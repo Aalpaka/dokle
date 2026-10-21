@@ -40,7 +40,10 @@ Promjena sheme: uredi `src/db/schema.ts`, pa `npm run db:generate` (nova migraci
   je račun već odigrao (`src/server/accounts.ts`). Kolačić igrača s računom vrijedi samo uz važeću sesiju.
 - **Profil** (`/profil`): streakovi, povijest, nadimak, odjava i brisanje računa. Streak = uzastopni dani,
   živi dok je zadnja partija danas ili jučer (`src/lib/stats.ts`).
-- **Admin**: tko je admin određuje `ADMIN_EMAILS` (sučelje dolazi u fazi 3).
+- **Admin** (`/admin`, samo za `ADMIN_EMAILS`): pregled dana, odbijeni odgovori (novi odgovor, varijanta
+  postojećeg ili odbij; prihvaćanje naknadno boduje igrače kojima je to bio zadnji odgovor), igrači,
+  kategorije i odgovori, raspored za 14 dana unaprijed, pretraga svih upisa i CSV izvoz.
+  Lokalno bez Supabasea: `ADMIN_DEV_BYPASS=1` uz `npm run dev` (u produkciji se ignorira).
 
 Bez `NEXT_PUBLIC_SUPABASE_*` varijabli igra radi normalno, samo bez prijave. Upute za postavljanje
 Supabasea i Google OAutha su u dokumentu projekta.

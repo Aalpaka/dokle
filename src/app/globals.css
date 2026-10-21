@@ -141,3 +141,18 @@ button.small-btn { padding: 8px 14px; font-size: 14px; }
 .danger { background: transparent; color: var(--stop); box-shadow: inset 0 0 0 1.5px var(--stop); font-weight: 600; }
 .prose { display: grid; gap: 12px; }
 .prose ul { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
+/* admin */
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.tabs button { padding: 8px 14px; font-size: 14px; }
+.field { font: inherit; font-size: 14px; padding: 8px 10px; border-radius: 8px; border: 1.5px solid var(--line); background: var(--bg); color: var(--ink); min-width: 0; }
+.field.narrow { width: 5em; margin-left: 6px; }
+textarea.field { width: 100%; font-family: var(--font-mono); }
+.tbl { width: 100%; border-collapse: collapse; font-size: 14px; display: block; overflow-x: auto; }
+.tbl th, .tbl td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.tbl th { font-size: 12px; color: var(--muted); font-weight: 800; text-transform: uppercase; letter-spacing: .05em; white-space: nowrap; }
+.tbl tr.off td { color: var(--muted); }
+.review { border-bottom: 1px solid var(--line); padding-block: 10px; }
+.decide { background: var(--bg); border-radius: 10px; padding: 10px 12px; display: grid; gap: 6px; }
+.bar { display: grid; grid-template-columns: 130px minmax(0, 1fr) 40px; gap: 8px; align-items: center; font-size: 14px; }
+.bar i { height: 10px; border-radius: 5px; background: var(--sign); display: block; }
+.bar b { font-family: var(--font-mono); text-align: right; }

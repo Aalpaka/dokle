@@ -145,3 +145,19 @@ export const attempts = pgTable(
   },
   (t) => [index("attempts_category_normalized").on(t.categoryId, t.normalized), index("attempts_game").on(t.gameId)],
 );
+
+// Odluke admina o odbijenim odgovorima (grupirano po normaliziranom tekstu).
+export const reviewDecisions = pgTable(
+  "review_decisions",
+  {
+    id: serial("id").primaryKey(),
+    categoryId: integer("category_id").notNull().references(() => categories.id),
+    normalized: text("normalized").notNull(),
+    decision: text("decision").notNull(), // answer | alias | reject
+    answerId: integer("answer_id").references(() => answers.id),
+    rescored: integer("rescored").notNull().default(0), // koliko je rundi naknadno bodovano
+    decidedBy: uuid("decided_by").references(() => players.id),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("review_decisions_category_normalized").on(t.categoryId, t.normalized)],
+);

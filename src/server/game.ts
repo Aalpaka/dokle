@@ -371,3 +371,49 @@ async function buildReveal(skin: Skin, puzzle: Puzzle, categoryId: number, mine:
   };
 }
 
+
+export function clearCategoryCache(id?: number) {
+  if (id === undefined) categoryCache.clear();
+  else categoryCache.delete(id);
+}
+
+/**
+ * Naknadno bodovanje: runde koje su završile promašajem s upisom koji se normalizira u `normalized`
+ * dobivaju odgovor `answerId`, udio, tier i km; ukupni km završenih partija se preračunava.
+ */
+export async function rescoreMisses(skin: Skin, categoryId: number, normalized: string, answerId: number): Promise<number> {
+  clearCategoryCache(categoryId);
+  const misses = await db
+    .select({ gameId: rounds.gameId, position: rounds.position, raw: rounds.raw, puzzleId: games.puzzleId })
+    .from(rounds)
+    .innerJoin(games, eq(games.id, rounds.gameId))
+    .where(and(eq(rounds.categoryId, categoryId), isNull(rounds.answerId), isNotNull(rounds.raw), isNotNull(rounds.answeredAt)));
+  const hits = misses.filter((m) => fold(m.raw!) === normalized);
+  if (!hits.length) return 0;
+
+  const cat = await getCategory(categoryId);
+  const byPuzzle = new Map<number, typeof hits>();
+  for (const h of hits) byPuzzle.set(h.puzzleId, [...(byPuzzle.get(h.puzzleId) ?? []), h]);
+  for (const [puzzleId, list] of byPuzzle) {
+    await db.transaction(async (tx) => {
+      for (const h of list)
+        await tx.update(rounds).set({ answerId }).where(and(eq(rounds.gameId, h.gameId), eq(rounds.position, h.position)));
+    });
+    const { count, total } = await answerCounts(puzzleId, categoryId, answerId);
+    const share = blendedShare(cat.prior.get(answerId) ?? 0, count, total, skin.config.priorWeight);
+    const t = tierFor(skin.config, share);
+    await db.transaction(async (tx) => {
+      for (const h of list) {
+        await tx
+          .update(rounds)
+          .set({ share, km: t.km, tier: t.name })
+          .where(and(eq(rounds.gameId, h.gameId), eq(rounds.position, h.position)));
+        await tx
+          .update(games)
+          .set({ totalKm: sql`(select coalesce(sum(${rounds.km}), 0) from ${rounds} where ${rounds.gameId} = ${h.gameId})` })
+          .where(and(eq(games.id, h.gameId), isNotNull(games.finishedAt)));
+      }
+    });
+  }
+  return hits.length;
+}
