@@ -26,8 +26,8 @@ export const hrConfig: SkinConfig = {
   ],
   tiers: [
     { minShare: 20, km: 10, emoji: "🚶", name: "Pješice" },
-    { minShare: 10, km: 25, emoji: "🚲", name: "Bajs", icon: "https://bajs.zagreb.hr/wp-content/uploads/sites/105/2025/07/Bajs-Logo-new.svg" },
-    { minShare: 5, km: 45, emoji: "🚆", name: "HŽ", icon: "https://hzpp.hr/images/logo.svg" },
+    { minShare: 10, km: 25, emoji: "🚲", name: "Bajs", icon: "/tiers/bajs.png" },
+    { minShare: 5, km: 45, emoji: "🚆", name: "HŽ", icon: "/tiers/hz.png" },
     { minShare: 2, km: 70, emoji: "🚌", name: "Autobus" },
     { minShare: 0.5, km: 100, emoji: "🚗", name: "Auto" },
     { minShare: 0, km: 125, emoji: "✈️", name: "Avion" },
