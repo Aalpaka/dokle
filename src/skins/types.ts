@@ -11,17 +11,27 @@ export type Station = {
 };
 
 // icon = URL sličice (logo) koja u igri zamjenjuje emoji; emoji ostaje za tekst za dijeljenje
-export type Tier = { minShare: number; km: number; emoji: string; name: string; icon?: string };
+// vehicle = animacija na karti, color = boja traga; badge = sličica na karti ako se razlikuje od icon
+export type Vehicle = "walk" | "bike" | "train" | "bus" | "car" | "plane";
+export type Tier = { minShare: number; km: number; emoji: string; name: string; icon?: string; badge?: string; vehicle: Vehicle; color: string };
 
 // množitelj km prema brzini odgovora; emoji/name prazni = bez oznake
 export type SpeedStep = { maxSeconds?: number; multiplier: number; emoji: string; name: string };
 
+// Karta skina; živi u klijentskom kodu (src/skins/maps.ts), ne šalje se u stanju igre
 export type SkinMap = {
-  viewBox: [number, number];
-  // projekcija lon/lat -> x/y: x = (lon - lon0) * kx, y = (lat0 - lat) * ky
-  projection: { lon0: number; lat0: number; kx: number; ky: number };
-  outline: [number, number][];
-  islands: [number, number, number, number, number][]; // lon, lat, rx, ry, kut
+  image: { href: string; x: number; y: number; width: number; height: number };
+  // međutočke rute [lon, lat] za svaku dionicu između dviju stanica
+  via: [number, number][][];
+  ferries: { name: string; from: [number, number]; to: [number, number] }[];
+  towns: [string, number, number][]; // mjesta koja se samo prikazuju
+  landmarks: { name: string; lon: number; lat: number; kind: "crash" }[];
+  countries: [string, number, number][];
+  border: string; // SVG path u koordinatama karte
+  rivers: { name: string; d: string }[];
+  // središte i širina pogleda "Cijela ruta" u koordinatama karte
+  overview: { x: number; y: number; width: number; height: number };
+  credit: string;
 };
 
 export type SkinConfig = {
@@ -35,7 +45,6 @@ export type SkinConfig = {
   tiers: Tier[]; // sortirano od najčešćeg prema najrjeđem
   speed: SpeedStep[]; // sortirano po maxSeconds, zadnji bez granice
   miss: { km: number; emoji: string; name: string };
-  map: SkinMap;
   // k iz koncepta: koliko "virtualnih" igrača vrijedi procjena prije stvarnih podataka
   priorWeight: number;
 };

@@ -360,25 +360,60 @@ async function answerCounts(puzzleId: number, categoryId: number, answerId: numb
   return row;
 }
 
-async function buildReveal(skin: Skin, puzzle: Puzzle, categoryId: number, mine: string | null): Promise<Reveal> {
+/** Svi odgovori kategorije s udjelom za taj dan, od najčešćeg prema najrjeđem. */
+async function categoryShares(skin: Skin, puzzleId: number, categoryId: number) {
   const cat = await getCategory(categoryId);
   const counts = await db
     .select({ answerId: rounds.answerId, n: sql<number>`count(*)::int` })
     .from(rounds)
     .innerJoin(games, eq(games.id, rounds.gameId))
-    .where(and(eq(games.puzzleId, puzzle.id), eq(rounds.categoryId, categoryId), isNotNull(rounds.answerId)))
+    .where(and(eq(games.puzzleId, puzzleId), eq(rounds.categoryId, categoryId), isNotNull(rounds.answerId)))
     .groupBy(rounds.answerId);
   const byId = new Map(counts.map((c) => [c.answerId!, c.n]));
   const total = counts.reduce((a, c) => a + c.n, 0);
-  const all = cat.index.answers
+  return cat.index.answers
     .map((a) => ({ canonical: a.canonical, share: blendedShare(cat.prior.get(a.id) ?? 0, byId.get(a.id) ?? 0, total, skin.config.priorWeight) }))
     .sort((a, b) => b.share - a.share);
+}
+
+async function buildReveal(skin: Skin, puzzle: Puzzle, categoryId: number, mine: string | null): Promise<Reveal> {
+  const all = await categoryShares(skin, puzzle.id, categoryId);
   return {
     top: all.slice(0, 4),
     rare: all.filter((a) => a.canonical !== mine).slice(-3).reverse(),
   };
 }
 
+export type AnswerList = {
+  position: number;
+  title: string;
+  mine: string | null;
+  answers: { canonical: string; share: number; tier: string; km: number }[];
+};
+
+/** Svi mogući odgovori jedne današnje kategorije s km koje vrijede; tek kad je igrač završio partiju. */
+export async function answerList(skin: Skin, playerId: string, position: number): Promise<AnswerList | null> {
+  const puzzle = await getOrCreatePuzzle(skin, localDate(skin.timezone));
+  const categoryId = puzzle.categoryIds[position];
+  const game = await findGame(playerId, puzzle.id);
+  if (categoryId === undefined || !game?.finishedAt) return null;
+  const [mine] = await db
+    .select({ canonical: answers.canonical })
+    .from(rounds)
+    .innerJoin(answers, eq(answers.id, rounds.answerId))
+    .where(and(eq(rounds.gameId, game.id), eq(rounds.position, position)));
+  const cat = await getCategory(categoryId);
+  const all = await categoryShares(skin, puzzle.id, categoryId);
+  return {
+    position,
+    title: cat.title,
+    mine: mine?.canonical ?? null,
+    answers: all.map((a) => {
+      const t = tierFor(skin.config, a.share);
+      return { canonical: a.canonical, share: a.share, tier: t.name, km: t.km };
+    }),
+  };
+}
 
 export function clearCategoryCache(id?: number) {
   if (id === undefined) categoryCache.clear();

@@ -1,10 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { GameState, RoundView } from "@/server/game";
+import type { AnswerList, GameState, RoundView } from "@/server/game";
 import type { SkinConfig } from "@/skins/types";
 import { formatShare, stationAt } from "@/lib/scoring";
-import RouteMap from "./RouteMap";
+import { maps, withVisuals } from "@/skins/maps";
+import { setMuted, sfx, useMuted } from "@/lib/sound";
+import MapStage from "./MapStage";
 import { AccountLink, GoogleButton, useMe, type Me } from "./account";
 
 async function api<T>(path: string, body?: unknown): Promise<T> {
@@ -31,16 +33,17 @@ export default function Game() {
   }, []);
   useEffect(load, [load]);
 
-  if (error) return <Shell><section className="card">Nešto je pošlo krivo. Osvježi stranicu.</section></Shell>;
-  if (!state) return <Shell><section className="card loading">Učitavam…</section></Shell>;
+  if (error) return <Shell><div className="stage empty" /><section className="panel">Nešto je pošlo krivo. Osvježi stranicu.</section></Shell>;
+  if (!state) return <Shell><div className="stage empty" /><section className="panel loading">Učitavam…</section></Shell>;
 
-  const cfg = state.skin.config;
+  const cfg = withVisuals(state.skin.id, state.skin.config);
   const start = () => api<GameState>("/api/game/start", {}).then(setState, () => setError(true));
   const phase = state.phase === "reveal" && showEnd ? "end" : state.phase;
 
   return (
     <Shell state={state} me={me}>
-      <section className="card" aria-live="polite">
+      <MapStage cfg={cfg} map={maps[state.skin.id] ?? maps.hr} rounds={state.rounds} perDay={state.perDay} />
+      <section className="panel" aria-live="polite">
         {phase === "intro" && <Intro cfg={cfg} perDay={state.perDay} onStart={start} />}
         {phase === "play" && state.current && (
           <Play key={state.current.position} state={state} onScored={setState} onLost={load} />
@@ -53,7 +56,7 @@ export default function Game() {
         )}
         {phase === "end" && <End state={state} me={me} />}
       </section>
-      <RouteMap cfg={cfg} km={state.totalKm} />
+      <p className="credit">{(maps[state.skin.id] ?? maps.hr).credit} Zvukovi su sintetizirani u pregledniku.</p>
     </Shell>
   );
 }
@@ -65,18 +68,37 @@ function Shell({ state, me = null, children }: { state?: GameState; me?: Me | nu
     <div className="wrap">
       <header className="top">
         <div className="plate">{cfg?.title ?? "Dokle?"}</div>
-        <div className="row">
-          {state && cfg && (
-            <div className="meta">
-              <b>#{state.number}</b> · {+d}. {+m}. {y}.<br />
-              {cfg.stations[0].name} → {cfg.stations[cfg.stations.length - 1].name} · {cfg.maxKm} km
-            </div>
-          )}
-          <AccountLink me={me} />
-        </div>
+        {state && cfg && (
+          <div className="meta">
+            <b>#{state.number}</b> · {+d}. {+m}. {y}.<br />
+            {cfg.stations[0].name} → {cfg.stations[cfg.stations.length - 1].name} · {cfg.maxKm} km
+          </div>
+        )}
+        <div className="spacer" />
+        <MuteButton />
+        <AccountLink me={me} />
       </header>
-      <div className="grid">{children}</div>
+      {children}
     </div>
+  );
+}
+
+function MuteButton() {
+  const muted = useMuted();
+  return (
+    <button
+      type="button"
+      className="iconbtn"
+      aria-pressed={muted}
+      aria-label={muted ? "Uključi zvuk" : "Isključi zvuk"}
+      title={muted ? "Uključi zvuk" : "Isključi zvuk"}
+      onClick={() => setMuted(!muted)}
+    >
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor" />
+        {muted ? <path d="m16 9.5 5 5M21 9.5l-5 5" /> : <path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" />}
+      </svg>
+    </button>
   );
 }
 
@@ -135,7 +157,10 @@ function Play({ state, onScored, onLost }: { state: GameState; onScored: (s: Gam
       try {
         const r = await api<AnswerResponse>("/api/game/answer", { raw, final });
         if (r.status === "scored") onScored(r.state);
-        else if (r.status === "rejected") setSending({ kind: "nope" });
+        else if (r.status === "rejected") {
+          sfx.wrong();
+          setSending({ kind: "nope" });
+        }
         else onLost();
       } finally {
         busy.current = false;
@@ -147,10 +172,15 @@ function Play({ state, onScored, onLost }: { state: GameState; onScored: (s: Gam
   // tajmer; server je mjerodavan, ovo je samo prikaz
   useEffect(() => {
     const deadline = performance.now() + cur.remainingMs;
-    let raf = 0;
+    let raf = 0, lastBeep = Math.ceil(cur.remainingMs / 1000);
     const tick = () => {
       const l = Math.max(0, (deadline - performance.now()) / 1000);
       setLeft(l);
+      // zadnjih 5 sekundi otkucava
+      if (l > 0 && l <= 5 && Math.ceil(l) < lastBeep) {
+        lastBeep = Math.ceil(l);
+        sfx.tick();
+      }
       if (l <= 0) {
         busy.current = false;
         send(valueRef.current, true);
@@ -189,7 +219,7 @@ function Play({ state, onScored, onLost }: { state: GameState; onScored: (s: Gam
       <div className={"timer" + (left <= 5 ? " low" : "")}>
         <i style={{ transform: `scaleX(${left / seconds})` }} />
       </div>
-      <div className="trow"><span>{Math.ceil(left)} s</span><span>{state.totalKm} km</span></div>
+      <div className="trow"><span>{Math.ceil(left)} s</span><span>Rjeđi odgovor = brže prijevozno sredstvo</span></div>
       <form
         className="answer"
         autoComplete="off"
@@ -207,7 +237,10 @@ function Play({ state, onScored, onLost }: { state: GameState; onScored: (s: Gam
           aria-label="Tvoj odgovor"
           placeholder="Tvoj odgovor"
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={(e) => {
+            setValue(e.target.value);
+            sfx.type();
+          }}
         />
         <button type="submit">Pošalji</button>
       </form>
@@ -309,16 +342,10 @@ function End({ state, me }: { state: GameState; me: Me | null }) {
         <span>{st.message}</span>
       </div>
       {next && <p className="small">Do {next.genitive ?? next.name} ti je falilo još {next.km - km} km.</p>}
+      <span className="small">Klikni kategoriju za sve moguće odgovore i koliko je koji vrijedio.</span>
       <ul className="recap">
         {state.rounds.map((r) => (
-          <li key={r.position}>
-            <span><TierIcon emoji={r.emoji} icon={r.icon} />{r.speed?.emoji}</span>
-            <span>
-              <span className="c">{r.category.title}</span><br />
-              <span className="a">{r.canonical ?? (r.raw ? `„${r.raw}”` : "—")}</span>
-            </span>
-            <span className="k">+{r.km}</span>
-          </li>
+          <RecapRow key={r.position} r={r} cfg={cfg} />
         ))}
       </ul>
       <pre className="share">{share}</pre>
@@ -345,6 +372,65 @@ function End({ state, me }: { state: GameState; me: Me | null }) {
         </p>
       )}
       <Countdown timezone={state.skin.timezone} />
+    </div>
+  );
+}
+
+function RecapRow({ r, cfg }: { r: RoundView; cfg: SkinConfig }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <li className={open ? "open" : ""}>
+      <button type="button" className="recap-row" aria-expanded={open} onClick={() => setOpen(!open)}>
+        <span><TierIcon emoji={r.emoji} icon={r.icon} />{r.speed?.emoji}</span>
+        <span>
+          <span className="c">{r.category.title}</span><br />
+          <span className="a">{r.canonical ?? (r.raw ? `„${r.raw}”` : "—")}</span>
+        </span>
+        <span className="k">+{r.km}</span>
+        <span className="chev" aria-hidden="true">{open ? "▴" : "▾"}</span>
+      </button>
+      {open && <AllAnswers position={r.position} cfg={cfg} />}
+    </li>
+  );
+}
+
+/** Svi odgovori kategorije s udjelom i prijevozom, s pretragom. */
+function AllAnswers({ position, cfg }: { position: number; cfg: SkinConfig }) {
+  const [list, setList] = useState<AnswerList | null | "error">(null);
+  const [q, setQ] = useState("");
+  useEffect(() => {
+    api<AnswerList | null>(`/api/game/answers?position=${position}`).then((l) => setList(l ?? "error"), () => setList("error"));
+  }, [position]);
+  if (list === null) return <div className="allans small">Učitavam odgovore…</div>;
+  if (list === "error") return <div className="allans small">Odgovori se ne mogu učitati.</div>;
+  const fold = (s: string) => s.toLowerCase().replace(/đ/g, "d").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const f = fold(q.trim());
+  const shown = f ? list.answers.filter((a) => fold(a.canonical).includes(f)) : list.answers;
+  return (
+    <div className="allans">
+      <input
+        className="field"
+        type="search"
+        placeholder={`Traži među ${list.answers.length} odgovora`}
+        aria-label="Traži odgovor"
+        value={q}
+        onChange={(e) => setQ(e.target.value)}
+      />
+      <span className="small">Udio igrača danas i km koje odgovor donosi, bez bonusa za brzinu.</span>
+      <ol>
+        {shown.map((a) => {
+          const t = cfg.tiers.find((x) => x.name === a.tier);
+          return (
+            <li key={a.canonical} className={a.canonical === list.mine ? "mine" : ""}>
+              <span className="ti">{t && <TierIcon emoji={t.emoji} icon={t.icon} />}</span>
+              <span className="n">{a.canonical}{a.canonical === list.mine && <em> · tvoj</em>}</span>
+              <span className="s">{formatShare(a.share)}</span>
+              <span className="k">+{a.km}</span>
+            </li>
+          );
+        })}
+        {!shown.length && <li className="small">Nema takvog odgovora.</li>}
+      </ol>
     </div>
   );
 }
