@@ -714,4 +714,410 @@ export const hrKategorije: SeedCategory[] = [
       Novo Selo=0.1; Novo Čiče=0.1; Staro Čiče=0.1; Mala Gorica=0.1; Mala Mlaka=0.1; Velo Grablje=0.1;
       Malo Grablje=0.1; Mala Ludina=0.05; Velika Trnovitica=0.05`,
   },
+  {
+    slug: "znamenitost",
+    group: "hr",
+    title: "Znamenitost ili turistička atrakcija u Hrvatskoj",
+    hint: "Građevina, spomenik, muzej ili prirodna atrakcija (ne cijeli grad)",
+    strip: [],
+    answers: `Plitvička jezera/Plitvice/NP Plitvička jezera=9; Dioklecijanova palača/Dioklecijanova=6.5;
+      Arena/Pulska arena/Amfiteatar u Puli=5; Dubrovačke zidine/Zidine Dubrovnika/Gradske zidine=4;
+      Krka/Slapovi Krke/NP Krka=4; Zlatni rat=2.5; Morske orgulje=2.5; Stradun/Placa=2; Trakošćan/Dvorac Trakošćan=2;
+      Pelješki most=2; Zagrebačka katedrala/Katedrala Uznesenja=2; Eufrazijeva bazilika/Eufrazijana=1.5;
+      Katedrala svetog Jakova/Šibenska katedrala=1.5; Trg bana Jelačića/Jelačić plac=1.5; Pozdrav Suncu=1.5;
+      Crkva svetog Marka/Sveti Marko=1.5; Mirogoj=1.5; Kornati=1.5; Brijuni=1.5; Modra špilja/Plava špilja=1.5;
+      Vukovarski vodotoranj/Vodotoranj=1.5; Lovrijenac/Tvrđava Lovrijenac=1.5; Klis/Tvrđava Klis=1.5; Marjan=1.5;
+      Skradinski buk=1; Grgur Ninski/Kip Grgura Ninskog=1; Peristil=1; Gornji grad=1; Maksimir=1; Tvrđa=1;
+      Sveti Donat/Crkva svetog Donata=1; Đakovačka katedrala=1; Rastoke=1; Biokovo/Skywalk=1;
+      Modro jezero=1; Stonske zidine/Zidine Stona=1; Katedrala svetog Duje/Sveti Duje=1; Salona=1;
+      Trsat/Trsatska gradina=1; Splitska riva/Riva=1; Sljeme/Medvednica=0.7; Veliki Tabor=0.7; Medvedgrad=0.7;
+      Kamenita vrata=0.7; Lotrščak/Kula Lotrščak=0.7; Muzej prekinutih veza=0.7; Dolac/Tržnica Dolac=0.7; Tkalčićeva/Tkalča=0.7;
+      Zrinjevac=0.7; Jarun=0.7; Uspinjača=0.7; Knežev dvor/Kneževa palača=0.7; Onofrijeva fontana=0.7; Lokrum=0.7;
+      Srđ/Žičara Srđ=0.7; Crveno jezero=0.7; Meštrovićeva galerija/Galerija Meštrović=0.7;
+      Fortica/Španjola/Tvrđava Fortica=0.7; Krčki most=0.7; Paklenica=0.7; Kopački rit=0.7; Marija Bistrica=0.7;
+      Bašćanska ploča/Baška ploča=0.7; Hušnjakovo/Muzej krapinskih neandertalaca/Krapinski pračovjek=0.7;
+      Staro selo Kumrovec/Kumrovec=0.7; Memorijalni centar Nikola Tesla/Smiljan=0.7; Jasenovac/Kameni cvijet=0.7;
+      Stari grad Varaždin/Varaždinska tvrđava=0.7; Kninska tvrđava=0.7; Lungomare=0.7; Djevojka s galebom=0.7; Korzo=0.7;
+      Sveta Eufemija/Crkva svete Eufemije=0.7; Trg svetog Marka/Markov trg=0.5; Tvrđava svetog Nikole=0.5;
+      Kanjon Cetine=0.3; Ovčara=0.3; Dvorac Eltz=0.3; Vučedol=0.3; Sponza/Palača Sponza=0.3; Orlandov stup=0.3;
+      Arboretum Trsteno/Trsteno=0.3; Kuća Marka Pola=0.3; Kalelarga=0.3; Kamerlengo/Kaštel Kamerlengo=0.3;
+      Trogirska katedrala/Katedrala svetog Lovre=0.3; Slavoluk Sergijevaca=0.3; Augustov hram=0.3; Dubovac=0.3;
+      Aquatika=0.3; Kuterevo=0.3; Lonjsko polje=0.3; Telašćica=0.3; Učka=0.3; Velebit=0.3; Banski dvori=0.3;
+      Muzej Mimara/Mimara=0.3; Tehnički muzej=0.3; Muzej iluzija=0.3; Poljud=0.3; Zoološki vrt/Zoo=0.3;
+      Botanički vrt=0.3; Bundek=0.3; HNK/Hrvatsko narodno kazalište=0.3; Ilica=0.3; Vrelo Cetine=0.3;
+      Gospa Sinjska=0.2; Crkva svetog Križa=0.2; Tvrđava svetog Mihovila=0.2; Masleniški most=0.2; Roški slap=0.2;
+      Iločki podrumi=0.2; Narona=0.2; Vela spila=0.2; Baredine=0.2; Cerovačke špilje=0.2; Grabovača=0.2;
+      Villa Angiolina=0.2; Molo longo=0.2; Revelin=0.2; Vransko jezero=0.2; Glagoljska aleja=0.1;
+      Vodnjanske mumije/Mumije u Vodnjanu=0.1`,
+  },
+  {
+    slug: "festival",
+    group: "hr",
+    title: "Festival ili manifestacija u Hrvatskoj",
+    hint: "Glazbeni, filmski, folklorni, sportski ili gastro događaj, danas ili nekad",
+    strip: ["festival"],
+    answers: `Ultra/Ultra Europe=10; Sinjska alka/Alka=10; Riječki karneval/Karneval=8; INmusic=6;
+      Advent u Zagrebu/Advent=6; Splitski festival/Festival zabavne glazbe Split=4; Dora=4;
+      Motovun Film Festival/Motovunski filmski festival=3; Pulski filmski festival/Pula Film Festival=3;
+      Dubrovačke ljetne igre/Ljetne igre=3; Špancirfest=3; Vinkovačke jeseni=3; Đakovački vezovi=2; Hideout=2;
+      Samoborski fašnik/Fašnik=1.5; Festival dalmatinskih klapa Omiš/Omiški festival=1.5;
+      Sveti Vlaho/Festa svetog Vlaha=1.5; Snježna kraljica=1.5; Croatia Open/ATP Umag=1; Animafest=1;
+      Varaždinske barokne večeri=1; Smotra folklora/Međunarodna smotra folklora=1; Melodije Istre i Kvarnera/MIK=1;
+      Cest is d'Best=1; Noć muzeja=1; Martinje=1; Sudamja=1; Fresh Island=1; Sonus=1; Porin=1; Outlook=0.5;
+      Dimensions=0.5; Love International=0.5; Defected Croatia/Defected=0.5; Seasplash=0.5; Terraneo=0.5;
+      Zagreb Film Festival=0.5; ZagrebDox=0.5; Brodsko kolo=0.5; Zlatne žice Slavonije=0.5;
+      Hrvatski radijski festival=0.5; Festival svjetla=0.5; Marunada=0.5; Rapska fjera=0.5;
+      Međunarodni dječji festival=0.5; Interliber=0.5; Zagreb Pride/Pride=0.5; Ljeto na Strossu=0.5;
+      Festival kajkavskih popevki/Krapinski festival=0.5; Zagrebfest=0.5; Splitsko ljeto=0.5; Sea Star=0.5;
+      The Garden Festival/Garden Festival=0.5; Zagreb Marathon/Zagrebački maraton=0.3; Tour of Croatia=0.3;
+      Vukovar Film Festival=0.3; Paški karneval=0.3; Hartera=0.3; Osječko ljeto kulture=0.3; Šokačko sijelo=0.3;
+      Unknown Festival/Unknown=0.3; Osorske glazbene večeri=0.3; Zadarfest=0.3; Festival mediteranskog filma=0.3;
+      Vinistra=0.3; Festival svjetskog kazališta=0.3; Eurokaz=0.3; Trka na prstenac=0.1; Picokijada=0.1`,
+  },
+  {
+    slug: "znanstvenik",
+    group: "hr",
+    title: "Hrvatski znanstvenik, izumitelj ili liječnik",
+    hint: "Rođen ili djelovao u Hrvatskoj, bilo kad",
+    strip: [],
+    answers: `Nikola Tesla/Tesla=30; Ruđer Bošković/Bošković=12; Slavoljub Penkala/Penkala=7; Faust Vrančić/Vrančić=6;
+      Andrija Mohorovičić/Mohorovičić=5; Lavoslav Ružička/Ružička=5; Vladimir Prelog/Prelog=4;
+      Andrija Štampar/Štampar=4; Ivan Vučetić/Vučetić=3; Mate Rimac=3; Marin Getaldić/Getaldić=2;
+      Miroslav Radman/Radman=2; Dragutin Gorjanović-Kramberger/Gorjanović-Kramberger/Gorjanović=2;
+      Milutin Milanković/Milanković=2; Ivan Lupis/Ivan Blaž Lupis=1; Franjo Hanaman=1; David Schwarz=1;
+      Josip Belušić=1; Ivan Supek=1; Markantun de Dominis/Marko Antun de Dominis=1; Igor Rudan=1; Ivica Puljak=1;
+      Dragan Primorac=1; Ivan Đikić=0.5; Gordan Lauc=0.5; Marin Soljačić=0.5; Rudolf Fizir=0.5; Herman Dalmatin=0.5;
+      Frane Petrić/Franjo Petrić=0.5; Benedikt Kotruljević/Benko Kotruljević=0.5; Đuro Baglivi/Baglivi=0.5;
+      Vladimir Paar=0.5; Federik Grisogono=0.3; Oton Kučera=0.3; Spiridion Brusina=0.3; Mirko Dražen Grmek=0.3;
+      Hrvoje Požar=0.3; Bogoslav Šulek=0.3; Vladimir Varićak=0.3; Danilo Blanuša=0.3; Ante Šercer=0.3;
+      Ivica Kostović=0.3; Vatroslav Jagić=0.3; Fran Bubanović=0.3; Božo Težak=0.3; Zvonimir Janko=0.3;
+      Josip Torbar=0.3; Fran Gundrum Oriovčanin=0.1; Josip Lončar=0.1; Josip Pančić=0.5; Fran Mihaljević=0.5;
+      Andrija Hebrang=0.5; Đuro Kurepa=0.2; Stjepan Gradić=0.2; Ivan Krstitelj Lalangue=0.2; Ivan Horvat=0.2;
+      Ljudevit Vukotinović=0.2; Gjuro Pilar=0.2; Nikola Nalješković=0.2; Teodor Wickerhauser=0.2; Ivo Padovan=0.2;
+      Tomislav Uzelac=0.2; Stjepan Škreb=0.2`,
+  },
+  {
+    slug: "kosarkas",
+    group: "hr",
+    title: "Hrvatski košarkaš ili košarkašica",
+    hint: "Bilo koja generacija",
+    strip: [],
+    answers: `Dražen Petrović/Petrović=25; Toni Kukoč/Kukoč=12; Dino Rađa/Rađa=10; Krešimir Ćosić/Ćosić=6;
+      Bojan Bogdanović/Bogdanović=5; Dario Šarić/Šarić=5; Stojko Vranković/Vranković=4; Ivica Zubac/Zubac=4;
+      Mario Hezonja/Hezonja=3; Zoran Planinić/Planinić=2; Roko Ukić/Ukić=2; Arijan Komazec/Komazec=2;
+      Velimir Perasović/Perasović=2; Danko Cvjetićanin/Cvjetićanin=1.5; Nikola Vujčić/Vujčić=1.5;
+      Gordan Giriček/Giriček=1.5; Žan Tabak/Tabak=1.5; Aleksandar Petrović/Aco Petrović=1.5; Ante Tomić=1.5;
+      Damir Mulaomerović=1; Marko Popović=1; Ante Žižić=1; Dragan Bender=1; Krunoslav Simon/Kruno Simon=1;
+      Mihovil Nakić=1; Franjo Arapović=0.5; Vladimir Krstić=0.5; Davor Kus=0.5; Damir Markota=0.5; Luka Žorić=0.5;
+      Marko Tomas=0.5; Mario Kasun=0.5; Nikola Prkačin=0.5; Mirko Novosel=0.5; Petar Skansi=0.5; Andro Knego=0.5;
+      Željko Jerkov=0.5; Veljko Mršić=0.5; Slaven Rimac=0.5; Miro Bilan=0.5; Rok Stipčević=0.5; Damjan Rudež=0.5;
+      Luka Šamanić=0.5; Karlo Matković=0.5; Roko Prkačin=0.5; Antonija Mišura=0.5; Žana Lelas=0.5; Danira Bilić=0.3;
+      Ana Lelas=0.3; Damir Šolman=0.3; Krešimir Lončar=0.3; Vladan Alanović=0.3; Alan Gregov=0.3; Bruno Šundov=0.3;
+      Matej Mamić=0.3; Jakov Vladović=0.3; Tomislav Zubčić=0.3; Filip Krušlin=0.3; Davor Pejčinović=0.3;
+      Marko Banić=0.3; Josip Sesar=0.3; Rato Tvrdić=0.1; Hrvoje Perinčić=0.1`,
+  },
+  {
+    slug: "rukomet-vaterpolo",
+    group: "hr",
+    title: "Hrvatski rukometaš ili vaterpolist",
+    hint: "Rukomet ili vaterpolo, muški ili ženski, bilo koja generacija",
+    strip: [],
+    answers: `Ivano Balić/Balić=15; Domagoj Duvnjak/Duvnjak=12; Igor Vori/Vori=6; Luka Cindrić/Cindrić=5;
+      Perica Bukić/Bukić=5; Ivan Čupić/Čupić=4; Mirko Alilović/Alilović=3; Blaženko Lacković/Lacković=3;
+      Manuel Štrlek/Štrlek=3; Vlado Šola/Šola=3; Igor Hinić/Hinić=3; Sandro Sukno/Sukno=3; Josip Pavić=3;
+      Igor Karačić/Karačić=2; Petar Metličić/Metličić=2; Mirza Džomba/Džomba=2; Slavko Goluža/Goluža=2;
+      Frano Vićan/Vićan=2; Patrik Ćavar/Ćavar=1.5; Venio Losert/Losert=1.5; Ivan Buljubašić=1.5; Andro Bušlje=1.5;
+      Samir Barać=1.5; Maro Joković=1.5; Valter Matošević=1; Nikša Kaleb=1; Iztok Puc=1; Zlatko Saračević=1;
+      Irfan Smajlagić=1; Alvaro Načinović=1; Denis Špoljarić=1; Drago Vuković=1; Zlatko Horvat=1; Davor Dominiković=1;
+      Damir Burić=1; Dubravko Šimenc=1; Paulo Obradović=1; Xavier García=1; Nikša Dobud=1; Miho Bošković=1;
+      Marko Bijač=1; Božidar Jović=0.5; Goran Perkovac=0.5; Domagoj Pavlović=0.5; Marino Marić=0.5; Željko Musa=0.5;
+      Jakov Gojun=0.5; Marko Kopljar=0.5; Tonči Valčić=0.5; Ivan Ninčević=0.5; Luka Stepančić=0.5; Ivan Pešić=0.5;
+      Filip Ivić=0.5; Marin Šego=0.5; Damir Bičanić=0.5; Renato Sulić=0.5; Vedran Zrnić=0.5; Hrvoje Horvat=0.5;
+      Zdravko Zovko=0.5; Andrea Penezić=0.5; Ratko Štritof=0.5; Anđelo Šetka=0.5; Loren Fatović=0.5; Luka Lončar=0.5;
+      Konstantin Kharkov=0.5; Luka Bukić=0.5; Tin Lučin=0.3; Mario Šoštarić=0.3; David Mandić=0.3;
+      Veron Načinović=0.3; Dominik Kuzmanović=0.3; Ana Debelić=0.3; Dejana Milosavljević=0.3; Paula Posavec=0.3;
+      Rino Burić=0.3; Jerko Marinić Kragić=0.3; Goran Sukno=0.3; Tomislav Paškvalin=0.3; Ronald Lopatny=0.3;
+      Petar Muslim=0.3; Zdravko Miljak=0.1; Ozren Bonačić=0.1`,
+  },
+  {
+    slug: "hajduk",
+    group: "hr",
+    title: "Nogometaš Hajduka",
+    hint: "Igrao za Hajduk bilo kad u povijesti kluba",
+    strip: [],
+    answers: `Marko Livaja/Livaja=15; Slaven Bilić/Bilić=5; Igor Štimac/Štimac=5; Alen Bokšić/Bokšić=5;
+      Darijo Srna/Dario Srna/Srna=4; Stipe Pletikosa/Pletikosa=4; Aljoša Asanović/Asanović=4; Milan Rapaić/Rapaić=4;
+      Igor Tudor/Tudor=4; Robert Jarni/Jarni=3; Nikola Vlašić/Vlašić=3; Nikola Kalinić=3; Ivan Perišić/Perišić=2;
+      Danijel Subašić/Subašić=2; Tonči Gabrić/Gabrić=2; Frane Matošić/Matošić=2; Bernard Vukas/Vukas=2;
+      Ivica Šurjak/Šurjak=2; Mario Pašalić/Pašalić=2; Josip Juranović/Juranović=2; Lovro Kalinić=2; Zlatko Vujović=2;
+      Niko Kranjčar/Kranjčar=1.5; Zoran Vujović=1; Goran Vučević=1; Ivica Mornar=1; Ivan Leko=1;
+      Nikica Jelavić/Jelavić=1; Mirko Hrgović=1; Senijad Ibričić=1; Ante Vukušić=1; Srđan Andrić=1; Ivan Strinić=1;
+      Filip Krovinović=1; Stipe Biuk=1; Tomislav Erceg=1; Ardian Kozniku=1; Stjepan Andrijašević=1; Vladimir Beara=1;
+      Dražen Mužinić=1; Jurica Jerković=1; Ivan Buljan=1; Blaž Slišković=1; Mijo Caktaš=1; Ante Erceg=0.5;
+      Ante Palaversa=0.5; Toma Bašić=0.5; Josip Radošević=0.5; Domagoj Bradarić=0.5; Marin Ljubičić=0.5;
+      Franko Andrijašević=0.5; Jurica Buljat=0.5; Mato Neretljak=0.5; Dante Stipica=0.5; Nikola Jerkan=0.5;
+      Ante Miše=0.5; Vedran Rožić=0.5; Luka Peruzović=0.5; Petar Nadoveza=0.5; Ivan Pudar=0.5; Ivan Gudelj=0.5;
+      Boro Primorac=0.5; Branko Oblak=0.5; Jan Mlakar=0.5; Rokas Pukštas=0.5; Ivan Dolček=0.3; Lukas Grgić=0.3;
+      Emir Sahiti=0.3; Andrija Balić=0.3; Bassel Jradi=0.3; Mario Maloča=0.3; Hari Vukas=0.3; Zvonimir Deranja=0.3;
+      Darko Butorović=0.3; Mario Boljat=0.3; Ivan Katalinić=0.3; Ivica Hlevnjak=0.3; Ante Žanetić=0.3;
+      Leo Lemešić=0.1; Šime Luketin=0.1`,
+  },
+  {
+    slug: "dinamo",
+    group: "hr",
+    title: "Nogometaš Dinama",
+    hint: "Igrao za Dinamo bilo kad u povijesti kluba (i kao Croatia Zagreb)",
+    strip: [],
+    answers: `Luka Modrić/Modrić=13; Zvonimir Boban/Boban=5; Mario Mandžukić/Mandžukić=5; Davor Šuker/Šuker=4.5;
+      Joško Gvardiol/Gvardiol=4.5; Robert Prosinečki/Prosinečki=3.5; Mateo Kovačić/Kovačić=3.5; Dani Olmo/Olmo=3.5;
+      Mislav Oršić/Oršić=3.5; Dominik Livaković/Livaković=3.5; Dejan Lovren/Lovren=2.5; Marcelo Brozović/Brozović=2.5;
+      Bruno Petković/Petković=2.5; Eduardo da Silva/Eduardo=2.5; Josip Šutalo/Šutalo=1.5; Vedran Ćorluka/Ćorluka=1.5;
+      Niko Kranjčar=1.5; Zlatko Kranjčar=1.5; Ivica Olić/Olić=1.5; Dražen Ladić/Ladić=1.5; Milan Badelj/Badelj=1.5;
+      Josip Šimunić/Šimunić=1.5; Dario Šimić=1.5; Martin Baturina/Baturina=0.9; Lovro Majer/Majer=0.9; Krunoslav Jurčić=0.9;
+      Velimir Zajec/Zajec=0.9; Marko Mlinarić/Mlinarić=0.9; Stjepan Deverić=0.9; Igor Cvitanović=0.9; Goran Vlaović/Vlaović=0.9;
+      Tomislav Butina=0.9; Sammir=0.9; Ognjen Vukojević=0.9; Boško Balaban=0.9; Igor Bišćan=0.9; Danijel Pranjić=0.9;
+      Alen Halilović=0.9; Marko Pjaca=0.9; Marko Rog=0.9; Ante Ćorić=0.9; Arijan Ademi=0.9; El Arabi Hillel Soudani/Soudani=0.9;
+      Mario Gavranović=0.9; Domagoj Vida=0.9; Šime Vrsaljko=0.9; Borna Sosa=0.9; Josip Brekalo=0.9; Robert Kovač=0.9;
+      Tomislav Ivković=0.9; Silvio Marić=0.4; Robert Špehar=0.4; Ivan Turina=0.4; Ivan Kelava=0.4; Jerko Leko=0.4;
+      Tomislav Šokota=0.4; Etto=0.4; Junior Fernandes=0.4; Kristijan Jakić=0.4; Luka Ivanušec=0.4; Petar Sučić=0.4;
+      Dino Perić=0.4; Josip Mišić=0.4; Sandro Kulenović=0.4; Kevin Theophile-Catherine=0.4; Amer Gojak=0.4;
+      Izet Hajrović=0.4; Duje Čop=0.4; Tin Jedvaj=0.4; Nikola Moro=0.4; Marin Leovac=0.4; Mihael Mikić=0.4;
+      Josip Pivarić=0.4; Gordon Schildenfeld=0.4; Stjepan Lamza=0.4; Rudolf Belin=0.4; Slaven Zambata=0.4;
+      Dražan Jerković=0.4; Željko Čajkovski=0.4; Snješko Cerin=0.4; Borislav Cvetković=0.4; Ivica Horvat=0.3;
+      Fatos Bećiraj=0.3; Stefan Ristovski=0.3; Petar Stojanović=0.3; Leonardo Sigali=0.3; Paulo Machado=0.3;
+      Dario Špikić=0.3; Mahir Emreli=0.3; Zvjezdan Cvetković=0.3; Ismet Hadžić=0.3; Džemal Mustedanagić=0.3;
+      Josip Kuže=0.3; Dionizije Dvornić=0.3; Mladen Ramljak=0.1; Zlatko Škorić=0.1`,
+  },
+  {
+    slug: "trener",
+    group: "hr",
+    title: "Hrvatski trener ili izbornik, bilo koji sport",
+    hint: "Bilo koja generacija i bilo koji sport",
+    strip: [],
+    answers: `Zlatko Dalić/Dalić=20; Miroslav Blažević/Ćiro Blažević/Ćiro=12; Lino Červar/Červar=6;
+      Ratko Rudić/Rudić=5; Slaven Bilić/Bilić=5; Niko Kovač=4; Igor Tudor/Tudor=4; Igor Štimac/Štimac=3;
+      Otto Barić/Barić=3; Mirko Novosel/Novosel=3; Tomislav Ivić/Ivić=2; Ante Čačić/Čačić=2; Nenad Bjelica/Bjelica=2;
+      Ante Kostelić=2; Goran Ivanišević=2; Ivan Ljubičić=2; Nikola Pilić=2; Ivan Leko/Leko=1.5; Robert Prosinečki=1.5;
+      Sergej Jakirović/Jakirović=1.5; Jasmin Repeša/Repeša=1.5; Mirko Jozić/Jozić=1.5; Branko Zebec=1;
+      Vlatko Marković=1; Krunoslav Jurčić=1; Zoran Mamić=1; Igor Bišćan=1; Zlatko Kranjčar=1; Ivo Šušak=1;
+      Branko Ivanković=1; Neven Spahija=1; Aleksandar Petrović=1; Velimir Perasović=1; Željko Babić=1;
+      Slavko Goluža=1; Ivica Tucak=1; Josip Kuže=1; Joško Vlašić=1; Petar Skansi=0.5; Hrvoje Horvat=0.5;
+      Zdravko Zovko=0.5; Ivo Trumbić=0.5; Vjekoslav Kobešćak=0.1; Luka Peruzović=0.5; Stanko Poklepović=0.5;
+      Ante Miše=0.5; Damir Krznar=0.5; Zoran Vulić=0.5; Mario Cvitanović=0.5; Igor Cvitanović=0.5; Dragan Skočić=0.5;
+      Zvonimir Soldo=0.5; Željko Krajan=0.5; Ilija Lončarević=0.3; Tomislav Ivković=0.3; Robert Jarni=0.3;
+      Dražen Anzulović=0.3; Damir Mulaomerović=0.3; Goran Perkovac=0.3; Velimir Kljaić=0.5; Dražen Jerković=0.1`,
+  },
+  {
+    slug: "klub-ostalo",
+    group: "hr",
+    title: "Hrvatski sportski klub izvan nogometa",
+    hint: "Košarka, rukomet, vaterpolo, hokej, odbojka, veslanje..., danas ili nekad",
+    strip: ["kk", "rk", "vk", "hk", "ok", "zkk", "zrk", "havk", "haok", "khl", "hvk"],
+    answers: `Cibona=20; Zagreb/RK Zagreb/PPD Zagreb/Croatia osiguranje/Badel 1862=10; Jug/Jug Dubrovnik=7; Mladost=6;
+      Medveščak=6; Split/Jugoplastika/KK Split=6; Zadar/KK Zadar=5; Cedevita=4; Primorje=3; POŠK=2; Nexe/RK Nexe=2;
+      Podravka/Podravka Vegeta=2; Šibenik/Šibenka=2; Mornar=1.5; Metković=1; Jadran=1; Bjelovar/Partizan Bjelovar=1;
+      Zamet=1; Lokomotiva=1; Osijek/Vrijednosnice Osijek=0.5; Alkar=0.5; Poreč=0.5; Sisak=0.5; Gusar=0.5;
+      Gospić/Gospić Industrogradnja=0.5; Nada=0.5; Solaris=0.5; Dubrovnik=0.5; Rijeka=0.5; Karlovac=0.3; Varaždin=0.3;
+      Dubrava=0.3; Sesvete=0.3; Spačva=0.3; Gorica=0.3; Novi Zagreb=0.3; Korčula=0.3; Dinamo-Zrinjevac=0.3;
+      ASK Split=0.3; Zabok=0.3; Zrinjevac=0.3; Moslavina=0.3; Futsal Dinamo=0.3; Olimpija Karlovac=0.1; Kvarner=0.2;
+      Kaštela/Ribola Kaštela=0.2; Samobor=0.2; Novo Vrijeme=0.2; Olmissum=0.2; Nacional=0.2; HAŠK=0.2;
+      Hrvatski sokol=0.2`,
+  },
+  {
+    slug: "medij",
+    group: "hr",
+    title: "Hrvatske novine, časopis, TV, radio ili portal",
+    hint: "Danas ili nekad",
+    strip: [],
+    answers: `Jutarnji list/Jutarnji=7; Večernji list/Večernji=7; 24sata=7; HRT/HTV/Hrvatska televizija=7;
+      Nova TV/Nova=7; RTL=5.5; Index/Index.hr=5.5; Slobodna Dalmacija/Slobodna=4; Novi list=3; N1=2; Telegram=2;
+      Tportal=2; Net.hr=2; Sportske novosti=2; Narodni radio=2; Otvoreni radio=2; Glas Slavonije=1.5; Vjesnik=1.5;
+      Feral Tribune/Feral=1.5; Nacional=1.5; Globus=1.5; Gloria=1.5; Dnevnik.hr=1.5; Hrvatski radio/HR1/Radio Zagreb=1.5;
+      Antena Zagreb/Antena=1.5; Radio 101=1.5; Radio Dalmacija=1.5; Glas Istre=0.7; Zadarski list=0.7; Novosti=0.7;
+      Poslovni dnevnik=0.7; Story=0.7; Glas Koncila=0.7; Bug=0.7; Smib=0.7; Hina=0.7; Doma TV=0.7; RTL2=0.7; Z1=0.7; OTV=0.7; CMC=0.7;
+      Arena Sport=0.7; Direktno=0.7; Sportnet=0.7; Enter Zagreb=0.7; Extra FM=0.7; Totalni FM=0.7; Šibenski list=0.4;
+      Varaždinske vijesti=0.4; Lider=0.4; Privredni vjesnik=0.4; Arena=0.4; Modra lasta=0.4; Nedjeljna Dalmacija=0.4;
+      Start=0.4; Polet=0.4; Plavi vjesnik=0.4; Faktograf=0.4; H-Alter=0.4; Lupiga=0.4; Narod.hr=0.4; Dnevno.hr=0.4;
+      Srednja.hr=0.4; Gol.hr=0.4; Laudato TV/Laudato=0.4; Radio Sljeme=0.4; Yammat FM=0.4; Laganini FM=0.4;
+      Radio Marija=0.4; Hrvatski katolički radio/HKR=0.4; Studio=0.2; Danas=0.2; Kanal Ri=0.2; Osječka televizija=0.2;
+      Zimo=0.2; Monitor.hr=0.2; Dalmacija Danas=0.2; Dalmatinski portal=0.2; Morski.hr=0.2; Radio Martin=0.2;
+      Radio Kaj=0.2; Radio Banovina=0.2; Radio Rijeka=0.2; Radio Split=0.2; Radio Osijek=0.2; Soundset Plavi=0.2;
+      Radio Student=0.2; Arkzin=0.1; Kerempuh=0.1`,
+  },
+  {
+    slug: "trgovina",
+    group: "hr",
+    title: "Trgovina ili trgovački lanac u Hrvatskoj",
+    hint: "Supermarket, dućan ili lanac, danas ili nekad",
+    strip: ["trgovina", "supermarket"],
+    answers: `Konzum=11.5; Lidl=9; Kaufland=6; Spar/Interspar=4.5; Studenac=4.5; DM=4.5; Plodine=4; Tommy=4;
+      Müller/Mueller=3; Ikea=3; Emmezeta=2.5; Zara=2.5; H&M=2.5; Eurospin=1.5; KTC=1.5; Metro=1.5; Pevex=1.5; Bauhaus=1.5; Lesnina=1.5;
+      Bipa=1.5; Nama=1.5; Tisak=1.5; Billa=1.5; Pepco=1.5; Mlinar=1.5; Ribola=0.8; Trgovina Krk=0.8; JYSK=0.8; Harvey Norman=0.8; Links=0.8;
+      Sancta Domenica=0.8; Douglas=0.8; Getro=0.8; Mercator=0.8; Diona=0.8; Kerum=0.8; Decathlon=0.8; Intersport=0.8; Sport Vision=0.8;
+      C&A=0.8; New Yorker=0.8; Deichmann=0.8; KiK=0.8; Tedi=0.8; Action=0.8; Obi=0.8; XXXLutz=0.8; Algoritam=0.8; Pan-Pek=0.8; Boso=0.4;
+      Elipso=0.4; Žabac=0.4; NTL=0.4; Hervis=0.4; Pull&Bear=0.4; Bershka=0.4; CCC=0.4; Takko=0.4; Mango=0.4;
+      Reserved=0.4; Sinsay=0.4; Varteks=0.4; Borovo=0.4; Instar=0.4; Hgspot=0.4; iStyle=0.4; Baumax=0.4;
+      Prima namještaj=0.4; Znanje=0.4; Profil=0.4; Školska knjiga=0.4; Sephora=0.4; eKupi=0.4; Merkur=0.2; Ljevak=0.2;
+      Lonia=0.1; Mikronis=0.1`,
+  },
+  {
+    slug: "zagreb-ulica",
+    group: "hr",
+    title: "Ulica, trg ili park u Zagrebu",
+    hint: "Ulica, avenija, trg, park ili šetalište",
+    strip: ["ulica", "trg", "park"],
+    answers: `Trg bana Josipa Jelačića/Trg bana Jelačića/Jelačić plac/Jelačićev trg=10.5; Ilica=8.5; Maksimir=3.5;
+      Tkalčićeva/Tkalča=3.5; Ulica grada Vukovara/Vukovarska/Vukovarska avenija=3.5; Savska/Savska cesta=3;
+      Zrinjevac/Trg Nikole Šubića Zrinskog=3; Cvjetni trg/Trg Petra Preradovića/Cvjetni=3;
+      Trg kralja Tomislava/Tomislavac=2; Markov trg/Trg svetog Marka=2; Britanski trg/Britanac=2;
+      Kvaternikov trg/Kvatrić=2; Jarun=2; Slavonska avenija/Slavonska=2; Radićeva=1.5; Bundek=1.5; Ribnjak=1.5;
+      Heinzelova=1.5; Zagrebačka avenija=1.5; Avenija Dubrovnik=1.5; Selska/Selska cesta=1.5; Draškovićeva=1.5; Branimirova=1.5;
+      Frankopanska=1.5; Gajeva=1.5; Bogovićeva=1.5; Kaptol=1.5; Mirogoj=1.5; Vlaška=1; Dolac=1;
+      Trg Republike Hrvatske/Trg maršala Tita=1; Trg žrtava fašizma/Trg hrvatskih velikana=1;
+      Strossmayerovo šetalište/Strossmartre=1; Masarykova=0.7; Praška=0.7; Petrinjska=0.7; Jurišićeva=0.7; Palmotićeva=0.7;
+      Martićeva=0.7; Opatovina=0.7; Mesnička=0.7; Radnička/Radnička cesta=0.7; Ljubljanska avenija=0.7;
+      Avenija Marina Držića/Držićeva=0.7; Avenija Većeslava Holjevca=0.7; Maksimirska=0.7; Zvonimirova=0.7; Šubićeva=0.7;
+      Petrova=0.7; Strossmayerov trg=0.7; Trg Ante Starčevića=0.7; Botanički vrt=0.7; Lenucijeva potkova=0.7; Tuškanac=0.7;
+      Šalata=0.7; Nova cesta=0.7; Ozaljska=0.7; Tratinska=0.7; Kamenita=0.7; Teslina=0.7; Preradovićeva=0.7; Varšavska=0.7;
+      Hebrangova=0.7; Horvaćanska=0.7; Kranjčevićeva=0.7; Krvavi most=0.7; Ulica Hrvatske bratske zajednice=0.4;
+      Avenija Dubrava=0.4; Trg Francuske Republike=0.4; Trg Stjepana Radića=0.4; Zagrebačka cesta=0.4;
+      Ulica Republike Austrije=0.4; Bakačeva=0.4; Gundulićeva=0.4; Tomićeva=0.4; Mihanovićeva=0.4; Krešimirov trg=0.4;
+      Voćarska=0.4; Medvedgradska=0.4; Ksaverska cesta=0.4; Mlinarska=0.4; Prisavlje=0.4; Savica=0.4;
+      Mažuranićev trg=0.4; Marulićev trg=0.4; Grič=0.4; Katarinin trg=0.4; Opatička=0.4; Šenoina=0.4; Skalinska=0.4;
+      Ilirski trg=0.2; Pavla Radića=0.2; Amruševa=0.2; Berislavićeva=0.2; Đorđićeva=0.2; Laščinska=0.2; Demetrova=0.2;
+      Ćirilometodska=0.2; Kušlanova=0.2; Jadranska avenija=0.2; Park Stara Trešnjevka=0.2; Jelenovac=0.2;
+      Dotrščina=0.2; Pod zidom=0.1; Mletačka=0.1`,
+  },
+  {
+    slug: "kvart-grad",
+    group: "hr",
+    title: "Kvart u Splitu, Rijeci ili Osijeku",
+    hint: "Gradski kotar, kvart ili naselje u jednom od ta tri grada",
+    strip: [],
+    answers: `Bačvice=6; Split 3=5; Trsat=5; Varoš/Veli Varoš=4; Poljud=4; Žnjan=4; Sušak=4; Kantrida=4; Tvrđa=4;
+      Spinut=3; Meje=3; Gripe=3; Zamet=3; Gornji grad=3; Donji grad=3; Bol=2; Lovret=2; Lokve=2; Mertojak=2;
+      Sućidar=2; Brda=2; Trstenik=2; Firule=2; Pećine=2; Kozala=2; Vežica/Gornja Vežica/Donja Vežica=2; Retfala=2;
+      Jug II/Jug 2/Jug=2; Sjenjak=2; Kman=1.5; Ravne njive=1.5; Turnić=1.5; Drenova=1.5; Novi grad=1.5; Višnjevac=1.5;
+      Kocunar=1; Mejaši=1; Neslanovac=1; Plokite=1; Pujanke=1; Sirobuja=1; Visoka=1; Stobreč=1; Blatine/Škrape=1;
+      Lučac=1; Manuš=1; Dobri=1; Pehlin=1; Srdoči=1; Škurinje=1; Krnjevo=1; Belveder=1; Brajda=1; Mlaka=1;
+      Podmurvice=1; Industrijska četvrt=1; Josipovac=1; Tenja=1; Šine=0.5; Kamen=0.5; Zenta=0.5; Martinkovac=0.5;
+      Grbci=0.5; Orehovica=0.5; Hosti=0.5; Pulac=0.5; Školjić=0.5; Delta=0.5; Draga=0.5; Briješće=0.5; Sarvaš=0.5;
+      Cvjetno naselje=0.5; Bosutsko naselje=0.5; Zeleno polje=0.5; Pazdigrad=0.3; Brašćine=0.3; Pašac=0.3;
+      Rujevica=0.3; Klisa=0.3; Vijenac=0.3; Nemetin=0.3; Tvrđavica=0.3; Duilovo=0.1; Svilno=0.1`,
+  },
+  {
+    slug: "plaza-hr",
+    group: "hr",
+    title: "Plaža u Hrvatskoj",
+    hint: "Ime plaže ili uvale za kupanje, na moru, jezeru ili rijeci",
+    strip: ["plaza", "uvala"],
+    answers: `Zlatni rat=15; Bačvice=8; Zrće=5; Sakarun/Saharun=4; Stiniva=4; Punta rata=4; Kamenjak=3;
+      Rajska plaža=3; Banje=3; Vela plaža=3; Nugal=2; Kraljičina plaža=2; Kašjuni=2; Žnjan=2; Čikat=2; Šunj=2;
+      Pasjača=1; Kupari=1; Lapad=1; Pržina=1; Slanica=1; Proizd=1; Dubovica=1; Medveja=1; Slatina=1; Lovrečina=1;
+      Firule=1; Bene=1; Kolovare=1; Borik=1; Jadrija=1; Raduča=1; Srebrna=1; Pupnatska luka=1; Saplunara=1;
+      Prapratno=1; Sveti Jakov=1; Zlatni rt=1; Jarun=1; Divna=0.5; Sabunike=0.5; Ručica=0.5; Kandarola=0.5;
+      Sahara=0.5; Ježinac=0.5; Trstenik=0.5; Kaštelet=0.5; Kantrida=0.5; Ostro=0.5; Oprna=0.5; Banj=0.5;
+      Pokonji Dol=0.5; Stončica=0.5; Lone=0.5; Girandella=0.5; Plava laguna=0.5; Zelena laguna=0.5; Velika plaža=0.5;
+      Bundek=0.5; Šoderica=0.5; Copacabana=0.5; Buža=0.3; Caska=0.3; Saplun=0.1; Žurkovo=0.1`,
+  },
+  {
+    slug: "spilja-slap",
+    group: "hr",
+    title: "Špilja, jama ili slap u Hrvatskoj",
+    hint: "Špilja, pećina, jama, ponor ili slap",
+    strip: ["spilja", "spilje", "pecina", "jama", "slap", "slapovi"],
+    answers: `Modra špilja/Plava špilja=10; Skradinski buk=10; Veliki slap=6; Roški slap=5; Krka/Slapovi Krke=5;
+      Plitvice/Plitvička jezera=4; Rastoke=3; Barać/Baraćeve špilje=3; Cerovačke špilje=2; Veternica=2;
+      Pazinska jama/Pazinski ponor=2; Lukina jama=2; Vrelo=1.5; Zelena špilja=1; Grabovača=1; Lokvarka=1;
+      Manita peć=1; Biserujka=1; Vela spila=1; Baredine=1; Romualdova pećina=1; Vranjača=1; Vindija=1; Sopot=1;
+      Gubavica=1; Manojlovac/Manojlovački slap=1; Zarečki krov=1; Zeleni vir=1; Slapovi Mrežnice=1; Modrič=0.5;
+      Mramornica=0.5; Feštinsko kraljevstvo=0.5; Slovačka jama=0.5; Đula-Medvedica/Đula=0.5; Velebita=0.5;
+      Ledena jama=0.5; Bilušića buk=0.5; Brljan=0.5; Krčić=0.5; Galovački buk=0.5; Sastavci=0.5; Vražji prolaz=0.5;
+      Gospodska pećina=0.3; Šipun=0.3; Medvidina špilja=0.3; Miljacka=0.3; Milke Trnine=0.3; Visoki buk=0.3; Rača=0.3;
+      Tounjčica=0.3; Jopićeva špilja=0.3; Patkov gušt=0.1`,
+  },
+  {
+    slug: "obicaj",
+    group: "hr",
+    title: "Hrvatski običaj, tradicija ili narodni ples",
+    hint: "Običaj, blagdanski ritual, narodni ples, pjevanje ili rukotvorina",
+    strip: [],
+    answers: `Kolo=8; Klapa/Klapsko pjevanje=6; Sinjska alka/Alka=5; Bećarac=4; Licitar/Licitarsko srce/Medičarstvo=4;
+      Moreška=4; Maškare/Fašnik/Karneval=4; Linđo/Poskočica=3; Ojkanje/Ojkača=3; Drmeš=3; Zvončari=3; Pisanice=3;
+      Gange/Ganga=2; Nijemo kolo=2; Badnjak=2; Krijes/Ivanjski krijes/Ivanje=2; Martinje=2; Za Križen=2;
+      Čipka/Paška čipka/Lepoglavska čipka/Hvarska čipka=2; Kolinje/Svinjokolja=2; Narodna nošnja/Nošnja=2; Kravata=2;
+      Festa svetog Vlaha/Sveti Vlaho=1.5; Kumpanija=1; Kraljice/Ljelje=1; Ladarice=1; Vincekovo=1;
+      Tamburica/Tamburaška glazba=1; Lucijino žito/Božićno žito=1; Adventski vijenac=1; Jaslice/Betlehem=1;
+      Koledari/Koleda=1; Šestinski kišobran=1; Guslanje/Gusle=1; Slavonsko kolo=1; Dvoglasje/Istarska ljestvica=1;
+      Rera=0.5; Prelo=0.5; Sijelo=0.5; Dožinjci=0.5; Jurjevo/Jurjaši=0.5; Pleter=0.5; Glagoljaštvo/Glagoljica=0.5;
+      Sopile/Sopele=0.5; Balun=0.5; Čuvari Kristova groba/Turci=0.5; Hodočašće=0.5; Blagoslov jela=0.5; Kumstvo=0.3;
+      Barjaktar=0.3; Pust=0.3; Polaženik=0.1; Zeleni Juraj=0.1; Picigin=2; Briškula/Trešeta/Briškula i trešeta=1;
+      Bocanje/Boće/Balote=1; Ponoćka=1; Kićenje bora=1; Sveti Nikola/Nikolinje=1; Cvjetnica=0.5; Krampus=0.5;
+      Svi sveti=0.5; Vez/Vezenje=0.5; Trka na prstenac=0.3; Fjaka=0.5; Mih/Mišnice/Dude=0.3`,
+  },
+  {
+    slug: "knjizevno-djelo",
+    group: "hr",
+    title: "Djelo hrvatske književnosti ili lektira",
+    hint: "Naslov romana, drame, pjesme ili zbirke",
+    strip: [],
+    answers: `Čudnovate zgode šegrta Hlapića/Šegrt Hlapić/Hlapić=6; Judita=3.5; Zlatarovo zlato=3; Vlak u snijegu=3;
+      Družba Pere Kvržice/Pero Kvržica=3; Priče iz davnine=2.5; Dundo Maroje=2.5; Smrt Smail-age Čengića=2.5;
+      Povratak Filipa Latinovicza/Filip Latinovicz=2.5; Gospoda Glembajevi/Glembajevi=2.5; Mali princ=2.5; Osman=2;
+      Koko u Parizu=2; Jama=2; Romeo i Julija=2; Dubravka=1; Ribanje i ribarsko prigovaranje/Ribanje=1;
+      Seljačka buna=1; Čuvaj se senjske ruke=1; Kiklop=1; Na rubu pameti=1; Balade Petrice Kerempuha=1;
+      Šuma Striborova=1; Mirisi, zlato i tamjan=1; Đuka Begović=1; Grička vještica=1; Tena=1; U registraturi=1;
+      Smogovci=1; Veli Jože=1; Ježeva kućica=1; Na Drini ćuprija=1; Hamlet=1; Zločin i kazna=1;
+      Junaci Pavlove ulice=1; Planine=0.6; Robinja=0.6; Suze sina razmetnoga=0.6; Diogenes=0.6; Prosjak Luka=0.6;
+      Hrvatski bog Mars=0.6; Zastave=0.6; Banket u Blitvi=0.6; Regoč=0.6; Novela od Stanca=0.6; Skup=0.6; Mrtvi kapitali=0.6;
+      Posljednji Stipančići=0.6; Svakidašnja jadikovka=0.6; Glorija=0.6; Proljeća Ivana Galeba=0.6; Dnevnik malog Perice=0.6;
+      Uzbuna na Zelenom vrhu=0.6; Zagonetni dječak=0.6; Koko i duhovi=0.6; Nevidljiva Iva=0.6; Zlatni danci=0.6;
+      Duh u močvari=0.6; Breza=0.6; Predstava Hamleta u selu Mrduša Donja=0.6; Lijepa naša/Horvatska domovina=0.6;
+      Ana Karenjina=0.6; Kralj Edip=0.6; Antigona=0.6; Ilijada=0.6; Odiseja=0.6; Don Quijote=0.6; Stranac=0.6; Proces=0.6;
+      Preobrazba=0.6; Starac i more=0.6; Lovac u žitu=0.6; Pipi Duga Čarapa=0.6; Emil i detektivi=0.6;
+      Pustolovine Toma Sawyera/Tom Sawyer=0.6; Dnevnik Anne Frank=0.6; Orlovi rano lete=0.6; Božanstvena komedija=0.6;
+      Kraljevo=0.3; U agoniji=0.3; Leda=0.3; Kći Lotršćaka=0.3; Davidijada=0.3; Prijan Lovro=0.3;
+      Karanfil s pjesnikova groba=0.3; Fiškal=0.3; Kip domovine leta 188*/Kip domovine=0.3; Jesenje veče=0.3;
+      Utjeha kose=0.3; Kolajna=0.3; Lelek sebra=0.3; Oblak=0.3; Balada iz predgrađa=0.3; Voćka poslije kiše=0.3;
+      Preobraženja=0.3; Opomena=0.3; Isušena kaljuža=0.3; Ruke=0.3; Kratki izlet=0.3; More=0.3;
+      Neprijatelj broj jedan=0.3; Lažeš, Melita=0.3; Mrvice iz dnevnog boravka=0.3; Zaboravljeni sin=0.3;
+      Kako smo lomili noge=0.3; Kad bi drveće hodalo=0.3; Dobri duh Zagreba=0.3; Što je muškarac bez brkova=0.3;
+      Sarajevski Marlboro=0.3; Mama Leone=0.3; Štefica Cvek u raljama života=0.3; Svoga tijela gospodar=0.3;
+      Satir iliti divji čovik=0.3; Razgovor ugodni naroda slovinskoga=0.3; Urota zrinsko-frankopanska=0.3;
+      Pod starim krovovima=0.3; Dubrovačka trilogija=0.3; Ekvinocij=0.3; Medvjed Brundo=0.3; Hrvatski Faust=0.3;
+      Prosjaci i sinovi=0.3; Madame Bovary=0.3; Gospodar muha=0.3; Heidi=0.3; Robinson Crusoe=0.3; Pinokio=0.3;
+      Alisa u zemlji čudesa=0.3; Faust=0.3; Rat i mir=0.3; Slika Doriana Graya=0.3; Plameni inkvizitori=0.2;
+      Tirena=0.2; Grižula=0.2; Branka=0.2; Kletva=0.2; Baruničina ljubav=0.2; Tito Dorčić=0.2; Dva svijeta=0.2;
+      Mora=0.2; Cvijet sa raskršća=0.2; Notturno=0.2; Mojsije=0.2; Iseljenik=0.2; Moj dom=0.2;
+      Pobratimstvo lica u svemiru=0.2; Visoki jablani=0.2; Visoka žuta žita=0.2; Baraka Pet Be=0.2;
+      Cvrčak pod vodopadom=0.2; Zore i vihori=0.2; Ljubav ili smrt=0.2; Ništa nas ne smije iznenaditi=0.2;
+      Hotel Zagorje=0.2; Putnik=0.2; Rodu o jeziku=0.2; Olga i Lina=0.2; Propali dvori=0.2; Pustolov pred vratima=0.2;
+      Bijeli jelen=0.2; Šarko=0.2; Tifusari=0.2; Bolja polovica hrabrosti=0.2; Djeca Božja=0.2; Čangi=0.2; Kandid=0.2;
+      Braća Karamazovi=0.2; Revizor=0.2; Životinjska farma=0.2; Oliver Twist=0.2; Cvit razgovora=0.1;
+      Vila Slovinka=0.1`,
+  },
+  {
+    slug: "stranka",
+    group: "hr",
+    title: "Hrvatska politička stranka, danas ili nekad",
+    hint: "Stranka, pokret ili koalicija, pod imenom ili kraticom",
+    strip: ["stranka"],
+    answers: `HDZ/Hrvatska demokratska zajednica=30; SDP/Socijaldemokratska partija=25; Možemo=8;
+      Most/Most nezavisnih lista=8; Domovinski pokret/DP=5; HNS/Hrvatska narodna stranka=4;
+      HSP/Hrvatska stranka prava=4; HSS/Hrvatska seljačka stranka/Hrvatska pučka seljačka stranka=4;
+      HSLS/Hrvatska socijalno-liberalna stranka=3; IDS/Istarski demokratski sabor=3; Živi zid=3;
+      SKH/Savez komunista Hrvatske/KPH/Komunistička partija Hrvatske=2; Stranka prava=2;
+      HDSSB/Hrvatski demokratski savez Slavonije i Baranje=2; Laburisti/Hrvatski laburisti=1; Fokus=1; Centar=1;
+      Pametno=1; HSU/Hrvatska stranka umirovljenika=1; SDSS/Samostalna demokratska srpska stranka=1;
+      Hrvatski suverenisti/Suverenisti=1; Bandić Milan 365/Stranka rada i solidarnosti=1;
+      ORaH/Održivi razvoj Hrvatske=1; HSP AS/HSP dr. Ante Starčević=1; Zagreb je naš=1;
+      KPJ/SKJ/Komunistička partija Jugoslavije/Savez komunista Jugoslavije=1; Narodna stranka/Ilirska stranka=1;
+      Hrvatsko-srpska koalicija=1; Reformisti=0.5; Nova ljevica=0.5; Radnička fronta=0.5; Hrast=0.5;
+      Hrvatska konzervativna stranka/HKS=0.5; Glas=0.5; Nezavisna platforma Sjever/NPS=0.5;
+      PGS/Primorsko-goranski savez=0.5; Mađaroni/Unionistička stranka=0.5; Frankovci/Čista stranka prava=0.5;
+      Ustaše/Ustaški pokret=0.5; Hrvatski blok=0.3; HKDU=0.3; Libra=0.3; Demokratski centar/DC=0.3; HIP=0.3;
+      Neovisni za Hrvatsku/NHR=0.3; Stranka s imenom i prezimenom=0.3; HDS/Hrvatska demokratska stranka=0.3;
+      KNS/Koalicija narodnog sporazuma=0.3; SDS/Srpska demokratska stranka=0.3;
+      Akcija socijaldemokrata Hrvatske/ASH=0.1`,
+  },
 ];
