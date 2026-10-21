@@ -12,6 +12,13 @@ export function tierFor(cfg: SkinConfig, share: number): Tier {
   return cfg.tiers.find((t) => share >= t.minShare) ?? cfg.tiers[cfg.tiers.length - 1];
 }
 
+/** Početna procjena (%) iz sredine raspona tiera, za admin kad bira prijevoz umjesto postotka. */
+export function priorForTier(tiers: Pick<Tier, "minShare">[], index: number): number {
+  const min = tiers[index].minShare;
+  const max = index > 0 ? tiers[index - 1].minShare : min * 1.5;
+  return Math.round(((min + max) / 2) * 100) / 100;
+}
+
 export function speedFor(cfg: SkinConfig, elapsedMs: number): SpeedStep {
   const steps = cfg.speed ?? [];
   return steps.find((s) => s.maxSeconds === undefined || elapsedMs <= s.maxSeconds * 1000) ?? { multiplier: 1, emoji: "", name: "" };

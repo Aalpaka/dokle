@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { blendedShare, scoreKm, speedFor, stationAt, tierFor } from "./scoring";
+import { blendedShare, priorForTier, scoreKm, speedFor, stationAt, tierFor } from "./scoring";
 import { dayNumber, localDate } from "./day";
 import { hrConfig } from "@/skins/hr/config";
 
@@ -14,6 +14,11 @@ describe("scoring", () => {
     expect(tierFor(hrConfig, 22).km).toBe(10);
     expect(tierFor(hrConfig, 0.4).km).toBe(125);
     expect(tierFor(hrConfig, 2).km).toBe(70);
+  });
+  it("procjena iz tiera pada u isti tier", () => {
+    hrConfig.tiers.forEach((t, i) => expect(tierFor(hrConfig, priorForTier(hrConfig.tiers, i)).name).toBe(t.name));
+    expect(priorForTier(hrConfig.tiers, 0)).toBe(25);
+    expect(priorForTier(hrConfig.tiers, hrConfig.tiers.length - 1)).toBe(0.25);
   });
   it("postaje", () => {
     expect(stationAt(hrConfig, 0).name).toBe("Vukovar");
