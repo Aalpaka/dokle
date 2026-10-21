@@ -5,6 +5,7 @@ import type { GameState, RoundView } from "@/server/game";
 import type { SkinConfig } from "@/skins/types";
 import { formatShare, stationAt } from "@/lib/scoring";
 import RouteMap from "./RouteMap";
+import { AccountLink, GoogleButton, useMe, type Me } from "./account";
 
 async function api<T>(path: string, body?: unknown): Promise<T> {
   const res = await fetch(path, {
@@ -22,6 +23,8 @@ export default function Game() {
   const [state, setState] = useState<GameState | null>(null);
   const [showEnd, setShowEnd] = useState(false);
   const [error, setError] = useState(false);
+  // profil (streak) se osvježava kad partija završi
+  const me = useMe(state?.phase === "end" || showEnd);
 
   const load = useCallback(() => {
     api<GameState>("/api/game").then(setState, () => setError(true));
@@ -36,7 +39,7 @@ export default function Game() {
   const phase = state.phase === "reveal" && showEnd ? "end" : state.phase;
 
   return (
-    <Shell state={state}>
+    <Shell state={state} me={me}>
       <section className="card" aria-live="polite">
         {phase === "intro" && <Intro cfg={cfg} perDay={state.perDay} onStart={start} />}
         {phase === "play" && state.current && (
@@ -48,26 +51,29 @@ export default function Game() {
             onNext={() => (state.rounds.length >= state.perDay ? setShowEnd(true) : start())}
           />
         )}
-        {phase === "end" && <End state={state} />}
+        {phase === "end" && <End state={state} me={me} />}
       </section>
       <RouteMap cfg={cfg} km={state.totalKm} />
     </Shell>
   );
 }
 
-function Shell({ state, children }: { state?: GameState; children: React.ReactNode }) {
+function Shell({ state, me = null, children }: { state?: GameState; me?: Me | null; children: React.ReactNode }) {
   const cfg = state?.skin.config;
   const [y, m, d] = (state?.date ?? "").split("-");
   return (
     <div className="wrap">
       <header className="top">
         <div className="plate">{cfg?.title ?? "Dokle?"}</div>
-        {state && cfg && (
-          <div className="meta">
-            <b>#{state.number}</b> · {+d}. {+m}. {y}.<br />
-            {cfg.stations[0].name} → {cfg.stations[cfg.stations.length - 1].name} · {cfg.maxKm} km
-          </div>
-        )}
+        <div className="row">
+          {state && cfg && (
+            <div className="meta">
+              <b>#{state.number}</b> · {+d}. {+m}. {y}.<br />
+              {cfg.stations[0].name} → {cfg.stations[cfg.stations.length - 1].name} · {cfg.maxKm} km
+            </div>
+          )}
+          <AccountLink me={me} />
+        </div>
       </header>
       <div className="grid">{children}</div>
     </div>
@@ -262,7 +268,7 @@ function Chips({ items }: { items: { canonical: string; share: number }[] }) {
   );
 }
 
-function End({ state }: { state: GameState }) {
+function End({ state, me }: { state: GameState; me: Me | null }) {
   const cfg = state.skin.config;
   const km = state.totalKm;
   const st = stationAt(cfg, km);
@@ -304,6 +310,18 @@ function End({ state }: { state: GameState }) {
         </button>
         <span className="small">{copied}</span>
       </div>
+      {me?.authEnabled && !me.user && (
+        <div className="savebox">
+          <b>Spremi rezultat i prati streak</b>
+          <span className="small">Prijavom se današnja partija sprema na tvoj račun, pa povijest vidiš na svakom uređaju.</span>
+          <div className="row"><GoogleButton /></div>
+        </div>
+      )}
+      {me?.user && me.stats && (
+        <p className="small">
+          🔥 Streak: <b>{me.stats.currentStreak}</b> {me.stats.currentStreak === 1 ? "dan" : "dana"} · <a href="/profil">tvoja povijest</a>
+        </p>
+      )}
       <Countdown timezone={state.skin.timezone} />
     </div>
   );

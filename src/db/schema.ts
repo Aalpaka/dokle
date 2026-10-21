@@ -89,6 +89,7 @@ export const puzzleCategories = pgTable(
 export const players = pgTable("players", {
   id: uuid("id").primaryKey(),
   authUserId: uuid("auth_user_id").unique(),
+  email: text("email"),
   nickname: text("nickname"),
   role: text("role").notNull().default("player"), // player | admin
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
