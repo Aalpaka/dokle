@@ -175,4 +175,12 @@ export const helikopter: Record<string, string[]> = {
   "svjetska-znamenitost": ["Shwedagon", "Kinkaku-ji/Zlatni paviljon"],
   "more-ocean": ["Vela vrata", "Tarantski zaljev"],
   "jezero-svijet": ["Vlasinsko jezero", "Mälaren"],
+  "svjetski-brend": ["Staedtler", "Monsanto"],
+  avioprijevoznik: ["Smartwings", "SunExpress"],
+  "kosarkas-svijet": ["Rimas Kurtinaitis", "Moses Malone"],
+  "sportas-svijet": ["Larisa Latynina", "Edwin Moses"],
+  stadion: ["Stadion Hrvatskih vitezova", "Bilino polje"],
+  "politicar-svijet": ["Kwame Nkrumah", "Thomas Sankara"],
+  "strani-pisac": ["Srećko Kosovel", "Skender Kulenović"],
+  "strani-znanstvenik": ["Josef Ressel", "Eratosten"],
 };

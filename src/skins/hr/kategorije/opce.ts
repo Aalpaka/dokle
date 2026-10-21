@@ -798,4 +798,266 @@ export const opceKategorije: SeedCategory[] = [
       Bolsena=0.2; Tonle Sap=0.2; Inle=0.2; Eyre=0.2; Taupo=0.2; Vättern=0.2; Saimaa=0.2; Zlatarsko jezero=0.2;
       Plavsko jezero=0.2; Müritz=0.2; Tegernsee=0.2; Vlasinsko jezero=0.1; Mälaren=0.1`,
   },
+  {
+    slug: "svjetski-brend",
+    group: "opce",
+    title: "Svjetska tvrtka ili brend",
+    hint: "Strana tvrtka ili marka bilo čega",
+    strip: [],
+    answers: `Apple=6; Coca-Cola/Coca=5; Nike=4; Google=4; Samsung=3; Microsoft=3; Adidas=3; Amazon=2.5;
+      McDonald's/Mek=2.5; Tesla=2; Facebook/Meta=2; Mercedes/Mercedes-Benz=1.5; BMW=1.5; Volkswagen/VW=1.5; Sony=1.5; Pepsi=1.5;
+      IKEA=1.5; Toyota=1; Netflix=1; Disney=1; Gucci=1; Louis Vuitton=1; Chanel=1; Rolex=1; Ferrari=1; Puma=1; Zara=1;
+      H&M=1; Starbucks=1; Red Bull=1; Nestlé=1; Lego=1; Nokia=0.8; Nvidia=0.8; Intel=0.5; Philips=0.5; Siemens=0.5; Bosch=0.5;
+      LG=0.5; Huawei=0.5; Xiaomi=0.5; Canon=0.5; HP=0.5; IBM=0.5; Shell=0.5; Visa=0.5; Mastercard=0.5; Uber=0.5; Spotify=0.5; YouTube=0.5;
+      Instagram=0.5; TikTok=0.5; Burger King=0.5; KFC=0.5; Heineken=0.5; Nutella=0.5; Milka=0.5; Ferrero=0.5; Nivea=0.5; L'Oréal=0.5;
+      Dior=0.5; Prada=0.5; Versace=0.5; Armani=0.5; Levi's=0.5; Boeing=0.5; Airbus=0.5; Audi=0.5; Porsche=0.5; Lamborghini=0.5; Ford=0.5;
+      Nintendo=0.5; PlayStation=0.5; Nikon=0.3; Panasonic=0.3; Lenovo=0.3; Dell=0.3; BP=0.3; ExxonMobil/Exxon=0.3;
+      Gazprom=0.3; PayPal=0.3; Airbnb=0.3; Booking=0.3; Twitter/X=0.3; Subway=0.3; Carlsberg=0.3; Kinder=0.3;
+      Haribo=0.3; Danone=0.3; Unilever=0.3; Procter & Gamble/P&G=0.3; Colgate=0.3; Hugo Boss=0.3; Calvin Klein=0.3;
+      Tommy Hilfiger=0.3; Lacoste=0.3; Ralph Lauren=0.3; Converse=0.3; Vans=0.3; New Balance=0.3; Reebok=0.3;
+      Hermès=0.3; Swarovski=0.3; Casio=0.3; Ray-Ban=0.3; Fiat=0.3; Renault=0.3; Peugeot=0.3; Škoda=0.3; Honda=0.3;
+      Nissan=0.3; Hyundai=0.3; Kia=0.3; Volvo=0.3; Opel=0.3; Harley-Davidson=0.3; Yamaha=0.3; Michelin=0.3; DHL=0.3;
+      Marlboro=0.3; Xbox=0.3; Warner Bros=0.3; Rolls-Royce=0.3; Lidl=0.3; Walmart=0.3; Gillette=0.3; Pfizer=0.3;
+      OpenAI=0.3; Alibaba=0.3; Temu=0.3; Shein=0.3; AliExpress=0.3; eBay=0.3; Nescafé=0.3; Fanta=0.3; Oracle=0.2;
+      SAP=0.2; Cisco=0.2; The North Face=0.2; Under Armour=0.2; Fila=0.2; Asics=0.2; Victoria's Secret=0.2;
+      Cartier=0.2; Tiffany=0.2; Omega=0.2; Swatch=0.2; Ryanair=0.2; Lufthansa=0.2; Emirates=0.2; Ducati=0.2;
+      Pirelli=0.2; Goodyear=0.2; FedEx=0.2; UPS=0.2; Philip Morris=0.2; Ubisoft=0.2; EA=0.2; Universal=0.2;
+      Paramount=0.2; Bentley=0.2; Jaguar=0.2; Land Rover=0.2; Mini=0.2; Dacia=0.2; Seat=0.2; Citroën=0.2; Mazda=0.2;
+      Suzuki=0.2; Mitsubishi=0.2; Bugatti=0.2; Maserati=0.2; Alfa Romeo=0.2; Aldi=0.2; Carrefour=0.2; Costco=0.2;
+      Kaufland=0.2; Spar=0.2; Decathlon=0.2; Dyson=0.2; Miele=0.2; Whirlpool=0.2; Gorenje=0.2; Electrolux=0.2;
+      Tefal=0.2; Braun=0.2; Durex=0.2; Pampers=0.2; Johnson & Johnson=0.2; Bayer=0.2; Novartis=0.2; Roche=0.2;
+      Moderna=0.2; ChatGPT=0.2; Lipton=0.2; Sprite=0.2; Schweppes=0.2; Heinz=0.2; Kellogg's=0.2; Pringles=0.2;
+      Lay's=0.2; Doritos=0.2; Oreo=0.2; Twix=0.2; Snickers=0.2; Mars=0.2; M&M's=0.2; Toblerone=0.2; Lindt=0.2;
+      Jägermeister=0.2; Jack Daniel's=0.2; Guinness=0.2; Budweiser=0.2; Corona=0.2; Anthropic=0.1; Absolut=0.1;
+      Johnnie Walker=0.1; Bacardi=0.1; Smirnoff=0.1; Stella Artois=0.1; Moët/Moët & Chandon=0.1; Montblanc=0.1;
+      Bic=0.1; Faber-Castell=0.1; Staedtler=0.1; Monsanto=0.1`,
+  },
+  {
+    slug: "avioprijevoznik",
+    group: "opce",
+    title: "Zrakoplovna tvrtka",
+    hint: "Avioprijevoznik, danas ili nekad",
+    strip: ["airlines", "airways"],
+    answers: `Croatia Airlines=15; Ryanair=10; Lufthansa=8; Emirates=6; Wizz Air/Wizzair=5; easyJet=5;
+      Qatar Airways/Qatar=4; Turkish Airlines/Turkish=4; Air France=3; British Airways=3; KLM=3;
+      Austrian Airlines/Austrian=2; Swiss=2; Etihad=2; Aeroflot=2; Delta=2; American Airlines/American=2;
+      United Airlines/United=2; Alitalia/ITA Airways=2; Air Serbia=1; JAT/Jugoslavenski aerotransport=1; Iberia=1;
+      TAP=1; Norwegian=1; Adria Airways=1; Eurowings=1; Singapore Airlines=1; Qantas=1; Pan Am=1; Southwest=0.5;
+      Aer Lingus=0.5; SAS=0.5; Finnair=0.5; LOT=0.5; Aegean=0.5; Condor=0.5; TUI=0.5; Vueling=0.5; Volotea=0.5;
+      Cathay Pacific=0.5; Japan Airlines/JAL=0.5; Air Canada=0.5; Virgin Atlantic/Virgin=0.5; Air Berlin=0.5;
+      Germanwings=0.5; Czech Airlines/ČSA=0.3; Malév=0.3; Tarom=0.3; Olympic=0.3; Montenegro Airlines=0.3;
+      Trade Air=0.3; Jet2=0.3; Transavia=0.3; Pegasus=0.3; Flydubai=0.3; Air India=0.3; ANA/All Nippon=0.3;
+      Korean Air=0.3; Air China=0.3; Air New Zealand=0.3; LATAM=0.3; Avianca=0.3; Ethiopian=0.3; EgyptAir=0.3;
+      El Al=0.3; Thai Airways=0.3; Malaysia Airlines=0.3; TWA=0.3; Brussels Airlines=0.3; airBaltic=0.3;
+      Icelandair=0.3; Lauda=0.3; JetBlue=0.3; Saudia=0.2; China Southern=0.2; Aeroméxico=0.2; WestJet=0.2;
+      Royal Air Maroc=0.2; Garuda=0.2; Niki=0.2; Spirit=0.2; Air Europa=0.2; Air Montenegro=0.2; Smartwings=0.1;
+      SunExpress=0.1`,
+  },
+  {
+    slug: "kosarkas-svijet",
+    group: "opce",
+    title: "Košarkaš izvan Hrvatske",
+    hint: "Strani košarkaš ili košarkašica, bilo koja generacija",
+    strip: [],
+    answers: `Michael Jordan/Jordan=14.5; LeBron James/LeBron=8.5; Kobe Bryant/Kobe=7; Stephen Curry/Curry=4.5;
+      Nikola Jokić/Jokić=4.5; Luka Dončić/Dončić=4.5; Shaquille O'Neal/Shaq=3.5; Magic Johnson/Magic=3; Vlade Divac/Divac=3;
+      Larry Bird/Bird=2; Kevin Durant/Durant=2; Giannis Antetokounmpo/Giannis=2; Dirk Nowitzki/Nowitzki=1.5;
+      Tim Duncan=1.5; Kareem Abdul-Jabbar/Kareem=1.5; Dennis Rodman/Rodman=1.5; Scottie Pippen/Pippen=1.5;
+      Peja Stojaković/Stojaković=1.5; Dejan Bodiroga/Bodiroga=1.5; Arvydas Sabonis/Sabonis=1.5; Wilt Chamberlain=1;
+      Allen Iverson/Iverson=1; Pau Gasol/Gasol=1; Victor Wembanyama/Wembanyama=1; Saša Đorđević=1;
+      Mirza Delibašić=1; Goran Dragić=1; Miloš Teodosić/Teodosić=1; Bill Russell=0.7; Dwyane Wade=0.7;
+      Kevin Garnett=0.7; Hakeem Olajuwon=0.7; Charles Barkley=0.7; Karl Malone=0.7; John Stockton=0.7; Vince Carter=0.7;
+      Yao Ming=0.7; Manu Ginóbili=0.7; Tony Parker=0.7; Steve Nash=0.7; James Harden=0.7; Russell Westbrook=0.7;
+      Predrag Danilović=0.7; Dražen Dalipagić=0.7; Radivoj Korać=0.7; Dragan Kićanović=0.7; Jusuf Nurkić=0.7; Mirza Teletović=0.7;
+      Bogdan Bogdanović=0.7; Boban Marjanović=0.7; Šarūnas Jasikevičius=0.7; Vassilis Spanoulis=0.7; Tracy McGrady=0.4;
+      Marc Gasol=0.4; Dwight Howard=0.4; Chris Paul=0.4; Kawhi Leonard=0.4; Anthony Davis=0.4; Joel Embiid=0.4;
+      Jayson Tatum=0.4; Shai Gilgeous-Alexander=0.4; Damian Lillard=0.4; Kyrie Irving=0.4; Klay Thompson=0.4;
+      Ray Allen=0.4; Reggie Miller=0.4; Patrick Ewing=0.4; Julius Erving/Dr. J=0.4; Žarko Paspalj=0.4;
+      Zoran Slavnić=0.4; Nemanja Bjelica=0.4; Vasilije Micić=0.4; Nikola Mirotić=0.4; Šarūnas Marčiulionis=0.4;
+      Domantas Sabonis=0.4; Nikos Galis=0.4; Andrei Kirilenko=0.4; Juan Carlos Navarro=0.4; Ricky Rubio=0.4;
+      Rudy Fernández=0.4; Kristaps Porziņģis=0.4; Caitlin Clark=0.4; Paul George=0.2; Ja Morant=0.2;
+      Zion Williamson=0.2; Draymond Green=0.2; Isiah Thomas=0.2; Jerry West=0.2; Oscar Robertson=0.2; Beno Udrih=0.2;
+      Rasho Nesterović=0.2; Ivo Daneu=0.2; Theo Papaloukas=0.2; Sergei Belov=0.2; Sergio Rodríguez=0.2;
+      Dino Meneghin=0.2; Lauri Markkanen=0.2; Rudy Gobert=0.2; Dennis Schröder=0.2; Detlef Schrempf=0.2;
+      Hedo Türkoğlu=0.2; Alperen Şengün=0.2; Jonas Valančiūnas=0.2; Žydrūnas Ilgauskas=0.2; Facundo Campazzo=0.2;
+      Luis Scola=0.2; Diana Taurasi=0.2; Razija Mujanović=0.2; Andrew Bogut=0.1; Nicolas Batum=0.1; Sue Bird=0.1;
+      Lisa Leslie=0.1; Candace Parker=0.1; A'ja Wilson=0.1; Rimas Kurtinaitis=0.1; Moses Malone=0.1`,
+  },
+  {
+    slug: "sportas-svijet",
+    group: "opce",
+    title: "Svjetski sportaš ili sportašica, bez nogometa i tenisa",
+    hint: "Nije iz Hrvatske; bilo koji sport osim nogometa i tenisa, i šah",
+    strip: [],
+    answers: `Usain Bolt/Bolt=9; Michael Phelps/Phelps=6; Muhammad Ali=4.5; Michael Jordan=4.5;
+      Lewis Hamilton/Hamilton=4; Michael Schumacher/Schumacher=4; Max Verstappen/Verstappen=3; Tiger Woods=3;
+      Mike Tyson/Tyson=3; LeBron James=2.5; Ayrton Senna/Senna=2.5; Simone Biles=2.5; Valentino Rossi/Rossi=2.5;
+      Tadej Pogačar/Pogačar=2.5; Conor McGregor/McGregor=1.5; Floyd Mayweather/Mayweather=1.5; Nadia Comăneci/Comaneci=1.5;
+      Carl Lewis=1.5; Jesse Owens=1.5; Armand Duplantis/Mondo Duplantis/Duplantis=1.5; Sebastian Vettel/Vettel=1.5;
+      Fernando Alonso/Alonso=1.5; Marcel Hirscher/Hirscher=1.5; Mikaela Shiffrin/Shiffrin=1.5; Magnus Carlsen/Carlsen=1.5;
+      Klitschko/Kličko/Vitali Klitschko/Wladimir Klitschko=1; Sergej Bubka/Bubka=1; Eliud Kipchoge=1;
+      Niki Lauda/Lauda=1; Primož Roglič/Roglič=1; Garry Kasparov/Kasparov=1; Manny Pacquiao=0.8; Mo Farah=0.8;
+      Yelena Isinbayeva/Isinbajeva=0.8; Marc Márquez=0.8; Alain Prost=0.8; Kimi Räikkönen=0.8; Charles Leclerc=0.8;
+      Hermann Maier=0.8; Lindsey Vonn=0.8; Alberto Tomba=0.8; Tina Maze=0.8; Lance Armstrong=0.8; Peter Sagan=0.8;
+      Wayne Gretzky=0.8; Tom Brady=0.8; Bobby Fischer=0.8; Ronnie O'Sullivan=0.8; Khabib Nurmagomedov/Khabib=0.8; Tyson Fury=0.8;
+      Oleksandr Usyk/Usyk=0.8; Nikola Karabatić/Karabatić=0.8; Emil Zátopek=0.4; Florence Griffith-Joyner/Flo-Jo=0.4;
+      Haile Gebrselassie=0.4; Jakob Ingebrigtsen=0.4; Mark Spitz=0.4; Ian Thorpe=0.4; Katie Ledecky=0.4;
+      Mika Häkkinen=0.4; Lando Norris=0.4; Sébastien Loeb=0.4; Ingemar Stenmark=0.4; Marit Bjørgen=0.4;
+      Ole Einar Bjørndalen=0.4; Peter Prevc=0.4; Adam Małysz=0.4; Shaun White=0.4; Tony Hawk=0.4; Eddy Merckx=0.4;
+      Chris Froome=0.4; Jonas Vingegaard=0.4; Jaromír Jágr=0.4; Aleksandr Ovečkin/Ovechkin=0.4; Anže Kopitar=0.4;
+      Babe Ruth=0.4; Anatolij Karpov=0.4; Luke Littler=0.4; Anthony Joshua=0.4; Canelo Álvarez/Canelo=0.4;
+      Evander Holyfield=0.4; Mikkel Hansen=0.4; Michael Johnson=0.4; Katarina Witt=0.4; Paavo Nurmi=0.2;
+      Shelly-Ann Fraser-Pryce=0.2; Kenenisa Bekele=0.2; Karsten Warholm=0.2; Noah Lyles=0.2; Léon Marchand=0.2;
+      Caeleb Dressel=0.2; Ryan Lochte=0.2; Giacomo Agostini=0.2; Juan Manuel Fangio=0.2; Aksel Lund Svindal=0.2;
+      Bode Miller=0.2; Martin Fourcade=0.2; Johannes Thingnes Bø=0.2; Kamil Stoch=0.2; Matti Nykänen=0.2;
+      Kelly Slater=0.2; Miguel Induráin=0.2; Marco Pantani=0.2; Sidney Crosby=0.2; Patrick Mahomes=0.2;
+      Shohei Ohtani=0.2; Phil Taylor=0.2; Jon Jones=0.2; Ronda Rousey=0.2; Lennox Lewis=0.2; Rocky Marciano=0.2;
+      Sugar Ray Leonard=0.2; Oscar De La Hoya=0.2; Thierry Omeyer=0.2; Sebastian Coe=0.2; Allyson Felix=0.2;
+      Valerie Adams=0.2; Olga Korbut=0.2; Yuzuru Hanyu=0.2; Evgeni Plushenko=0.2; Colin McRae=0.2; Mario Lemieux=0.2;
+      Derek Jeter=0.2; Giba=0.2; Earvin Ngapeth=0.2; Ashton Eaton=0.2; Daley Thompson=0.2; Jackie Joyner-Kersee=0.2;
+      Sydney McLaughlin=0.2; Faith Kipyegon=0.2; Kohei Uchimura=0.2; Larisa Latynina=0.1; Edwin Moses=0.1`,
+  },
+  {
+    slug: "stadion",
+    group: "opce",
+    title: "Nogometni stadion",
+    hint: "U Hrvatskoj ili bilo gdje u svijetu, danas ili nekad",
+    strip: ["stadion"],
+    answers: `Maksimir=10; Poljud=8.5; Camp Nou=7; Santiago Bernabéu/Bernabeu=7; Old Trafford=5; Wembley=5;
+      San Siro/Giuseppe Meazza=4.5; Anfield=4.5; Allianz Arena=3.5; Signal Iduna Park/Westfalenstadion=2.5; Rujevica=2.5;
+      Stamford Bridge=2.5; Maracanã=2.5; Opus Arena=1.5; Gradski vrt=1.5; Kantrida=1.5; Emirates=1.5; Etihad=1.5; Stade de France=1.5;
+      Parc des Princes=1.5; Olimpico/Stadio Olimpico=1.5; Marakana/Rajko Mitić=1.5; Metropolitano/Wanda Metropolitano=1.5;
+      Azteca=1.5; Bombonera/La Bombonera=1.5; Goodison Park=0.9; St James' Park=0.9; Juventus Stadium/Allianz Stadium=0.9;
+      Diego Armando Maradona/San Paolo=0.9; Mestalla=0.9; Estádio da Luz/Da Luz=0.9; Johan Cruijff ArenA/Amsterdam ArenA=0.9;
+      Celtic Park=0.9; Ibrox=0.9; Olympiastadion=0.9; Partizanov stadion/JNA=0.9; Koševo=0.9; Grbavica=0.9; Lužniki=0.9;
+      Monumental=0.9; Tottenham Hotspur Stadium=0.4; White Hart Lane=0.4; Villa Park=0.4; Highbury=0.4;
+      Vicente Calderón=0.4; San Mamés=0.4; Dragão=0.4; De Kuip=0.4; Philips Stadion=0.4; Hampden Park=0.4;
+      Veltins-Arena=0.4; Stožice=0.4; Puskás Aréna=0.4; Ernst Happel/Prater=0.4; Ali Sami Yen/RAMS Park=0.4;
+      Şükrü Saracoğlu=0.4; Centenario=0.4; Lusail=0.4; Kranjčevićeva=0.4; Elland Road=0.3; Delle Alpi=0.3; Anoeta=0.3;
+      Ramón Sánchez-Pizjuán=0.3; José Alvalade=0.3; Red Bull Arena=0.3; Volksparkstadion=0.3; BayArena=0.3;
+      Ljudski vrt=0.3; Bijeli brijeg=0.3; Pecara=0.3; Atatürk=0.3; Olimpijski=0.3; Soccer City=0.3; Rose Bowl=0.3;
+      MetLife=0.3; Craven Cottage=0.3; Šubićevac=0.3; Aldo Drosina=0.3; Varteks/Anđelko Herjavec=0.3; Stanovi=0.3;
+      Benito Villamarín=0.2; Mercedes-Benz Arena=0.2; Borussia-Park=0.2; Weserstadion=0.2; Selhurst Park=0.2;
+      King Power=0.2; Branko Čavlović-Čavlek=0.2; Stadion Hrvatskih vitezova=0.1; Bilino polje=0.1`,
+  },
+  {
+    slug: "politicar-svijet",
+    group: "opce",
+    title: "Svjetski političar ili državnik",
+    hint: "Strani političar, vladar ili državnik, danas ili kroz povijest (ne iz Hrvatske)",
+    strip: [],
+    answers: `Donald Trump/Trump=7; Vladimir Putin/Putin=6; Barack Obama/Obama=5; Joe Biden/Biden=3.5;
+      Angela Merkel/Merkel=3.5; Adolf Hitler/Hitler=3; Winston Churchill/Churchill=2.5; Staljin/Josif Staljin/Stalin=2.5;
+      John F. Kennedy/JFK/Kennedy=2.5; Emmanuel Macron/Macron=2.5; Volodimir Zelenski/Zelenski=2.5; Lenjin/Lenin=2;
+      Napoleon/Napoleon Bonaparte=2; Abraham Lincoln/Lincoln=2; Nelson Mandela/Mandela=2; Mahatma Gandhi/Gandhi=2;
+      Aleksandar Vučić/Vučić=2; George Washington=1; Boris Johnson=1; Margaret Thatcher/Thatcher=1;
+      Mihail Gorbačov/Gorbačov=1; Fidel Castro/Castro=1; Mao Zedong/Mao=1; Xi Jinping=1; Kim Jong-un=1;
+      Benjamin Netanyahu/Netanyahu=1; Recep Tayyip Erdoğan/Erdogan=1; Viktor Orbán/Orban=1;
+      Slobodan Milošević/Milošević=1; Benito Mussolini/Mussolini=1; Che Guevara=0.9; Ronald Reagan/Reagan=0.9;
+      Bill Clinton=0.9; George W. Bush/Bush=0.9; Silvio Berlusconi/Berlusconi=0.9; Ursula von der Leyen=0.9;
+      Milorad Dodik/Dodik=0.9; Alija Izetbegović=0.6; Hillary Clinton=0.6; Richard Nixon/Nixon=0.6;
+      Franklin D. Roosevelt/Roosevelt=0.6; Kamala Harris=0.6; Charles de Gaulle/De Gaulle=0.6; Helmut Kohl=0.6;
+      Otto von Bismarck/Bismarck=0.6; Olaf Scholz=0.6; Tony Blair=0.6; Giorgia Meloni/Meloni=0.6; Francisco Franco/Franco=0.6;
+      Kraljica Elizabeta/Elizabeta II=0.6; Julije Cezar/Cezar=0.6; Mustafa Kemal Atatürk/Atatürk=0.6;
+      Sadam Husein/Saddam Hussein=0.6; Gadafi/Muammar Gaddafi=0.6; Narendra Modi/Modi=0.6; Justin Trudeau/Trudeau=0.6;
+      Hugo Chávez=0.6; Nicolae Ceaușescu/Čaušesku=0.6; Boris Jeljcin/Jeljcin=0.6; Aleksandr Lukašenko/Lukašenko=0.6;
+      Milo Đukanović=0.6; Zoran Đinđić=0.6; Radovan Karadžić=0.6; Janez Janša=0.6; Bašar al-Asad/Asad=0.6;
+      François Mitterrand=0.3; Nicolas Sarkozy/Sarkozy=0.3; Jacques Chirac=0.3; Willy Brandt=0.3; Konrad Adenauer=0.3;
+      Friedrich Merz=0.3; Keir Starmer=0.3; Rishi Sunak=0.3; Theresa May=0.3; David Cameron=0.3; Mario Draghi=0.3;
+      Aleksandar Veliki=0.3; Kleopatra=0.3; Marija Terezija=0.3; Franjo Josip=0.3; Ho Ši Min/Ho Chi Minh=0.3;
+      Jaser Arafat/Arafat=0.3; Indira Gandhi=0.3; Lula=0.3; Jair Bolsonaro=0.3; Nicolás Maduro=0.3;
+      Javier Milei/Milei=0.3; Augusto Pinochet=0.3; Simón Bolívar=0.3; Lech Wałęsa=0.3; Václav Havel=0.3;
+      Enver Hoxha/Enver Hodža=0.3; Dmitrij Medvedev=0.3; Sergej Lavrov=0.3; Milan Kučan=0.3; Borut Pahor=0.3;
+      Boris Tadić=0.3; Ivica Dačić=0.3; Ana Brnabić=0.3; Bakir Izetbegović=0.3; Dragan Čović=0.3; Željko Komšić=0.3;
+      Edi Rama=0.3; Kim Il-sung=0.3; Kim Jong-il=0.3; Homeini/Khomeini=0.3; Gamal Abdel Naser/Naser=0.3; Idi Amin=0.3;
+      Jens Stoltenberg=0.3; Mark Rutte=0.3; Henry Kissinger=0.3; Bernie Sanders=0.3; JD Vance=0.3; Marine Le Pen=0.3;
+      Sebastian Kurz=0.3; Theodore Roosevelt=0.2; Pedro Sánchez=0.2; Jean-Claude Juncker=0.2; Karlo III=0.2;
+      Karlo Veliki=0.2; Petar Veliki=0.2; Katarina Velika=0.2; Luj XIV=0.2; Pol Pot=0.2; Golda Meir=0.2;
+      Jawaharlal Nehru=0.2; Shinzo Abe=0.2; Jacinda Ardern=0.2; Eva Perón/Evita=0.2; Juan Perón=0.2;
+      Salvador Allende=0.2; Kofi Annan=0.2; António Guterres=0.2; Erich Honecker=0.2; Viktor Janukovič=0.2;
+      Julija Timošenko=0.2; Vojislav Koštunica=0.2; Hashim Thaçi=0.2; Albin Kurti=0.2; Ibrahim Rugova=0.2;
+      Nikola Gruevski=0.2; Alexis Tsipras=0.2; Deng Xiaoping=0.2; Ali Hamnei/Khamenei=0.2; Mahmud Ahmadinedžad=0.2;
+      Hosni Mubarak=0.2; Anvar el-Sadat/Sadat=0.2; Haile Selassie=0.2; Robert Mugabe=0.2; Kaja Kallas=0.2;
+      Condoleezza Rice=0.2; Nancy Pelosi=0.2; Alexander Van der Bellen=0.2; Jörg Haider=0.2; Sanna Marin=0.2;
+      Olof Palme=0.2; Ban Ki-moon=0.1; Todor Živkov=0.1; Kiro Gligorov=0.1; Kyriakos Mitsotakis=0.1;
+      Chiang Kai-shek=0.1; Robert Golob=0.1; Kwame Nkrumah=0.1; Thomas Sankara=0.1`,
+  },
+  {
+    slug: "strani-pisac",
+    group: "opce",
+    title: "Strani pisac ili pjesnik",
+    hint: "Pisac ili pjesnik koji nije iz Hrvatske, bilo kojeg doba",
+    strip: [],
+    answers: `William Shakespeare/Shakespeare=7.5; Fjodor Dostojevski/Dostojevski=3.5; Lav Tolstoj/Tolstoj=3.5;
+      J. K. Rowling/Rowling=3.5; Ernest Hemingway/Hemingway=3; Dante Alighieri/Dante=2.5; Homer=2.5;
+      Johann Wolfgang von Goethe/Goethe=2.5; Franz Kafka/Kafka=2.5; George Orwell/Orwell=2.5; Agatha Christie=2.5;
+      Stephen King=2.5; Victor Hugo/Hugo=2; Charles Dickens/Dickens=2; Mark Twain=2; Paulo Coelho/Coelho=2;
+      Gabriel García Márquez/Márquez=2; Antoine de Saint-Exupéry/Saint-Exupéry=2; Miguel de Cervantes/Cervantes=2;
+      J. R. R. Tolkien/Tolkien=2; Ivo Andrić/Andrić=2; Edgar Allan Poe/Poe=1; Oscar Wilde=1; Jane Austen=1;
+      Meša Selimović=1; Branko Ćopić/Ćopić=1; Aleksandar Puškin/Puškin=1; Anton Čehov/Čehov=1; Jules Verne/Verne=1;
+      Dan Brown=1; Mihail Bulgakov/Bulgakov=0.9; Hans Christian Andersen/Andersen=0.9; Danilo Kiš=0.6; Gogolj=0.6;
+      Vladimir Nabokov/Nabokov=0.6; Lord Byron/Byron=0.6; Charles Baudelaire/Baudelaire=0.6; Alexandre Dumas/Dumas=0.6;
+      Molière=0.6; Voltaire=0.6; Albert Camus/Camus=0.6; Jean-Paul Sartre/Sartre=0.6; Thomas Mann=0.6; Hermann Hesse/Hesse=0.6;
+      Erich Maria Remarque/Remarque=0.6; Braća Grimm=0.6; Astrid Lindgren=0.6; Umberto Eco=0.6; Pablo Neruda/Neruda=0.6;
+      Jorge Luis Borges/Borges=0.6; James Joyce/Joyce=0.6; Arthur Conan Doyle/Conan Doyle=0.6; Roald Dahl=0.6;
+      George R. R. Martin=0.6; Charles Bukowski/Bukowski=0.6; Haruki Murakami/Murakami=0.6; Njegoš=0.6;
+      Branislav Nušić/Nušić=0.6; Boris Pasternak=0.3; Solženjicin=0.3; Ivan Turgenjev=0.3; Maksim Gorki=0.3;
+      Arthur Rimbaud=0.3; Gustave Flaubert/Flaubert=0.3; Émile Zola/Zola=0.3; Honoré de Balzac/Balzac=0.3;
+      Marcel Proust/Proust=0.3; Friedrich Schiller/Schiller=0.3; Bertolt Brecht/Brecht=0.3; Heinrich Heine=0.3;
+      Rainer Maria Rilke/Rilke=0.3; Stefan Zweig=0.3; Henrik Ibsen=0.3; Italo Calvino=0.3; Boccaccio=0.3;
+      Petrarca=0.3; Federico García Lorca/Lorca=0.3; Mario Vargas Llosa=0.3; Isabel Allende=0.3;
+      Carlos Ruiz Zafón=0.3; José Saramago=0.3; Virginia Woolf=0.3; Samuel Beckett=0.3; George Bernard Shaw=0.3;
+      Jonathan Swift=0.3; Daniel Defoe=0.3; Lewis Carroll=0.3; Brontë/Charlotte Brontë/Emily Brontë=0.3;
+      Rudyard Kipling=0.3; Aldous Huxley=0.3; C. S. Lewis=0.3; John Grisham=0.3; Ken Follett=0.3;
+      J. D. Salinger/Salinger=0.3; F. Scott Fitzgerald/Fitzgerald=0.3; John Steinbeck/Steinbeck=0.3; Jack London=0.3;
+      Isaac Asimov/Asimov=0.3; Sofoklo=0.3; Vergilije=0.3; Ezop=0.3; Milan Kundera/Kundera=0.3; Jaroslav Hašek=0.3;
+      Aleksa Šantić=0.3; France Prešeren/Prešeren=0.3; Paul Verlaine=0.2; Günter Grass=0.2; Patrick Süskind=0.2;
+      Michael Ende=0.2; Jo Nesbø=0.2; Stieg Larsson=0.2; Knut Hamsun=0.2; Elena Ferrante=0.2; Carlo Collodi=0.2;
+      Luigi Pirandello=0.2; Julio Cortázar=0.2; Fernando Pessoa=0.2; Mary Shelley=0.2; John Keats=0.2;
+      H. G. Wells=0.2; Ian Fleming=0.2; Douglas Adams=0.2; Terry Pratchett=0.2; Neil Gaiman=0.2; Sidney Sheldon=0.2;
+      Danielle Steel=0.2; Harper Lee=0.2; William Faulkner=0.2; Herman Melville=0.2; Walt Whitman=0.2;
+      Emily Dickinson=0.2; Ray Bradbury=0.2; Kurt Vonnegut=0.2; Jack Kerouac=0.2; Toni Morrison=0.2;
+      Cormac McCarthy=0.2; Sylvia Plath=0.2; Rabindranath Tagore=0.2; Halil Džubran/Khalil Gibran=0.2; Rumi=0.2;
+      Euripid=0.2; Eshil=0.2; Ovidije=0.2; Horacije=0.2; Bohumil Hrabal=0.2; Ferenc Molnár=0.2; Orhan Pamuk=0.2;
+      Desanka Maksimović=0.2; Miloš Crnjanski=0.2; Mak Dizdar=0.2; Momo Kapor=0.2; Ivan Cankar=0.2;
+      Selma Lagerlöf=0.1; Alessandro Manzoni=0.1; William Wordsworth=0.1; Robert Burns=0.1; Yukio Mishima=0.1;
+      Omar Hajam=0.1; Sapfo=0.1; Karel Čapek=0.1; Wisława Szymborska=0.1; Adam Mickiewicz=0.1; Henryk Sienkiewicz=0.1;
+      Sándor Márai=0.1; Nazım Hikmet=0.1; Borislav Pekić=0.1; Dobrica Ćosić=0.1; Abdulah Sidran=0.1;
+      Dušan Kovačević=0.1; Srećko Kosovel=0.1; Skender Kulenović=0.1`,
+  },
+  {
+    slug: "strani-znanstvenik",
+    group: "opce",
+    title: "Strani znanstvenik ili izumitelj",
+    hint: "Nije rođen u Hrvatskoj; bilo koje doba",
+    strip: [],
+    answers: `Albert Einstein/Einstein=15.5; Isaac Newton/Newton=8; Thomas Edison/Edison=4.5;
+      Marie Curie/Marija Curie/Curie=4; Galileo Galilei/Galileo=4; Charles Darwin/Darwin=4; Stephen Hawking/Hawking=3;
+      Leonardo da Vinci/Leonardo=3; Nikolaj Kopernik/Kopernik=2.5; Arhimed=2.5; Alexander Graham Bell/Bell=1.5;
+      Louis Pasteur/Pasteur=1.5; Alexander Fleming/Fleming=1.5; Pitagora=1.5; Alfred Nobel/Nobel=1.5;
+      Dmitrij Mendeljejev/Mendeljejev=1.5; Robert Oppenheimer/Oppenheimer=1.5; Sigmund Freud/Freud=1.5; Steve Jobs/Jobs=1.5;
+      Bill Gates=1.5; Elon Musk/Musk=1.5; Johannes Gutenberg/Gutenberg=1.5; Aristotel=1; Johannes Kepler/Kepler=1;
+      Alan Turing/Turing=1; Braća Wright=1; Henry Ford=1; Euklid=0.8; Michael Faraday/Faraday=0.8;
+      James Watt/Watt=0.8; Niels Bohr/Bohr=0.8; Max Planck/Planck=0.8; Werner Heisenberg/Heisenberg=0.8;
+      Erwin Schrödinger/Schrödinger=0.8; Richard Feynman/Feynman=0.8; Wilhelm Röntgen/Röntgen=0.8; Gregor Mendel/Mendel=0.8;
+      Ivan Pavlov/Pavlov=0.8; Mihajlo Pupin/Pupin=0.8; Mark Zuckerberg=0.8; Tim Berners-Lee=0.8; Guglielmo Marconi/Marconi=0.8;
+      Alessandro Volta/Volta=0.8; Benjamin Franklin=0.8; Karl Benz=0.8; Rudolf Diesel=0.8; Blaise Pascal/Pascal=0.8;
+      René Descartes/Descartes=0.8; Hipokrat=0.8; Enrico Fermi=0.4; Carl Jung=0.4; Ada Lovelace=0.4; Charles Babbage=0.4;
+      John von Neumann=0.4; André-Marie Ampère/Ampère=0.4; Georg Ohm/Ohm=0.4; James Clerk Maxwell/Maxwell=0.4;
+      Heinrich Hertz=0.4; Ferdinand Porsche=0.4; Gottfried Leibniz/Leibniz=0.4; Leonhard Euler/Euler=0.4;
+      Carl Friedrich Gauss/Gauss=0.4; Antoine Lavoisier=0.4; Ernest Rutherford=0.4; Edwin Hubble/Hubble=0.4;
+      Carl Sagan=0.4; Tycho Brahe=0.4; Edward Jenner=0.4; Robert Koch=0.4;
+      Watson i Crick/James Watson/Francis Crick=0.4; Carl Linné/Linnaeus=0.4; Anders Celsius/Celsius=0.4;
+      Daniel Fahrenheit/Fahrenheit=0.4; Samuel Morse/Morse=0.4; Tales=0.4; Gottlieb Daimler=0.2; Pierre de Fermat=0.2;
+      Robert Boyle=0.2; John Dalton=0.2; Paul Dirac=0.2; Otto Hahn=0.2; Neil deGrasse Tyson=0.2; Edmond Halley=0.2;
+      Christiaan Huygens=0.2; Robert Hooke=0.2; Antonie van Leeuwenhoek=0.2; Joseph Lister=0.2; Galen=0.2;
+      Avicenna/Ibn Sina=0.2; Florence Nightingale=0.2; Jonas Salk=0.2; Linus Pauling=0.2; Rosalind Franklin=0.2;
+      Jane Goodall=0.2; Alexander von Humboldt=0.2; Lord Kelvin/Kelvin=0.2; Evangelista Torricelli=0.2;
+      John Logie Baird=0.2; Steve Wozniak=0.2; Jacques Cousteau=0.2; Wernher von Braun=0.2;
+      Mihail Lomonosov/Lomonosov=0.2; Peter Higgs=0.2; Ptolomej=0.2; Demokrit=0.2; Évariste Galois=0.2;
+      J. J. Thomson=0.2; Wolfgang Pauli=0.2; Lise Meitner=0.2; Andreas Vesalius=0.2; Jean-Baptiste Lamarck=0.2;
+      Alfred Wegener=0.2; Philo Farnsworth=0.2; Sergey Brin=0.2; Larry Page=0.2; Konrad Zuse=0.2; Sergej Koroljov=0.2;
+      Katalin Karikó=0.2; Andrej Saharov=0.2; Lev Landau=0.2; Hans Geiger=0.2; Emmy Noether=0.2;
+      Srinivasa Ramanujan=0.2; Josef Ressel=0.1; Eratosten=0.1`,
+  },
 ];
