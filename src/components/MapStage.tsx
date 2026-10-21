@@ -292,7 +292,9 @@ export default function MapStage({ cfg, map, rounds, perDay }: { cfg: SkinConfig
       const v = vehRef.current, b = badgeRef.current, sh = shadowRef.current;
       if (v && b && sh) {
         v.style.transform = `translate(${((S.pos.x - x0) * sc).toFixed(1)}px,${((S.pos.y - y0) * sc).toFixed(1)}px)`;
-        b.style.transform = `translateY(${-S.lift * sc + S.bob}px) rotate(${S.rot}rad) scaleX(${S.flip}) scale(${1 + S.lift / 260})`;
+        // ikona vozila gleda u smjer vožnje, logo (Bajs, HŽ) se nikad ne zrcali
+        const flip = b.classList.contains("logo") ? 1 : S.flip;
+        b.style.transform = `translateY(${-S.lift * sc + S.bob}px) rotate(${S.rot}rad) scaleX(${flip}) scale(${1 + S.lift / 260})`;
         sh.style.opacity = String(S.lift > 1 ? Math.min(0.9, S.lift / 60) : 0);
       }
     };
