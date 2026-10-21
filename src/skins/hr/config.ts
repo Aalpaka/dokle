@@ -28,9 +28,9 @@ export const hrConfig: SkinConfig = {
     { minShare: 20, km: 10, emoji: "🚶", name: "Pješice", vehicle: "walk", color: "#8a6d52" },
     { minShare: 10, km: 25, emoji: "🚲", name: "Bajs", icon: "/tiers/bajs.png", badge: "/tiers/bajs.svg", vehicle: "bike", color: "#d7262e" },
     { minShare: 5, km: 45, emoji: "🚆", name: "HŽ", icon: "/tiers/hz.png", vehicle: "train", color: "#1f5fae" },
-    { minShare: 2, km: 70, emoji: "🚌", name: "Autobus", vehicle: "bus", color: "#ee8a00" },
-    { minShare: 0.5, km: 100, emoji: "🚗", name: "Auto", vehicle: "car", color: "#13804a" },
-    { minShare: 0, km: 125, emoji: "✈️", name: "Avion", vehicle: "plane", color: "#7a3db8" },
+    { minShare: 2, km: 70, emoji: "🚌", name: "Čazmatrans", badge: "/tiers/cazmatrans.png", vehicle: "bus", color: "#ee8a00" },
+    { minShare: 0.5, km: 100, emoji: "🚗", name: "Rimac Robotaxi", badge: "/tiers/rimac.png", vehicle: "car", color: "#13804a" },
+    { minShare: 0, km: 125, emoji: "✈️", name: "Croatia Airlines", badge: "/tiers/croatia-airlines.png", vehicle: "plane", color: "#7a3db8" },
   ],
   // brzina odgovora (vrijeme od otvaranja kategorije do prihvaćenog odgovora); sortirano po maxSeconds, zadnji bez granice
   speed: [
