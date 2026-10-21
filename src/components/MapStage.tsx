@@ -69,7 +69,7 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
   insetRef.current = inset;
   const [hudKm, setHudKm] = useState(() => rounds.reduce((a, r) => a + r.km, 0));
   const [toast, setToast] = useState<Toast | null>(null);
-  const [arrival, setArrival] = useState<{ name: string; km: number; message: string; id: number; label?: string } | null>(null);
+  const [arrival, setArrival] = useState<{ name: string; km: number; message: string; id: number } | null>(null);
   const [replaying, setReplaying] = useState(false);
 
   // stanje simulacije; mijenja se u petlji animacije, ne kroz React
@@ -138,14 +138,14 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
     sfx.station();
   }
 
-  function crash(name: string, quiet: boolean) {
+  function crash(quiet: boolean) {
     badgeRef.current?.animate(
       [{ translate: "0 0" }, { translate: "-6px 3px" }, { translate: "5px -4px" }, { translate: "-3px -2px" }, { translate: "0 0" }],
       { duration: 380, iterations: 2 },
     );
     if (quiet) return;
-    setArrival({ name, km: Math.round(sim.current.km), message: "Bum! Ovdje se uvijek netko zabije.", id: performance.now(), label: "Sudar" });
     sfx.crash();
+    sfx.clip("/sounds/gornje-jesenje.mp3", 0.8);
   }
 
   // kopneno vozilo koje prolazi pored znaka sudara stane tamo, odstoji i nastavi
@@ -226,7 +226,7 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
       if (s.km > prev && s.km <= k) arrive(i, a.quiet);
     });
     if (a.tier.vehicle !== "plane" && a.tier.vehicle !== "heli")
-      for (const c of crashes) if (c.km > prev && c.km <= k) crash(c.name, a.quiet);
+      for (const c of crashes) if (c.km > prev && c.km <= k) crash(a.quiet);
     drawSegments();
     setHudKm(Math.round(k));
     if (raw >= 1) {
@@ -513,7 +513,7 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
       </div>
       {arrival && (
         <div className="stationmsg" key={arrival.id}>
-          <small>{arrival.label ?? "Stigao si"} · {arrival.km} km</small>
+          <small>Stigao si · {arrival.km} km</small>
           <b>{arrival.name}</b>
           <p>{arrival.message}</p>
         </div>

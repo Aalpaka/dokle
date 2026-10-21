@@ -125,6 +125,19 @@ function engine(c: AudioContext, t: number, dur: number, bus: boolean) {
   else noise(c, t + dur * 0.45, 0.6, "bandpass", 900, 0.8, 0.12, 0.25); // prolazak
 }
 
+const clips = new Map<string, Promise<AudioBuffer | null>>();
+function loadClip(c: AudioContext, url: string) {
+  let p = clips.get(url);
+  if (!p) {
+    p = fetch(url)
+      .then((r) => (r.ok ? r.arrayBuffer() : null))
+      .then((b) => (b ? c.decodeAudioData(b) : null))
+      .catch(() => null);
+    clips.set(url, p);
+  }
+  return p;
+}
+
 export const sfx = {
   tick() {
     const c = ready();
@@ -161,6 +174,19 @@ export const sfx = {
     noise(c, t + 0.3, 0.25, "bandpass", 2200, 1.5, 0.35);
     tone(c, "square", 90, t + 0.3, 0.005, 0.25, 0.3, 40);
     for (let i = 0; i < 9; i++) tone(c, "sine", 2800 + Math.random() * 3200, t + 0.42 + i * 0.045 + Math.random() * 0.03, 0.002, 0.05, 0.12);
+  },
+  /** Snimljeni isječak iz public/; ako datoteke nema, ništa se ne čuje. */
+  clip(url: string, delay = 0) {
+    const c = ready();
+    if (!c) return;
+    const at = c.currentTime + delay;
+    loadClip(c, url).then((buf) => {
+      if (!buf || !ready()) return;
+      const s = c.createBufferSource();
+      s.buffer = buf;
+      s.connect(master!);
+      s.start(Math.max(at, c.currentTime));
+    });
   },
   station() {
     const c = ready();
