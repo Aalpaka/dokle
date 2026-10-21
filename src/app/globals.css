@@ -290,11 +290,14 @@ textarea.field { width: 100%; font-family: var(--font-mono); }
 /* početni ekran */
 .landing {
   position: relative; max-width: 1120px; margin: 0 auto; min-height: calc(100vh - 56px); min-height: calc(100dvh - 56px);
-  display: flex; flex-direction: column; border-radius: 22px; overflow: hidden; box-shadow: 0 0 0 1px #000;
+  display: flex; flex-direction: column;
 }
 .landing-bg {
   position: absolute; inset: 0;
   background: linear-gradient(180deg, #161d1fd9 0%, #161d1fa6 45%, #161d1ff5 100%), url(/map/hr-reljef.jpg) center 35% / cover;
+  /* karta se rubovima postupno stapa s pozadinom stranice, bez okvira */
+  -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 55%, transparent 100%);
+  mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 55%, transparent 100%);
 }
 .landing-top { position: relative; display: flex; align-items: center; gap: 12px; padding: 14px 16px; }
 .landing-top .meta { display: block; }
@@ -309,8 +312,12 @@ textarea.field { width: 100%; font-family: var(--font-mono); }
 @media (max-width: 520px) { .plate.big { font-size: 60px; padding: 10px 30px 6px; } }
 .route-line { font-family: var(--font-mono); font-weight: 700; color: var(--signal); letter-spacing: .04em; }
 .lead { max-width: 46ch; font-size: 18px; text-wrap: balance; }
-.vehicles { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 14px 22px; }
-.vehicles li { display: grid; justify-items: center; gap: 4px; min-width: 68px; }
+/* jednako široki stupci, da su kružići na istim razmacima i kad su nazivi različito dugi */
+.vehicles { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 12px; max-width: 760px; }
+.vehicles li { width: 96px; display: grid; justify-items: center; align-content: start; gap: 4px; }
+.vehicles li .vb { margin-bottom: 2px; }
+.vehicles li b { line-height: 1.2; min-height: 2.4em; display: flex; align-items: center; text-wrap: balance; }
+@media (max-width: 520px) { .vehicles { gap: 12px 4px; } .vehicles li { width: 76px; } .vehicles b { font-size: 12px; } .vehicles .vb { width: 44px; height: 44px; } }
 .vehicles .vb { width: 50px; height: 50px; border-radius: 50%; display: grid; place-items: center; background: var(--vc); color: #fff; box-shadow: 0 0 0 3px #fff; }
 .vehicles .vb svg { width: 28px; height: 28px; }
 .vehicles .vb.logo { box-shadow: 0 0 0 3px var(--vc), 0 0 0 5px #fff; }

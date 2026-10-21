@@ -12,7 +12,7 @@ export const hrConfig: SkinConfig = {
     { name: "Osijek", genitive: "Osijeka", km: 60, lon: 18.69, lat: 45.55, message: "A lega moj, nisi baš daleko stigao.", labelOffset: [6, -6] },
     { name: "Đakovo", genitive: "Đakova", km: 130, lon: 18.41, lat: 45.31, message: "U usta ti ga spakovo.", labelOffset: [6, 12] },
     { name: "Slavonski Brod", genitive: "Slavonskog Broda", km: 200, lon: 18.01, lat: 45.16, message: "Kraj Slavonije, Sava pokraj tebe.", labelOffset: [-4, 16] },
-    { name: "Zagreb", genitive: "Zagreba", km: 290, lon: 15.98, lat: 45.81, message: "Štrukli na Dolcu, a more još daleko.", labelOffset: [6, -6], alwaysLabel: true },
+    { name: "Zagreb", genitive: "Zagreba", km: 290, lon: 15.98, lat: 45.81, message: "Prokleti Tomašević.", labelOffset: [6, -6], alwaysLabel: true },
     { name: "Karlovac", genitive: "Karlovca", km: 370, lon: 15.55, lat: 45.49, message: "Grad na četiri rijeke.", labelOffset: [6, -6] },
     { name: "Rijeka", genitive: "Rijeke", km: 450, lon: 14.44, lat: 45.33, message: "Napokon more. Kiša, naravno, pada.", labelOffset: [-4, -8] },
     { name: "Pula", genitive: "Pule", km: 530, lon: 13.85, lat: 44.87, message: "Arena je tu, ali gladijator nisi.", labelOffset: [-6, 16], alwaysLabel: true },

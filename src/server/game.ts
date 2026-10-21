@@ -410,7 +410,8 @@ export async function answerList(skin: Skin, playerId: string, position: number)
     position,
     title: cat.title,
     mine: mine?.canonical ?? null,
-    answers: all.map((a) => {
+    // odgovori posebnog tiera (helikopter) uvijek na dnu, da se ne miješaju s najrjeđim običnima
+    answers: [...all.filter((a) => !a.tier.rare), ...all.filter((a) => a.tier.rare)].map((a) => {
       return { canonical: a.canonical, share: a.share, tier: a.tier.name, km: a.tier.km };
     }),
   };

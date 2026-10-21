@@ -47,6 +47,8 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
   const route = useMemo(() => new Route(cfg.stations, map.via), [cfg.stations, map.via]);
   const stations = useMemo(() => cfg.stations.map((s) => project(s.lon, s.lat)), [cfg.stations]);
   const fullRoad = useMemo(() => route.path(0, route.maxKm), [route]);
+  // mjesta uz cestu sa znakom sudara: kopnena vozila tu se zabiju u prolazu
+  const crashes = useMemo(() => map.landmarks.map((l) => ({ ...l, km: route.kmNear(l.lon, l.lat) })), [map.landmarks, route]);
 
   const stageRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
@@ -136,6 +138,23 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
     sfx.station();
   }
 
+  function crash(quiet: boolean) {
+    badgeRef.current?.animate(
+      [{ translate: "0 0" }, { translate: "-6px 3px" }, { translate: "5px -4px" }, { translate: "-3px -2px" }, { translate: "0 0" }],
+      { duration: 380, iterations: 2 },
+    );
+    if (quiet) return;
+    sfx.crash();
+    sfx.clip("/sounds/gornje-jesenje.mp3", 0.5);
+  }
+
+  // kopneno vozilo koje prolazi pored znaka sudara stane tamo, odstoji i nastavi
+  function driveVia(tier: Tier, from: number, to: number, onDone?: () => void, quiet = false) {
+    const c = tier.vehicle === "plane" || tier.vehicle === "heli" ? undefined : crashes.find((x) => x.km > from && x.km < to);
+    if (!c) return drive(tier, from, to, onDone, quiet);
+    drive(tier, from, c.km, () => setTimeout(() => drive(tier, c.km, to, onDone, quiet), quiet ? 500 : 1500), quiet);
+  }
+
   function drive(tier: Tier, from: number, to: number, onDone?: () => void, quiet = false) {
     const S = sim.current;
     const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -206,6 +225,8 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
     cfg.stations.forEach((s, i) => {
       if (s.km > prev && s.km <= k) arrive(i, a.quiet);
     });
+    if (a.tier.vehicle !== "plane" && a.tier.vehicle !== "heli")
+      for (const c of crashes) if (c.km > prev && c.km <= k) crash(a.quiet);
     drawSegments();
     setHudKm(Math.round(k));
     if (raw >= 1) {
@@ -265,7 +286,7 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
     const sp = r.speed ? ` · ${r.speed.emoji} ${r.speed.name} ×${String(r.speed.multiplier).replace(".", ",")}` : "";
     setToast({ color: tier.color, icon: b.html, logo: b.logo, title: `${r.canonical} · ${tier.name}`, sub: `${formatShare(r.share ?? 0)} igrača${sp}`, km: `+${r.km} km`, id });
     const to = Math.min(route.maxKm, before + r.km);
-    const t = setTimeout(() => drive(tier, Math.min(before, route.maxKm), to, () => (to >= route.maxKm || isLast) && sfx.finish()), 350);
+    const t = setTimeout(() => driveVia(tier, Math.min(before, route.maxKm), to, () => (to >= route.maxKm || isLast) && sfx.finish()), 350);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rounds.length]);
@@ -303,7 +324,7 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
         setTimeout(next, 900);
         return;
       }
-      drive(t, Math.min(from, route.maxKm), Math.min(km, route.maxKm), () => setTimeout(next, 250), true);
+      driveVia(t, Math.min(from, route.maxKm), Math.min(km, route.maxKm), () => setTimeout(next, 250), true);
     };
     setTimeout(next, 700);
   }

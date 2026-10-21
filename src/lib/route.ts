@@ -62,6 +62,21 @@ export class Route {
     return { x: p[0] + (q[0] - p[0]) * t, y: p[1] + (q[1] - p[1]) * t, angle: Math.atan2(q[1] - p[1], q[0] - p[0]) };
   }
 
+  /** Km rute najbliži zadanoj točki (za mjesta uz put koja nisu postaje). */
+  kmNear(lon: number, lat: number): number {
+    const [x, y] = project(lon, lat);
+    let best = Infinity, km = 0;
+    for (const l of this.legs)
+      l.pts.forEach((p, i) => {
+        const d = Math.hypot(p[0] - x, p[1] - y);
+        if (d < best) {
+          best = d;
+          km = l.a + (l.cum[i] / l.len) * (l.b - l.a);
+        }
+      });
+    return km;
+  }
+
   /** SVG path dijela rute od k0 do k1 km. */
   path(k0: number, k1: number, step = 1.5): string {
     const out: string[] = [];
