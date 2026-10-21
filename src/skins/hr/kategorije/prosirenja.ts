@@ -1,9 +1,12 @@
 // Dodatni odgovori za početne kategorije. Seed ih dodaje postojećim kategorijama (stari odgovori ostaju kakvi jesu).
 export const prosirenja: Record<string, string> = {
   otok: `Pakleni otoci/Pakleni=0.5; Elafiti/Elafitski otoci=0.3; Košljun=0.3; Šćedro=0.2; Visovac=0.2; Ošljak=0.1;
-    Rivanj=0.1; Jakljan=0.1; Daksa=0.1; Sveti Nikola=0.1; Vrnik=0.1; Proizd=0.1; Brusnik=0.1; Svetac=0.1;
-    Ravnik=0.1; Tijat=0.1; Maun=0.1; Crveni otok=0.1; Babac=0.05; Zečevo=0.05; Mrkan=0.05; Olipa=0.05; Ruda=0.05;
-    Budikovac=0.05; Majsan=0.05; Kakan=0.05; Skrda=0.05; Trstenik=0.05; Logorun=0.05; Zmajan=0.05; Katarina=0.05`,
+    Rivanj=0.1; Jakljan=0.1; Daksa=0.1; Sveti Nikola=0.1; Vrnik=0.1; Proizd=0.1; Brusnik=0.1; Svetac=0.1; Ravnik=0.1;
+    Tijat=0.1; Maun=0.1; Crveni otok=0.1; Babac=0.05; Zečevo=0.05; Mrkan=0.05; Olipa=0.05; Ruda=0.05; Budikovac=0.05;
+    Majsan=0.05; Kakan=0.05; Skrda=0.05; Trstenik=0.05; Logorun=0.05; Zmajan=0.05; Katarina=0.05; Mrduja=0.2;
+    Vanga=0.1; Mali Brijun=0.1; Dolin=0.1; Lavdara=0.1; Žut=0.1; Sit=0.1; Levrnaka=0.1; Piškera=0.1; Mana=0.1;
+    Katina=0.1; Lavsa=0.1; Kurba Vela=0.1; Galevac=0.1; Škarda=0.1; Orjule=0.1; Vele Srakane=0.1; Sveti Marko=0.1;
+    Bobara=0.1; Glavat=0.1; Marinkovac=0.1; Jerolim=0.1; Drvenik Mali=0.1; Kopište=0.1; Lastovnjaci=0.1`,
   rijeka: `Spačva=0.2; Bregana=0.2; Dragonja=0.2; Odra=0.1; Kamačnik=0.1; Krčić=0.1; Butišnica=0.1; Plitvica=0.1;
     Kupica=0.1; Čabranka=0.1; Petrinjčica=0.1; Sunja=0.1; Londža=0.1; Biđ=0.1; Tounjčica=0.1; Pazinčica=0.1;
     Norin=0.1; Vrljika=0.1; Kosovčica=0.05; Dretulja=0.05; Lička Jesenica=0.05; Novčica=0.05; Otuča=0.05; Jadova=0.05;
@@ -14,7 +17,14 @@ export const prosirenja: Record<string, string> = {
     Pečenka=0.5; Palenta/Polenta=0.5; Krpice sa zeljem=0.5; Kiseli kupus=0.5; Ričet=0.5; Tripice/Fileki=0.5;
     Čušpajz/Ćušpajz=0.5; Paprikaš=0.5; Skradinski rižot=0.5; Fritaja=0.5; Krumpiruša=0.5; Ćufte=0.5;
     Govedska juha=0.5; Salata od hobotnice=0.5; Riba na gradele=0.5; Šurlice=0.3; Šaran na rašljama=0.3;
-    Pileća juha=0.3; Pogača=0.3; Ombolo=0.2`,
+    Pileća juha=0.3; Pogača=0.3; Ombolo=0.2; Lignje=0.2; Girice=0.2; Srdele=0.2; Dagnje/Mušule=0.2; Rižot=0.2;
+    Jota=0.2; Međimurska gibanica/Gibanica=0.2; Perkelt=0.2; Lički lonac=0.2; Štrudla/Savijača=0.2; Palačinke=0.2;
+    Breskvice=0.2; Čupavci=0.2; Pohana piletina/Pohano=0.2; Kamenice/Ostrige=0.1; Inćuni=0.1; Vitalac=0.1;
+    Kaštradina=0.1; Šporki makaruli=0.1; Paradižot=0.1; Smokvenjak=0.1; Makarana=0.1; Uštipci=0.1;
+    Istarska supa/Supa=0.1; Krafi=0.1; Pinca=0.1; Prge=0.1; Proja=0.1; Mahune=0.1; Škripavac=0.1; Kuglof=0.1;
+    Šnenokle=0.1; Rapska torta=0.1; Varaždinski klipić=0.1; Medenjaci=0.1; Salenjaci=0.1; Vanilin kiflice=0.1;
+    Pita od jabuka=0.1; Buhtle=0.1; Puslice=0.1; Mesne okruglice=0.1; Faširanci=0.1; Restani krumpir=0.1;
+    Francuska salata=0.1; Krumpir salata=0.1; Žablji kraci=0.1; Švargl=0.1; Kulenova seka=0.1`,
   glazba: `Dražen Zečić=0.5; Željko Bebek=0.5; Jasmin Stavros=0.3; Mladen Grdović=0.3; Giuliano=0.3; Jole=0.3;
     Darko Rundek=0.3; Urban & 4/Urban=0.3; Nina Kraljić=0.3; Ivan Zak=0.3; Antonija Šola=0.3; Vanna=0.3;
     Boris Novković=0.3; Danijela Martinović/Danijela=0.3; Brkovi=0.3; Zdenka Kovačiček=0.2; Radojka Šverko=0.2;
@@ -61,17 +71,38 @@ export const prosirenja: Record<string, string> = {
     Biserka=0.05`,
   instrument: `Frula=0.5; Električna gitara=0.2; Balalajka=0.1; Gong=0.1; Zvono/Zvona=0.1; Udaraljke=0.1; Pianino=0.1;
     Akustična gitara=0.1; Lira=0.1; Kalimba=0.05; Darbuka/Tarabuka=0.05; Šargija=0.05; Buzuki/Bouzouki=0.05;
-    Zvončići=0.05; Horna=0.05; Kornet=0.05; Brač=0.05; Roženice=0.05; Cimbal/Cimbalom=0.05; Zvečka=0.05;
-    Def=0.05; Tapan=0.05; Tabla=0.02; Saz=0.02; Hang=0.02; Teremin=0.02; Harmonij=0.02`,
+    Zvončići=0.05; Horna=0.05; Kornet=0.05; Brač=0.05; Roženice=0.05; Cimbal/Cimbalom=0.05; Zvečka=0.05; Def=0.05;
+    Tapan=0.05; Tabla=0.02; Saz=0.02; Hang=0.02; Teremin=0.02; Harmonij=0.02; Akordeon=0.2; Džembe/Djembe=0.2;
+    Marake/Marakas=0.2; Zviždaljka=0.2; Kontrafagot=0.1; Engleski rog=0.1; Eufonij=0.1; Sousafon=0.1; Krilnica=0.1;
+    Viola da gamba=0.1; Mandola=0.1; Ud/Oud=0.1; Koto=0.1; Šamisen=0.1; Pipa=0.1; Erhu=0.1; Kantele=0.1; Psaltir=0.1;
+    Bandura=0.1; Samica=0.1; Dangubica=0.1; Svirala=0.1; Šurle=0.1; Panova frula=0.1; Kaval=0.1; Duduk=0.1; Zurla=0.1;
+    Šofar=0.1; Alpski rog=0.1; Bandoneon=0.1; Kazoo=0.1; Doboš=0.1; Konge=0.1; Kravlje zvono=0.1; Steelpan=0.1;
+    Metalofon=0.1; Žlice=0.1; Pjevajuća pila=0.1; Električni klavir=0.1; Klavikord=0.1; Ritam mašina=0.1`,
   plaza: `Bikini=0.3; Voće=0.3; Reketi=0.3; Novčanik/Novac=0.3; Ključevi=0.2; Punjač/Powerbank=0.2;
     Naočale za plivanje=0.2; Vino=0.2; Sok=0.2; Pas=0.2; Kava=0.1; Rakija=0.1; Kruh=0.1; Kupaća kapa=0.1; Led=0.1;
     Kukuruz=0.1; Krafne=0.1; Daska za surfanje=0.1; SUP daska/SUP=0.1; Marama=0.1; Majica=0.1; Upaljač=0.1;
-    Šminka=0.05; Kišobran=0.05; Kajak=0.05; Ribarski štap=0.05; Haljina=0.05`,
+    Šminka=0.05; Kišobran=0.05; Kajak=0.05; Ribarski štap=0.05; Haljina=0.05; Burek=0.2; Pohano/Pohana piletina=0.2;
+    Keksi=0.2; Križaljke/Križaljka=0.2; Gitara=0.2; Radio=0.2; Stolica/Sklopiva stolica=0.2;
+    Vlažne maramice/Maramice=0.2; Kratke hlače/Šorc=0.2; Sandale=0.2; Igračke=0.2; Tenda/Šator=0.1; Lepeza=0.1;
+    Šah=0.1; Balzam za usne=0.1; Šampon=0.1; Češalj=0.1; Gumica za kosu=0.1; Sprej protiv komaraca=0.1; Vrećica=0.1;
+    Čaše=0.1; Otvarač=0.1; Nož=0.1; Smokve=0.1; Napolitanke=0.1; Pizza=0.1; Kuhana jaja=0.1; Žvakaće/Žvaka=0.1;
+    Ledeni čaj=0.1; Coca-Cola/Cola=0.1; Gemišt/Bevanda=0.1; Limunada=0.1; Ronilačko odijelo/Neopren=0.1;
+    Podvodna puška=0.1; GoPro=0.1; Dron=0.1; Laptop=0.1; Tablet=0.1; Časopis=0.1; Olovka=0.1; Bodyboard=0.1;
+    Čepići za uši=0.1; Mrežica=0.1; Kalupi za pijesak=0.1; Punica=0.1; Baka=0.1; E-cigareta/Vape=0.1;
+    Prsluk za spašavanje=0.1; Krokodil na napuhavanje=0.1; Flamingo na napuhavanje=0.1; Osobna iskaznica/Osobna=0.1;
+    Kartica=0.1; Sitniš/Kovanice=0.1; Tenisice=0.1; Flasteri=0.1; Pinceta=0.1`,
   frizider: `Parizer=0.3; Džem/Pekmez=0.3; Mortadela=0.2; Pizza=0.2; Kolač=0.2; Slatko vrhnje/Vrhnje za kuhanje=0.2;
-    Šlag=0.2; Mljeveno meso=0.2; Paprika=0.2; Jagode=0.2; Lubenica=0.2; Krem sir=0.1; Feta=0.1; Losos=0.1;
-    Kupus=0.1; Naranče=0.1; Grožđe=0.1; Nutella=0.1; Tartar umak=0.1; Hren=0.1; Šampanjac/Prosecco=0.1;
-    Rakija=0.1; Red Bull/Energetsko piće=0.1; Inzulin=0.1; Kozmetika=0.1; Celer=0.05; Med=0.05;
-    Ljuti umak/Tabasco=0.05; Baterije=0.05; Hrana za psa=0.05`,
+    Šlag=0.2; Mljeveno meso=0.2; Paprika=0.2; Jagode=0.2; Lubenica=0.2; Krem sir=0.1; Feta=0.1; Losos=0.1; Kupus=0.1;
+    Naranče=0.1; Grožđe=0.1; Nutella=0.1; Tartar umak=0.1; Hren=0.1; Šampanjac/Prosecco=0.1; Rakija=0.1;
+    Red Bull/Energetsko piće=0.1; Inzulin=0.1; Kozmetika=0.1; Celer=0.05; Med=0.05; Ljuti umak/Tabasco=0.05;
+    Baterije=0.05; Hrana za psa=0.05; Kiselo mlijeko=0.2; Čajna kobasica=0.2; Tuna=0.2; Ledeni čaj=0.2; Votka=0.2;
+    Čokoladno mlijeko=0.1; Zobeno mlijeko=0.1; Skyr=0.1; Mascarpone=0.1; Gouda=0.1; Parmezan=0.1; Brie=0.1;
+    Sirni namaz=0.1; Sardine=0.1; Kozice=0.1; Ćevapi=0.1; Gulaš=0.1; Lazanje=0.1; Kremšnita=0.1; Tiramisu=0.1;
+    Krastavac=0.1; Tikvice=0.1; Patlidžan=0.1; Brokula=0.1; Cvjetača=0.1; Špinat=0.1; Rotkvice=0.1; Mladi luk=0.1;
+    Gljive=0.1; Avokado=0.1; Kivi=0.1; Breskve=0.1; Borovnice=0.1; Maline=0.1; Trešnje=0.1; Dinja=0.1; Peršin=0.1;
+    Rikola=0.1; Limunada=0.1; Jägermeister=0.1; Smoothie=0.1; Ledena kava=0.1; Pesto=0.1; Umak za roštilj=0.1;
+    Sojin umak=0.1; Tzatziki=0.1; Kiseli kupus=0.1; Turšija=0.1; Feferoni=0.1; Cikla=0.1; Grašak=0.1; Pomfrit=0.1;
+    Riblji štapići=0.1`,
   psovka: `Sto mu gromova=0.5; Pobogu=0.5; Zaboga=0.3; Bože dragi=0.3; Majko Božja=0.3; Joj=0.3; Mamicu mu=0.3;
     Majke mi=0.3; Ajme majko=0.3; Mamma mia/Mama mia=0.3; Grom i pakao=0.2; Tisuću mu gromova=0.2; Bože sačuvaj=0.2;
     Isuse Kriste=0.2; Sunce ti kalajisano=0.2; Pas mu mater=0.2; Ma koji vrag/Koji vrag=0.2; Bogme=0.2;

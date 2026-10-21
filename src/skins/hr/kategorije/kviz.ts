@@ -95,16 +95,25 @@ export const kvizKategorije: SeedCategory[] = [
     strip: ["grad"],
     answers: `Tokio=12; Washington/Vašington=8; Peking/Beijing=8; Kairo=6; Buenos Aires=4; Canberra=3; Ottawa=3;
       Brazilija/Brasilia=3; Ciudad de Mexico/Mexico City/Meksiko=3; New Delhi/Delhi/Nju Delhi=3; Seul=3; Bangkok=3;
-      Teheran=1.5; Bagdad=1.5; Kabul=1.5; Ankara=1.5; Havana=1.5; Jeruzalem=1; Rijad=1; Abu Dhabi=1; Doha=1;
-      Damask=1; Hanoi=1; Manila=1; Jakarta=1; Kuala Lumpur=1; Nairobi=1; Lima=1; Santiago=1; Bejrut=0.8;
-      Islamabad=0.8; Katmandu/Kathmandu=0.8; Pjongjang=0.8; Ulan Bator=0.8; Bogota=0.8; Karakas/Caracas=0.8;
-      Montevideo=0.8; Wellington=0.8; Aman=0.5; Singapur=0.5; Tajpej/Taipei=0.5; Astana=0.5; Taškent=0.5; Baku=0.5;
-      Tbilisi=0.5; Erevan/Jerevan=0.5; Adis Abeba=0.5; Dakar=0.5; Rabat=0.5; Tunis=0.5; Tripoli=0.5; Pretorija=0.5;
-      Kito/Quito=0.5; La Paz=0.5; Kuvajt=0.3; Daka/Dhaka=0.3; Kolombo=0.3; Phnom Penh/Pnom Pen=0.3; Abuja=0.3;
-      Akra=0.3; Alžir=0.3; Kartum=0.3; Kinšasa=0.3; Cape Town/Kapstad=0.3; Asunción/Asuncion=0.3; Kingston=0.3;
-      Panama=0.3; Manama=0.2; Maskat=0.2; Sana=0.2; Vientiane=0.2; Biškek=0.2; Dušanbe=0.2; Ašgabat=0.2;
-      Luanda=0.2; Harare=0.2; Lusaka=0.2; Kampala=0.2; Mogadišu=0.2; San José=0.2; Santo Domingo=0.2;
-      Naypyidaw=0.1; Dodoma=0.1; Kigali=0.1; Antananarivo=0.1; Port Moresby=0.1; Suva=0.1`,
+      Teheran=1.5; Bagdad=1.5; Kabul=1.5; Ankara=1.5; Havana=1.5; Jeruzalem=1; Rijad=1; Abu Dhabi=1; Doha=1; Damask=1;
+      Hanoi=1; Manila=1; Jakarta=1; Kuala Lumpur=1; Nairobi=1; Lima=1; Santiago=1; Bejrut=0.8; Islamabad=0.8;
+      Katmandu/Kathmandu=0.8; Pjongjang=0.8; Ulan Bator=0.8; Bogota=0.8; Karakas/Caracas=0.8; Montevideo=0.8;
+      Wellington=0.8; Aman=0.5; Singapur=0.5; Tajpej/Taipei=0.5; Astana=0.5; Taškent=0.5; Baku=0.5; Tbilisi=0.5;
+      Erevan/Jerevan=0.5; Adis Abeba=0.5; Dakar=0.5; Rabat=0.5; Tunis=0.5; Tripoli=0.5; Pretorija=0.5; Kito/Quito=0.5;
+      La Paz=0.5; Kuvajt=0.3; Daka/Dhaka=0.3; Kolombo=0.3; Phnom Penh/Pnom Pen=0.3; Abuja=0.3; Akra=0.3; Alžir=0.3;
+      Kartum=0.3; Kinšasa=0.3; Cape Town/Kapstad=0.3; Asunción/Asuncion=0.3; Kingston=0.3; Panama=0.3; Manama=0.2;
+      Maskat=0.2; Sana=0.2; Vientiane=0.2; Biškek=0.2; Dušanbe=0.2; Ašgabat=0.2; Luanda=0.2; Harare=0.2; Lusaka=0.2;
+      Kampala=0.2; Mogadišu=0.2; San José=0.2; Santo Domingo=0.2; Naypyidaw=0.1; Dodoma=0.1; Kigali=0.1;
+      Antananarivo=0.1; Port Moresby=0.1; Suva=0.1; Bamako=0.1; Niamey=0.1; N'Djamena=0.1; Nouakchott=0.1;
+      Ouagadougou/Uagadugu=0.1; Yamoussoukro=0.1; Lomé=0.1; Porto-Novo=0.1; Freetown=0.1; Monrovia=0.1;
+      Conakry/Konakri=0.1; Bissau=0.1; Banjul=0.1; Praia=0.1; Yaoundé/Jaunde=0.1; Malabo=0.1; Libreville=0.1;
+      Brazzaville=0.1; Bangui=0.1; Juba/Džuba=0.1; Asmara=0.1; Džibuti=0.1; Gitega=0.1; Lilongwe=0.1; Maputo=0.1;
+      Gaborone=0.1; Windhoek=0.1; Mbabane=0.1; Maseru=0.1; Port Louis=0.1; Victoria=0.1; Moroni=0.1;
+      São Tomé/Sao Tome=0.1; Bloemfontein=0.1; Bandar Seri Begawan=0.1; Dili=0.1; Thimphu=0.1; Male=0.1;
+      Putrajaya=0.1; Sri Jayawardenepura Kotte/Kotte=0.1; Sucre=0.1; Guatemala/Gvatemala=0.1; Tegucigalpa=0.1;
+      San Salvador=0.1; Managua=0.1; Belmopan=0.1; Port-au-Prince=0.1; Nassau=0.1; Bridgetown=0.1; Port of Spain=0.1;
+      Georgetown=0.1; Paramaribo=0.1; Honiara=0.1; Port Vila=0.1; Apia=0.1; Nuku'alofa=0.1; Tarawa=0.1; Majuro=0.1;
+      Palikir=0.1`,
   },
   {
     slug: "sad-drzava",

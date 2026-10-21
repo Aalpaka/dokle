@@ -612,18 +612,51 @@ export const opceKategorije: SeedCategory[] = [
       Gerard Piqué/Pique=0.5; Iker Casillas/Casillas=0.5; Alessandro Del Piero/Del Piero=0.5;
       Roberto Baggio/Baggio=0.5; Johan Cruyff/Cruyff=0.5; Franz Beckenbauer/Beckenbauer=0.5; Manuel Neuer/Neuer=0.5;
       Thomas Müller/Müller=0.5; Toni Kroos/Kroos=0.5; Antoine Griezmann/Griezmann=0.5; Karim Benzema/Benzema=0.5;
-      Paul Pogba/Pogba=0.5; Didier Drogba/Drogba=0.5; Samuel Eto'o/Etoo=0.5; Roberto Carlos=0.5;
-      Gerd Müller=0.3; Michel Platini/Platini=0.3; Marco van Basten/Van Basten=0.3; Lothar Matthäus/Matthäus=0.3;
-      Oliver Kahn/Kahn=0.3; Edinson Cavani/Cavani=0.3; N'Golo Kanté/Kante=0.3; Frank Lampard/Lampard=0.3;
-      Steven Gerrard/Gerrard=0.3; Eric Cantona/Cantona=0.3; Andrij Ševčenko/Ševčenko/Shevchenko=0.3;
-      Luís Figo/Figo=0.3; Raúl/Raul=0.3; Fernando Torres/Torres=0.3; Arjen Robben/Robben=0.3;
-      Franck Ribéry/Ribery=0.3; Virgil van Dijk/Van Dijk=0.3; Son Heung-min/Son=0.3; Miralem Pjanić/Pjanić=0.3;
-      Dušan Vlahović/Vlahović=0.3; Romário/Romario=0.3; Rivaldo=0.3; Ferenc Puskás/Puskas=0.3;
-      Ruud Gullit/Gullit=0.2; Eusébio/Eusebio=0.2; George Best/Best=0.2; Bobby Charlton/Charlton=0.2;
-      Ryan Giggs/Giggs=0.2; Siniša Mihajlović/Mihajlović=0.2; Cafu=0.2; Marcelo=0.2; Hristo Stoičkov/Stoičkov=0.2;
-      Gheorghe Hagi/Hagi=0.2; Paul Scholes/Scholes=0.1; David Villa=0.1; Wesley Sneijder/Sneijder=0.1;
-      Robin van Persie/Van Persie=0.1; Dejan Stanković=0.1; Dragan Stojković/Piksi=0.1; Lav Jašin/Jašin=0.1;
-      Alfredo Di Stéfano/Di Stefano=0.1; Bukayo Saka/Saka=0.2; Pedri=0.2; Gavi=0.1`,
+      Paul Pogba/Pogba=0.5; Didier Drogba/Drogba=0.5; Samuel Eto'o/Etoo=0.5; Roberto Carlos=0.5; Gerd Müller=0.3;
+      Michel Platini/Platini=0.3; Marco van Basten/Van Basten=0.3; Lothar Matthäus/Matthäus=0.3; Oliver Kahn/Kahn=0.3;
+      Edinson Cavani/Cavani=0.3; N'Golo Kanté/Kante=0.3; Frank Lampard/Lampard=0.3; Steven Gerrard/Gerrard=0.3;
+      Eric Cantona/Cantona=0.3; Andrij Ševčenko/Ševčenko/Shevchenko=0.3; Luís Figo/Figo=0.3; Raúl/Raul=0.3;
+      Fernando Torres/Torres=0.3; Arjen Robben/Robben=0.3; Franck Ribéry/Ribery=0.3; Virgil van Dijk/Van Dijk=0.3;
+      Son Heung-min/Son=0.3; Miralem Pjanić/Pjanić=0.3; Dušan Vlahović/Vlahović=0.3; Romário/Romario=0.3; Rivaldo=0.3;
+      Ferenc Puskás/Puskas=0.3; Ruud Gullit/Gullit=0.2; Eusébio/Eusebio=0.2; George Best/Best=0.2;
+      Bobby Charlton/Charlton=0.2; Ryan Giggs/Giggs=0.2; Siniša Mihajlović/Mihajlović=0.2; Cafu=0.2; Marcelo=0.2;
+      Hristo Stoičkov/Stoičkov=0.2; Gheorghe Hagi/Hagi=0.2; Paul Scholes/Scholes=0.1; David Villa=0.1;
+      Wesley Sneijder/Sneijder=0.1; Robin van Persie/Van Persie=0.1; Dejan Stanković=0.1; Dragan Stojković/Piksi=0.1;
+      Lav Jašin/Jašin=0.1; Alfredo Di Stéfano/Di Stefano=0.1; Bukayo Saka/Saka=0.2; Pedri=0.2; Gavi=0.1;
+      Gabriel Batistuta/Batistuta=0.2; Ángel Di María/Di Maria=0.2; Pavel Nedvěd/Nedved=0.2; Rodri=0.1;
+      Phil Foden/Foden=0.1; Martin Ødegaard/Odegaard=0.1; Bruno Fernandes=0.1; Bernardo Silva=0.1; João Félix=0.1;
+      Rafael Leão/Leao=0.1; Federico Valverde/Valverde=0.1; Eduardo Camavinga/Camavinga=0.1;
+      Ousmane Dembélé/Dembele=0.1; Raphinha=0.1; Rodrygo=0.1; Florian Wirtz/Wirtz=0.1; Jamal Musiala/Musiala=0.1;
+      Victor Osimhen/Osimhen=0.1; Khvicha Kvaratskhelia/Kvaratskhelia/Kvara=0.1; Lautaro Martínez/Lautaro=0.1;
+      Julián Álvarez=0.1; Paulo Dybala/Dybala=0.1; Sadio Mané/Mane=0.1; Riyad Mahrez/Mahrez=0.1;
+      Achraf Hakimi/Hakimi=0.1; Marcus Rashford/Rashford=0.1; Thibaut Courtois/Courtois=0.1; Jan Oblak/Oblak=0.1;
+      Gianluigi Donnarumma/Donnarumma=0.1; Alessandro Nesta/Nesta=0.1; Fabio Cannavaro/Cannavaro=0.1;
+      Christian Vieri/Vieri=0.1; Filippo Inzaghi/Inzaghi=0.1; Gennaro Gattuso/Gattuso=0.1;
+      Giorgio Chiellini/Chiellini=0.1; Mario Balotelli/Balotelli=0.1; Hernán Crespo/Crespo=0.1;
+      Juan Román Riquelme/Riquelme=0.1; Javier Zanetti/Zanetti=0.1; Carlos Tevez/Tevez=0.1; Sergio Agüero/Aguero=0.1;
+      Gonzalo Higuaín/Higuain=0.1; Diego Forlán/Forlan=0.1; Diego Simeone/Simeone=0.1;
+      Carlos Valderrama/Valderrama=0.1; René Higuita/Higuita=0.1; James Rodríguez=0.1; Radamel Falcao/Falcao=0.1;
+      Zico=0.1; Sócrates=0.1; Garrincha=0.1; Bebeto=0.1; Adriano=0.1; Dani Alves=0.1; Thiago Silva=0.1; Casemiro=0.1;
+      Carles Puyol/Puyol=0.1; Xabi Alonso=0.1; Sergio Busquets/Busquets=0.1; Cesc Fàbregas/Fabregas=0.1;
+      David Silva=0.1; Michael Laudrup/Laudrup=0.1; Peter Schmeichel=0.1; Christian Eriksen/Eriksen=0.1;
+      Dennis Bergkamp/Bergkamp=0.1; Clarence Seedorf/Seedorf=0.1; Patrick Kluivert/Kluivert=0.1; Edgar Davids=0.1;
+      Frank Rijkaard/Rijkaard=0.1; Ruud van Nistelrooy/Van Nistelrooy=0.1; Edwin van der Sar/Van der Sar=0.1;
+      Eden Hazard/Hazard=0.1; Romelu Lukaku/Lukaku=0.1; Rudi Völler/Völler=0.1; Jürgen Klinsmann/Klinsmann=0.1;
+      Miroslav Klose/Klose=0.1; Michael Ballack/Ballack=0.1; Bastian Schweinsteiger/Schweinsteiger=0.1;
+      Philipp Lahm/Lahm=0.1; Mesut Özil/Özil=0.1; Marco Reus/Reus=0.1; Mario Götze/Götze=0.1;
+      Karl-Heinz Rummenigge/Rummenigge=0.1; Jean-Pierre Papin/Papin=0.1; Didier Deschamps/Deschamps=0.1;
+      Lilian Thuram=0.1; Patrick Vieira/Vieira=0.1; David Trezeguet/Trezeguet=0.1; Fabien Barthez/Barthez=0.1;
+      Olivier Giroud/Giroud=0.1; Alan Shearer/Shearer=0.1; Gary Lineker/Lineker=0.1; Michael Owen=0.1;
+      Paul Gascoigne/Gascoigne/Gazza=0.1; John Terry=0.1; Rio Ferdinand=0.1; Kenny Dalglish/Dalglish=0.1;
+      Rui Costa=0.1; Deco=0.1; Mario Kempes/Kempes=0.1; Zbigniew Boniek/Boniek=0.1; Petr Čech/Čech=0.1;
+      Marek Hamšík/Hamšík=0.1; Josip Iličić/Iličić=0.1; Zlatko Zahovič/Zahovič=0.1; Samir Handanović/Handanović=0.1;
+      Hasan Salihamidžić/Salihamidžić=0.1; Sergej Barbarez/Barbarez=0.1; Vedad Ibišević/Ibišević=0.1;
+      Safet Sušić/Sušić=0.1; Dragan Džajić/Džajić=0.1; Dejan Savićević/Savićević=0.1; Predrag Mijatović/Mijatović=0.1;
+      Darko Pančev/Pančev=0.1; Goran Pandev/Pandev=0.1; Nemanja Vidić/Vidić=0.1; Aleksandar Mitrović=0.1;
+      Sergej Milinković-Savić/Milinković-Savić=0.1; Dušan Tadić/Tadić=0.1; Stevan Jovetić/Jovetić=0.1;
+      Mateja Kežman/Kežman=0.1; Hakan Şükür/Şükür=0.1; Jay-Jay Okocha/Okocha=0.1; George Weah/Weah=0.1;
+      Roger Milla=0.1; Yaya Touré/Touré=0.1; Michael Essien/Essien=0.1; Christian Pulisic/Pulisic=0.1;
+      Xherdan Shaqiri/Shaqiri=0.1; Granit Xhaka/Xhaka=0.1`,
   },
   {
     slug: "gmaz",

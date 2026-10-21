@@ -440,18 +440,28 @@ export const zaigranoKategorije: SeedCategory[] = [
     answers: `FIFA/EA FC=9; Super Mario/Mario=8; Minecraft=6; GTA/Grand Theft Auto=6; Tetris=5; Counter-Strike/CS=4;
       Fortnite=4; Call of Duty/COD=3; Pac-Man/Pacman=3; The Sims/Sims=3; League of Legends/LoL=2; Pokemon=2;
       Candy Crush=2; Angry Birds=2; Zmija/Snake=2; Need for Speed/NFS=2; Mortal Kombat=2; World of Warcraft/WoW=1.5;
-      Sonic=1.5; Zelda/Legend of Zelda=1.5; Roblox=1.5; Doom=1; Tekken=1; Red Dead Redemption=1; Witcher/The Witcher=1;
-      Assassin's Creed=1; Age of Empires=1; Dota=1; Among Us=1; Clash of Clans=1; Crash Bandicoot=1;
-      PES/Pro Evolution Soccer=1; Pasijans/Solitaire=1; Minolovac/Minesweeper=1; Street Fighter=0.5; Diablo=0.5;
-      StarCraft=0.5; Warcraft=0.5; Valorant=0.5; Clash Royale=0.5; PUBG=0.5; Rocket League=0.5; Pong=0.5;
-      Donkey Kong=0.5; Tomb Raider/Lara Croft=0.5; Skyrim/Elder Scrolls=0.5; God of War=0.5; Mario Kart=0.5;
-      Subway Surfers=0.5; Football Manager/FM=0.5; Battlefield=0.5; Overwatch=0.3; Apex Legends=0.3;
-      Space Invaders=0.3; Spyro=0.3; Prince of Persia=0.3; Half-Life=0.3; Portal=0.3; Fallout=0.3; Halo=0.3;
-      Uncharted=0.3; Resident Evil=0.3; Elden Ring=0.3; Cyberpunk=0.3; Temple Run=0.3; Flappy Bird=0.3; Worms=0.3;
-      Heroes of Might and Magic/Heroes=0.3; Civilization=0.3; NBA 2K=0.3; Mafia=0.3; Serious Sam=0.3;
-      Mass Effect=0.2; Metal Gear=0.2; Dark Souls=0.2; Hogwarts Legacy=0.2; Super Smash Bros=0.2;
-      Animal Crossing=0.2; Stardew Valley=0.2; Wii Sports=0.2; Guitar Hero=0.2; Just Dance=0.2; Lemmings=0.2;
-      SimCity=0.2; Gran Turismo=0.2; Medal of Honor=0.2; Hitman=0.2; Max Payne=0.2; Silent Hill=0.1`,
+      Sonic=1.5; Zelda/Legend of Zelda=1.5; Roblox=1.5; Doom=1; Tekken=1; Red Dead Redemption=1;
+      Witcher/The Witcher=1; Assassin's Creed=1; Age of Empires=1; Dota=1; Among Us=1; Clash of Clans=1;
+      Crash Bandicoot=1; PES/Pro Evolution Soccer=1; Pasijans/Solitaire=1; Minolovac/Minesweeper=1;
+      Street Fighter=0.5; Diablo=0.5; StarCraft=0.5; Warcraft=0.5; Valorant=0.5; Clash Royale=0.5; PUBG=0.5;
+      Rocket League=0.5; Pong=0.5; Donkey Kong=0.5; Tomb Raider/Lara Croft=0.5; Skyrim/Elder Scrolls=0.5;
+      God of War=0.5; Mario Kart=0.5; Subway Surfers=0.5; Football Manager/FM=0.5; Battlefield=0.5; Overwatch=0.3;
+      Apex Legends=0.3; Space Invaders=0.3; Spyro=0.3; Prince of Persia=0.3; Half-Life=0.3; Portal=0.3; Fallout=0.3;
+      Halo=0.3; Uncharted=0.3; Resident Evil=0.3; Elden Ring=0.3; Cyberpunk=0.3; Temple Run=0.3; Flappy Bird=0.3;
+      Worms=0.3; Heroes of Might and Magic/Heroes=0.3; Civilization=0.3; NBA 2K=0.3; Mafia=0.3; Serious Sam=0.3;
+      Mass Effect=0.2; Metal Gear=0.2; Dark Souls=0.2; Hogwarts Legacy=0.2; Super Smash Bros=0.2; Animal Crossing=0.2;
+      Stardew Valley=0.2; Wii Sports=0.2; Guitar Hero=0.2; Just Dance=0.2; Lemmings=0.2; SimCity=0.2;
+      Gran Turismo=0.2; Medal of Honor=0.2; Hitman=0.2; Max Payne=0.2; Silent Hill=0.1; The Last of Us=0.2;
+      Stronghold=0.2; Metin2=0.1; Digger=0.1; Baldur's Gate=0.1; Hollow Knight=0.1; Undertale=0.1; Terraria=0.1;
+      Fall Guys=0.1; Genshin Impact=0.1; Brawl Stars=0.1; Geometry Dash=0.1; Five Nights at Freddy's/FNAF=0.1;
+      Plants vs. Zombies=0.1; Fruit Ninja=0.1; Talking Tom=0.1; FarmVille=0.1; Commandos=0.1; Settlers=0.1;
+      Command & Conquer=0.1; Total War=0.1; RollerCoaster Tycoon=0.1; Cities: Skylines=0.1; Euro Truck Simulator=0.1;
+      Farming Simulator=0.1; Flight Simulator=0.1; Duke Nukem=0.1; Quake=0.1; Wolfenstein=0.1; Unreal Tournament=0.1;
+      Far Cry=0.1; Bioshock=0.1; Rainbow Six=0.1; Forza=0.1; Tony Hawk=0.1; Rayman=0.1; Kirby=0.1; Metroid=0.1;
+      Mega Man=0.1; Castlevania=0.1; Contra=0.1; Bomberman=0.1; Frogger=0.1; Asteroids=0.1; Arkanoid=0.1;
+      Duck Hunt=0.1; Bubble Bobble=0.1; Final Fantasy=0.1; Zuma=0.1; Dead Space=0.1; It Takes Two=0.1; Cuphead=0.1;
+      Goat Simulator=0.1; Hearthstone=0.1; RuneScape=0.1; Team Fortress=0.1; The Talos Principle/Talos Principle=0.1;
+      Ghost of Tsushima=0.1; Horizon Zero Dawn=0.1; Spore=0.1; Detroit: Become Human=0.1`,
   },
   {
     slug: "drustvena-igra",
@@ -607,20 +617,31 @@ export const zaigranoKategorije: SeedCategory[] = [
     title: "Strani pjevač ili bend",
     hint: "Izvan bivše Jugoslavije",
     strip: ["bend", "grupa"],
-    answers: `Beatles=6; Michael Jackson=6; Queen=5; Madonna=4; Elvis Presley/Elvis=4; ABBA=3; Rolling Stones=3; Taylor Swift=3;
-      Metallica=2; AC-DC/ACDC=2; Nirvana=2; U2=2; Coldplay=2; Beyoncé/Beyonce=2; Rihanna=2; Shakira=2; Adele=2;
-      Ed Sheeran=2; Eminem=2; Lady Gaga=2; Britney Spears/Britney=1.5; Bon Jovi=1.5; Pink Floyd=1.5;
+    answers: `Beatles=6; Michael Jackson=6; Queen=5; Madonna=4; Elvis Presley/Elvis=4; ABBA=3; Rolling Stones=3;
+      Taylor Swift=3; Metallica=2; AC-DC/ACDC=2; Nirvana=2; U2=2; Coldplay=2; Beyoncé/Beyonce=2; Rihanna=2; Shakira=2;
+      Adele=2; Ed Sheeran=2; Eminem=2; Lady Gaga=2; Britney Spears/Britney=1.5; Bon Jovi=1.5; Pink Floyd=1.5;
       Guns N' Roses/Guns n Roses/GNR=1.5; Bob Marley=1.5; Rammstein=1.5; Justin Bieber=1.5; Dua Lipa=1.5;
       Led Zeppelin=1; David Bowie=1; Whitney Houston=1; Celine Dion=1; Frank Sinatra=1; Red Hot Chili Peppers/RHCP=1;
       Linkin Park=1; Depeche Mode=1; Elton John=1; Bruno Mars=1; Billie Eilish=1; Ariana Grande=1; Backstreet Boys=1;
       Imagine Dragons=1; Eros Ramazzotti=1; Bob Dylan=0.8; Mariah Carey=0.8; Tina Turner=0.8; Iron Maiden=0.8;
-      Green Day=0.8; Oasis=0.8; Kanye West/Ye=0.8; The Weeknd=0.8; Katy Perry=0.8; One Direction=0.8;
-      Spice Girls=0.8; Prince=0.5; Bee Gees=0.5; Phil Collins=0.5; Sting=0.5; Bruce Springsteen=0.5;
-      Justin Timberlake=0.5; Drake=0.5; Miley Cyrus=0.5; Harry Styles=0.5; Maroon 5=0.5; The Doors=0.5;
-      Jimi Hendrix=0.5; Kiss=0.5; Scorpions=0.5; Deep Purple=0.5; Black Sabbath/Ozzy Osbourne/Ozzy=0.5;
-      Aerosmith=0.5; Laura Pausini=0.5; Andrea Bocelli=0.5; Måneskin/Maneskin=0.5; Snoop Dogg=0.5; Tupac/2Pac=0.5;
-      David Guetta=0.5; Avicii=0.5; Lana Del Rey=0.3; Westlife=0.3; Muse=0.3; Radiohead=0.3; Zucchero=0.3;
-      Bad Bunny=0.3; 50 Cent=0.3; Jay-Z=0.3; Daft Punk=0.3; Calvin Harris=0.3; Tom Jones=0.3`,
+      Green Day=0.8; Oasis=0.8; Kanye West/Ye=0.8; The Weeknd=0.8; Katy Perry=0.8; One Direction=0.8; Spice Girls=0.8;
+      Prince=0.5; Bee Gees=0.5; Phil Collins=0.5; Sting=0.5; Bruce Springsteen=0.5; Justin Timberlake=0.5; Drake=0.5;
+      Miley Cyrus=0.5; Harry Styles=0.5; Maroon 5=0.5; The Doors=0.5; Jimi Hendrix=0.5; Kiss=0.5; Scorpions=0.5;
+      Deep Purple=0.5; Black Sabbath/Ozzy Osbourne/Ozzy=0.5; Aerosmith=0.5; Laura Pausini=0.5; Andrea Bocelli=0.5;
+      Måneskin/Maneskin=0.5; Snoop Dogg=0.5; Tupac/2Pac=0.5; David Guetta=0.5; Avicii=0.5; Lana Del Rey=0.3;
+      Westlife=0.3; Muse=0.3; Radiohead=0.3; Zucchero=0.3; Bad Bunny=0.3; 50 Cent=0.3; Jay-Z=0.3; Daft Punk=0.3;
+      Calvin Harris=0.3; Tom Jones=0.3; Dire Straits=0.2; Modern Talking=0.2; Pink/P!nk=0.2; The Who=0.1;
+      The Police/Police=0.1; Sex Pistols=0.1; Ramones=0.1; Blondie=0.1; Duran Duran=0.1; Tears for Fears=0.1;
+      Eurythmics=0.1; Roxette=0.1; A-ha=0.1; Boney M=0.1; Europe=0.1; Toto=0.1; Eagles=0.1; Fleetwood Mac=0.1;
+      Genesis=0.1; Cher=0.1; Stevie Wonder=0.1; Ray Charles=0.1; James Brown=0.1; Aretha Franklin=0.1;
+      Louis Armstrong=0.1; Johnny Cash=0.1; Dolly Parton=0.1; Shania Twain=0.1; Avril Lavigne=0.1;
+      Christina Aguilera=0.1; Jennifer Lopez/J.Lo=0.1; Enrique Iglesias=0.1; Ricky Martin=0.1; Julio Iglesias=0.1;
+      Pitbull=0.1; Usher=0.1; Sia=0.1; Sam Smith=0.1; Olivia Rodrigo=0.1; Sabrina Carpenter=0.1; Travis Scott=0.1;
+      Kendrick Lamar=0.1; Post Malone=0.1; Nicki Minaj=0.1; Dr. Dre=0.1; Slipknot=0.1; System of a Down=0.1;
+      Limp Bizkit=0.1; Foo Fighters=0.1; Van Halen=0.1; Motörhead=0.1; Nightwish=0.1; Evanescence=0.1; The Cure=0.1;
+      Pet Shop Boys=0.1; Arctic Monkeys=0.1; The Killers=0.1; Blur=0.1; Blink-182=0.1; The Offspring=0.1;
+      The Prodigy=0.1; Ace of Base=0.1; Aqua=0.1; Scooter=0.1; Adriano Celentano/Celentano=0.1; Toto Cutugno=0.1;
+      Al Bano=0.1; Édith Piaf/Edith Piaf=0.1; Stromae=0.1; Nena=0.1; Tokio Hotel=0.1; Falco=0.1`,
   },
   {
     slug: "exyu-izvodjac",
@@ -661,23 +682,40 @@ export const zaigranoKategorije: SeedCategory[] = [
     group: "zaigrano",
     title: "Holivudski glumac ili glumica",
     strip: [],
-    answers: `Tom Cruise=6; Brad Pitt=6; Leonardo DiCaprio/DiCaprio/Leo=6; Johnny Depp=5; Angelina Jolie=4; Tom Hanks=4;
-      Arnold Schwarzenegger/Arnold/Švarceneger=4; Julia Roberts=3; Robert De Niro/De Niro=3; Al Pacino=3;
+    answers: `Tom Cruise=6; Brad Pitt=6; Leonardo DiCaprio/DiCaprio/Leo=6; Johnny Depp=5; Angelina Jolie=4;
+      Tom Hanks=4; Arnold Schwarzenegger/Arnold/Švarceneger=4; Julia Roberts=3; Robert De Niro/De Niro=3; Al Pacino=3;
       Sylvester Stallone/Stallone=3; Bruce Willis=3; Will Smith=3; Meryl Streep=2; Morgan Freeman=2;
       Denzel Washington=2; George Clooney=2; Keanu Reeves=2; Jennifer Aniston=2; Scarlett Johansson=2;
       Marilyn Monroe=2; Dwayne Johnson/The Rock/Rock=2; Jim Carrey=2; Jack Nicholson=1.5; Nicole Kidman=1.5;
       Clint Eastwood=1.5; Robert Downey Jr./Robert Downey=1.5; Jackie Chan=1.5; Charlie Chaplin/Chaplin=1.5;
-      Audrey Hepburn=1; Matt Damon=1; Ryan Gosling=1; Ryan Reynolds=1; Vin Diesel=1; Jason Statham=1;
-      Adam Sandler=1; Eddie Murphy=1; Bruce Lee=1; Sandra Bullock=1; Cameron Diaz=1; Jennifer Lawrence=1;
-      Emma Watson=1; Margot Robbie=1; Samuel L. Jackson/Samuel Jackson=1; Harrison Ford=1; Mel Gibson=1;
-      Nicolas Cage=1; Marlon Brando=1; Sean Connery=1; Robin Williams=1; Zendaya=0.5; Timothée Chalamet/Chalamet=0.5;
+      Audrey Hepburn=1; Matt Damon=1; Ryan Gosling=1; Ryan Reynolds=1; Vin Diesel=1; Jason Statham=1; Adam Sandler=1;
+      Eddie Murphy=1; Bruce Lee=1; Sandra Bullock=1; Cameron Diaz=1; Jennifer Lawrence=1; Emma Watson=1;
+      Margot Robbie=1; Samuel L. Jackson/Samuel Jackson=1; Harrison Ford=1; Mel Gibson=1; Nicolas Cage=1;
+      Marlon Brando=1; Sean Connery=1; Robin Williams=1; Zendaya=0.5; Timothée Chalamet/Chalamet=0.5;
       Chris Hemsworth=0.5; Chris Evans=0.5; Hugh Jackman=0.5; Christian Bale=0.5; Joaquin Phoenix=0.5;
       Anthony Hopkins=0.5; Kevin Costner=0.5; Michael Douglas=0.5; Daniel Craig=0.5; Pierce Brosnan=0.5;
       Jennifer Lopez/J.Lo=0.5; Sharon Stone=0.5; Kate Winslet=0.5; Natalie Portman=0.5; Goran Višnjić/Višnjić=0.5;
       Chris Pratt=0.3; Heath Ledger=0.3; Kevin Spacey=0.3; Humphrey Bogart=0.3; James Dean=0.3; Paul Newman=0.3;
       Halle Berry=0.3; Anne Hathaway=0.3; Charlize Theron=0.3; Salma Hayek=0.3; Penélope Cruz/Penelope Cruz=0.3;
       Monica Bellucci=0.3; Uma Thurman=0.3; Megan Fox=0.3; Gal Gadot=0.3; Rade Šerbedžija/Šerbedžija=0.3;
-      Ben Stiller=0.3; Kirk Douglas=0.2; Mila Kunis=0.2; Steve Carell=0.2; Owen Wilson=0.1`,
+      Ben Stiller=0.3; Kirk Douglas=0.2; Mila Kunis=0.2; Steve Carell=0.2; Owen Wilson=0.1; Tom Hardy=0.2;
+      Cillian Murphy=0.2; Emma Stone=0.2; Daniel Radcliffe=0.2; Liam Neeson=0.2; Tom Holland=0.2; Pedro Pascal=0.2;
+      Jean-Claude Van Damme/Van Damme=0.2; Chuck Norris=0.2; John Travolta=0.2; Florence Pugh=0.1;
+      Jessica Chastain=0.1; Amy Adams=0.1; Reese Witherspoon=0.1; Drew Barrymore=0.1; Gwyneth Paltrow=0.1;
+      Kristen Stewart=0.1; Robert Pattinson=0.1; Rupert Grint=0.1; Orlando Bloom=0.1; Keira Knightley=0.1;
+      Jude Law=0.1; Colin Firth=0.1; Hugh Grant=0.1; Gerard Butler=0.1; Russell Crowe=0.1; Mark Wahlberg=0.1;
+      Ben Affleck=0.1; Jake Gyllenhaal=0.1; Edward Norton=0.1; Benedict Cumberbatch=0.1; Andrew Garfield=0.1;
+      Tobey Maguire=0.1; Mark Ruffalo=0.1; Jeremy Renner=0.1; Paul Rudd=0.1; Oscar Isaac=0.1; Adam Driver=0.1;
+      Austin Butler=0.1; Jacob Elordi=0.1; Sydney Sweeney=0.1; Anya Taylor-Joy=0.1; Jenna Ortega=0.1;
+      Millie Bobby Brown=0.1; Saoirse Ronan=0.1; Helen Mirren=0.1; Judi Dench=0.1; Maggie Smith=0.1; Ian McKellen=0.1;
+      Patrick Stewart=0.1; Gary Oldman=0.1; Michael Caine=0.1; Ralph Fiennes=0.1; Dustin Hoffman=0.1;
+      Robert Redford=0.1; Steve McQueen=0.1; John Wayne=0.1; Gregory Peck=0.1; Cary Grant=0.1; James Stewart=0.1;
+      Grace Kelly=0.1; Elizabeth Taylor=0.1; Sophia Loren=0.1; Ingrid Bergman=0.1; Katharine Hepburn=0.1;
+      Steven Seagal=0.1; Dolph Lundgren=0.1; Wesley Snipes=0.1; Danny DeVito=0.1; Patrick Swayze=0.1;
+      Richard Gere=0.1; Michelle Pfeiffer=0.1; Demi Moore=0.1; Kim Basinger=0.1; Jodie Foster=0.1;
+      Sigourney Weaver=0.1; Whoopi Goldberg=0.1; Zac Efron=0.1; Channing Tatum=0.1; Jason Momoa=0.1; Idris Elba=0.1;
+      Henry Cavill=0.1; Jessica Alba=0.1; Leslie Nielsen=0.1; Milla Jovovich=0.1; Peter Falk=0.1; Karl Malden=0.1;
+      John Malkovich=0.1; Eric Bana=0.1`,
   },
   {
     slug: "prijevoz",

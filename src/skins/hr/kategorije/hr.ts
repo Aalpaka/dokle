@@ -393,14 +393,22 @@ export const hrKategorije: SeedCategory[] = [
     strip: [],
     answers: `Ivan=8; Marko=6; Luka=5; Josip/Joža/Jozo=4; Ante=4; Tomislav/Tomo=3; Stjepan/Stipe/Stipo/Štef=3;
       Petar/Pero=3; Nikola=2.5; Mario=2; Matej=2; Filip=2; David=2; Antonio=1.5; Mateo=1.5; Goran=1.5; Hrvoje=1.5;
-      Karlo=1; Lovro=1; Jakov=1; Dario=1; Davor=1; Domagoj=1; Dražen=1; Damir=1; Darko=1; Igor=1;
-      Krešimir/Krešo=1; Mate=1; Mirko=1; Ivica=1; Ivo=1; Jure=1; Marin=1; Martin=1; Matija=1; Robert=0.8;
-      Zoran=0.8; Zvonimir/Zvonko=0.8; Željko=0.8; Boris=0.8; Bruno=0.8; Dominik=0.8; Leon=0.8; Niko=0.8;
-      Roko=0.8; Toni=0.8; Franjo=0.8; Kristijan=0.5; Mladen=0.5; Mislav=0.5; Neven=0.5; Siniša=0.5; Slaven=0.5;
-      Tihomir=0.5; Vedran=0.5; Branko=0.5; Dino=0.5; Duje=0.5; Frane/Frano=0.5; Juraj=0.5; Leo=0.5; Patrik=0.5;
-      Šime=0.5; Viktor=0.5; Zlatko=0.5; Nenad=0.4; Branimir=0.4; Mihael=0.4; Vito=0.4; Đuro=0.4; Joško=0.4;
-      Krunoslav/Kruno=0.4; Gabrijel=0.3; Mihovil=0.3; Dragutin=0.3; Valentin=0.3; Emanuel=0.2; Borna=0.5;
-      Fran=0.5; Noa=0.4; Gabriel=0.3; Lukas=0.3; Tin=0.5; Vid=0.3; Ilija=0.3; Andrija=0.4; Ognjen=0.2`,
+      Karlo=1; Lovro=1; Jakov=1; Dario=1; Davor=1; Domagoj=1; Dražen=1; Damir=1; Darko=1; Igor=1; Krešimir/Krešo=1;
+      Mate=1; Mirko=1; Ivica=1; Ivo=1; Jure=1; Marin=1; Martin=1; Matija=1; Robert=0.8; Zoran=0.8;
+      Zvonimir/Zvonko=0.8; Željko=0.8; Boris=0.8; Bruno=0.8; Dominik=0.8; Leon=0.8; Niko=0.8; Roko=0.8; Toni=0.8;
+      Franjo=0.8; Kristijan=0.5; Mladen=0.5; Mislav=0.5; Neven=0.5; Siniša=0.5; Slaven=0.5; Tihomir=0.5; Vedran=0.5;
+      Branko=0.5; Dino=0.5; Duje=0.5; Frane/Frano=0.5; Juraj=0.5; Leo=0.5; Patrik=0.5; Šime=0.5; Viktor=0.5;
+      Zlatko=0.5; Nenad=0.4; Branimir=0.4; Mihael=0.4; Vito=0.4; Đuro=0.4; Joško=0.4; Krunoslav/Kruno=0.4;
+      Gabrijel=0.3; Mihovil=0.3; Dragutin=0.3; Valentin=0.3; Emanuel=0.2; Borna=0.5; Fran=0.5; Noa=0.4; Gabriel=0.3;
+      Lukas=0.3; Tin=0.5; Vid=0.3; Ilija=0.3; Andrija=0.4; Ognjen=0.2; Antun=0.2; Andrej=0.2; Adrian=0.2; Alen=0.2;
+      Božidar/Božo=0.2; Danijel=0.2; Denis=0.2; Marijan=0.2; Milan=0.2; Miroslav/Miro=0.2; Pavao/Pavle/Pave=0.2;
+      Saša=0.2; Teo=0.2; Vinko=0.2; Vladimir/Vlado=0.2; Jan=0.2; Anton=0.1; Aleksandar=0.1; Bernard=0.1; Berislav=0.1;
+      Dalibor=0.1; Dejan=0.1; Drago=0.1; Dubravko=0.1; Edi/Edo=0.1; Emil=0.1; Fabijan=0.1; Gordan=0.1; Grgur/Grga=0.1;
+      Ivano=0.1; Ivor=0.1; Jakša=0.1; Janko=0.1; Jerko=0.1; Lovre=0.1; Ljubomir/Ljubo=0.1; Marinko=0.1; Mato=0.1;
+      Mijo=0.1; Miljenko=0.1; Nino=0.1; Oliver=0.1; Oskar=0.1; Renato=0.1; Rok=0.1; Sebastijan=0.1; Silvio=0.1;
+      Slavko=0.1; Srećko=0.1; Stanko=0.1; Šimun=0.1; Toma=0.1; Tonči/Tonći=0.1; Tvrtko=0.1; Velimir=0.1;
+      Vjekoslav/Vjeko=0.1; Vlatko=0.1; Zdravko=0.1; Liam=0.1; Erik=0.1; Benjamin=0.1; Maksimilijan/Maks=0.1;
+      Nikša=0.1; Rafael=0.1; Samuel=0.1; Tadej=0.1; Ljudevit=0.1`,
   },
   {
     slug: "jezero",
