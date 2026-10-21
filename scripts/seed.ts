@@ -24,29 +24,29 @@ for (const { skin, categories: cats } of SKINS) {
       .onConflictDoNothing()
       .returning();
     if (!cat) [cat] = await db.select().from(categories).where(and(eq(categories.skinId, skin.id), eq(categories.slug, c.slug)));
-    for (const a of parseSeedAnswers(c.answers)) {
-      let [ans] = await db
-        .insert(answers)
-        .values({ categoryId: cat.id, canonical: a.canonical, priorShare: a.share, rare: a.rare })
-        .onConflictDoNothing()
-        .returning();
-      if (ans) added++;
-      else [ans] = await db.select().from(answers).where(and(eq(answers.categoryId, cat.id), eq(answers.canonical, a.canonical)));
+    // odgovori i aliasi idu skupno po kategoriji: upit po odgovoru je za desetke tisuća odgovora predug za build
+    const seeded = parseSeedAnswers(c.answers);
+    const inserted = await db
+      .insert(answers)
+      .values(seeded.map((a) => ({ categoryId: cat.id, canonical: a.canonical, priorShare: a.share, rare: a.rare })))
+      .onConflictDoNothing()
+      .returning({ id: answers.id });
+    added += inserted.length;
+    const byCanonical = new Map((await db.select().from(answers).where(eq(answers.categoryId, cat.id))).map((x) => [x.canonical, x]));
+    const aliases: { answerId: number; alias: string }[] = [];
+    for (const a of seeded) {
+      const ans = byCanonical.get(a.canonical)!;
       // najrjeđi (helikopter) se označava i na postojećim odgovorima; procjena se smije samo spustiti
       if (a.rare && !ans.rare) {
-        [ans] = await db
+        await db
           .update(answers)
           .set({ rare: true, priorShare: Math.min(ans.priorShare, a.share) })
-          .where(eq(answers.id, ans.id))
-          .returning();
+          .where(eq(answers.id, ans.id));
         marked++;
       }
-      if (a.variants.length)
-        await db
-          .insert(answerAliases)
-          .values(a.variants.map((alias) => ({ answerId: ans.id, alias })))
-          .onConflictDoNothing();
+      for (const alias of a.variants) aliases.push({ answerId: ans.id, alias });
     }
+    if (aliases.length) await db.insert(answerAliases).values(aliases).onConflictDoNothing();
   }
   console.log(`${skin.id}: ${cats.length} kategorija, ${added} novih odgovora, ${marked} označeno za helikopter`);
 }
