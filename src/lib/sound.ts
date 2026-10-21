@@ -119,6 +119,11 @@ export const sfx = {
     tone(c, "square", 180, t, 0.005, 0.12, 0.16, 110);
     tone(c, "square", 140, t + 0.13, 0.005, 0.12, 0.22, 90);
   },
+  /** Odbrojavanje: kratki ton za 3, 2, 1 i viši za start. */
+  count(go: boolean) {
+    const c = ready();
+    if (c) tone(c, "triangle", go ? 1320 : 660, c.currentTime, 0.005, 0.2, go ? 0.45 : 0.18);
+  },
   correct() {
     const c = ready();
     if (!c) return;

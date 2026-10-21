@@ -21,7 +21,7 @@ const EASE: Record<Vehicle, (t: number) => number> = {
 };
 
 type Segment = { a: number; b: number; tier: Tier };
-type Anim = { tier: Tier; from: number; to: number; start: number; dur: number; seg: Segment; p0: Pt; p1: Pt; onDone?: () => void };
+type Anim = { tier: Tier; from: number; to: number; start: number; dur: number; seg: Segment; p0: Pt; p1: Pt; quiet: boolean; onDone?: () => void };
 type Toast = { color: string; icon: string; logo: boolean; title: string; sub: string; km: string; id: number };
 
 function tierOf(cfg: SkinConfig, r: RoundView): Tier | null {
@@ -36,7 +36,8 @@ function badgeHtml(t: Tier | null): { html: string; logo: boolean } {
   return { html: vehicleIcons[t.vehicle], logo: false };
 }
 
-export default function MapStage({ cfg, map, rounds, perDay }: { cfg: SkinConfig; map: SkinMap; rounds: RoundView[]; perDay: number }) {
+/** Karta s vozilom. S `ended` na kraju igre automatski jednom pusti replay cijelog puta. */
+export default function MapStage({ cfg, map, rounds, perDay, ended = false }: { cfg: SkinConfig; map: SkinMap; rounds: RoundView[]; perDay: number; ended?: boolean }) {
   const route = useMemo(() => new Route(cfg.stations, map.via), [cfg.stations, map.via]);
   const stations = useMemo(() => cfg.stations.map((s) => project(s.lon, s.lat)), [cfg.stations]);
   const fullRoad = useMemo(() => route.path(0, route.maxKm), [route]);
@@ -58,6 +59,7 @@ export default function MapStage({ cfg, map, rounds, perDay }: { cfg: SkinConfig
   const [hudKm, setHudKm] = useState(() => rounds.reduce((a, r) => a + r.km, 0));
   const [toast, setToast] = useState<Toast | null>(null);
   const [arrival, setArrival] = useState<{ name: string; km: number; message: string; id: number } | null>(null);
+  const [replaying, setReplaying] = useState(false);
 
   // stanje simulacije; mijenja se u petlji animacije, ne kroz React
   const sim = useRef({
@@ -65,6 +67,7 @@ export default function MapStage({ cfg, map, rounds, perDay }: { cfg: SkinConfig
     segments: [] as Segment[],
     anim: null as Anim | null,
     seen: -1,
+    replay: 0,
     cam: { x: 0, y: 0, w: 760 },
     pos: { x: 0, y: 0 },
     lift: 0,
@@ -108,27 +111,29 @@ export default function MapStage({ cfg, map, rounds, perDay }: { cfg: SkinConfig
     g.innerHTML = h;
   }
 
-  function arrive(i: number) {
+  function arrive(i: number, quiet: boolean) {
     const s = cfg.stations[i], el = stationEls.current[i];
     if (el) {
       el.classList.remove("pop");
       void el.offsetWidth;
       el.classList.add("pop");
     }
+    if (quiet) return;
     setArrival({ name: s.name, km: s.km, message: s.message, id: performance.now() });
     sfx.station();
   }
 
-  function drive(tier: Tier, from: number, to: number, onDone?: () => void) {
+  function drive(tier: Tier, from: number, to: number, onDone?: () => void, quiet = false) {
     const S = sim.current;
     const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
     const seg = { a: from, b: from, tier };
     S.segments.push(seg);
     setVehicle(tier);
-    const dur = (reduce ? 0.6 : DURATION[tier.vehicle]) * 1000;
+    // replay vozi brže i bez zvuka vozila
+    const dur = (reduce ? 0.6 : DURATION[tier.vehicle] * (quiet ? 0.5 : 1)) * 1000;
     const a = route.at(from), b = route.at(to);
-    S.anim = { tier, from, to, start: performance.now(), dur, seg, p0: [a.x, a.y], p1: [b.x, b.y], onDone };
-    sfx.vehicle(tier.vehicle, dur / 1000);
+    S.anim = { tier, from, to, start: performance.now(), dur, seg, p0: [a.x, a.y], p1: [b.x, b.y], quiet, onDone };
+    if (!quiet) sfx.vehicle(tier.vehicle, dur / 1000);
   }
 
   function step(now: number) {
@@ -175,7 +180,7 @@ export default function MapStage({ cfg, map, rounds, perDay }: { cfg: SkinConfig
         S.flip = 1;
     }
     cfg.stations.forEach((s, i) => {
-      if (s.km > prev && s.km <= k) arrive(i);
+      if (s.km > prev && s.km <= k) arrive(i, a.quiet);
     });
     drawSegments();
     setHudKm(Math.round(k));
@@ -237,6 +242,54 @@ export default function MapStage({ cfg, map, rounds, perDay }: { cfg: SkinConfig
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rounds.length]);
+
+  // replay: put se iscrta ispočetka, dionicu po dionicu
+  function replay() {
+    const S = sim.current, id = ++S.replay;
+    S.anim = null;
+    S.segments = [];
+    S.km = 0;
+    S.lift = S.bob = S.rot = 0;
+    S.pos = route.at(0);
+    trailRef.current?.setAttribute("d", "");
+    drawSegments();
+    setHudKm(0);
+    setVehicle(cfg.tiers[0]);
+    setReplaying(true);
+    let i = 0, km = 0;
+    const next = () => {
+      if (S.replay !== id) return;
+      if (i >= rounds.length) {
+        setReplaying(false);
+        sfx.finish();
+        return;
+      }
+      const r = rounds[i++], t = tierOf(cfg, r), from = km;
+      km += r.km;
+      const b = badgeHtml(t);
+      setToast({
+        color: t ? t.color : MISS_COLOR, icon: b.html, logo: b.logo,
+        title: `${i}. ${t ? `${r.canonical} · ${t.name}` : cfg.miss.name}`, sub: r.category.title, km: `+${r.km} km`, id: performance.now(),
+      });
+      if (!t) {
+        setVehicle(null);
+        setTimeout(next, 900);
+        return;
+      }
+      drive(t, Math.min(from, route.maxKm), Math.min(km, route.maxKm), () => setTimeout(next, 250), true);
+    };
+    setTimeout(next, 700);
+  }
+
+  useEffect(() => {
+    if (!ended) return;
+    const t = setTimeout(replay, 500);
+    return () => {
+      clearTimeout(t);
+      sim.current.replay++;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ended]);
 
   useEffect(() => {
     if (!toast) return;
@@ -379,6 +432,11 @@ export default function MapStage({ cfg, map, rounds, perDay }: { cfg: SkinConfig
           )}
         </div>
       </div>
+      {ended && (
+        <div className="hud bl">
+          <button type="button" className="mapbtn solo" disabled={replaying} onClick={replay}>{replaying ? "Replay…" : "↻ Ponovi put"}</button>
+        </div>
+      )}
       <div className="hud br">
         <div className="camseg" role="radiogroup" aria-label="Kamera">
           <button type="button" className="mapbtn" role="radio" aria-checked={mode === "follow"} onClick={() => setMode("follow")}>Kamera prati</button>
