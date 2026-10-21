@@ -22,6 +22,10 @@ const EASE: Record<Vehicle, (t: number) => number> = {
   heli: (t) => (t < 0.18 ? 0 : t > 0.9 ? 1 : (1 - Math.cos(((t - 0.18) / 0.72) * Math.PI)) / 2),
 };
 
+// mobilna tipka kamere pokazuje u što se prebacuje
+const WHOLE_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
+const FOLLOW_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>';
+
 type Segment = { a: number; b: number; tier: Tier };
 type Anim = { tier: Tier; from: number; to: number; start: number; dur: number; seg: Segment; p0: Pt; p1: Pt; quiet: boolean; onDone?: () => void };
 type Toast = { color: string; icon: string; logo: boolean; title: string; sub: string; km: string; id: number };
@@ -39,7 +43,7 @@ function badgeHtml(t: Tier | null): { html: string; logo: boolean } {
 }
 
 /** Karta s vozilom. S `ended` na kraju igre automatski jednom pusti replay cijelog puta. */
-export default function MapStage({ cfg, map, rounds, perDay, ended = false }: { cfg: SkinConfig; map: SkinMap; rounds: RoundView[]; perDay: number; ended?: boolean }) {
+export default function MapStage({ cfg, map, rounds, perDay, ended = false, inset = 0 }: { cfg: SkinConfig; map: SkinMap; rounds: RoundView[]; perDay: number; ended?: boolean; inset?: number }) {
   const route = useMemo(() => new Route(cfg.stations, map.via), [cfg.stations, map.via]);
   const stations = useMemo(() => cfg.stations.map((s) => project(s.lon, s.lat)), [cfg.stations]);
   const fullRoad = useMemo(() => route.path(0, route.maxKm), [route]);
@@ -58,6 +62,9 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false }: { 
   const [mode, setMode] = useState<"follow" | "whole">("follow");
   const modeRef = useRef(mode);
   modeRef.current = mode;
+  // donji dio karte pokriven pločom s pitanjem (mobitel); kamera centrira u vidljivi dio
+  const insetRef = useRef(inset);
+  insetRef.current = inset;
   const [hudKm, setHudKm] = useState(() => rounds.reduce((a, r) => a + r.km, 0));
   const [toast, setToast] = useState<Toast | null>(null);
   const [arrival, setArrival] = useState<{ name: string; km: number; message: string; id: number } | null>(null);
@@ -344,17 +351,21 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false }: { 
       const cw = stage.clientWidth, ch = stage.clientHeight;
       if (!cw || !ch) return;
       const aspect = ch / cw;
+      const cover = Math.min(insetRef.current, ch * 0.7), visible = (ch - cover) / cw;
       let tx: number, ty: number, tw: number;
       if (modeRef.current === "whole") {
-        tw = Math.min(image.width, Math.max(overview.width, overview.height / aspect));
+        tw = Math.min(image.width, Math.max(overview.width, overview.height / visible));
         tx = overview.x;
         ty = overview.y;
       } else {
         tw = S.anim ? (S.anim.tier.vehicle === "plane" || S.anim.tier.vehicle === "heli" ? 820 : 640) : 760;
-        if (cw < 700) tw *= 0.85;
+        // mobitel: bliži zum, da sitne oznake ne prekriju kartu
+        if (cw < 700) tw *= 0.7;
         tx = S.pos.x;
         ty = S.pos.y - S.lift * 0.4;
       }
+      const shift = (cover / 2) * (tw / cw);
+      ty += shift;
       const k = 1 - Math.exp(-dt * (S.anim ? 4 : 2.4));
       S.cam.w += (tw - S.cam.w) * k;
       S.cam.x += (tx - S.cam.x) * k;
@@ -362,7 +373,9 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false }: { 
       const vw = S.cam.w, vh = vw * aspect;
       let x0 = S.cam.x - vw / 2, y0 = S.cam.y - vh / 2;
       x0 = vw <= xmax - xmin ? Math.max(xmin, Math.min(xmax - vw, x0)) : (xmin + xmax - vw) / 2;
-      y0 = vh <= ymax ? Math.max(0, Math.min(ymax - vh, y0)) : (ymax - vh) / 2;
+      // ispod ploče smije viriti more, da i jug karte može doći u vidljivi dio
+      const below = (cover / 2) * (vw / cw);
+      y0 = vh <= ymax ? Math.max(0, Math.min(ymax - vh + 2 * below, y0)) : (ymax - vh) / 2 + below;
       svg.setAttribute("viewBox", `${x0.toFixed(2)} ${y0.toFixed(2)} ${vw.toFixed(2)} ${vh.toFixed(2)}`);
       const sc = cw / vw, near = vw < 1150;
       for (const pin of pins.current) {
@@ -393,7 +406,7 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false }: { 
   const last = cfg.stations[cfg.stations.length - 1];
 
   return (
-    <div className="stage" ref={stageRef}>
+    <div className="stage" ref={stageRef} style={{ "--inset": `${inset}px` } as React.CSSProperties}>
       <svg className="map" ref={svgRef} viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
         <image href={map.image.href} x={map.image.x} y={map.image.y} width={map.image.width} height={map.image.height} preserveAspectRatio="none" />
         {map.rivers.map((r) => <path key={r.name} className="river" d={r.d} />)}
@@ -469,6 +482,13 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false }: { 
           <button type="button" className="mapbtn" role="radio" aria-checked={mode === "follow"} onClick={() => setMode("follow")}>Kamera prati</button>
           <button type="button" className="mapbtn" role="radio" aria-checked={mode === "whole"} onClick={() => setMode("whole")}>Cijela ruta</button>
         </div>
+        <button
+          type="button"
+          className="camtoggle"
+          aria-label={mode === "follow" ? "Kamera prati, prebaci na cijelu rutu" : "Cijela ruta, prebaci na praćenje"}
+          onClick={() => setMode(mode === "follow" ? "whole" : "follow")}
+          dangerouslySetInnerHTML={{ __html: mode === "follow" ? WHOLE_ICON : FOLLOW_ICON }}
+        />
       </div>
       {arrival && (
         <div className="stationmsg" key={arrival.id}>
