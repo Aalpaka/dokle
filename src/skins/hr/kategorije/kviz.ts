@@ -867,4 +867,416 @@ export const kvizKategorije: SeedCategory[] = [
       Sigmund Jähn=0.2; Gaia=0.2; Hayabusa=0.2; DART=0.2; Rakesh Sharma=0.1; Jean-Loup Chrétien=0.1; OSIRIS-REx=0.1;
       BepiColombo=0.1; Mars Express=0.1; ExoMars=0.1; JUICE=0.1; Vanguard=0.1; Lunohod=0.1`,
   },
+  {
+    slug: "dunav-grad",
+    group: "kviz",
+    title: "Grad ili mjesto na Dunavu",
+    hint: "Bilo koja država, od izvora u Njemačkoj do ušća u Crno more",
+    strip: [],
+    answers: `Beč=12; Budimpešta=12; Vukovar=10; Bratislava=8; Beograd=8; Novi Sad=6; Linz=4; Ilok=4; Ulm=2;
+      Regensburg=2; Ingolstadt=1.5; Passau=1.5; Melk=1; Krems=1; Esztergom=1; Mohács/Mohač=1; Batina=1; Aljmaš=1;
+      Apatin=1; Smederevo=1; Zemun=1; Sremski Karlovci=1; Vidin=1; Ruse=1; Donaueschingen=1; Mauthausen=0.5;
+      Tulln=0.5; Komárno=0.5; Visegrád=0.5; Vác=0.5; Szentendre=0.5; Dunaújváros=0.5; Paks=0.5; Baja=0.5; Dalj=0.5;
+      Erdut=0.5; Šarengrad=0.5; Bačka Palanka=0.5; Petrovaradin=0.5; Golubac=0.5; Kladovo=0.5;
+      Drobeta-Turnu Severin=0.5; Giurgiu=0.5; Brăila/Braila=0.5; Galați/Galaţi/Galati=0.5; Tulcea=0.5; Silistra=0.5;
+      Neu-Ulm=0.3; Donauwörth=0.3; Straubing=0.3; Deggendorf=0.3; Dürnstein=0.3; Štúrovo=0.3; Komárom=0.3; Sotin=0.3;
+      Donji Milanovac=0.3; Veliko Gradište=0.3; Orșova/Oršova=0.3; Calafat=0.3; Călărași/Calarasi=0.3;
+      Cernavodă/Cernavoda=0.3; Sulina=0.3; Lom=0.3; Svištov=0.3; Izmail=0.3; Tuttlingen=0.2; Sigmaringen=0.2;
+      Neuburg=0.2; Kelheim=0.2; Hainburg=0.2; Opatovac=0.2; Bezdan=0.2; Oltenița=0.2; Nikopol=0.2; Kozloduj=0.2;
+      Günzburg=0.1; Dillingen=0.1; Vilshofen=0.1; Grein=0.1; Ybbs=0.1; Prahovo=0.1; Bogojevo=0.1; Corabia=0.1;
+      Turnu Măgurele=0.1; Zimnicea=0.1; Kilija=0.1; Vilkove=0.1; Giurgiulești=0.1; Tutrakan=0.1; Reni=0.1`,
+  },
+  {
+    slug: "jadran-grad",
+    group: "kviz",
+    title: "Grad ili mjesto na Jadranu izvan Hrvatske",
+    hint: "Italija, Slovenija, BiH, Crna Gora ili Albanija; mora biti na moru",
+    strip: [],
+    answers: `Venecija/Venezia=10; Trst/Trieste=8; Budva=6; Neum=6; Bari=5; Rimini=5; Piran=5; Koper=5; Kotor=5;
+      Ancona/Ankona=4; Portorož=4; Herceg Novi=4; Bar=4; Ulcinj=4; Pescara=3; Izola=3; Tivat=3; Drač/Durrës=3;
+      Brindisi=2; Ravenna=2; Lignano=2; Sveti Stefan=2; Valona/Vlorë=2; Otranto=1.5; Jesolo=1.5; Bibione=1.5;
+      Riccione=1.5; Petrovac=1.5; Perast=1.5; Chioggia=1; Grado=1; Caorle=1; Pesaro=1; Ankaran=1; Igalo=1; Sutomore=1;
+      Bečići=1; Monfalcone=0.5; Cesenatico=0.5; Cervia=0.5; Cattolica=0.5; Fano=0.5; Senigallia=0.5;
+      San Benedetto del Tronto=0.5; Termoli=0.5; Vieste=0.5; Manfredonia=0.5; Barletta=0.5; Trani=0.5; Monopoli=0.5;
+      Polignano a Mare/Polignano=0.5; Risan=0.5; Ada Bojana=0.5; Shëngjin/Šengjin=0.5; Duino=0.3; Muggia=0.3;
+      Molfetta=0.3; Ortona=0.3; Strunjan=0.3; Rafailovići=0.3; Bijela=0.3; Dobrota=0.3; Velipojë=0.3; Giulianova=0.2;
+      Vasto=0.2; Comacchio=0.2; Bellaria=0.2; Civitanova Marche=0.2; Pržno=0.2; Prčanj=0.2; Đenovići=0.2; Golem=0.2;
+      Orikum=0.2; Porto Recanati=0.1; Bisceglie=0.1; Gabicce Mare=0.1; Rodi Garganico=0.1; Kumbor=0.1`,
+  },
+  {
+    slug: "opera-balet",
+    group: "kviz",
+    title: "Opera, opereta ili balet",
+    hint: "Naslov djela, i hrvatska djela; hrvatski ili izvorni naslov",
+    strip: ["opera","balet","opereta"],
+    answers: `Carmen=6.5; Labuđe jezero=6.5; Orašar=5; Traviata/La Traviata=5; Aida=5; Čarobna frulja/Die Zauberflöte=4;
+      Figarov pir/Le nozze di Figaro=3; Madama Butterfly/Madame Butterfly=3; Tosca=3; La Bohème/Boheme=3; Rigoletto=3;
+      Seviljski brijač/Il barbiere di Siviglia=3; Nikola Šubić Zrinjski/Zrinjski=3; Ero s onoga svijeta/Ero=3;
+      Nabucco=2.5; Don Giovanni=2.5; Turandot=2.5; Trnoružica/Uspavana ljepotica=2.5; Otello=1.5; Trubadur/Il trovatore=1.5;
+      Pajaci/I Pagliacci=1.5; Cavalleria rusticana=1.5; Šišmiš/Die Fledermaus=1.5; Vesela udovica=1.5; Giselle/Žizela=1.5;
+      Porin=1; Bolero=1; Posvećenje proljeća/Le Sacre du printemps=1; Žar-ptica=1; Romeo i Julija=1;
+      Licitarsko srce=1; Falstaff=0.8; Tannhäuser=0.8; Lohengrin=0.8; Tristan i Izolda=0.8; Prsten Nibelunga=0.8;
+      Valkira/Die Walküre=0.8; Fidelio=0.8; Evgenij Onjegin/Jevgenij Onjegin=0.8; Norma=0.8; Vilim Tell/Guillaume Tell=0.8;
+      Faust=0.8; Porgy i Bess=0.8; Così fan tutte=0.8; Pepeljuga=0.8; Splitski akvarel=0.8; Mala Floramye=0.8;
+      Kneginja čardaša/Čardaška kneginja=0.8; Barun Trenk=0.8; Orfej u podzemlju=0.8; Ciganski barun=0.8;
+      Don Quijote/Don Kihot=0.8; Spartak=0.8; Đavo u selu=0.8; Ljubav i zloba=0.4; Mila Gojsalića=0.4;
+      Krabuljni ples/Un ballo in maschera=0.4; Moć sudbine/La forza del destino=0.4; Don Carlos=0.4; Parsifal=0.4;
+      Leteći Holandez=0.4; Pikova dama=0.4; Boris Godunov=0.4; Prodana nevjesta=0.4; Rusalka=0.4; Salome=0.4;
+      Lucia di Lammermoor=0.4; Ljubavni napitak/L'elisir d'amore=0.4; Hoffmannove priče=0.4; Orfej i Euridika=0.4;
+      Otmica iz saraja=0.4; Gianni Schicchi=0.4; Grof Luksemburg=0.4; Grofica Marica=0.4; Petruška=0.4;
+      Coppélia/Copelija=0.4; Bajadera=0.4; Macbeth=0.2; Rajnino zlato=0.2; Sumrak bogova=0.2; Knez Igor=0.2;
+      Elektra=0.2; Kavalir s ružom/Der Rosenkavalier=0.2; Mjesečarka/La sonnambula=0.2; Lakmé=0.2;
+      Samson i Dalila=0.2; Manon=0.2; Dido i Eneja=0.2; Manon Lescaut=0.2; Ljubav za tri naranče=0.2;
+      Lijepa Helena=0.2; Zemlja smiješka=0.2; Mikado=0.2; Silfida/La Sylphide=0.2; Gajane=0.2; Ohridska legenda=0.2;
+      Popodne jednog fauna=0.2; Siegfried=0.2; Wozzeck=0.2; Werther=0.2; Idomeneo=0.2; Andrea Chénier=0.2;
+      Gioconda=0.2; Ernani=0.2; Simon Boccanegra=0.2; Peter Grimes=0.2; Lady Macbeth Mcenskog okruga=0.2;
+      Gusari iz Penzancea=0.2; Noć u Veneciji=0.2; Gusar/Le Corsaire=0.2; Daphnis i Chloé=0.2; Pulcinella=0.2;
+      Adriana Lecouvreur=0.1; Mefistofele=0.1; Raymonda=0.1; Kameni cvijet=0.1`,
+  },
+  {
+    slug: "anticki-grad",
+    group: "kviz",
+    title: "Antički grad",
+    hint: "Grad iz antike; vrijedi antički ili današnji naziv grada koji je tada postojao",
+    strip: ["grad"],
+    answers: `Rim=8.5; Atena=7; Sparta=5; Troja=5; Kartaga=4.5; Pompeji=4.5; Salona/Solin=4.5; Aleksandrija=3.5; Babilon=3.5;
+      Bizant/Konstantinopol/Carigrad=3.5; Jeruzalem=1.5; Teba/Luksor=1.5; Korint=1.5; Olimpija=1.5; Delfi=1.5; Mikena=1.5; Efez=1.5;
+      Petra=1.5; Pula/Pola=1.5; Siscia/Sisak=1.5; Knosos=1.5; Persepolis=1.5; Herkulanej=1.5; Zadar/Iader/Jader=1.5;
+      Epidaurum/Cavtat=1.5; Narona=1.5; Mursa/Osijek=1.5; Andautonija=1.5; Issa/Vis=1.5; Pharos/Stari Grad=1.5;
+      Palmira=1.5; Milet=0.9; Pergam=0.9; Antiohija=0.9; Damask=0.9; Tir=0.9; Jerihon=0.9; Ur=0.9; Ninive/Niniva=0.9; Memfis=0.9;
+      Ostija=0.9; Akvileja/Aquileia=0.9; Cibalae/Vinkovci=0.9; Tragurion/Trogir=0.9; Sirmium=0.9; Singidunum=0.9; Sirakuza=0.9;
+      Londinium=0.9; Halikarnas=0.9; Rodos=0.9; Mohendžo-daro=0.9; Sidon=0.4; Biblos=0.4; Uruk=0.4; Suza=0.4; Ravena=0.4;
+      Epetion/Stobreč=0.4; Burnum=0.4; Asseria=0.4; Aenona/Nin=0.4; Senia/Senj=0.4; Tarsatica=0.4;
+      Parentium/Poreč=0.4; Nezakcij/Nesactium=0.4; Naissus=0.4; Emona=0.4; Dyrrachium/Drač=0.4; Leptis Magna=0.4;
+      Agrigent=0.4; Paestum=0.4; Massalia=0.4; Baalbek=0.4; Hatuša=0.4; Harappa=0.4; Pela=0.4; Argos=0.4; Epidaur=0.4;
+      Scardona/Skradin=0.3; Aquae Iasae=0.3; Marsonia=0.3; Poetovio=0.3; Doclea/Duklja=0.3; Butrint=0.3;
+      Apolonija=0.3; Utika=0.3; Neapolis=0.3; Tarent=0.3; Sibaris=0.3; Lugdunum=0.3; Jerash/Gerasa=0.3; Masada=0.3;
+      Gaza=0.3; Smirna=0.3; Sard=0.3; Gordij=0.3; Akad=0.3; Amarna=0.3; Kirena=0.3; Aksum=0.3; Stagira=0.3;
+      Tirint=0.3; Megara=0.3; Eleusina/Eleusis=0.3; Alba Longa=0.3; Kapua=0.3; Celeia=0.2; Krotone=0.2; Eboracum=0.2;
+      Tarraco=0.2; Kafarnaum=0.2; Lagaš=0.2; Mari=0.2; Ebla=0.2; Ugarit=0.2; Abydos=0.2; Heliopol=0.2; Meroe=0.2;
+      Ktezifont=0.2; Seleukija=0.2; Samarkand/Marakanda=0.2; Aige/Vergina=0.2; Olint=0.2; Pil=0.2; Dodona=0.2;
+      Veji=0.2; Tarkvinija=0.2; Brundizij=0.2; Kuma=0.2; Emerita Augusta=0.1; Naukratis=0.1; Varvaria=0.1`,
+  },
+  {
+    slug: "grcko-slovo",
+    group: "kviz",
+    title: "Slovo grčkog alfabeta",
+    hint: "Naziv slova; vrijede i stara slova koja se više ne koriste",
+    strip: ["slovo"],
+    answers: `Alfa=15; Beta=12; Gama/Gamma=10; Delta=10; Omega=10; Pi=8; Sigma=6; Lambda/Lamda=5; Epsilon=5;
+      Theta/Teta=4; Mi/Mu=4; Fi/Phi=3; Psi=3; Tau=3; Ro/Rho=2.5; Zeta=2.5; Eta=2; Kapa/Kappa=2; Jota/Iota=2;
+      Ni/Nu=1.5; Ksi/Xi=1.5; Hi/Chi=1.5; Ipsilon/Upsilon/Ypsilon=1.5; Omikron/Omicron=1.5; Kopa/Koppa=0.2; Sampi=0.2;
+      Stigma=0.1; San=0.1; Heta=0.1; Digama/Digamma=0.1`,
+  },
+  {
+    slug: "eurovizija-pobjednik",
+    group: "kviz",
+    title: "Pobjednik Eurovizije: izvođač ili pjesma",
+    hint: "Bilo koja godina od 1956. do 2025.",
+    strip: [],
+    answers: `ABBA/Waterloo=15; Riva/Rock Me=12; Måneskin/Zitti e buoni=8;
+      Conchita Wurst/Conchita/Rise Like a Phoenix=6; Loreen/Euphoria/Tattoo=6; Marija Šerifović/Molitva=5;
+      Lordi/Hard Rock Hallelujah=4; Alexander Rybak/Rybak/Fairytale=4;
+      Céline Dion/Celine Dion/Ne partez pas sans moi=4; Nemo/The Code=3; Ruslana/Wild Dances=3; Netta/Toy=3;
+      Duncan Laurence/Arcade=2; Kalush Orchestra/Kalush/Stefania=2; Måns Zelmerlöw/Heroes=2; Lena/Satellite=2;
+      Jamala/1944=1.5; Dima Bilan/Believe=1.5; Helena Paparizou/My Number One=1.5; JJ/Wasted Love=1.5;
+      Dana International/Diva=1.5; Salvador Sobral/Amar pelos dois=1; Johnny Logan/What's Another Year/Hold Me Now=1;
+      Toto Cutugno/Insieme/Insieme 1992=1; Brotherhood of Man/Save Your Kisses for Me=0.5;
+      Bucks Fizz/Making Your Mind Up=0.5; Sandie Shaw/Puppet on a String=0.5; Lulu/Boom Bang-a-Bang=0.5;
+      Nicole/Ein bißchen Frieden/Ein bisschen Frieden=0.5; Emmelie de Forest/Only Teardrops=0.5;
+      Ell & Nikki/Running Scared=0.5; Sertab Erener/Everyway That I Can=0.5; Secret Garden/Nocturne=0.5;
+      Olsen Brothers/Fly on the Wings of Love=0.5; Katrina and the Waves/Love Shine a Light=0.5;
+      France Gall/Poupée de cire, poupée de son=0.5; Udo Jürgens/Merci, Chérie=0.5;
+      Gigliola Cinquetti/Non ho l'età=0.5; Dana/All Kinds of Everything=0.3; Vicky Leandros/Après toi=0.3;
+      Massiel/La, la, la=0.3; Milk and Honey/Hallelujah=0.3; Carola/Fångad av en stormvind=0.3;
+      Herreys/Diggi-Loo Diggi-Ley=0.3; Bobbysocks/La det swinge=0.3; Sandra Kim/J'aime la vie=0.3;
+      Lys Assia/Refrain=0.3; Izhar Cohen/A-Ba-Ni-Bi=0.2; Linda Martin/Why Me=0.2; Niamh Kavanagh/In Your Eyes=0.2;
+      Paul Harrington i Charlie McGettigan/Rock 'n' Roll Kids=0.2; Eimear Quinn/The Voice=0.2;
+      Charlotte Nilsson/Take Me to Your Heaven=0.2; Tanel Padar/Dave Benton/Everybody=0.2; Marie N/I Wanna=0.2;
+      André Claveau/Dors, mon amour=0.1; Jacqueline Boyer/Tom Pillibi=0.1; Jean-Claude Pascal/Nous les amoureux=0.1;
+      Isabelle Aubret/Un premier amour=0.1; Grethe i Jørgen Ingmann/Dansevise=0.1; Salomé/Vivo cantando=0.1;
+      Lenny Kuhr/De troubadour=0.1; Frida Boccara/Un jour, un enfant=0.1; Séverine/Un banc, un arbre, une rue=0.1;
+      Anne-Marie David/Tu te reconnaîtras=0.1; Teach-In/Ding-a-dong=0.1; Marie Myriam/L'oiseau et l'enfant=0.1;
+      Corinne Hermès/Si la vie est cadeau=0.1; Corry Brokken/Net als toen=0.1; Teddy Scholten/Een beetje=0.1`,
+  },
+  {
+    slug: "geometrija",
+    group: "kviz",
+    title: "Geometrijski lik ili tijelo",
+    hint: "Lik u ravnini ili tijelo u prostoru",
+    strip: [],
+    answers: `Trokut=10; Kvadrat=10; Krug=10; Pravokutnik=8; Kocka/Heksaedar=6; Kugla/Sfera=5; Valjak/Cilindar=5;
+      Stožac/Konus=5; Piramida=5; Romb=4; Trapez=4; Kvadar=4; Paralelogram=3; Peterokut/Pentagon=3;
+      Šesterokut/Heksagon=3; Elipsa=3; Prizma=3; Deltoid=2; Osmerokut/Oktogon=2; Mnogokut/Poligon=1.5; Četverokut=1.5;
+      Tetraedar=1.5; Sedmerokut=1; Deseterokut=1; Oktaedar=1; Dodekaedar=1; Ikozaedar=1; Polukrug=1; Kružnica=1;
+      Deveterokut=0.5; Dvanaesterokut=0.5; Kružni isječak=0.5; Jednakostraničan trokut=0.5; Pravokutni trokut=0.5;
+      Torus=0.5; Elipsoid=0.5; Polukugla=0.5; Pentagram/Zvijezda petokraka=0.5; Kružni odsječak=0.3;
+      Kružni vijenac/Kružni prsten=0.3; Jednakokračan trokut=0.3; Krnja piramida=0.3; Krnji stožac=0.3;
+      Paralelepiped=0.3; Romboid=0.3; Möbiusova vrpca=0.3; Teserakt/Hiperkocka=0.3; Raznostraničan trokut=0.2;
+      Paraboloid=0.2; Hiperboloid=0.2; Heksagram=0.2; Romboedar=0.2; Trapezoid=0.2; Antiprizma=0.1; Kuboktaedar=0.1`,
+  },
+  {
+    slug: "redatelj",
+    group: "kviz",
+    title: "Filmski redatelj ili redateljica",
+    hint: "Bilo koja zemlja, i hrvatski i jugoslavenski redatelji",
+    strip: [],
+    answers: `Steven Spielberg/Spielberg=6.5; Quentin Tarantino/Tarantino=5.5; Christopher Nolan/Nolan=4.5;
+      Martin Scorsese/Scorsese=4; Alfred Hitchcock/Hitchcock=4; Stanley Kubrick/Kubrick=3.5;
+      Francis Ford Coppola/Coppola=2.5; James Cameron/Cameron=2.5; Tim Burton/Burton=2.5; Emir Kusturica/Kusturica=2.5;
+      Woody Allen/Allen=2; Ridley Scott=2; George Lucas/Lucas=2; Peter Jackson/Jackson=2; David Fincher/Fincher=2;
+      Wes Anderson=1.5; Federico Fellini/Fellini=1.5; Sergio Leone/Leone=1.5; Guy Ritchie/Ritchie=1.5;
+      Clint Eastwood/Eastwood=1.5; Denis Villeneuve/Villeneuve=1.5; Ingmar Bergman/Bergman=1.5; Akira Kurosawa/Kurosawa=1.5;
+      Charlie Chaplin/Chaplin=1.5; Pedro Almodóvar/Almodóvar=1.5; David Lynch/Lynch=1.5; Vinko Brešan/Brešan=1.5;
+      Lars von Trier/Von Trier=1; Roman Polanski/Polanski=1; Oliver Stone=1; Mel Gibson/Gibson=1;
+      Robert Zemeckis/Zemeckis=1; Michael Bay=1; Guillermo del Toro/Del Toro=1; Hayao Miyazaki/Miyazaki=1;
+      Braća Coen/Coen/Joel Coen/Ethan Coen=1; Dalibor Matanić/Matanić=1; Danis Tanović/Tanović=1; Ron Howard=0.7;
+      Alfonso Cuarón/Cuarón=0.7; Alejandro González Iñárritu/Iñárritu=0.7; Bong Joon-ho=0.7; Jean-Luc Godard/Godard=0.7;
+      François Truffaut/Truffaut=0.7; Luc Besson/Besson=0.7; Andrej Tarkovski/Tarkovski=0.7; Sergej Ejzenštejn/Ejzenštejn=0.7;
+      Orson Welles/Welles=0.7; Billy Wilder/Wilder=0.7; John Ford=0.7; Miloš Forman/Forman=0.7; Greta Gerwig/Gerwig=0.7;
+      Spike Lee=0.7; Veljko Bulajić/Bulajić=0.7; Branko Bauer=0.7; Krsto Papić/Papić=0.7; Vatroslav Mimica/Mimica=0.7;
+      Rajko Grlić/Grlić=0.7; Arsen Anton Ostojić/Ostojić=0.7; Antun Vrdoljak/Vrdoljak=0.7; Jasmila Žbanić/Žbanić=0.7;
+      Srđan Dragojević/Dragojević=0.7; Slobodan Šijan/Šijan=0.7; Tony Scott=0.3; Zack Snyder/Snyder=0.3;
+      J. J. Abrams/Abrams=0.3; Sam Raimi/Raimi=0.3; Frank Capra/Capra=0.3; Fritz Lang=0.3;
+      Michelangelo Antonioni/Antonioni=0.3; Vittorio De Sica/De Sica=0.3; Pier Paolo Pasolini/Pasolini=0.3;
+      Bernardo Bertolucci/Bertolucci=0.3; Paolo Sorrentino/Sorrentino=0.3; Roberto Benigni/Benigni=0.3;
+      Werner Herzog/Herzog=0.3; Wim Wenders/Wenders=0.3; Michael Haneke/Haneke=0.3;
+      Krzysztof Kieślowski/Kieślowski=0.3; Jim Jarmusch/Jarmusch=0.3; Sofia Coppola=0.3; Kathryn Bigelow/Bigelow=0.3;
+      Darren Aronofsky/Aronofsky=0.3; Paul Thomas Anderson=0.3; Danny Boyle/Boyle=0.3;
+      Steven Soderbergh/Soderbergh=0.3; John Carpenter/Carpenter=0.3; Wes Craven/Craven=0.3;
+      Brian De Palma/De Palma=0.3; David Lean=0.3; Taika Waititi/Waititi=0.3; Jordan Peele/Peele=0.3;
+      Yorgos Lanthimos/Lanthimos=0.3; Ang Lee=0.3; Luis Buñuel/Buñuel=0.3; Dušan Makavejev/Makavejev=0.3;
+      Fadil Hadžić=0.3; Zoran Tadić=0.3; Lordan Zafranović/Zafranović=0.3; Zrinko Ogresta/Ogresta=0.3;
+      Hrvoje Hribar/Hribar=0.3; Antonio Nuić/Nuić=0.3; Branko Schmidt=0.3; Jakov Sedlar/Sedlar=0.3;
+      Goran Marković=0.3; Dušan Vukotić/Vukotić=0.3; Lukas Nola=0.3; Luchino Visconti=0.2;
+      Roberto Rossellini/Rossellini=0.2; Giuseppe Tornatore/Tornatore=0.2; Rainer Werner Fassbinder/Fassbinder=0.2;
+      Andrzej Wajda/Wajda=0.2; Jane Campion/Campion=0.2; Terrence Malick/Malick=0.2; Ken Loach/Loach=0.2;
+      Sidney Lumet/Lumet=0.2; Elia Kazan/Kazan=0.2; Ari Aster=0.2; Park Chan-wook=0.2; Wong Kar-wai=0.2;
+      Zhang Yimou=0.2; John Woo=0.2; Nikita Mihalkov/Mihalkov=0.2; Ognjen Sviličić=0.2; Bogdan Žižić=0.2;
+      Nikola Tanhofer=0.2; Ante Babaja=0.2; Aida Begić=0.2; Goran Paskaljević=0.2; Želimir Žilnik=0.2;
+      Živojin Pavlović=0.2; Aleksandar Petrović=0.2; Nevio Marasović=0.2; Snježana Tribuson=0.2; Kristijan Milić=0.2;
+      Mike Leigh=0.1; Ruben Östlund=0.1; Xavier Dolan=0.1; Satyajit Ray=0.1; Abbas Kiarostami=0.1; Asghar Farhadi=0.1;
+      Carlos Saura=0.1; Costa-Gavras=0.1; Theo Angelopoulos=0.1; Jacques Tati=0.1; Jean Renoir=0.1; Agnès Varda=0.1;
+      Puriša Đorđević=0.1; Tomislav Radić=0.1; Ivan Salaj=0.1; Juraj Lerotić=0.1; Bobo Jelčić=0.1; Igor Mirković=0.1;
+      Goran Rušinović=0.1; Ivona Juka=0.1; Hana Jušić=0.1; Andrej Zvjagincev=0.1; Ines Tanović=0.1;
+      Obrad Gluščević=0.1; Robert Bresson=0.1`,
+  },
+  {
+    slug: "svetac",
+    group: "kviz",
+    title: "Svetac, svetica ili blaženik",
+    hint: "Bilo koje Crkve; i biblijski sveci i apostoli",
+    strip: ["sveti","sveta","sv","svetac","svetica","blazeni","blazena"],
+    answers: `Sveti Nikola/Nikola=6.5; Sveti Petar/Petar=6.5; Djevica Marija/Sveta Marija/Bogorodica/Gospa=5;
+      Sveti Pavao/Pavao=4; Sveti Josip/Josip=4; Sveti Antun/Antun Padovanski/Antun=4; Sveti Franjo/Franjo Asiški=4;
+      Sveti Vlaho/Vlaho/Blaž=4; Sveti Ivan Krstitelj/Ivan Krstitelj/Sveti Ivan=3; Sveti Juraj/Juraj=3;
+      Sveti Duje/Duje/Dujam=3; Sveti Martin/Martin=2.5; Sveta Lucija/Lucija=2.5; Alojzije Stepinac/Stepinac=2.5;
+      Sveti Vid/Vid=1.5; Sveti Mihovil/Mihovil/Mihael=1.5; Sveti Jeronim/Jeronim=1.5; Sveti Stjepan/Stjepan prvomučenik=1.5;
+      Sveti Luka/Luka=1.5; Sveti Marko/Marko=1.5; Sveti Matej/Matej=1.5; Sveti Andrija/Andrija=1.5; Sveta Ana/Ana=1.5;
+      Marija Magdalena=1.5; Sveta Barbara/Barbara=1.5; Majka Tereza/Majka Terezija=1.5; Sveti Rok/Rok=1.5;
+      Sveti Valentin/Valentin=1.5; Sveti Patrik/Patrik=1.5; Ivan Pavao II=1.5; Leopold Mandić/Sveti Leopold=1.5;
+      Nikola Tavelić/Sveti Nikola Tavelić=1.5; Sveti Toma/Toma apostol=1; Toma Akvinski=1; Sveti Jakov/Jakov=1;
+      Sveta Katarina/Katarina=1; Ivana Orleanska=1; Sveti Lovro/Lovro=1; Ćiril i Metod/Ćiril/Metod=1;
+      Sveti Sava/Sava=1; Padre Pio/Sveti Pio=1; Ivan Evanđelist/Ivan apostol=0.8; Sveta Klara/Klara=0.8;
+      Terezija Avilska=0.8; Sveta Eufemija/Eufemija/Fuma=0.8; Sveta Stošija/Stošija/Anastazija=0.8;
+      Sveti Šime/Šimun Bogoprimac=0.8; Sveti Florijan/Florijan=0.8; Sveti Sebastijan/Sebastijan=0.8;
+      Sveti Benedikt/Benedikt=0.8; Sveti Dominik/Dominik=0.8; Ignacije Loyola=0.8; Sveti Augustin/Augustin=0.8;
+      Sveti Kristofor/Kristofor=0.8; Marko Križevčanin=0.8; Sveti Filip/Filip=0.4; Sveti Bartolomej/Bartul=0.4;
+      Juda Tadej=0.4; Sveta Margareta=0.4; Sveta Agata=0.4; Sveta Cecilija=0.4;
+      Mala Terezija/Terezija od Djeteta Isusa=0.4; Sveta Rita=0.4; Sveta Helena=0.4; Sveti Krševan/Krševan=0.4;
+      Sveti Kvirin/Kvirin=0.4; Sveti Tripun/Tripun=0.4; Franjo Ksaverski=0.4; Sveti Ambrozije=0.4; Grgur Veliki=0.4;
+      Vasilije Ostroški=0.4; Ivan Merz=0.4; Sveti Silvestar/Silvestar=0.4; Ivan Nepomuk=0.4; Vinko Paulski=0.4;
+      Don Bosco/Ivan Bosco=0.4; Sveti Lazar/Lazar=0.4; Arkanđeo Gabrijel/Gabrijel=0.4; Sveti Ilija/Ilija=0.4;
+      Matija apostol=0.2; Sveti Joakim/Joakim=0.2; Sveta Agneza=0.2; Miroslav Bulešić=0.2; Marija Petković=0.2;
+      Augustin Kažotić=0.2; Alojzije Gonzaga=0.2; Arkanđeo Rafael=0.2; Ivan Zlatousti=0.2; Antun Pustinjak=0.2;
+      Sveti Vjenceslav=0.2; Stjepan Ugarski=0.2; Sveti Ladislav=0.2; Ivan Kapistran=0.2; Kuzma i Damjan=0.2;
+      Sveti Bernard=0.2; Atanazije=0.2; Sveti Kliment=0.2; Sveti Mavro=0.1; Sveti Spiridon=0.1`,
+  },
+  {
+    slug: "nepostojeca-drzava",
+    group: "kviz",
+    title: "Država ili carstvo koje više ne postoji",
+    hint: "Bilo koje doba; i države kojih je Hrvatska bila dio",
+    strip: [],
+    answers: `Jugoslavija/SFRJ/SFR Jugoslavija/FNRJ=10; SSSR/Sovjetski Savez=8.5; Austro-Ugarska/Austrougarska=7;
+      Rimsko Carstvo/Zapadno Rimsko Carstvo/Rim=7; Osmansko Carstvo/Otomansko Carstvo=5;
+      NDH/Nezavisna Država Hrvatska=4.5; Čehoslovačka=4.5; Dubrovačka Republika=4.5;
+      Istočna Njemačka/DDR/Njemačka Demokratska Republika=3.5; Bizant/Bizantsko Carstvo/Istočno Rimsko Carstvo=3.5;
+      Mletačka Republika/Venecija=2.5; Prusija=2.5; Sveto Rimsko Carstvo=2.5; Kraljevina SHS=2.5;
+      Zapadna Njemačka/SR Njemačka=1.5; Austrijsko Carstvo/Habsburška Monarhija=1.5; Kraljevina Jugoslavija=1.5;
+      Mongolsko Carstvo=1.5; Perzijsko Carstvo/Perzija=1.5; Kartaga=1.5; Carstvo Inka/Inke=1.5;
+      Treći Reich/Nacistička Njemačka=1.5; Babilon=1.5; Srbija i Crna Gora=1.5; Stari Egipat=1.5;
+      Astečko Carstvo/Asteci=1.5; Britansko Carstvo=1.5; Rusko Carstvo=1.5; SRJ/Savezna Republika Jugoslavija=0.9;
+      Republika Srpska Krajina/Krajina=0.9; Herceg-Bosna=0.9; Asirija=0.9; Sumer=0.9; Makedonsko Carstvo=0.9; Sparta=0.9; Maje=0.9;
+      Franačka/Franačko Carstvo=0.9; Kraljevina Hrvatska=0.9; Ilirske provincije=0.9;
+      Bosansko Kraljevstvo/Kraljevina Bosna=0.9; Ilirija=0.9; Rodezija=0.9; Zair=0.9; Atena=0.4; Weimarska Republika=0.4;
+      Trojedna Kraljevina=0.4; Država SHS=0.4; Duklja/Zeta=0.4; Srpsko Carstvo=0.4; Papinska Država=0.4; Burma=0.4;
+      Siam=0.4; Cejlon=0.4; Abesinija=0.4; Južni Vijetnam=0.4; Poljsko-Litavska Unija=0.4; Kijevska Rus=0.4;
+      Hunsko Carstvo/Huni=0.4; Mogulsko Carstvo=0.4; Kraljevina Havaji=0.4;
+      Konfederacija/Konfederativne Američke Države=0.4; Hetitsko Carstvo/Hetiti=0.4; Slobodni Teritorij Trst=0.4;
+      Slobodna Država Rijeka=0.4; Raška=0.3; Bugarsko Carstvo=0.3; Kraljevina Srbija=0.3; Kraljevina Crna Gora=0.3;
+      Kraljevina Italija=0.3; Kraljevina Sardinija=0.3; Kraljevina Dviju Sicilija=0.3; Firentinska Republika=0.3;
+      Genovska Republika=0.3; Tibet=0.3; Gornja Volta=0.3; Tanganjika=0.3; Zanzibar=0.3; Biafra=0.3;
+      Ujedinjena Arapska Republika=0.3; Avarski Kaganat=0.3; Ostrogotsko Kraljevstvo/Ostrogoti=0.3; Etrurija=0.3;
+      Kmersko Carstvo=0.3; Teksaška Republika=0.3; Akadsko Carstvo=0.3; Bavarska=0.2; Dahomej=0.2; Sjeverni Jemen=0.2;
+      Južni Jemen=0.2; Novgorodska Republika=0.2; Vlaška=0.2; Hazarski Kaganat=0.2; Vizigoti=0.2; Numidija=0.2;
+      Partsko Carstvo=0.2; Seleukidsko Carstvo=0.2; Carstvo Mali=0.2; Zulu Kraljevstvo=0.2; Lidija=0.2; Saska=0.1;
+      Frigija=0.1; Urartu=0.1; Songaj/Songhaj=0.1`,
+  },
+  {
+    slug: "vulkan",
+    group: "kviz",
+    title: "Vulkan",
+    hint: "Aktivan ili ugasli, i izvan Zemlje",
+    strip: ["vulkan"],
+    answers: `Vezuv=12; Etna=12; Stromboli=5; Krakatau/Krakatoa=5; Fuji/Fudži=5; Kilimandžaro=4; Eyjafjallajökull=3;
+      St. Helens/Mount St. Helens/Sveta Helena=3; Mauna Loa=2; Kilauea=2; Pinatubo=2; Tambora=2; Teide=2;
+      Santorini/Tera=2; Yellowstone=2; Mauna Kea=1.5; Vulcano=1.5; Popocatépetl/Popokatepetl=1.5; Elbrus=1.5;
+      Ararat=1.5; Hekla=1; Cotopaxi=1; Chimborazo=1; Erebus=1; Mont Pelée=1; Nyiragongo=1; Merapi=1; Olympus Mons=1;
+      Agung=0.5; Bromo=0.5; Sakurajima=0.5; Ključevska Sopka=0.5; Rainier=0.5; Paricutín=0.5; Nevado del Ruiz=0.5;
+      Campi Flegrei/Flegrejska polja=0.5; Mayon=0.5; Hunga Tonga=0.5; Kamerun=0.3; Rinjani=0.3; Shasta=0.3; Hood=0.3;
+      Colima=0.3; Orizaba=0.3; Villarrica=0.3; Ojos del Salado=0.3; Grímsvötn=0.3; Katla=0.3; Laki=0.3; Surtsey=0.3;
+      Fagradalsfjall=0.3; Piton de la Fournaise=0.3; Kenija/Mount Kenya=0.3; Erta Ale=0.3; Taal=0.3; Ruapehu=0.3;
+      Tongariro/Ngauruhoe=0.3; Puy de Dôme=0.3; Unzen=0.2; Ontake=0.2; Avačinska Sopka=0.2; Lassen=0.2;
+      Llullaillaco=0.2; Chaitén=0.2; Osorno=0.2; Askja=0.2; Nyamuragira=0.2; Ol Doinyo Lengai=0.2; Taranaki=0.2;
+      Haleakalā=0.2; Ischia=0.2; Pantelleria=0.1; Vulture=0.1; Laacher See=0.1; Nisiros/Nisyros=0.1`,
+  },
+  {
+    slug: "monarhija",
+    group: "kviz",
+    title: "Država koja je danas monarhija",
+    hint: "Kraljevina, kneževina, emirat, sultanat...; i države s britanskim kraljem na čelu",
+    strip: ["kraljevina"],
+    answers: `Ujedinjeno Kraljevstvo/Velika Britanija/Britanija/UK/Engleska=12; Španjolska=8; Švedska=6; Norveška=6;
+      Danska=6; Nizozemska/Holandija=6; Belgija=6; Japan=5; Saudijska Arabija=5; Monako=4; Luksemburg=3;
+      Lihtenštajn=3; Maroko=3; Tajland=3; Jordan=2; Kanada=2; Australija=2; Ujedinjeni Arapski Emirati/UAE/Emirati=2;
+      Katar=2; Vatikan=2; Kuvajt=1.5; Brunej=1.5; Andora=1; Bahrein=1; Oman=1; Butan=1; Novi Zeland=1; Malezija=1;
+      Kambodža=1; Jamajka=0.5; Bahami=0.5; Esvatini/Eswatini/Svazi=0.5; Lesoto=0.5; Tonga=0.5; Papua Nova Gvineja=0.3;
+      Salomonovi Otoci=0.2; Tuvalu=0.2; Belize=0.2; Antigva i Barbuda=0.2; Sveta Lucija=0.2;
+      Sveti Vincent i Grenadini=0.2; Grenada=0.2; Sveti Kristofor i Nevis=0.1`,
+  },
+  {
+    slug: "shakespeare-lik",
+    group: "kviz",
+    title: "Lik iz Shakespeareova djela",
+    hint: "Iz bilo koje drame; i stvarne osobe kako ih on prikazuje",
+    strip: [],
+    answers: `Hamlet=10; Romeo=8; Julija/Juliet=8; Macbeth=5; Otelo/Othello=4; Lady Macbeth=3.5; Kralj Lear/Lear=3.5;
+      Ofelija/Ophelia=3.5; Desdemona=2.5; Jago/Iago=2.5; Julije Cezar/Cezar=2.5; Shylock/Šajlok=1.5; Puk/Puck=1.5; Prospero=1.5;
+      Falstaff=1.5; Brut/Brutus=1.5; Marko Antonije/Antonije=1.5; Kleopatra=1.5; Rikard III=1.5; Merkucijo/Mercutio=1.5;
+      Klaudije/Claudius=1.5; Gertruda/Gertrude=1.5; Polonije/Polonius=1.5; Ariel=1; Kaliban/Caliban=1;
+      Henrik V/Princ Hal=1; Tibalt/Tybalt=1; Laert/Laertes=1; Horacije/Horatio=1; Yorick/Jorik=1;
+      Kordelija/Cordelia=1; Petruchio/Petručo=1; Katarina=1; Oberon=1; Titanija/Titania=1; Miranda=0.8;
+      Benvolio=0.8; Fra Lorenzo/Lorenzo=0.8; Dojilja=0.8; Montague=0.8; Capulet/Kapulet=0.8; Rosencrantz=0.8; Guildenstern=0.8;
+      Banquo/Banko=0.8; Macduff/Makduf=0.8; Duncan/Dunkan=0.8; Tri vještice/Vještice=0.8; Goneril=0.8; Regan=0.8;
+      Porcija/Portia=0.8; Viola=0.8; Malvolio=0.8; Kasije/Cassius=0.4; Henrik IV=0.4; Henrik VIII=0.4; Rikard II=0.4;
+      Paris=0.4; Fortinbras=0.4; Duh Hamletova oca/Duh=0.4; Edmund=0.4; Edgar=0.4; Gloucester=0.4; Emilija/Emilia=0.4;
+      Kasio/Cassio=0.4; Bianca=0.4; Antonio=0.4; Bassanio=0.4; Lisandar/Lysander=0.4; Demetrije/Demetrius=0.4;
+      Hermija/Hermia=0.4; Helena=0.4; Bottom=0.4; Beatrice=0.4; Benedikt/Benedick=0.4; Orsino=0.4; Olivija/Olivia=0.4;
+      Rozalinda/Rosalind=0.4; Orlando=0.4; Tit Andronik=0.4; Kralj Ivan=0.2; Henrik VI=0.2; Malcolm=0.2; Kent=0.2;
+      Rodrigo/Roderigo=0.2; Jessica=0.2; Tezej/Theseus=0.2; Hipolita=0.2; Timon Atenjanin/Timon=0.2; Koriolan=0.2;
+      Troil=0.2; Kresida=0.2; Perikle=0.2; Oktavije=0.2; Hotspur=0.2; Tamna dama=0.2; Brabancio=0.2;
+      Sir Toby Belch=0.2; Feste=0.2; Jaques=0.2; Leontes=0.2; Hermiona=0.2; Perdita=0.2; Bolingbroke=0.2; Enobarb=0.1;
+      Imogena=0.1`,
+  },
+  {
+    slug: "liga-prvaka-klub",
+    group: "kviz",
+    title: "Klub koji je osvojio Ligu prvaka ili Kup prvaka",
+    hint: "Nogomet, muški ili ženski, do 2025.",
+    strip: ["fc","fk","ac","sc"],
+    answers: `Real Madrid/Real=14; Barcelona/Barca/Barça=12; Bayern/Bayern München/Bayern Munchen=10;
+      Milan/AC Milan=9; Liverpool=9; Manchester United/Man Utd/United=8; Juventus/Juve=7; Inter/Internazionale=7;
+      Chelsea=6; Ajax/Ajax Amsterdam=5; Crvena zvezda/Crvena Zvezda/Zvezda/Red Star=5; Porto/FC Porto=4;
+      PSG/Paris Saint-Germain/Paris=4; Manchester City/Man City/City=4; Borussia Dortmund/Dortmund/BVB=3.5;
+      Marseille/Olympique Marseille=3; Benfica=3; Celtic=2; Steaua/Steaua Bukurešt/FCSB=2; PSV/PSV Eindhoven=1.5;
+      Hamburg/Hamburger SV/HSV=1.5; Nottingham Forest/Forest=1.5; Feyenoord=1.5; Arsenal=1.5; Aston Villa/Villa=1;
+      Lyon/Olympique Lyon=1; Wolfsburg=0.5; Frankfurt/1. FFC Frankfurt/Eintracht Frankfurt=0.3;
+      Turbine Potsdam/Potsdam=0.2; Umeå/Umea=0.1; Duisburg=0.1`,
+  },
+  {
+    slug: "bitka",
+    group: "kviz",
+    title: "Poznata bitka",
+    hint: "Bilo koje doba, i hrvatske bitke i operacije; dovoljno je mjesto bitke",
+    strip: ["bitka","opsada","operacija","boj"],
+    answers: `Waterloo/Bitka kod Waterlooa=7.5; Vukovar/Bitka za Vukovar=7.5; Staljingrad/Bitka za Staljingrad=6;
+      Normandija/Iskrcavanje u Normandiji/Dan D=4.5; Kosovska bitka/Kosovo/Kosovo polje=4;
+      Krbavska bitka/Krbava/Krbavsko polje/Udbina=4; Sigetska bitka/Siget/Szigetvár=4; Termopile/Termopilski klanac=4;
+      Mohačka bitka/Mohač=3; Bitka kod Siska/Sisak=3; Neretva/Bitka na Neretvi=3; Oluja/Operacija Oluja=3; Maraton=2.5;
+      Sutjeska/Bitka na Sutjesci=2.5; Troja/Opsada Troje=1.5; Gvozd/Bitka na Gvozdu/Petrova gora=1.5;
+      Dubrovnik/Opsada Dubrovnika=1.5; Sinj/Opsada Sinja/Sinjska bitka=1.5; Austerlitz/Slavkov=1.5; Trafalgar=1.5; Hastings=1.5;
+      Gettysburg=1.5; Verdun=1.5; Pearl Harbor=1.5; Beč/Bečka bitka/Opsada Beča=1.5; Bljesak/Operacija Bljesak=1;
+      Lepanto=1; Somme=1; Galipolje/Gallipoli=1; Kursk=1; Midway=1; Bitka za Britaniju=1;
+      Berlin/Bitka za Berlin=1; Dunkirk/Dunkerque=1; Kana/Kane/Cannae=1; Vis/Viška bitka=1; Alamo=1;
+      Maslenica=0.8; Marna=0.8; El Alamein=0.8; Lenjingrad/Opsada Lenjingrada=0.8; Moskva/Bitka za Moskvu=0.8; Iwo Jima=0.8;
+      Zama=0.8; Gaugamela=0.8; Salamina=0.8; Teutoburška šuma=0.8; Agincourt=0.8; Borodino=0.8; Little Bighorn=0.8;
+      Soča/Soška bojišnica/Isonzo=0.8; Dien Bien Phu=0.8; Svinjski zaljev=0.8; Kadeš=0.8; Kupres=0.4;
+      Ardeni/Bitka u Ardenima=0.4; Monte Cassino=0.4; Okinawa=0.4; Is/Isos=0.4; Akcij/Actium=0.4; Alezija=0.4;
+      Katalaunska polja=0.4; Poitiers=0.4; Crécy=0.4; Grunwald=0.4; Poltava=0.4; Lipsko/Bitka naroda=0.4; Marengo=0.4;
+      Solferino=0.4; Sedan=0.4; Yorktown=0.4; Tsushima=0.4; Ypres=0.4; Kobarid/Caporetto=0.4; Tannenberg=0.4;
+      Jutland=0.4; Tet ofenziva=0.4; Hattin=0.4; Manzikert=0.4; Megido=0.4; Bannockburn=0.4; Cer/Cerska bitka=0.4;
+      Kolubara/Kolubarska bitka=0.4; Plateja=0.2; Hadrijanopol=0.2; Roncesvalles=0.2; Kulikovo polje=0.2;
+      Nikopolj=0.2; Varna=0.2; Slankamen=0.2; Senta=0.2; Petrovaradin=0.2; Narva=0.2; Jena=0.2; Wagram=0.2;
+      Sadova/Königgrätz=0.2; Bunker Hill=0.2; Lexington=0.2; Saratoga=0.2; Antietam=0.2; Bull Run=0.2; Piava=0.2;
+      Inchon=0.2; Culloden=0.2; Stamford Bridge=0.2; Bosworth=0.2; Bijela gora=0.2; Naseby=0.2; Lützen=0.2;
+      Blenheim=0.2; Rocroi=0.1; Jarmuk=0.1`,
+  },
+  {
+    slug: "planinski-lanac",
+    group: "kviz",
+    title: "Planinski lanac ili gorje",
+    hint: "Bilo gdje u svijetu, i hrvatska gorja i planine",
+    strip: ["gorje","planina","planine"],
+    answers: `Alpe=10; Himalaja=8.5; Dinaridi/Dinarsko gorje/Dinara=7; Velebit=7; Andi=5; Pireneji=5; Karpati=4.5;
+      Stjenovite planine/Rocky Mountains/Stjenjak=4.5; Ural=3.5; Kavkaz=3.5; Apenini=3.5; Biokovo=2.5; Medvednica/Sljeme=2.5;
+      Učka=1.5; Mosor=1.5; Papuk=1.5; Atlas=1.5; Apalači=1.5; Tatre=1.5; Dolomiti=1.5; Velika Kapela/Kapela=1.5; Risnjak=1.5;
+      Sijera Nevada/Sierra Nevada=1.5; Kordiljeri=1.5; Hindukuš=1.5; Karakorum=1.5; Kozjak=0.9; Psunj=0.9; Kalnik=0.9;
+      Ivanščica=0.9; Žumberak/Žumberačko gorje/Samoborsko gorje=0.9; Balkan/Stara planina=0.9; Rodopi=0.9;
+      Švarcvald/Schwarzwald=0.9; Skandinavsko gorje=0.9; Julijske Alpe=0.9; Pamir=0.9; Tian Shan/Tjenšan=0.9; Altaj=0.9;
+      Prokletije=0.9; Durmitor=0.9; Mala Kapela=0.4; Krndija=0.4; Dilj=0.4; Požeška gora=0.4; Moslavačka gora=0.4;
+      Plješivica=0.4; Svilaja=0.4; Kamešnica=0.4; Ćićarija=0.4; Snježnik=0.4; Petrova gora=0.4; Bilogora=0.4;
+      Pind=0.4; Sudeti=0.4; Harz=0.4; Vogezi=0.4; Jura=0.4; Ardeni=0.4; Karavanke=0.4; Zagros=0.4;
+      Velika razvodna gora=0.4; Drakensberg=0.4; Sierra Madre=0.4; Šar planina=0.4; Kopaonik=0.4; Bjelašnica=0.4;
+      Jahorina=0.4; Lovćen=0.4; Pohorje=0.4; Zrinska gora=0.3; Macelj=0.3; Kaskadno gorje=0.3; Penini=0.3; Taurus=0.3;
+      Elburz=0.3; Južne Alpe=0.3; Ruwenzori=0.3; Etiopsko visočje=0.3; Libanon=0.3; Transilvanske Alpe=0.3;
+      Čvrsnica=0.3; Prenj=0.3; Velež=0.3; Romanija=0.3; Orjen=0.3; Strahinjčica=0.2; Kamničke Alpe=0.2; Sajani=0.2;
+      Brazilsko visočje=0.2; Vranica=0.2; Transantarktičko gorje=0.2; Verhojansko gorje=0.1; Antilibanon=0.1`,
+  },
+  {
+    slug: "sad-glavni",
+    group: "kviz",
+    title: "Glavni grad savezne države SAD-a",
+    hint: "Glavni grad neke od 50 država, nije nužno i najveći grad; Washington ne vrijedi",
+    strip: [],
+    answers: `Boston=8; Atlanta=6; Austin=6; Sacramento=5; Denver=5; Phoenix=5; Honolulu=5; Nashville=4;
+      Salt Lake City/Salt Lake=4; Indianapolis=3; Columbus=3; Albany=3; Santa Fe=2; Oklahoma City=2; Richmond=2;
+      Springfield=2; Providence=1.5; Madison=1.5; Little Rock=1.5; Baton Rouge=1.5; Tallahassee=1; Carson City=1;
+      Juneau=1; Lincoln=1; Saint Paul/St. Paul=1; Raleigh=1; Montgomery=1; Columbia=1; Charleston=1; Jackson=1;
+      Hartford=1; Trenton=0.5; Dover=0.5; Annapolis=0.5; Harrisburg=0.5; Olympia=0.5; Salem=0.5; Boise=0.5;
+      Des Moines=0.5; Topeka=0.5; Frankfort=0.5; Augusta=0.5; Lansing=0.5; Jefferson City=0.3; Helena=0.3;
+      Concord=0.3; Bismarck=0.3; Cheyenne=0.3; Montpelier=0.2; Pierre=0.1`,
+  },
+  {
+    slug: "indijanci",
+    group: "kviz",
+    title: "Indijansko pleme ili narod Amerike",
+    hint: "Starosjedilački narod Sjeverne ili Južne Amerike, i Inuiti",
+    strip: ["pleme","indijanci"],
+    answers: `Apači/Apache=10; Sijuksi/Siouxi/Sioux=8; Čerokiji/Cherokee=6; Komanči/Comanche=5; Navaho/Navajo=5;
+      Mohikanci/Mohikanac/Mohican=5; Irokezi=4; Čejeni/Cheyenne=4; Inke=4; Asteci=4; Maje=4; Inuiti/Eskimi=4;
+      Lakota=2; Šošoni/Shoshone=2; Hopi=2; Crne noge/Blackfoot=2; Dakota=1.5; Pueblo=1.5; Huroni=1.5;
+      Mohawk/Mohoki=1.5; Vrane/Crow=1; Delaveri/Delaware/Lenape=1; Šoni/Shawnee=1; Kiowa=1; Arapaho=1; Pawnee/Pauni=1;
+      Seminoli=1; Nez Perce=1; Odžibve/Ojibwe/Chippewa=1; Algonkini/Algonquin=1; Olmeci=1; Tolteci=1; Kečua/Quechua=1;
+      Mapuče/Mapuche/Araukanci=1; Guarani=1; Karibi=1; Zuni=0.5; Seneka=0.5; Osage=0.5; Omaha=0.5;
+      Čikaso/Chickasaw=0.5; Čokto/Choctaw=0.5; Kriki/Creek/Muskogee=0.5; Ute=0.5; Paiute=0.5; Kri/Cree=0.5;
+      Zapoteci=0.5; Ajmara/Aymara=0.5; Tupi=0.5; Aravaci/Arawak=0.5; Taíno/Taino=0.5; Yanomami=0.5; Powhatan=0.5;
+      Anasazi=0.5; Onondaga=0.3; Oneida=0.3; Kajuga/Cayuga=0.3; Natchez=0.3; Modoc=0.3; Tlingit=0.3; Haida=0.3;
+      Aleuti=0.3; Mikmak/Mi'kmaq=0.3; Mandan=0.3; Miami=0.3; Yaqui=0.3; Mixteci=0.3; Jivaro/Shuar=0.3;
+      Patagonci/Tehuelche=0.3; Pequot=0.3; Wampanoag=0.3; Mescalero=0.3; Moche=0.3; Nazca=0.3; Tuskarora=0.2;
+      Ponca=0.2; Pomo=0.2; Chumash=0.2; Kwakiutl=0.2; Nootka=0.2; Hidatsa=0.2; Arikara=0.2; Winnebago=0.2; Sauk=0.2;
+      Potawatomi=0.2; Kickapoo=0.2; Wichita=0.2; Caddo=0.2; Tarahumara=0.2; Purépecha/Tarasci=0.2; Kayapo=0.2;
+      Selk'nam/Ona=0.2; Kuna=0.2; Miskito=0.2; Narragansett=0.2; Chimú=0.2; Muisca=0.2; Menominee=0.1; Tonkawa=0.1;
+      Otomí=0.1; Erie=0.1; Kalusa/Calusa=0.1; Hohokam=0.1; Timucua=0.1; Susquehannock=0.1`,
+  },
 ];
