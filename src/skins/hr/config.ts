@@ -24,6 +24,7 @@ export const hrConfig: SkinConfig = {
     { name: "Ston", genitive: "Stona", km: 1070, lon: 17.7, lat: 42.84, message: "Kamenice i zidine, Dubrovnik se već vidi.", labelOffset: [-28, 16] },
     { name: "Dubrovnik", genitive: "Dubrovnika", dative: "Dubrovniku", km: 1200, lon: 18.09, lat: 42.65, message: "Stradun! Stigao si do kraja puta.", labelOffset: [-58, 14], alwaysLabel: true },
   ],
+  // prijevoz u igri ide po rangu odgovora u pitanju (tierSizes); minShare služi za procjene u adminu i stare partije
   tiers: [
     { minShare: 20, km: 10, emoji: "🚶", name: "Pješice", vehicle: "walk", color: "#8a6d52" },
     { minShare: 10, km: 25, emoji: "🚲", name: "Bajs", icon: "/tiers/bajs.png", badge: "/tiers/bajs.svg", vehicle: "bike", color: "#d7262e" },
@@ -41,7 +42,8 @@ export const hrConfig: SkinConfig = {
     { multiplier: 0.9, emoji: "🐌", name: "Sporo" },
   ],
   miss: { km: 0, emoji: "🚧", name: "Radovi na cesti" },
-  priorWeight: 50,
+  // procjena vrijedi kao 500 igrača, pa rani igrači skoro ne pomiču prijevoz (vidi blendedShare)
+  priorWeight: 500,
 };
 
 export const hrSkin = {

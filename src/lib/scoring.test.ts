@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { assignTiers, blendedShare, commonCount, priorForTier, scoreKm, speedFor, stationAt, tierFor } from "./scoring";
+import { assignTiers, blendedShare, priorForTier, scoreKm, speedFor, stationAt, tierFor, tierSizes } from "./scoring";
 import { dayNumber, localDate } from "./day";
 import { hrConfig } from "@/skins/hr/config";
 
@@ -15,10 +15,20 @@ describe("scoring", () => {
     expect(tierFor(hrConfig, 0.4).km).toBe(125);
     expect(tierFor(hrConfig, 2).km).toBe(70);
   });
-  it("najčešći odgovori uvijek pješice", () => {
-    expect(commonCount(30)).toBe(2);
-    expect(commonCount(50)).toBe(3);
-    expect(commonCount(120)).toBe(4);
+  it("prijevoz ide po rangu u pitanju", () => {
+    expect(tierSizes(60)).toEqual([3, 7, 7, 7, 11]);
+    expect(tierSizes(100)).toEqual([5, 7, 11, 11, 18]);
+    expect(tierSizes(150)).toEqual([6, 8, 11, 17, 27]);
+    // Pješice i Bajs zajedno bar 10, a s HŽ-om 15 do 25
+    for (const n of [50, 60, 80, 100, 120, 150, 250]) {
+      const [p, b, h] = tierSizes(n);
+      expect(p + b, String(n)).toBeGreaterThanOrEqual(10);
+      expect(p + b + h, String(n)).toBeGreaterThanOrEqual(15);
+      expect(p + b + h, String(n)).toBeLessThanOrEqual(25);
+    }
+    const answers = Array.from({ length: 100 }, (_, i) => ({ share: 30 - i * 0.3, rare: i >= 98 }));
+    const names = assignTiers(hrConfig, answers).map((t) => t.name);
+    expect(hrConfig.tiers.map((t) => names.filter((x) => x === t.name).length)).toEqual([5, 7, 11, 11, 18, 46, 2]);
     expect(tierFor(hrConfig, 8, false, true).name).toBe("Pješice");
     expect(tierFor(hrConfig, 8).name).toBe("HŽ");
   });

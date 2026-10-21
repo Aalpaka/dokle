@@ -85,7 +85,7 @@ function useTierPrior() {
       <select className="field" value={index} onChange={(e) => setIndex(Number(e.target.value))} aria-label="Prijevoz">
         {tiers.map((t, i) => (
           <option key={t.name} value={i}>
-            {t.emoji} {t.name} ({t.rare ? "1 do 2 najrjeđa po kategoriji" : i === 0 ? `${pct(t.minShare)} % i više` : t.minShare ? `${pct(t.minShare)} do ${pct(tiers[i - 1].minShare)} %` : `ispod ${pct(tiers[i - 1].minShare)} %`})
+            {t.emoji} {t.name} ({t.rare ? "1 do 2 najrjeđa po kategoriji" : `procjena ${pct(priorForTier(tiers, i))} %`})
           </option>
         ))}
       </select>
@@ -515,7 +515,7 @@ function CategoryAnswers({ id, onChange, onClose }: { id: number; onChange: () =
   const tiers = useContext(Tiers);
   const [err, setErr] = useState("");
   if (!data) return error ? <Modal title="Odgovori" onClose={onClose}><Err msg={error} /></Modal> : null;
-  // odgovori dolaze sortirani po procjeni; prijevoz kao u igri prije prvih igrača (najčešći pješice, bez praznih)
+  // odgovori dolaze sortirani po procjeni; prijevoz kao u igri prije prvih igrača (po rangu)
   const assigned = tiers.length ? assignTiers({ tiers }, data.answers.map((a) => ({ share: a.priorShare, rare: a.rare }))) : [];
   return (
     <Modal title={`${data.title} · ${data.answers.length}`} onClose={onClose}>
