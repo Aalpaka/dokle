@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { AnswerList, GameState, RoundView } from "@/server/game";
 import type { SkinConfig } from "@/skins/types";
 import { formatShare, stationAt } from "@/lib/scoring";
-import { maps } from "@/skins/maps";
+import { maps, withVisuals } from "@/skins/maps";
 import { setMuted, sfx, useMuted } from "@/lib/sound";
 import MapStage from "./MapStage";
 import { AccountLink, GoogleButton, useMe, type Me } from "./account";
@@ -36,7 +36,7 @@ export default function Game() {
   if (error) return <Shell><div className="stage empty" /><section className="panel">Nešto je pošlo krivo. Osvježi stranicu.</section></Shell>;
   if (!state) return <Shell><div className="stage empty" /><section className="panel loading">Učitavam…</section></Shell>;
 
-  const cfg = state.skin.config;
+  const cfg = withVisuals(state.skin.id, state.skin.config);
   const start = () => api<GameState>("/api/game/start", {}).then(setState, () => setError(true));
   const phase = state.phase === "reveal" && showEnd ? "end" : state.phase;
 
