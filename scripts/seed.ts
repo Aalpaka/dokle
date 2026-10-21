@@ -1,4 +1,4 @@
-// Puni bazu skinom i početnim kategorijama. Može se pokretati više puta: postojeće ne dira, dodaje novo.
+// Puni bazu skinom i početnim kategorijama. Može se pokretati više puta: config skina osvježava, kategorije i odgovore samo dodaje.
 import { and, eq } from "drizzle-orm";
 import { db, sql } from "../src/db";
 import { answerAliases, answers, categories, skins } from "../src/db/schema";
@@ -16,14 +16,13 @@ for (const { skin, categories: cats } of SKINS) {
 
   let added = 0;
   for (const c of cats) {
-    const [cat] = await db
+    // postojeće kategorije se ne diraju (admin ih je možda uredio), dodaju se samo nove
+    let [cat] = await db
       .insert(categories)
       .values({ skinId: skin.id, slug: c.slug, title: c.title, hint: c.hint ?? null, group: c.group, strip: c.strip })
-      .onConflictDoUpdate({
-        target: [categories.skinId, categories.slug],
-        set: { title: c.title, hint: c.hint ?? null, group: c.group, strip: c.strip },
-      })
+      .onConflictDoNothing()
       .returning();
+    if (!cat) [cat] = await db.select().from(categories).where(and(eq(categories.skinId, skin.id), eq(categories.slug, c.slug)));
     for (const a of parseSeedAnswers(c.answers)) {
       let [ans] = await db
         .insert(answers)
