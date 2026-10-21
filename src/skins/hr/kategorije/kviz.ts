@@ -154,17 +154,21 @@ export const kvizKategorije: SeedCategory[] = [
     group: "kviz",
     title: "Kemijski element",
     strip: [],
-    answers: `Kisik/Oksigen=12; Vodik/Hidrogen=10; Ugljik/Ugljenik=6; Zlato=6; Željezo/Gvožđe=5; Dušik/Azot=4; Srebro=4;
-      Helij=3; Bakar=3; Natrij=2; Kalij=2; Kalcij=2; Aluminij=2; Uran=2; Magnezij=1.5; Klor=1.5; Sumpor=1.5; Olovo=1.5;
-      Živa=1.5; Plutonij=1; Fluor=1; Fosfor=1; Cink=1; Platina=1; Litij=1; Silicij=0.8; Neon=0.8; Jod=0.8; Argon=0.5;
-      Nikal=0.5; Kobalt=0.5; Krom=0.5; Titan=0.5; Kositar/Kalaj=0.5; Kripton=0.3; Ksenon=0.3; Radon=0.3; Brom=0.3;
-      Berilij=0.3; Bor=0.3; Mangan=0.3; Volfram=0.3; Radij=0.3; Arsen=0.3; Polonij=0.2; Selen=0.2; Barij=0.2;
-      Stroncij=0.2; Cezij=0.2; Rubidij=0.1; Germanij=0.1; Galij=0.1; Bizmut=0.1; Antimon=0.1; Kadmij=0.1;
+    answers: `Kisik/Oksigen=12; Vodik/Hidrogen=10; Ugljik/Ugljenik=6; Zlato=6; Željezo/Gvožđe=5; Dušik/Azot=4;
+      Srebro=4; Helij=3; Bakar=3; Natrij=2; Kalij=2; Kalcij=2; Aluminij=2; Uran=2; Magnezij=1.5; Klor=1.5; Sumpor=1.5;
+      Olovo=1.5; Živa=1.5; Plutonij=1; Fluor=1; Fosfor=1; Cink=1; Platina=1; Litij=1; Silicij=0.8; Neon=0.8; Jod=0.8;
+      Argon=0.5; Nikal=0.5; Kobalt=0.5; Krom=0.5; Titan=0.5; Kositar/Kalaj=0.5; Kripton=0.3; Ksenon=0.3; Radon=0.3;
+      Brom=0.3; Berilij=0.3; Bor=0.3; Mangan=0.3; Volfram=0.3; Radij=0.3; Arsen=0.3; Polonij=0.2; Selen=0.2;
+      Barij=0.2; Stroncij=0.2; Cezij=0.2; Rubidij=0.1; Germanij=0.1; Galij=0.1; Bizmut=0.1; Antimon=0.1; Kadmij=0.1;
       Paladij=0.1; Iridij=0.1; Cirkonij=0.1; Vanadij=0.1; Molibden=0.1; Francij=0.05; Indij=0.05; Talij=0.05;
       Telur=0.05; Rodij=0.05; Rutenij=0.05; Osmij=0.05; Renij=0.05; Tantal=0.05; Hafnij=0.05; Itrij=0.05;
-      Skandij=0.05; Niobij=0.05; Tehnecij=0.05; Lantan=0.05; Cerij=0.05; Neodimij=0.05; Europij=0.05;
-      Gadolinij=0.05; Torij=0.05; Aktinij=0.05; Americij=0.05; Einsteinij=0.05; Kalifornij=0.05; Nobelij=0.05;
-      Mendelevij=0.05; Kirij=0.05; Fermij=0.05; Oganeson=0.05`,
+      Skandij=0.05; Niobij=0.05; Tehnecij=0.05; Lantan=0.05; Cerij=0.05; Neodimij=0.05; Europij=0.05; Gadolinij=0.05;
+      Torij=0.05; Aktinij=0.05; Americij=0.05; Einsteinij=0.05; Kalifornij=0.05; Nobelij=0.05; Mendelevij=0.05;
+      Kirij=0.05; Fermij=0.05; Oganeson=0.05; Prometij=0.1; Samarij=0.1; Terbij=0.1; Disprozij=0.1; Holmij=0.1;
+      Erbij=0.1; Tulij=0.1; Iterbij=0.1; Lutecij=0.1; Astat=0.1; Protaktinij=0.1; Neptunij=0.1; Berkelij=0.1;
+      Lorencij/Lawrencij=0.1; Rutherfordij/Raderfordij=0.1; Dubnij=0.1; Seaborgij=0.1; Bohrij=0.1; Hassij=0.1;
+      Meitnerij/Majtnerij=0.1; Darmstadtij/Darmštatij=0.1; Rendgenij=0.1; Kopernicij=0.1; Nihonij=0.1; Flerovij=0.1;
+      Moskovij=0.1; Livermorij=0.1; Tenes=0.1`,
   },
   {
     slug: "svemir",
