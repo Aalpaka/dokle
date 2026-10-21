@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { fold, parseSeedAnswers } from "@/lib/matcher";
+import { assignTiers } from "@/lib/scoring";
 import { hrCategories } from "./categories";
 import { hrConfig } from "./config";
 
@@ -40,6 +41,10 @@ describe("hr kategorije", () => {
     const total = answers.reduce((s, a) => s + a.share, 0);
     expect(total).toBeGreaterThan(60);
     expect(total).toBeLessThan(130);
+    // prije prvih igrača svaka kategorija ima odgovor za svaki prijevoz
+    const sorted = [...answers].sort((x, y) => y.share - x.share);
+    const names = new Set(assignTiers(hrConfig, sorted).map((t) => t.name));
+    expect([...hrConfig.tiers.map((t) => t.name)].filter((n) => !names.has(n)), "prazni prijevozi").toEqual([]);
     // helikopter: 1 najrjeđi odgovor, 2 u kategorijama sa 60+ odgovora
     const rare = answers.filter((a) => a.rare);
     expect(rare.length, "broj helikoptera").toBe(answers.length >= 60 ? 2 : 1);

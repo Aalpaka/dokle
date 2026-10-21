@@ -14,7 +14,7 @@ import {
   skins,
 } from "@/db/schema";
 import { buildIndex, fold, match, type MatchIndex } from "@/lib/matcher";
-import { blendedShare, scoreKm, speedFor, tierFor } from "@/lib/scoring";
+import { assignTiers, blendedShare, kmFor, speedFor, tierFor } from "@/lib/scoring";
 import { dayNumber, localDate } from "@/lib/day";
 import { compareDay, type DayCompare } from "@/lib/compare";
 import type { SkinConfig } from "@/skins/types";
@@ -326,10 +326,9 @@ async function scoreRound(
   let km = cfg.miss.km;
   let tier = raw ? cfg.miss.name : "Isteklo vrijeme";
   if (answerId !== null) {
-    const cat = await getCategory(categoryId);
-    const { count, total } = await answerCounts(puzzle.id, categoryId, answerId);
-    share = blendedShare(cat.prior.get(answerId) ?? 0, count, total, cfg.priorWeight);
-    const scored = scoreKm(cfg, share, elapsedMs, cat.rare.has(answerId));
+    const a = await answerStanding(skin, puzzle.id, categoryId, answerId);
+    share = a.share;
+    const scored = kmFor(cfg, a.tier, elapsedMs);
     km = scored.km;
     tier = scored.tier.name;
   }
@@ -351,20 +350,11 @@ async function scoreRound(
 }
 
 /** Koliko je igrača tog dana u kategoriji dalo ovaj odgovor, od svih s prihvaćenim odgovorom. */
-async function answerCounts(puzzleId: number, categoryId: number, answerId: number) {
-  const [row] = await db
-    .select({
-      count: sql<number>`count(*) filter (where ${rounds.answerId} = ${answerId})::int`,
-      total: sql<number>`count(*)::int`,
-    })
-    .from(rounds)
-    .innerJoin(games, eq(games.id, rounds.gameId))
-    .where(and(eq(games.puzzleId, puzzleId), eq(rounds.categoryId, categoryId), isNotNull(rounds.answerId)));
-  return row;
-}
-
-/** Svi odgovori kategorije s udjelom za taj dan, od najčešćeg prema najrjeđem. */
-async function categoryShares(skin: Skin, puzzleId: number, categoryId: number) {
+/**
+ * Svi odgovori kategorije s udjelom za taj dan, od najčešćeg prema najrjeđem. `n` = koliko ih je taj dan dalo,
+ * `tier` = prijevoz koji odgovor taj dan vrijedi (vidi assignTiers).
+ */
+export async function categoryShares(skin: Skin, puzzleId: number, categoryId: number) {
   const cat = await getCategory(categoryId);
   const counts = await db
     .select({ answerId: rounds.answerId, n: sql<number>`count(*)::int` })
@@ -374,16 +364,25 @@ async function categoryShares(skin: Skin, puzzleId: number, categoryId: number) 
     .groupBy(rounds.answerId);
   const byId = new Map(counts.map((c) => [c.answerId!, c.n]));
   const total = counts.reduce((a, c) => a + c.n, 0);
-  return cat.index.answers
-    .map((a) => ({ canonical: a.canonical, rare: cat.rare.has(a.id), share: blendedShare(cat.prior.get(a.id) ?? 0, byId.get(a.id) ?? 0, total, skin.config.priorWeight) }))
+  const list = cat.index.answers
+    .map((a) => ({ id: a.id, canonical: a.canonical, rare: cat.rare.has(a.id), n: byId.get(a.id) ?? 0, share: blendedShare(cat.prior.get(a.id) ?? 0, byId.get(a.id) ?? 0, total, skin.config.priorWeight) }))
     .sort((a, b) => b.share - a.share);
+  const tiers = assignTiers(skin.config, list);
+  return list.map((a, i) => ({ ...a, tier: tiers[i] }));
+}
+
+/** Udio i prijevoz odgovora za taj dan. */
+async function answerStanding(skin: Skin, puzzleId: number, categoryId: number, answerId: number) {
+  const a = (await categoryShares(skin, puzzleId, categoryId)).find((x) => x.id === answerId);
+  const cfg = skin.config;
+  return { share: a?.share ?? 0, tier: a?.tier ?? cfg.tiers.filter((t) => !t.rare).at(-1)! };
 }
 
 async function buildReveal(skin: Skin, puzzle: Puzzle, categoryId: number, mine: string | null): Promise<Reveal> {
   const all = await categoryShares(skin, puzzle.id, categoryId);
   return {
-    top: all.slice(0, 4),
-    rare: all.filter((a) => a.canonical !== mine).slice(-3).reverse(),
+    top: all.slice(0, 4).map(({ canonical, share }) => ({ canonical, share })),
+    rare: all.filter((a) => a.canonical !== mine).slice(-3).reverse().map(({ canonical, share }) => ({ canonical, share })),
   };
 }
 
@@ -412,8 +411,7 @@ export async function answerList(skin: Skin, playerId: string, position: number)
     title: cat.title,
     mine: mine?.canonical ?? null,
     answers: all.map((a) => {
-      const t = tierFor(skin.config, a.share, a.rare);
-      return { canonical: a.canonical, share: a.share, tier: t.name, km: t.km };
+      return { canonical: a.canonical, share: a.share, tier: a.tier.name, km: a.tier.km };
     }),
   };
 }
@@ -456,7 +454,6 @@ export async function rescoreMisses(skin: Skin, categoryId: number, normalized: 
   const hits = misses.filter((m) => fold(m.raw!) === normalized);
   if (!hits.length) return 0;
 
-  const cat = await getCategory(categoryId);
   const byPuzzle = new Map<number, typeof hits>();
   for (const h of hits) byPuzzle.set(h.puzzleId, [...(byPuzzle.get(h.puzzleId) ?? []), h]);
   for (const [puzzleId, list] of byPuzzle) {
@@ -464,11 +461,10 @@ export async function rescoreMisses(skin: Skin, categoryId: number, normalized: 
       for (const h of list)
         await tx.update(rounds).set({ answerId }).where(and(eq(rounds.gameId, h.gameId), eq(rounds.position, h.position)));
     });
-    const { count, total } = await answerCounts(puzzleId, categoryId, answerId);
-    const share = blendedShare(cat.prior.get(answerId) ?? 0, count, total, skin.config.priorWeight);
+    const { share, tier } = await answerStanding(skin, puzzleId, categoryId, answerId);
     await db.transaction(async (tx) => {
       for (const h of list) {
-        const t = scoreKm(skin.config, share, h.answeredAt!.getTime() - h.startedAt.getTime(), cat.rare.has(answerId));
+        const t = kmFor(skin.config, tier, h.answeredAt!.getTime() - h.startedAt.getTime());
         await tx
           .update(rounds)
           .set({ share, km: t.km, tier: t.tier.name })

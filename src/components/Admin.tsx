@@ -1,7 +1,7 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
-import { priorForTier } from "@/lib/scoring";
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
+import { assignTiers, priorForTier, tierFor } from "@/lib/scoring";
 
 async function api<T>(path: string, method = "GET", body?: unknown): Promise<T> {
   const res = await fetch(path, {
@@ -33,19 +33,35 @@ type Meta = { skin: { id: string; groups: Record<string, string>; perDay: number
 // tierovi skina, sortirani od najčešćeg prema najrjeđem (kao u configu)
 const Tiers = createContext<TierInfo[]>([]);
 
-// kao tierFor u lib/scoring: označeni najrjeđi odgovor umjesto najrjeđeg običnog tiera dobiva poseban
-const tierIndex = (tiers: TierInfo[], share: number, rare = false) => {
-  const normal = tiers.filter((t) => !t.rare);
-  const t = normal.find((x) => share >= x.minShare) ?? normal[normal.length - 1];
-  const special = tiers.findIndex((x) => x.rare);
-  return rare && t === normal[normal.length - 1] && special >= 0 ? special : tiers.indexOf(t);
-};
-
 const pct = (n: number) => String(n).replace(".", ",");
 
-function TierLabel({ share, rare }: { share: number; rare?: boolean }) {
+// kanonski odgovori počinju velikim slovom (server to i sam osigura)
+const upperFirst = (v: string) => v.charAt(0).toLocaleUpperCase("hr") + v.slice(1);
+
+/** Prozor preko stranice (native dialog: Esc i klik izvan zatvaraju). */
+function Modal({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
+  const ref = useRef<HTMLDialogElement>(null);
+  useEffect(() => {
+    const d = ref.current;
+    if (d && !d.open) d.showModal();
+  }, []);
+  return (
+    <dialog ref={ref} className="modal" onClose={onClose} onClick={(e) => e.target === ref.current && onClose()} aria-label={title}>
+      <div className="stack">
+        <div className="row" style={{ justifyContent: "space-between" }}>
+          <h2>{title}</h2>
+          <button className="ghost small-btn" onClick={onClose} aria-label="Zatvori">✕</button>
+        </div>
+        {children}
+      </div>
+    </dialog>
+  );
+}
+
+/** Oznaka prijevoza; `tier` kad je već izračunat za cijelu kategoriju (assignTiers), inače po udjelu. */
+function TierLabel({ share, rare, tier }: { share: number; rare?: boolean; tier?: TierInfo }) {
   const tiers = useContext(Tiers);
-  const t = tiers[tierIndex(tiers, share, rare)];
+  const t = tier ?? (tiers.length ? tierFor({ tiers }, share, rare) : undefined);
   return t ? <span className="chip">{t.emoji} {t.name}</span> : null;
 }
 
@@ -144,8 +160,44 @@ type DayData = {
   puzzle: { number: number } | null;
   totals?: { started: number; finished: number; registered: number; avgKm: number };
   stations?: { name: string; n: number }[];
-  categories?: { position: number; id: number; title: string; top: { canonical: string; n: number }[]; attempts: number; rejected: number; misses: number }[];
+  categories?: {
+    position: number;
+    id: number;
+    title: string;
+    top: { canonical: string; n: number }[];
+    attempts: number;
+    rejected: number;
+    misses: number;
+    answers: { canonical: string; n: number; share: number; tier: string }[];
+  }[];
 };
+
+/** Svi odgovori jedne današnje kategorije, grupirani po prijevozu koji taj dan vrijedi. */
+function DayAnswers({ answers }: { answers: { canonical: string; n: number; share: number; tier: string }[] }) {
+  const tiers = useContext(Tiers);
+  return (
+    <div className="stack" style={{ gap: 8 }}>
+      {tiers.map((t) => {
+        const list = answers.filter((a) => a.tier === t.name);
+        if (!list.length) return null;
+        return (
+          <div key={t.name}>
+            <span className="eyebrow">{t.emoji} {t.name} · {list.length}</span>
+            <div className="chips">
+              {list.map((a) => (
+                <span key={a.canonical} className="chip">
+                  {a.canonical}<span>{formatPct(a.share)}{a.n ? ` · ${a.n}×` : ""}</span>
+                </span>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+const formatPct = (s: number) => (s < 0.1 ? "< 0,1 %" : `${pct(Math.round(s * 10) / 10)} %`);
 
 function Day({ today }: { today: string }) {
   const [date, setDate] = useState(today);
@@ -195,6 +247,14 @@ function Day({ today }: { today: string }) {
               ))}
             </tbody>
           </table>
+          <span className="eyebrow">Svi odgovori po prijevozu</span>
+          <p className="small">Udio igrača danas (procjena pomiješana sa stvarnim odgovorima) i koliko ih je taj odgovor dalo.</p>
+          {data.categories!.map((c) => (
+            <details key={c.position} className="decide">
+              <summary><b>{c.position + 1}. {c.title}</b> <span className="small">· {c.answers.length} odgovora</span></summary>
+              <DayAnswers answers={c.answers} />
+            </details>
+          ))}
         </>
       )}
     </div>
@@ -214,6 +274,14 @@ function Review() {
   const { data, error, reload } = useLoad<ReviewRow[]>("/api/admin/review");
   const [open, setOpen] = useState<string | null>(null);
   const [msg, setMsg] = useState("");
+  const reject = (r: ReviewRow) =>
+    api("/api/admin/review", "POST", { categoryId: r.categoryId, normalized: r.normalized, action: "reject" }).then(
+      () => {
+        setMsg(`Odbijeno: „${r.examples[0]}”.`);
+        reload();
+      },
+      (e: Error) => setMsg(e.message),
+    );
   return (
     <div className="stack">
       <h2>Odbijeni odgovori</h2>
@@ -236,6 +304,7 @@ function Review() {
               <div className="row">
                 <span className="chip">{r.n} {r.n === 1 ? "igrač" : "igrača"}</span>
                 <button className="ghost small-btn" onClick={() => setOpen(open === key ? null : key)}>{open === key ? "Zatvori" : "Odluči"}</button>
+                <button className="danger small-btn" onClick={() => reject(r)} aria-label="Nije točno" title="Nije točno">✕</button>
               </div>
             </div>
             {open === key && (
@@ -257,7 +326,7 @@ function Review() {
 
 function Decide({ row, onDone }: { row: ReviewRow; onDone: (msg: string) => void }) {
   const cat = useLoad<CatDetail>(`/api/admin/categories/${row.categoryId}`);
-  const [canonical, setCanonical] = useState(row.examples[0] ?? row.normalized);
+  const [canonical, setCanonical] = useState(upperFirst(row.examples[0] ?? row.normalized));
   const tier = useTierPrior();
   const [answerId, setAnswerId] = useState("");
   const [err, setErr] = useState("");
@@ -271,7 +340,7 @@ function Decide({ row, onDone }: { row: ReviewRow; onDone: (msg: string) => void
       <div className="decide">
         <b>Novi točan odgovor</b>
         <div className="row">
-          <input className="field" value={canonical} onChange={(e) => setCanonical(e.target.value)} aria-label="Kanonski oblik" />
+          <input className="field" value={canonical} onChange={(e) => setCanonical(upperFirst(e.target.value))} aria-label="Kanonski oblik" />
           {tier.select}
           <button className="small-btn" onClick={() => send({ action: "answer", canonical, priorShare: tier.prior, rare: tier.rare }, "Dodan odgovor")}>Dodaj</button>
         </div>
@@ -382,12 +451,12 @@ function Content({ groups }: { groups: Record<string, string> }) {
                   onChange={() => api(`/api/admin/categories/${c.id}`, "PATCH", { active: !c.active }).then(reload)}
                 />
               </td>
-              <td><button className="ghost small-btn" onClick={() => setOpenId(openId === c.id ? null : c.id)}>Odgovori</button></td>
+              <td><button className="ghost small-btn" onClick={() => setOpenId(c.id)}>Odgovori</button></td>
             </tr>
           ))}
         </tbody>
       </table>
-      {openId && <CategoryAnswers id={openId} onChange={reload} />}
+      {openId && <CategoryAnswers id={openId} onChange={reload} onClose={() => setOpenId(null)} />}
     </div>
   );
 }
@@ -438,18 +507,20 @@ function NewCategory({ groups, onDone }: { groups: Record<string, string>; onDon
   );
 }
 
-function CategoryAnswers({ id, onChange }: { id: number; onChange: () => void }) {
+function CategoryAnswers({ id, onChange, onClose }: { id: number; onChange: () => void; onClose: () => void }) {
   const { data, error, reload } = useLoad<CatDetail>(`/api/admin/categories/${id}`);
   const [canonical, setCanonical] = useState("");
   const [variants, setVariants] = useState("");
   const tier = useTierPrior();
+  const tiers = useContext(Tiers);
   const [err, setErr] = useState("");
-  if (!data) return <Err msg={error} />;
+  if (!data) return error ? <Modal title="Odgovori" onClose={onClose}><Err msg={error} /></Modal> : null;
+  // odgovori dolaze sortirani po procjeni; prijevoz kao u igri prije prvih igrača (najčešći pješice, bez praznih)
+  const assigned = tiers.length ? assignTiers({ tiers }, data.answers.map((a) => ({ share: a.priorShare, rare: a.rare }))) : [];
   return (
-    <div className="decide stack" style={{ gap: 8 }}>
-      <h2>{data.title}</h2>
+    <Modal title={`${data.title} · ${data.answers.length}`} onClose={onClose}>
       <div className="row">
-        <input className="field" placeholder="Novi odgovor" value={canonical} onChange={(e) => setCanonical(e.target.value)} />
+        <input className="field" placeholder="Novi odgovor" value={canonical} onChange={(e) => setCanonical(upperFirst(e.target.value))} />
         <input className="field" placeholder="Varijante, odvojene zarezom" value={variants} onChange={(e) => setVariants(e.target.value)} />
         {tier.select}
         <button
@@ -468,12 +539,12 @@ function CategoryAnswers({ id, onChange }: { id: number; onChange: () => void })
       <table className="tbl">
         <thead><tr><th>Odgovor</th><th>Varijante</th><th>Prijevoz (procjena)</th></tr></thead>
         <tbody>
-          {data.answers.map((a) => (
-            <tr key={a.id}><td>{a.canonical}{a.source === "review" && " ✎"}</td><td>{a.aliases.join(", ")}</td><td><TierLabel share={a.priorShare} rare={a.rare} /> <span className="small">{pct(a.priorShare)} %</span></td></tr>
+          {data.answers.map((a, i) => (
+            <tr key={a.id}><td>{a.canonical}{a.source === "review" && " ✎"}</td><td>{a.aliases.join(", ")}</td><td><TierLabel share={a.priorShare} rare={a.rare} tier={assigned[i]} /> <span className="small">{pct(a.priorShare)} %</span></td></tr>
           ))}
         </tbody>
       </table>
-    </div>
+    </Modal>
   );
 }
 

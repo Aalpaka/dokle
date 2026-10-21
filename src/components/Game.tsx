@@ -31,6 +31,17 @@ export default function Game() {
   const [count, setCount] = useState<number | null>(null);
   // profil (streak) se osvježava kad partija završi
   const me = useMe(state?.phase === "end" || showEnd);
+  // na mobitelu je panel donja ploča preko karte; karta zna koliko joj je dna pokriveno
+  const [sheet, setSheet] = useState(0);
+  const sheetObs = useRef<ResizeObserver | null>(null);
+  const panelRef = useCallback((el: HTMLElement | null) => {
+    sheetObs.current?.disconnect();
+    if (!el) return;
+    const measure = () => setSheet(getComputedStyle(el).position === "absolute" ? el.offsetHeight : 0);
+    sheetObs.current = new ResizeObserver(measure);
+    sheetObs.current.observe(el);
+    measure();
+  }, []);
 
   const load = useCallback(() => {
     api<GameState>("/api/game").then(setState, () => setError(true));
@@ -73,8 +84,8 @@ export default function Game() {
   // igra stane na jedan ekran (karta + pitanje), kraj je obična stranica koja se skrola
   return (
     <Shell state={state} me={me} fit={phase !== "end"}>
-      <MapStage cfg={cfg} map={map} rounds={state.rounds} perDay={state.perDay} ended={phase === "end"} />
-      <section className="panel" aria-live="polite">
+      <MapStage cfg={cfg} map={map} rounds={state.rounds} perDay={state.perDay} ended={phase === "end"} inset={phase === "end" ? 0 : sheet} />
+      <section className="panel" aria-live="polite" ref={panelRef}>
         {count !== null && <Ready n={count} cfg={cfg} position={state.rounds.length} perDay={state.perDay} />}
         {count === null && phase === "play" && state.current && (
           <Play key={state.current.position} state={vstate} onScored={setState} onLost={load} />
@@ -95,8 +106,25 @@ export default function Game() {
 function Shell({ state, me = null, fit = false, children }: { state?: GameState; me?: Me | null; fit?: boolean; children: React.ReactNode }) {
   const cfg = state?.skin.config;
   const [y, m, d] = (state?.date ?? "").split("-");
+  const wrapRef = useRef<HTMLDivElement>(null);
+  // mobitel: igra prati vidljivi dio ekrana, pa kad se otvori tipkovnica ploča s unosom ide gore s njom
+  useEffect(() => {
+    const vv = window.visualViewport, el = wrapRef.current;
+    if (!fit || !vv || !el) return;
+    const sync = () => {
+      el.style.setProperty("--vvh", vv.height + "px");
+      el.style.setProperty("--vvt", vv.offsetTop + "px");
+    };
+    sync();
+    vv.addEventListener("resize", sync);
+    vv.addEventListener("scroll", sync);
+    return () => {
+      vv.removeEventListener("resize", sync);
+      vv.removeEventListener("scroll", sync);
+    };
+  }, [fit]);
   return (
-    <div className={"wrap" + (fit ? " fit" : "")}>
+    <div className={"wrap" + (fit ? " fit" : "")} ref={wrapRef}>
       <header className="top">
         <div className="plate">{cfg?.title ?? "Dokle?"}</div>
         {state && cfg && (
@@ -272,13 +300,15 @@ function Play({ state, onScored, onLost }: { state: GameState; onScored: (s: Gam
           autoFocus
           type="text"
           enterKeyHint="send"
-          autoCapitalize="off"
+          autoCapitalize="sentences"
           spellCheck={false}
           aria-label="Tvoj odgovor"
           placeholder="Tvoj odgovor"
           value={value}
           onChange={(e) => {
-            setValue(e.target.value);
+            // prvo slovo uvijek veliko, kao u kanonskim odgovorima
+            const v = e.target.value;
+            setValue(v.charAt(0).toLocaleUpperCase("hr") + v.slice(1));
             sfx.type();
           }}
         />
