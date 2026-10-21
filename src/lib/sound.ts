@@ -151,6 +151,17 @@ export const sfx = {
     if (!c) return;
     [784, 988, 1319].forEach((f, i) => tone(c, "triangle", f, c.currentTime + i * 0.07, 0.005, 0.22, 0.3));
   },
+  /** Sudar: tresak, škripa metala i staklo koje se rasipa. */
+  crash() {
+    const c = ready();
+    if (!c) return;
+    const t = c.currentTime;
+    tone(c, "sawtooth", 1400, t, 0.01, 0.06, 0.35, 700);
+    noise(c, t + 0.3, 0.5, "lowpass", 600, 0.7, 0.9);
+    noise(c, t + 0.3, 0.25, "bandpass", 2200, 1.5, 0.35);
+    tone(c, "square", 90, t + 0.3, 0.005, 0.25, 0.3, 40);
+    for (let i = 0; i < 9; i++) tone(c, "sine", 2800 + Math.random() * 3200, t + 0.42 + i * 0.045 + Math.random() * 0.03, 0.002, 0.05, 0.12);
+  },
   station() {
     const c = ready();
     if (!c) return;
