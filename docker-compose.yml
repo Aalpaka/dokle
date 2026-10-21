@@ -1,0 +1,13 @@
+# Lokalna baza za razvoj: docker compose up -d
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: dokle
+    ports:
+      - "5432:5432"
+    volumes:
+      - dokle-db:/var/lib/postgresql/data
+volumes:
+  dokle-db:

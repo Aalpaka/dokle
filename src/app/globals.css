@@ -1,0 +1,129 @@
+/* Layout: cestovna karta + zelena autocestovna ploča; igra lijevo, karta desno (na mobitelu igra pa karta) */
+:root {
+  --bg: #e9f0f2;          /* more na karti / pozadina */
+  --land: #f7f8f1;
+  --land-edge: #b9c6bf;
+  --ink: #13232c;
+  --muted: #5b6d75;
+  --card: #ffffff;
+  --line: #cfdadf;
+  --sign: #0a6a3b;        /* zelena ploča autoceste */
+  --sign-ink: #ffffff;
+  --signal: #f2b200;      /* žuta signalizacija */
+  --stop: #c4441a;        /* radovi na cesti */
+  --route: #9fb0b7;
+  --font-sign: "Overpass", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "Overpass Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0c1820; --land: #172630; --land-edge: #2c4250; --ink: #e5eef1; --muted: #8fa3ac;
+    --card: #12212b; --line: #24394580; --sign: #0f7a45; --sign-ink: #ffffff; --signal: #f5c22e;
+    --stop: #ef6a3a; --route: #46606c; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0c1820; --land: #172630; --land-edge: #2c4250; --ink: #e5eef1; --muted: #8fa3ac;
+  --card: #12212b; --line: #24394580; --sign: #0f7a45; --sign-ink: #ffffff; --signal: #f5c22e;
+  --stop: #ef6a3a; --route: #46606c; color-scheme: dark;
+}
+html, body { min-height: 100%; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--font-sign); font-size: 16px; line-height: 1.45;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 16px 40px;
+}
+.wrap { max-width: 1040px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+header.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.plate {
+  background: var(--sign); color: var(--sign-ink); border-radius: 10px; padding: 6px 16px 2px;
+  box-shadow: inset 0 0 0 2px var(--sign), inset 0 0 0 4px var(--sign-ink);
+  font-weight: 900; font-size: 30px; letter-spacing: -0.01em; line-height: 1.15;
+}
+.meta { font-family: var(--font-mono); font-size: 13px; color: var(--muted); text-align: right; }
+.meta b { color: var(--ink); }
+.grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 860px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px; min-width: 0; }
+.eyebrow { font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+h1, h2 { margin: 0; text-wrap: balance; }
+h1 { font-size: 30px; font-weight: 900; line-height: 1.1; }
+h2 { font-size: 22px; font-weight: 800; line-height: 1.15; }
+p { margin: 0; }
+.stack { display: flex; flex-direction: column; gap: 14px; }
+.row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+button {
+  font: inherit; font-weight: 800; border-radius: 10px; border: 0; cursor: pointer; padding: 12px 18px;
+  background: var(--sign); color: var(--sign-ink);
+}
+button.ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--line); font-weight: 600; }
+button:focus-visible, input:focus-visible { outline: 3px solid var(--signal); outline-offset: 2px; }
+button:disabled { opacity: .5; cursor: default; }
+.rules { display: grid; gap: 8px; padding: 0; margin: 0; list-style: none; }
+.rules li { display: flex; gap: 10px; }
+.rules .k { font-family: var(--font-mono); font-weight: 700; color: var(--sign); min-width: 2.2em; }
+.tiers { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 6px 14px; font-size: 14px; }
+.tiers div { display: flex; justify-content: space-between; gap: 8px; border-bottom: 1px dashed var(--line); padding-block: 3px; }
+.tiers span:last-child { font-family: var(--font-mono); color: var(--muted); }
+
+/* igra */
+.qhead { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.qnum { font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
+.cat { font-size: 28px; font-weight: 900; line-height: 1.1; text-wrap: balance; }
+.hint { color: var(--muted); font-size: 14px; }
+.timer { height: 8px; border-radius: 4px; background: var(--line); overflow: hidden; }
+.timer i { display: block; height: 100%; width: 100%; background: var(--sign); transform-origin: left; }
+.timer.low i { background: var(--stop); }
+.trow { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
+.answer { display: flex; gap: 8px; }
+.answer input {
+  flex: 1; min-width: 0; font: inherit; font-size: 20px; font-weight: 600; padding: 12px 14px; border-radius: 10px;
+  border: 2px solid var(--line); background: var(--bg); color: var(--ink);
+}
+.answer input:focus { border-color: var(--sign); outline: none; }
+.sending { font-size: 14px; color: var(--muted); min-height: 1.45em; }
+.sending b { color: var(--ink); }
+.sending.nope { color: var(--stop); font-weight: 700; }
+.sending.changed b { background: var(--signal); color: #1b1b1b; padding: 0 5px; border-radius: 4px; }
+.result { border-radius: 12px; padding: 14px 16px; background: var(--bg); display: flex; flex-direction: column; gap: 6px; }
+.result .big { display: flex; align-items: center; gap: 12px; }
+.result .emo { font-size: 34px; line-height: 1; }
+.result .km { font-family: var(--font-mono); font-weight: 700; font-size: 22px; margin-left: auto; }
+.result.miss .km { color: var(--stop); }
+.small { font-size: 13px; color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-size: 13px; padding: 2px 8px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--line); }
+.chip span { font-family: var(--font-mono); color: var(--muted); margin-left: 4px; }
+
+/* karta */
+.mapcard { padding: 0; overflow: hidden; display: flex; flex-direction: column; }
+.mapcard svg { display: block; width: 100%; height: auto; max-height: 520px; }
+.sea { fill: var(--bg); }
+.landp { fill: var(--land); stroke: var(--land-edge); stroke-width: 1.2; stroke-linejoin: round; }
+.route { fill: none; stroke: var(--route); stroke-width: 2.5; stroke-dasharray: 2 5; stroke-linecap: round; }
+.done { fill: none; stroke: var(--sign); stroke-width: 4.5; stroke-linecap: round; stroke-linejoin: round; }
+.st { fill: var(--card); stroke: var(--route); stroke-width: 2; }
+.st.reached { fill: var(--sign); stroke: var(--sign); }
+.lbl { font-family: var(--font-sign); font-size: 11px; font-weight: 800; fill: var(--ink); paint-order: stroke; stroke: var(--land); stroke-width: 3px; }
+.lbl.dim { fill: var(--muted); font-weight: 600; }
+.car { fill: var(--signal); stroke: var(--ink); stroke-width: 2; }
+.signbar { background: var(--sign); color: var(--sign-ink); padding: 12px 18px; display: grid; gap: 2px; box-shadow: inset 0 0 0 4px var(--sign), inset 0 0 0 6px var(--sign-ink); border-radius: 0 0 13px 13px; }
+.signbar .d { display: flex; justify-content: space-between; gap: 10px; font-weight: 800; font-size: 19px; }
+.signbar .d span:last-child { font-family: var(--font-mono); }
+.signbar .now { font-size: 12px; font-weight: 600; opacity: .85; letter-spacing: .06em; text-transform: uppercase; }
+
+/* kraj */
+.arrive { background: var(--sign); color: var(--sign-ink); border-radius: 12px; padding: 18px; box-shadow: inset 0 0 0 3px var(--sign), inset 0 0 0 5px var(--sign-ink); display: grid; gap: 4px; }
+.arrive .town { font-size: 34px; font-weight: 900; line-height: 1.05; }
+.arrive .kmt { font-family: var(--font-mono); font-size: 15px; opacity: .9; }
+.recap { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+.recap li { display: grid; grid-template-columns: 1.6em minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 7px 0; border-bottom: 1px solid var(--line); }
+.recap .c { font-size: 12px; color: var(--muted); }
+.recap .a { font-weight: 700; overflow-wrap: anywhere; }
+.recap .k { font-family: var(--font-mono); font-weight: 700; font-variant-numeric: tabular-nums; }
+pre.share { margin: 0; padding: 12px 14px; border-radius: 10px; background: var(--bg); font-family: var(--font-mono); font-size: 14px; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; }
+.loading { color: var(--muted); }
