@@ -272,13 +272,15 @@ function Play({ state, onScored, onLost }: { state: GameState; onScored: (s: Gam
           autoFocus
           type="text"
           enterKeyHint="send"
-          autoCapitalize="off"
+          autoCapitalize="sentences"
           spellCheck={false}
           aria-label="Tvoj odgovor"
           placeholder="Tvoj odgovor"
           value={value}
           onChange={(e) => {
-            setValue(e.target.value);
+            // prvo slovo uvijek veliko, kao u kanonskim odgovorima
+            const v = e.target.value;
+            setValue(v.charAt(0).toLocaleUpperCase("hr") + v.slice(1));
             sfx.type();
           }}
         />

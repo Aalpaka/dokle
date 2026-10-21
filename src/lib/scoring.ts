@@ -8,8 +8,17 @@ export function blendedShare(prior: number, count: number, total: number, k: num
   return (k * prior + 100 * count) / (k + total);
 }
 
-/** Tier po udjelu; odgovor označen kao najrjeđi (`rare`) umjesto najrjeđeg običnog tiera dobiva poseban tier. */
-export function tierFor(cfg: SkinConfig, share: number, rare = false): Tier {
+/** Koliko najčešćih odgovora kategorije uvijek ide prvim tierom (pješice): 2, 3 ili 4 po veličini kategorije. */
+export function commonCount(answers: number): number {
+  return answers >= 80 ? 4 : answers >= 40 ? 3 : 2;
+}
+
+/**
+ * Tier po udjelu. `common` = odgovor je među najčešćima kategorije (commonCount) i uvijek dobiva prvi tier;
+ * odgovor označen kao najrjeđi (`rare`) umjesto najrjeđeg običnog tiera dobiva poseban tier.
+ */
+export function tierFor(cfg: SkinConfig, share: number, rare = false, common = false): Tier {
+  if (common) return cfg.tiers[0];
   const normal = cfg.tiers.filter((t) => !t.rare);
   const t = normal.find((x) => share >= x.minShare) ?? normal[normal.length - 1];
   return (rare && t === normal[normal.length - 1] && cfg.tiers.find((x) => x.rare)) || t;
@@ -32,8 +41,8 @@ export function speedFor(cfg: SkinConfig, elapsedMs: number): SpeedStep {
 }
 
 /** Km za pogođeni odgovor: km tiera puta množitelj brzine, zaokruženo. */
-export function scoreKm(cfg: SkinConfig, share: number, elapsedMs: number, rare = false): { tier: Tier; speed: SpeedStep; km: number } {
-  const tier = tierFor(cfg, share, rare);
+export function scoreKm(cfg: SkinConfig, share: number, elapsedMs: number, rare = false, common = false): { tier: Tier; speed: SpeedStep; km: number } {
+  const tier = tierFor(cfg, share, rare, common);
   const speed = speedFor(cfg, elapsedMs);
   return { tier, speed, km: Math.round(tier.km * speed.multiplier) };
 }

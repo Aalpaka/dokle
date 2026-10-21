@@ -112,6 +112,12 @@ function matchIndex(idx: MatchIndex, input: string): number | null {
   return null;
 }
 
+/** Kanonski oblik s velikim prvim slovom ("krk" -> "Krk"); ostatak ostaje kako je upisan. */
+export function capitalize(s: string): string {
+  const t = s.trim();
+  return t.charAt(0).toLocaleUpperCase("hr") + t.slice(1);
+}
+
 /** "Krk=22;Lošinj/Mali Lošinj=3;Silba=0.05!" -> [{canonical, variants, share, rare}]; "!" iza udjela = najrjeđi (helikopter) */
 export function parseSeedAnswers(d: string) {
   return d.split(";").map((e) => {

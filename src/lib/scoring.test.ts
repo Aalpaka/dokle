@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { blendedShare, priorForTier, scoreKm, speedFor, stationAt, tierFor } from "./scoring";
+import { blendedShare, commonCount, priorForTier, scoreKm, speedFor, stationAt, tierFor } from "./scoring";
 import { dayNumber, localDate } from "./day";
 import { hrConfig } from "@/skins/hr/config";
 
@@ -14,6 +14,13 @@ describe("scoring", () => {
     expect(tierFor(hrConfig, 22).km).toBe(10);
     expect(tierFor(hrConfig, 0.4).km).toBe(125);
     expect(tierFor(hrConfig, 2).km).toBe(70);
+  });
+  it("najčešći odgovori uvijek pješice", () => {
+    expect(commonCount(30)).toBe(2);
+    expect(commonCount(50)).toBe(3);
+    expect(commonCount(120)).toBe(4);
+    expect(tierFor(hrConfig, 8, false, true).name).toBe("Pješice");
+    expect(tierFor(hrConfig, 8).name).toBe("HŽ");
   });
   it("helikopter samo za označene najrjeđe odgovore", () => {
     expect(tierFor(hrConfig, 0.05).name).toBe("Croatia Airlines");

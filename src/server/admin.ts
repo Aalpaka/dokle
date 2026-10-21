@@ -13,13 +13,13 @@ import {
   reviewDecisions,
   rounds,
 } from "@/db/schema";
-import { fold, parseSeedAnswers } from "@/lib/matcher";
-import { stationAt } from "@/lib/scoring";
+import { capitalize, fold, parseSeedAnswers } from "@/lib/matcher";
+import { stationAt, tierFor } from "@/lib/scoring";
 import { computeStats } from "@/lib/stats";
 import { dayNumber, localDate } from "@/lib/day";
 import { isAdminEmail } from "./accounts";
 import { resolveIdentity } from "./player";
-import { clearCategoryCache, getOrCreatePuzzle, rescoreMisses, type Skin } from "./game";
+import { categoryShares, clearCategoryCache, getOrCreatePuzzle, rescoreMisses, type Skin } from "./game";
 
 /** Id admina ili null. Lokalno se može uključiti ADMIN_DEV_BYPASS=1 (nikad u produkciji). */
 export async function requireAdmin(): Promise<{ playerId: string | null } | null> {
@@ -90,6 +90,19 @@ export async function dayOverview(skin: Skin, date: string) {
     .where(and(eq(games.puzzleId, puzzle.id), isNull(rounds.answerId), isNotNull(rounds.answeredAt)))
     .groupBy(rounds.categoryId);
 
+  // svi odgovori današnjih kategorija s udjelom i prijevozom koji taj dan vrijede
+  const shares = new Map<number, { canonical: string; n: number; share: number; tier: string }[]>();
+  for (const c of cats)
+    shares.set(
+      c.id,
+      (await categoryShares(skin, puzzle.id, c.id)).map((a) => ({
+        canonical: a.canonical,
+        n: a.n,
+        share: a.share,
+        tier: tierFor(skin.config, a.share, a.rare, a.common).name,
+      })),
+    );
+
   return {
     date,
     puzzle: { number: puzzle.number },
@@ -103,6 +116,7 @@ export async function dayOverview(skin: Skin, date: string) {
         attempts: a?.total ?? 0,
         rejected: a?.rejected ?? 0,
         misses: misses.find((m) => m.categoryId === c.id)?.n ?? 0,
+        answers: shares.get(c.id) ?? [],
       };
     }),
   };
@@ -143,7 +157,7 @@ export async function decide(skin: Skin, adminId: string | null, a: ReviewAction
   if (a.action === "answer") {
     const [row] = await db
       .insert(answers)
-      .values({ categoryId: a.categoryId, canonical: a.canonical.trim(), priorShare: a.priorShare, rare: !!a.rare, source: "review" })
+      .values({ categoryId: a.categoryId, canonical: capitalize(a.canonical), priorShare: a.priorShare, rare: !!a.rare, source: "review" })
       .onConflictDoUpdate({ target: [answers.categoryId, answers.canonical], set: { source: "review" } })
       .returning();
     answerId = row.id;
@@ -253,7 +267,9 @@ const slugify = (s: string) => fold(s).replace(/ /g, "-").slice(0, 40) || "kateg
 /** Nova kategorija; odgovori u formatu seeda: "Kanonski/varijanta=udio; ..." */
 export async function createCategory(skin: Skin, input: { title: string; group: string; hint?: string; strip?: string[]; answers: string }) {
   if (!skin.config.groups[input.group]) throw new Error("Nepoznata grupa");
-  const parsed = parseSeedAnswers(input.answers).filter((a) => a.canonical && Number.isFinite(a.share));
+  const parsed = parseSeedAnswers(input.answers)
+    .filter((a) => a.canonical && Number.isFinite(a.share))
+    .map((a) => ({ ...a, canonical: capitalize(a.canonical) }));
   if (!parsed.length) throw new Error("Nema odgovora");
   return db.transaction(async (tx) => {
     const [cat] = await tx
@@ -289,7 +305,7 @@ export async function addAnswer(categoryId: number, input: { canonical: string; 
   const rare = !!input.rare;
   const [ans] = await db
     .insert(answers)
-    .values({ categoryId, canonical: input.canonical.trim(), priorShare: input.priorShare, rare, source: "review" })
+    .values({ categoryId, canonical: capitalize(input.canonical), priorShare: input.priorShare, rare, source: "review" })
     .onConflictDoUpdate({ target: [answers.categoryId, answers.canonical], set: { priorShare: input.priorShare, rare } })
     .returning();
   const variants = input.variants.map((v) => v.trim()).filter(Boolean);

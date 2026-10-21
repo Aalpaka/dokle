@@ -265,6 +265,13 @@ textarea.field { width: 100%; font-family: var(--font-mono); }
 .tbl tr.off td { color: var(--muted); }
 .review { border-bottom: 1px solid var(--line); padding-block: 10px; }
 .decide { background: var(--card); border-radius: 10px; padding: 10px 12px; display: grid; gap: 6px; }
+.decide > summary { cursor: pointer; }
+.chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.modal {
+  width: min(900px, calc(100vw - 32px)); max-height: calc(100dvh - 48px); padding: 16px 18px; border: 0; border-radius: 14px;
+  background: var(--bg); color: var(--ink); box-shadow: 0 0 0 1px var(--line), 0 20px 60px #000a;
+}
+.modal::backdrop { background: #000a; }
 .bar { display: grid; grid-template-columns: 130px minmax(0, 1fr) 40px; gap: 8px; align-items: center; font-size: 14px; }
 .bar i { height: 10px; border-radius: 5px; background: var(--sign); display: block; }
 .bar b { font-family: var(--font-mono); text-align: right; }
