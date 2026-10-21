@@ -713,4 +713,230 @@ export const zaigranoKategorije: SeedCategory[] = [
       Promjena=0.3; Bog=0.3; Tavan=0.3; Brzina=0.3; Tunel=0.3; Most=0.3; Konji=0.3; Ptice=0.3; Tinejdžeri=0.3;
       Ljubav=0.3; Ćelavost=0.3; Bore=0.3; Vaga=0.3; Budilica=0.3; Tata=0.3; Roboti=0.3; Rupe=0.1; Guske=0.1`,
   },
+  {
+    slug: "ime-ljubimca",
+    group: "zaigrano",
+    title: "Ime za psa ili mačku",
+    hint: "Ime koje ljudi daju psu ili mački, i poznati psi i mačke",
+    strip: [],
+    answers: `Rex/Reks=8; Max/Maks=6; Luna=6; Mici/Mica=6; Bobi=5; Šarko=4; Žućo=4; Fifi=3; Lesi/Lassie=3; Medo=3;
+      Lola=3; Garfield=2; Bella=2; Bruno=2; Roki/Rocky=2; Leki/Lucky=2; Bubi=2; Simba=2; Maza=2; Cica=2; Fleki=2;
+      Snoopy/Snupi=1.5; Čarli/Charlie=1.5; Tigar/Tigrica=1.5; Crnko/Crni=1.5; Felix=1.5; Tom=1; Ben=1; Mrvica=1;
+      Pluto=1; Jack=1; Leo=1; Pufi=1; Bjelko=1; Sivko=1; Oskar/Oscar=1; Kiti/Kitty=1; Princeza=1; Zeus=1; Rambo=1;
+      Hachiko=1; Beethoven=1; Scooby-Doo/Scooby=1; Lajka/Laika=1; Kiki=1; Lili=1; Mia=1; Nala=1; Kira=1; Koko/Coco=1;
+      Keks/Keksić=1; Tobi/Toby=1; Rudi=1; Bimbo=0.5; Gizmo=0.5; Thor=0.5; Tarzan=0.5; Archie/Arči=0.5; Benji=0.5;
+      Tina=0.5; Sara=0.5; Daisy/Dejzi=0.5; Molly/Moli=0.5; Čupko=0.5; Ciko=0.5; Pepi=0.5; Bambi=0.5; Lord=0.5;
+      Badi=0.5; Bubica=0.5; Mrki=0.5; Riki=0.5; Lucifer=0.5; Salem=0.5; Silvestar/Sylvester=0.5; Džeki=0.5; Hugo=0.5;
+      Cezar=0.5; Nero=0.5; Bingo=0.5; Tedi/Teddy=0.5; Roksi/Roxy=0.5; Fido=0.5; Toto=0.5; Bolt=0.5; Marley=0.5;
+      Odin=0.3; Belka=0.3; Strelka=0.3; Chanel=0.3; Gaga=0.3; Duke=0.3; Đuro=0.3; Pero=0.3; Ginger=0.3; Dimko=0.3;
+      Ringo=0.3; Dingo=0.3; Kaja=0.3; Gromit=0.3; Odie=0.3; Pongo=0.3; Rin Tin Tin=0.1; Krypto=0.1`,
+  },
+  {
+    slug: "pivo",
+    group: "zaigrano",
+    title: "Pivo",
+    hint: "Marka ili vrsta piva",
+    strip: ["pivo"],
+    answers: `Ožujsko=15; Karlovačko=12; Heineken=6; Pan=5; Staropramen=3; Laško=3; Stella Artois/Stella=3; Tuborg=3;
+      Carlsberg=3; Corona=3; Guinness=3; Tomislav=2; Union=2; Budweiser=2; Beck's=2; Paulaner=2;
+      Pilsner Urquell/Plzeň=2; Velebitsko=2; Osječko=2; Erdinger=1.5; Kozel=1.5; Gösser=1.5; Jelen=1.5; Nikšićko=1.5;
+      Sarajevsko=1.5; Franziskaner=1; Budvar=1; Lav=1; Riječko=1; Zmajsko=1; Medvedgrad/Zlatni medvjed=1; Amstel=1;
+      Hoegaarden=1; Leffe=1; Peroni=1; Moretti=1; Desperados=1; Radler=1; Lager=1; Pils/Pilsner=1;
+      Tamno pivo/Crno pivo/Stout=1; IPA=1; Pšenično pivo/Weissbier=1; Löwenbräu=0.5; Warsteiner=0.5; Bitburger=0.5;
+      Krombacher=0.5; Holsten=0.5; Zaječarsko=0.5; Skopsko=0.5; Nova runda=0.5; Garden=0.5; Daruvarsko/Staročeško=0.5;
+      Vukovarsko=0.5; Bavaria=0.5; Grolsch=0.5; Duvel=0.5; Estrella/Estrella Damm=0.5; San Miguel=0.5;
+      Kronenbourg=0.5; Miller=0.5; Asahi=0.5; Tsingtao=0.5; Efes=0.5; Mythos=0.5; Zipfer=0.5; Stiegl=0.5;
+      Kilkenny=0.5; Gambrinus=0.5; Ale=0.5; Bezalkoholno pivo=0.5; Craft pivo=0.5; Zlatorog=0.3; Varionica=0.3;
+      Chimay=0.3; Kwak=0.3; Kriek=0.3; Mahou=0.3; Sagres=0.3; Super Bock=0.3; Coors=0.3; Bud Light=0.3; Blue Moon=0.3;
+      Samuel Adams=0.3; Brooklyn=0.3; Sapporo=0.3; Kirin=0.3; Tiger=0.3; Singha=0.3; Kingfisher=0.3; Żywiec=0.3;
+      Tyskie=0.3; Dreher=0.3; Borsodi=0.3; Puntigamer=0.3; Ottakringer=0.3; Edelweiss=0.3; Murphy's=0.3; Foster's=0.3;
+      Baltika=0.3; Krušovice=0.3; Porter=0.3; Točeno pivo=0.3; Menabrea=0.2; Ursus=0.2; Feldschlösschen=0.2;
+      Bernard=0.2; Bock=0.2; Westmalle=0.1; Lambic=0.1`,
+  },
+  {
+    slug: "koktel",
+    group: "zaigrano",
+    title: "Koktel",
+    hint: "Koktel ili miješano piće",
+    strip: [],
+    answers: `Mojito=15; Piña colada/Pina colada=8; Aperol Spritz/Aperol/Spritz=8; Margarita=6; Sex on the Beach=6;
+      Cosmopolitan=4; Long Island=4; Cuba libre=4; Martini=4; Bloody Mary=3; Tequila Sunrise=3; Caipirinha=3;
+      Gin tonic=3; Daiquiri=2; Negroni=2; Blue Lagoon=2; Hugo=2; Old Fashioned=1.5; Mai Tai=1.5; B-52=1.5;
+      White Russian=1.5; Sangria=1.5; Black Russian=1; Espresso Martini=1; Manhattan=1; Whiskey Sour=1; Moscow Mule=1;
+      Mimosa=1; Bellini=1; Bambus=1; Gemišt=1; Jägerbomb=1; Vodka Red Bull=1; Screwdriver/Vodka-naranča=1;
+      Irish coffee=1; Kuhano vino=1; Pisco Sour=0.5; Tom Collins=0.5; Kir Royal=0.5; Bevanda=0.5; Zombie=0.5;
+      Amaretto Sour=0.5; Kamikaze=0.5; Pornstar Martini=0.5; Punč=0.5; Campari=0.5; Radler=0.3; Hurricane=0.3;
+      Singapore Sling=0.3; Sidecar=0.3; Gimlet=0.3; Paloma=0.3; Mint Julep=0.3; Grasshopper=0.3; French 75=0.3;
+      Vesper=0.3; Appletini=0.3; Blue Hawaii=0.3; Bombardino=0.3; Caipiroska=0.3; Americano=0.3; Gin Fizz=0.3;
+      Swimming Pool=0.3; Mudslide=0.2; Bramble=0.2; Sazerac=0.2; Michelada=0.2; Godfather=0.2; Rusty Nail=0.2;
+      Aviation=0.1; Rob Roy=0.1`,
+  },
+  {
+    slug: "igra-djetinjstvo",
+    group: "zaigrano",
+    title: "Igra iz djetinjstva",
+    hint: "Igra vani, u školi ili kod kuće",
+    strip: [],
+    answers: `Skrivača/Skrivači/Skrivanje=15; Lovice/Lovica/Ganjanje=12; Gumi-gumi/Gumi/Elastika=8; Školica=6;
+      Graničar/Između dvije vatre=6; Špekule/Klikeri/Pikule=4; Čovječe ne ljuti se=3; Kauboji i Indijanci/Kauboji=3;
+      Ringe ringe raja=3; Crna kraljica=3; Pokvareni telefon=3; Nogomet/Lopta=3; Kamen, škare, papir=3;
+      Križić-kružić=3; Ime, prezime, grad/Zemlja-grad-rijeka=3; Potapanje brodova=2; Vješala=2; Monopoly=2;
+      Crni Petar=2; Barbie/Lutke=2; Vijača/Preskakanje vijače=2; Šah=1.5; Memory=1.5; Lego=1.5;
+      Policajci i lopovi/Lopovi i žandari=1.5; Grudanje=1.5; Sličice=1.5; Šuga=1; Dama=1; Uno=1; Mama i tata=1;
+      Kolo=1; Obruč/Hula hoop=1; Ljuljačka=1; Sanjkanje=1; Kućice=1; Zmaj=1; Tamagotchi=1; Tazo=1; Jojo=1;
+      Istina ili izazov=1; Vrtenje boce=1; Mačka i miš=0.5; Domino=0.5; Kuhinjica=0.5; Igra doktora=0.5;
+      Igra trgovine/Dućan=0.5; Tapšalice=0.5; Tobogan=0.5; Klackalica=0.5; Romobil/Trotinet=0.5; Bicikl=0.5; Role=0.5;
+      Snjegović=0.5; Pješčanik=0.5; Igra rata=0.5; Praćka=0.5; Frizbi=0.5; Badminton=0.5; Stolni tenis=0.5;
+      Game Boy=0.5; Super Mario=0.5; Tetris=0.5; Slagalica/Puzzle=0.5; Mikado=0.5; Twister=0.5; Pikado=0.3;
+      Kamenčići=0.1; Čigra=0.1`,
+  },
+  {
+    slug: "mitolosko-bice",
+    group: "zaigrano",
+    title: "Mitološko biće ili čudovište",
+    hint: "Iz mitova, legendi, bajki ili narodnih vjerovanja",
+    strip: [],
+    answers: `Zmaj=12; Vampir=8; Vukodlak=6; Jednorog=6; Sirena=6; Kiklop=4; Minotaur=4; Feniks=4; Pegaz=3; Kentaur=3;
+      Meduza=3; Vila=3; Baba Roga/Babaroga=3; Hidra=2; Kerber/Cerber=2; Grifon=2; Patuljak=2; Trol=2; Vještica=2;
+      Div=2; Kraken=2; Jeti/Yeti=2; Nessie/Čudovište iz Loch Nessa=2; Godzilla=1.5; Bigfoot=1.5; Elf/Vilenjak=1.5;
+      Sfinga=1.5; Demon=1.5; Duh=1.5; Zombi=1.5; Štriga/Štrigun=1; Bauk=1; King Kong=1; Chupacabra=1; Golem=1; Gnom=1;
+      Goblin=1; Ork=1; Harpija=1; Satir=1; Nimfa=1; Bazilisk=1; Džin/Duh iz boce=1; Mumija=1; Krampus=1; Baba Jaga=1;
+      Orko=0.5; Mora=0.5; Kresnik/Krsnik=0.5; Macić=0.5; Rusalka=0.5; Banshee=0.5; Leprechaun=0.5; Gargojl=0.5;
+      Scila/Haribda=0.5; Kimera=0.5; Faun=0.5; Titani=0.5; Gorgona=0.5; Mantikora=0.5; Hipogrif=0.5; Wendigo=0.5;
+      Fenrir=0.5; Valkira=0.5; Leviatan=0.5; Drekavac=0.5; Karakondžula=0.5; Domaći=0.3; Tifon=0.3; Kitsune=0.3;
+      Oni=0.3; Ifrit=0.3; Ptica Rok=0.3; Lamija=0.3; Sukub=0.3; Midgardska zmija=0.3; Sleipnir=0.3; Behemot=0.3;
+      Poltergeist=0.3; Suđenice=0.3; Koščej=0.3; Žar-ptica=0.3; Inkub=0.2; Draugr=0.2; Kelpie=0.2; Selkie=0.2;
+      Kappa=0.2; Zduhač=0.1; Tengu=0.1`,
+  },
+  {
+    slug: "lotr",
+    group: "zaigrano",
+    title: "Lik iz Gospodara prstenova ili Hobita",
+    hint: "Iz knjiga ili filmova",
+    strip: [],
+    answers: `Frodo/Frodo Baggins=15; Gandalf=12; Gollum/Golum/Sméagol=8; Aragorn=8; Legolas=6; Bilbo/Bilbo Baggins=6;
+      Sauron=6; Sam/Samwise=5; Gimli=4; Saruman=4; Smaug=3; Pippin=2; Merry=2; Boromir=2; Arwen=2; Galadriel=2;
+      Thorin=2; Elrond=1.5; Balrog=1.5; Faramir=1; Éowyn=1; Théoden=1; Bard=1; Nazgul/Nazguli=1; Shelob=1; Éomer=0.5;
+      Drvobradi/Treebeard=0.5; Tom Bombadil=0.5; Balin=0.5; Kili=0.5; Thranduil=0.5; Tauriel=0.5; Radagast=0.5;
+      Beorn=0.5; Azog=0.5; Kralj vještac/Witch-king=0.5; Uruk-hai=0.5; Orci=0.5; Denethor=0.5; Isildur=0.5;
+      Shadowfax=0.5; Morgoth=0.5; Gríma=0.3; Dwalin=0.3; Fili=0.3; Bombur=0.3; Gloin=0.3; Entovi=0.3; Celeborn=0.3;
+      Rosie=0.3; Dain=0.3; Bofur=0.2; Ori=0.2; Bolg=0.2; Lurtz=0.2; Elendil=0.2; Haldir=0.2; Glorfindel=0.2; Bill=0.2;
+      Thror=0.2; Thrain=0.2; Gwaihir=0.1; Celebrimbor=0.1`,
+  },
+  {
+    slug: "got",
+    group: "zaigrano",
+    title: "Lik iz Igre prijestolja",
+    hint: "Iz serije ili knjiga, i iz Kuće zmaja",
+    strip: [],
+    answers: `Jon Snow/Jon=12; Daenerys/Daenerys Targaryen/Dany=10; Tyrion/Tyrion Lannister=10;
+      Cersei/Cersei Lannister=6; Arya/Arya Stark=6; Ned Stark/Eddard Stark/Ned=5; Sansa/Sansa Stark=4;
+      Jaime/Jaime Lannister=4; Joffrey=4; Khal Drogo/Drogo=3; Bran/Bran Stark=3; Hodor=3; Robb/Robb Stark=2;
+      The Hound/Sandor Clegane/Pas=2; Littlefinger/Petyr Baelish=2; Varys=2; Brienne=2; Noćni kralj/Night King=2;
+      Catelyn/Catelyn Stark=1.5; The Mountain/Gregor Clegane/Planina=1.5; Theon/Theon Greyjoy=1.5;
+      Ramsay/Ramsay Bolton=1.5; Samwell Tarly/Samwell=1.5; Melisandre=1.5; Robert Baratheon=1.5;
+      Tywin/Tywin Lannister=1.5; Jorah=1; Missandei=1; Davos=1; Stannis=1; Margaery=1; Olenna=1; Oberyn=1; Bronn=1;
+      Tormund=1; Ygritte=1; Gendry=1; Drogon=1; Viserys=1; Rhaenyra=1; Daemon Targaryen/Daemon=1; Gilly=0.5;
+      Sivi Crv/Grey Worm=0.5; Renly=0.5; Podrick=0.5; Shae=0.5; Ghost=0.5; Lyanna Stark=0.5; Lyanna Mormont=0.5;
+      Walder Frey=0.5; Vrhovni vrabac/High Sparrow=0.5; Jaqen H'ghar=0.5; Tommen=0.5; Alicent=0.5; Aegon=0.5;
+      Ellaria Sand=0.3; Yara Greyjoy=0.3; Euron Greyjoy=0.3; Mance Rayder=0.3; Rhaegal=0.3; Viserion=0.3; Rhaegar=0.3;
+      Benjen=0.3; Rickon=0.3; Qyburn=0.3; Daario=0.3; Barristan Selmy=0.3; Roose Bolton=0.3; Septa Unella=0.3;
+      Shireen=0.3; Lysa Arryn=0.3; Syrio Forel=0.3; Aemond=0.3; Thoros=0.2; Beric Dondarrion=0.2; Hot Pie=0.2;
+      Myrcella=0.2; Robin Arryn=0.2; Craster=0.2; Osha=0.2; Meera Reed=0.2; Maester Aemon=0.2; Pycelle=0.2;
+      Alliser Thorne=0.2; Olly=0.2; Talisa=0.2; Corlys=0.2; Rhaenys=0.2; Criston Cole=0.2; Otto Hightower=0.2;
+      Jojen Reed=0.1; Selyse=0.1`,
+  },
+  {
+    slug: "strani-film",
+    group: "zaigrano",
+    title: "Strani film",
+    hint: "Bilo koji igrani ili animirani film koji nije hrvatski",
+    strip: ["film"],
+    answers: `Titanic=6; Kum/The Godfather=3; Ratovi zvijezda/Star Wars=2.5; Gospodar prstenova/Lord of the Rings=2.5;
+      Harry Potter=2; Avatar=2; Matrix=2; Forrest Gump=2; Pulp Fiction=1.5; Shrek=1.5; Kralj lavova/Lion King=1.5;
+      Avengers=1.5; Interstellar=1.5; Gladijator=1.5; Sam u kući/Home Alone=1.5; Jurski park/Jurassic Park=1.5; Ralje/Jaws=1;
+      Rocky=1; Terminator=1; Povratak u budućnost=1; Indiana Jones=1; E.T.=1; Schindlerova lista=1;
+      Iskupljenje u Shawshanku/Shawshank=1; Klub boraca/Fight Club=1; Mračni vitez/Dark Knight=1; Joker=1;
+      Oppenheimer=1; Barbie=1; Top Gun=1; James Bond=1; Pirati s Kariba=1; Snježno kraljevstvo/Frozen=1;
+      Priča o igračkama/Toy Story=1; Početak/Inception=1; Batman=0.8; Spider-Man=0.8; Mission Impossible=0.8;
+      Potraga za Nemom/Nemo=0.8; Ledeno doba=0.8; Grease=0.8; Prljavi ples/Dirty Dancing=0.8;
+      Zgodna žena/Pretty Woman=0.8; Casablanca=0.8; Isijavanje/The Shining=0.8; Kad jaganjci utihnu=0.8;
+      Vuk s Wall Streeta=0.8; Spašavanje vojnika Ryana=0.8; Alien=0.8; Umri muški/Die Hard=0.8;
+      Brzi i žestoki/Fast and Furious=0.8; Život je lijep=0.8; Sumrak/Twilight=0.8; Let iznad kukavičjeg gnijezda=0.8;
+      Hrabro srce/Braveheart=0.8; Superman=0.5; Madagaskar=0.5; Kung Fu Panda=0.5; Aladin=0.5; Mala sirena=0.5;
+      Ljepotica i zvijer=0.5; Notting Hill=0.5; Ljubav zapravo/Love Actually=0.5; Bilježnica/The Notebook=0.5; La La Land=0.5;
+      Prohujalo s vihorom=0.5; Psiho/Psycho=0.5; Egzorcist=0.5; Ono/It=0.5; Sedam/Se7en=0.5; Veliki Lebowski=0.5; Kill Bill=0.5;
+      Django=0.5; Nemilosrdni gadovi=0.5; Taksist=0.5; Dobri momci/Goodfellas=0.5; Paklena naranča=0.5;
+      2001: Odiseja u svemiru=0.5; Apokalipsa danas=0.5; Ben-Hur=0.5; Čarobnjak iz Oza=0.5; Mary Poppins=0.5;
+      Moje pjesme, moji snovi=0.5; Mamma Mia=0.5; Dina/Dune=0.5; Blade Runner=0.5; Rambo=0.5; Transformers=0.5; John Wick=0.5;
+      Mad Max=0.5; Amélie=0.5; Léon=0.5; Nedodirljivi=0.5; Dobar, loš, zao=0.5; Parazit=0.5; Hobit=0.5; Narnija=0.5; Igre gladi=0.5;
+      Istjerivači duhova/Ghostbusters=0.5; Kišni čovjek/Rain Man=0.5; Troja=0.5; 300=0.5; Pijanist=0.5;
+      Dječak u prugastoj pidžami=0.5; Ko to tamo peva=0.5; Maratonci trče počasni krug/Maratonci=0.5; Auti/Cars=0.5; Mumija=0.5;
+      Iron Man=0.5; Deadpool=0.5; Bohemian Rhapsody=0.5; Povratnik/The Revenant=0.5; Snjeguljica=0.3; Pepeljuga=0.3;
+      Bambi=0.3; Dumbo=0.3; Vrisak=0.3; Saw=0.3; Fargo=0.3; Reservoir Dogs=0.3; Lawrence od Arabije=0.3; Spartak=0.3;
+      Predator=0.3; Robocop=0.3; Taxi=0.3; Cinema Paradiso=0.3; Avanture male Chihiro=0.3; Oldboy=0.3;
+      Milijunaš s ulice=0.3; Gremlini=0.3; Goonies=0.3; Amadeus=0.3; Platoon=0.3; Full Metal Jacket=0.3;
+      Posljednji samuraj=0.3; Ples s vukovima=0.3; Zbogom, Lenjine=0.3; Trči, Lola, trči=0.3; Underground=0.3;
+      Lepa sela lepo gore=0.3; Mi nismo anđeli=0.3; Ničija zemlja=0.3; Crna mačka, beli mačor=0.3;
+      Otac na službenom putu=0.3; Coco=0.3; Up=0.3; Izvrnuto obrnuto=0.3; Malci/Minions=0.3; Gru=0.3; Ratatouille=0.3;
+      Wall-E=0.3; Čudovišta iz ormara=0.3; Obitelj Superić=0.3; Crni Panter=0.3; Zvijezda je rođena=0.3;
+      Crni labud=0.3; Whiplash=0.3; Duh/Ghost=0.3; Tjelohranitelj=0.3; Groznica subotnje večeri=0.3;
+      Doručak kod Tiffanyja=0.3; Rimski praznici=0.3; Neki to vole vruće=0.3; Građanin Kane=0.3; King Kong=0.3;
+      Drakula=0.3; Moderna vremena=0.3; Veliki diktator=0.3; Moj susjed Totoro=0.2; Sedam samuraja=0.2;
+      Ubojstvo u Orient Expressu=0.2; Fantastične zvijeri=0.2; Divergent=0.2; Labirint=0.2; Lovac na jelene=0.2;
+      Veliki bijeg=0.2; Aleksandar=0.2; Život drugih=0.2; Podmornica/Das Boot=0.2; Bal na vodi=0.2;
+      Varljivo leto '68=0.2; Rane=0.2; Everything Everywhere All at Once=0.2; Zootopia=0.2; Vaiana/Moana=0.2;
+      Encanto=0.2; Thor=0.2; Kapetan Amerika=0.2; Čuvari galaksije=0.2; Wonder Woman=0.2; Aquaman=0.2;
+      Gravitacija=0.2; Marsovac=0.2; Elvis=0.2; Zelena knjiga=0.2; Tko je smjestio Zeki Rogeru=0.2; Vrtoglavica=0.2;
+      Ptice=0.2; Godzilla=0.2; Frankenstein=0.2; Nosferatu=0.2; Footloose=0.1; Flashdance=0.1; Rocketman=0.1;
+      Grbavica=0.1; Sjever-sjeverozapad=0.1; Metropolis=0.1; Sjećaš li se Dolly Bell=0.1`,
+  },
+  {
+    slug: "lik-videoigre",
+    group: "zaigrano",
+    title: "Lik iz videoigre",
+    strip: [],
+    answers: `Super Mario/Mario=15; Pac-Man=5; Sonic=5; Lara Croft=5; Luigi=4; Pikachu=4; Link=3; Zelda=3;
+      Donkey Kong=3; Kirby=2; Yoshi=2; Bowser=2; Princeza Peach/Peach=2; Kratos=2; Master Chief=2; Steve=2;
+      Crash Bandicoot/Crash=2; Geralt=2; Creeper=1.5; Spyro=1.5; CJ/Carl Johnson=1.5; Niko Bellić=1.5; Agent 47=1.5;
+      Scorpion=1.5; Sub-Zero=1.5; Wario=1; Toad=1; Rayman=1; Ezio=1; Nathan Drake=1; Ellie=1; Joel=1;
+      Solid Snake/Snake=1; Cloud=1; Arthur Morgan=1; Tommy Vercetti=1; Max Payne=1; Gordon Freeman=1; Ryu=1;
+      Chun-Li=1; Leon Kennedy=1; Princ Perzije/Prince of Persia=1; Red=1; Ash/Ash Ketchum=1; Ganondorf/Ganon=1;
+      Dr. Eggman/Robotnik=1; Tails=1; Ciri=0.5; Yennefer=0.5; Sephiroth=0.5; John Marston=0.5; Trevor=0.5;
+      Franklin=0.5; Sam Fisher=0.5; GLaDOS=0.5; Doom Slayer/Doomguy=0.5; Duke Nukem=0.5; Samus=0.5; Ken=0.5;
+      Raiden=0.5; Liu Kang=0.5; Dante=0.5; Jill Valentine=0.5; Freddy Fazbear=0.5; Ratchet=0.5; Altaïr=0.5;
+      Captain Price=0.5; Ghost=0.5; Dovahkiin=0.5; Bomberman=0.5; Mega Man=0.5; Talking Tom=0.5; Crewmate=0.5;
+      Sans=0.5; Cuphead=0.5; Lemming=0.5; Mewtwo=0.5; Charizard=0.5; Knuckles=0.5; Shadow=0.5; Lemmy=0.3; Tifa=0.3;
+      Aerith=0.3; Alyx=0.3; Marcus Fenix=0.3; Aloy=0.3; Fox McCloud=0.3; Johnny Cage=0.3; Heihachi=0.3;
+      Jin Kazama=0.3; Eddy Gordo=0.3; Nemesis=0.3; Pyramid Head=0.3; Clank=0.3; Jak=0.3; Banjo=0.3; Earthworm Jim=0.3;
+      Soap=0.3; Vaas=0.3; Shepard=0.3; Arthas=0.3; Thrall=0.3; Illidan=0.3; Tracer=0.3; Jinx=0.3; Teemo=0.3;
+      Frogger=0.3; Jonesy=0.3; Jigglypuff=0.3; Neo Cortex=0.3; Rabbids=0.3; Hollow Knight=0.3; Ness=0.2; Sackboy=0.2;
+      Sly Cooper=0.2; Kazooie=0.2; Jaina=0.2; D.Va=0.2; Lux=0.2; Yasuo=0.2; Ahri=0.2; Peely=0.2; Madeline=0.2;
+      Ori=0.2; Shovel Knight=0.2; Eevee=0.2; Amy Rose=0.2; Daxter=0.1; Isaac Clarke=0.1`,
+  },
+  {
+    slug: "lik-stripa",
+    group: "zaigrano",
+    title: "Lik iz stripa",
+    hint: "Iz stripa, manga ili novinskog stripa",
+    strip: [],
+    answers: `Alan Ford=8; Asterix=6.5; Obelix=5; Tintin=4; Garfield=4; Paja Patak/Donald=4; Zagor=4; Tex Willer/Tex=4;
+      Miki Maus/Mickey Mouse=3; Batman=2.5; Superman=2.5; Spider-Man=2.5; Dylan Dog=2.5; Lucky Luke=2.5; Martin Mystère=1.5;
+      Mister No=1.5; Veliki Blek/Blek=1.5; Štrumpfovi/Smurfovi=1.5; Charlie Brown=1.5; Snoopy=1.5; Popaj/Popeye=1.5;
+      Baja Patak/Scrooge McDuck=1.5; Kapetan Miki=1; Komandant Mark=1; Calvin=1; Joker=1; Daltoni=0.8; Hobbes=0.8;
+      Mafalda=0.8; Corto Maltese=0.8; Idefiks=0.8; Bob Rock=0.8; Broj 1=0.8; Hu, Dju i Lui=0.8; Šilja/Goofy=0.8; Wolverine=0.8;
+      Hulk=0.8; Iron Man=0.8; Kapetan Amerika=0.8; Thor=0.8; Wonder Woman=0.8; Deadpool=0.8; Fantom=0.8; Tarzan=0.8; Čiko=0.8;
+      Ken Parker=0.8; Diabolik=0.8; Dikan=0.8; Mirko i Slavko=0.8; Kapetan Haddock/Haddock=0.8; Naruto=0.8; Goku/Son Goku=0.8;
+      Olivija=0.4; Panoramiks=0.4; Grunf=0.4; Sir Oliver=0.4; Jeremija=0.4; Superhik=0.4; Pluton=0.4;
+      Mini Maus/Minnie=0.4; Flash=0.4; Aquaman=0.4; Magneto=0.4; Venom=0.4; Catwoman=0.4; Harley Quinn=0.4; Robin=0.4;
+      Hellboy=0.4; Conan=0.4; Mandrak=0.4; Flash Gordon=0.4; Princ Valiant=0.4; Zorro=0.4; Nathan Never=0.4; Grga=0.4;
+      Herlock Sholmes=0.4; Jolly Jumper=0.4; Rantanplan=0.4; Milou=0.4; Dilbert=0.4; Odie=0.4; Linus=0.4; Hagar=0.4;
+      Bugs Bunny=0.4; Luffy=0.4; Sailor Moon=0.4; Dennis=0.2; Green Lantern=0.2; Storm=0.2; Daredevil=0.2;
+      Punisher=0.2; Lex Luthor=0.2; Rorschach=0.2; Sandman=0.2; Judge Dredd=0.2; Spawn=0.2; Kit Willer=0.2;
+      Kit Carson=0.2; Tiger Jack=0.2; Julia=0.2; Gaston=0.2; Spirou=0.2; Marsupilami=0.2; Profesor Suncokret=0.2;
+      Dupond i Dupont=0.2; Jon Arbuckle=0.2; Lucy=0.2; Woodstock=0.2; Andy Capp=0.2; Mortadelo i Filemon=0.2;
+      Mali Nemo=0.2; Dick Tracy=0.2; Astro Boy=0.2; Doraemon=0.2; Dampyr=0.2; Satanik=0.2; Kriminal=0.2;
+      Blake i Mortimer=0.2; Torpedo=0.2; Tank Girl=0.2; Krazy Kat=0.2; Akira=0.2; Guts=0.2; Light Yagami=0.2;
+      Rip Kirby=0.1; Valentina=0.1`,
+  },
 ];
