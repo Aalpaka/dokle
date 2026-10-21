@@ -53,3 +53,9 @@ Supabasea i Google OAutha su u dokumentu projekta.
 Sve vezano uz zemlju je u skinu (`src/skins/<id>/`): ruta, postaje, poruke, tierovi, karta i kategorije.
 Seed ih upisuje u bazu (`skins.config`), a aplikacija ih čita iz baze. Novi skin (BiH, Srbija) =
 nova mapa u `src/skins/` + unos u `scripts/seed.ts`. Koji skin se servira bira `DEFAULT_SKIN`.
+
+## Produkcija (Vercel)
+
+Vercel pokreće `npm run vercel-build` (`scripts/vercel-build.sh`): u produkciji prvo migracije i seed
+(seed osvježava config skina i dodaje nove kategorije, postojeće ne dira), pa build. Preview deployi
+ne mijenjaju bazu. Funkcije rade u Frankfurtu (`vercel.json`), uz Supabase bazu.
