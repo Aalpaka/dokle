@@ -7,6 +7,7 @@ import { formatShare, stationAt } from "@/lib/scoring";
 import { maps, withVisuals } from "@/skins/maps";
 import { setMuted, sfx, useMuted } from "@/lib/sound";
 import MapStage from "./MapStage";
+import { vehicleIcons } from "./vehicleIcons";
 import { AccountLink, GoogleButton, useMe, type Me } from "./account";
 
 async function api<T>(path: string, body?: unknown): Promise<T> {
@@ -40,11 +41,14 @@ export default function Game() {
   const start = () => api<GameState>("/api/game/start", {}).then(setState, () => setError(true));
   const phase = state.phase === "reveal" && showEnd ? "end" : state.phase;
 
+  const map = maps[state.skin.id] ?? maps.hr;
+  if (phase === "intro") return <Landing state={state} cfg={cfg} me={me} onStart={start} />;
+
+  // igra stane na jedan ekran (karta + pitanje), kraj je obična stranica koja se skrola
   return (
-    <Shell state={state} me={me}>
-      <MapStage cfg={cfg} map={maps[state.skin.id] ?? maps.hr} rounds={state.rounds} perDay={state.perDay} />
+    <Shell state={state} me={me} fit={phase !== "end"}>
+      <MapStage cfg={cfg} map={map} rounds={state.rounds} perDay={state.perDay} />
       <section className="panel" aria-live="polite">
-        {phase === "intro" && <Intro cfg={cfg} perDay={state.perDay} onStart={start} />}
         {phase === "play" && state.current && (
           <Play key={state.current.position} state={state} onScored={setState} onLost={load} />
         )}
@@ -56,16 +60,16 @@ export default function Game() {
         )}
         {phase === "end" && <End state={state} me={me} />}
       </section>
-      <p className="credit">{(maps[state.skin.id] ?? maps.hr).credit} Zvukovi su sintetizirani u pregledniku.</p>
+      {phase === "end" && <p className="credit">{map.credit} Zvukovi su sintetizirani u pregledniku.</p>}
     </Shell>
   );
 }
 
-function Shell({ state, me = null, children }: { state?: GameState; me?: Me | null; children: React.ReactNode }) {
+function Shell({ state, me = null, fit = false, children }: { state?: GameState; me?: Me | null; fit?: boolean; children: React.ReactNode }) {
   const cfg = state?.skin.config;
   const [y, m, d] = (state?.date ?? "").split("-");
   return (
-    <div className="wrap">
+    <div className={"wrap" + (fit ? " fit" : "")}>
       <header className="top">
         <div className="plate">{cfg?.title ?? "Dokle?"}</div>
         {state && cfg && (
@@ -102,39 +106,48 @@ function MuteButton() {
   );
 }
 
-function Intro({ cfg, perDay, onStart }: { cfg: SkinConfig; perDay: number; onStart: () => void }) {
+/** Početni ekran: veliki naziv, kratka pravila i start; karta dolazi tek nakon starta. */
+function Landing({ state, cfg, me, onStart }: { state: GameState; cfg: SkinConfig; me: Me | null; onStart: () => void }) {
   const first = cfg.stations[0], last = cfg.stations[cfg.stations.length - 1];
+  const [y, m, d] = state.date.split("-");
   return (
-    <div className="stack">
-      <span className="eyebrow">Dnevna igra</span>
-      <h1>Koliko daleko stigneš danas?</h1>
-      <p>
-        Kreneš iz {first.genitive ?? first.name}. Dobiješ {perDay} kategorija i za svaku upišeš jedan odgovor. Što je tvoj
-        točan odgovor rjeđi među igračima, to dalje putuješ prema {last.dative ?? last.name}.
-      </p>
-      <ul className="rules">
-        <li><span className="k">{perDay}×</span><span>kategorija, svaki dan iste za sve</span></li>
-        <li><span className="k">{cfg.secondsPerCategory}s</span><span>po kategoriji, Enter šalje odgovor</span></li>
-        <li><span className="k">1×</span><span>jedan odgovor; ako ga nemamo na popisu, probaj opet</span></li>
-        <li><span className="k">⚡</span><span>brži odgovor množi kilometre, spori ih malo smanjuje</span></li>
-      </ul>
-      <div className="tiers">
-        {cfg.tiers.map((t) => (
-          <div key={t.name}><span><TierIcon emoji={t.emoji} icon={t.icon} /> {t.name}</span><span>+{t.km}</span></div>
-        ))}
-        <div><span>{cfg.miss.emoji} Promašaj</span><span>0</span></div>
-      </div>
-      <div className="tiers">
-        {cfg.speed.map((s, i) => (
-          <div key={i}>
-            <span>{s.emoji || "⏱️"} {speedRange(cfg.speed, i)}</span>
-            <span>×{String(s.multiplier).replace(".", ",")}</span>
-          </div>
-        ))}
-      </div>
-      <div className="row">
-        <button autoFocus onClick={onStart}>Kreni iz {first.genitive ?? first.name}</button>
-      </div>
+    <div className="landing">
+      <div className="landing-bg" aria-hidden="true" />
+      <header className="landing-top">
+        <span className="meta"><b>#{state.number}</b> · {+d}. {+m}. {y}.</span>
+        <div className="spacer" />
+        <MuteButton />
+        <AccountLink me={me} />
+      </header>
+      <main className="landing-main">
+        <h1 className="plate big">{cfg.title}</h1>
+        <p className="route-line">{first.name} → {last.name} · {cfg.maxKm} km</p>
+        <p className="lead">
+          {state.perDay} kategorija, za svaku jedan odgovor. Što je tvoj odgovor rjeđi među igračima, to brže putuješ prema{" "}
+          {last.dative ?? last.name}.
+        </p>
+        <ul className="vehicles" aria-label="Prijevoz prema rijetkosti odgovora">
+          {cfg.tiers.map((t) => (
+            <li key={t.name} style={{ "--vc": t.color } as React.CSSProperties}>
+              <span className={"vb" + (t.badge ?? t.icon ? " logo" : "")} dangerouslySetInnerHTML={{ __html: t.badge ?? t.icon ? `<img src="${t.badge ?? t.icon}" alt="">` : vehicleIcons[t.vehicle] }} />
+              <b>{t.name}</b>
+              <small>+{t.km} km</small>
+            </li>
+          ))}
+        </ul>
+        <p className="rarity-hint"><span>češći odgovor</span><span>rjeđi odgovor</span></p>
+        <button className="start" autoFocus onClick={onStart}>Kreni iz {first.genitive ?? first.name}</button>
+        <details className="howto">
+          <summary>Pravila</summary>
+          <ul className="rules">
+            <li><span className="k">{cfg.secondsPerCategory}s</span><span>po kategoriji, vrijeme kreće odmah, Enter šalje odgovor</span></li>
+            <li><span className="k">1×</span><span>jedan odgovor; ako ga nemamo na popisu, probaj opet dok traje vrijeme</span></li>
+            <li><span className="k">⚡</span><span>{cfg.speed.filter((s) => s.emoji).map((s) => `${s.emoji} ${speedRange(cfg.speed, cfg.speed.indexOf(s))} ×${String(s.multiplier).replace(".", ",")}`).join(" · ")}</span></li>
+            <li><span className="k">{cfg.miss.emoji}</span><span>bez odgovora: {cfg.miss.name.toLowerCase()}, 0 km</span></li>
+            <li><span className="k">📅</span><span>kategorije su svaki dan iste za sve, nova ruta u ponoć</span></li>
+          </ul>
+        </details>
+      </main>
     </div>
   );
 }
