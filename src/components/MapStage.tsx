@@ -145,14 +145,14 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
     );
     if (quiet) return;
     sfx.crash();
-    sfx.clip("/sounds/gornje-jesenje.mp3", 0.8);
+    sfx.clip("/sounds/gornje-jesenje.mp3", 0.5);
   }
 
   // kopneno vozilo koje prolazi pored znaka sudara stane tamo, odstoji i nastavi
   function driveVia(tier: Tier, from: number, to: number, onDone?: () => void, quiet = false) {
     const c = tier.vehicle === "plane" || tier.vehicle === "heli" ? undefined : crashes.find((x) => x.km > from && x.km < to);
     if (!c) return drive(tier, from, to, onDone, quiet);
-    drive(tier, from, c.km, () => setTimeout(() => drive(tier, c.km, to, onDone, quiet), quiet ? 500 : 3000), quiet);
+    drive(tier, from, c.km, () => setTimeout(() => drive(tier, c.km, to, onDone, quiet), quiet ? 500 : 1500), quiet);
   }
 
   function drive(tier: Tier, from: number, to: number, onDone?: () => void, quiet = false) {
