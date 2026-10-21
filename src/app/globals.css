@@ -9,10 +9,12 @@
   --sign: #0a6a3b;        /* zelena ploča autoceste */
   --sign-ink: #ffffff;
   --signal: #f2b200;      /* žuta signalizacija */
+  --town-sign: #f6c200;   /* ploča za ulaz u naselje */
   --stop: #e2572b;        /* radovi na cesti */
   --sea: #6aa8cc;
   --map-ink: #1d2628;     /* tekst na karti */
   --font-sign: "Overpass", "Helvetica Neue", Arial, sans-serif;
+  --font-town: "Barlow Semi Condensed", "DIN Alternate", "Arial Narrow", sans-serif;
   --font-mono: "Overpass Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   color-scheme: dark;
 }
@@ -28,12 +30,13 @@ header.top { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .iconbtn { width: 42px; height: 42px; padding: 0; border-radius: 10px; display: grid; place-items: center; background: var(--card); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
 .iconbtn svg { width: 22px; height: 22px; }
 .iconbtn[aria-pressed="true"] { color: var(--muted); }
-@media (max-width: 520px) { .meta { display: none; } .plate { font-size: 24px; } }
+/* logo: žuta ploča za ulaz u naselje (crni tanki rub uvučen od ruba, crna DIN slova) */
 .plate {
-  background: var(--sign); color: var(--sign-ink); border-radius: 10px; padding: 6px 16px 2px;
-  box-shadow: inset 0 0 0 2px var(--sign), inset 0 0 0 4px var(--sign-ink);
-  font-weight: 900; font-size: 30px; letter-spacing: -0.01em; line-height: 1.15;
+  display: inline-block; background: var(--town-sign); color: #111; border-radius: 4px; padding: 6px 26px 5px;
+  box-shadow: inset 0 0 0 4px var(--town-sign), inset 0 0 0 6px #111, 0 4px 12px -4px #0009;
+  font-family: var(--font-town); font-weight: 600; font-size: 32px; letter-spacing: 0.03em; line-height: 1.1;
 }
+@media (max-width: 520px) { .meta { display: none; } .plate { font-size: 26px; padding-inline: 16px; } }
 .meta { font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
 .meta b { color: var(--ink); }
 .grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: start; }
