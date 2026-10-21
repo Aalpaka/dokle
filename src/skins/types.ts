@@ -12,8 +12,9 @@ export type Station = {
 
 // icon = URL sličice (logo) koja u igri zamjenjuje emoji; emoji ostaje za tekst za dijeljenje
 // vehicle = animacija na karti, color = boja traga; badge = sličica na karti ako se razlikuje od icon
-export type Vehicle = "walk" | "bike" | "train" | "bus" | "car" | "plane";
-export type Tier = { minShare: number; km: number; emoji: string; name: string; icon?: string; badge?: string; vehicle: Vehicle; color: string };
+// rare = poseban tier samo za odgovore označene kao najrjeđi (helikopter), dok im udio ne naraste iznad najrjeđeg običnog tiera
+export type Vehicle = "walk" | "bike" | "train" | "bus" | "car" | "plane" | "heli";
+export type Tier = { minShare: number; km: number; emoji: string; name: string; icon?: string; badge?: string; vehicle: Vehicle; color: string; rare?: boolean };
 
 // množitelj km prema brzini odgovora; emoji/name prazni = bez oznake
 export type SpeedStep = { maxSeconds?: number; multiplier: number; emoji: string; name: string };

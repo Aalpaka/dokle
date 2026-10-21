@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { priorForTier } from "@/lib/scoring";
 
 async function api<T>(path: string, method = "GET", body?: unknown): Promise<T> {
   const res = await fetch(path, {
@@ -26,7 +27,56 @@ function useLoad<T>(path: string | null) {
   return { data, error, reload, setData };
 }
 
-type Meta = { skin: { id: string; groups: Record<string, string>; perDay: number; today: string } };
+type TierInfo = { name: string; emoji: string; minShare: number; rare?: boolean };
+type Meta = { skin: { id: string; groups: Record<string, string>; perDay: number; today: string; tiers: TierInfo[] } };
+
+// tierovi skina, sortirani od najčešćeg prema najrjeđem (kao u configu)
+const Tiers = createContext<TierInfo[]>([]);
+
+// kao tierFor u lib/scoring: označeni najrjeđi odgovor umjesto najrjeđeg običnog tiera dobiva poseban
+const tierIndex = (tiers: TierInfo[], share: number, rare = false) => {
+  const normal = tiers.filter((t) => !t.rare);
+  const t = normal.find((x) => share >= x.minShare) ?? normal[normal.length - 1];
+  const special = tiers.findIndex((x) => x.rare);
+  return rare && t === normal[normal.length - 1] && special >= 0 ? special : tiers.indexOf(t);
+};
+
+const pct = (n: number) => String(n).replace(".", ",");
+
+function TierLabel({ share, rare }: { share: number; rare?: boolean }) {
+  const tiers = useContext(Tiers);
+  const t = tiers[tierIndex(tiers, share, rare)];
+  return t ? <span className="chip">{t.emoji} {t.name}</span> : null;
+}
+
+/** Koji broj upisati za koji prijevoz (sredina raspona), za unos više odgovora odjednom. */
+function TierLegend() {
+  const tiers = useContext(Tiers);
+  return (
+    <p className="small">
+      Procjena za prijevoz: {tiers.map((t, i) => `${t.emoji} ${t.name} =${priorForTier(tiers, i)}${t.rare ? "!" : ""}`).join(" · ")}
+    </p>
+  );
+}
+
+/** Izbor prijevoza umjesto postotka; vraća procjenu iz sredine raspona tiera. Zadano je najrjeđi obični tier. */
+function useTierPrior() {
+  const tiers = useContext(Tiers);
+  const [index, setIndex] = useState(() => Math.max(tiers.findLastIndex((t) => !t.rare), 0));
+  const select = (
+    <label className="small">
+      prijevoz
+      <select className="field" value={index} onChange={(e) => setIndex(Number(e.target.value))} aria-label="Prijevoz">
+        {tiers.map((t, i) => (
+          <option key={t.name} value={i}>
+            {t.emoji} {t.name} ({t.rare ? "1 do 2 najrjeđa po kategoriji" : i === 0 ? `${pct(t.minShare)} % i više` : t.minShare ? `${pct(t.minShare)} do ${pct(tiers[i - 1].minShare)} %` : `ispod ${pct(tiers[i - 1].minShare)} %`})
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+  return { select, prior: tiers.length ? priorForTier(tiers, index) : 0.1, rare: !!tiers[index]?.rare };
+}
 
 const TABS = ["Dan", "Za pregled", "Igrači", "Sadržaj", "Raspored", "Odgovori"] as const;
 type Tab = (typeof TABS)[number];
@@ -50,6 +100,7 @@ export default function Admin() {
 
   return (
     <AdminShell>
+      <Tiers.Provider value={m.tiers ?? []}>
       <nav className="tabs" role="tablist">
         {TABS.map((t) => (
           <button key={t} role="tab" aria-selected={tab === t} className={tab === t ? "" : "ghost"} onClick={() => setTab(t)}>
@@ -65,6 +116,7 @@ export default function Admin() {
         {tab === "Raspored" && <Schedule perDay={m.perDay} />}
         {tab === "Odgovori" && <Attempts today={m.today} />}
       </section>
+      </Tiers.Provider>
     </AdminShell>
   );
 }
@@ -156,7 +208,7 @@ function Stat({ v, l }: { v: string | number; l: string }) {
 // ---------- Za pregled ----------
 
 type ReviewRow = { categoryId: number; category: string; normalized: string; n: number; examples: string[] };
-type CatDetail = { id: number; title: string; active: boolean; hint: string | null; answers: { id: number; canonical: string; priorShare: number; source: string; aliases: string[] }[] };
+type CatDetail = { id: number; title: string; active: boolean; hint: string | null; answers: { id: number; canonical: string; priorShare: number; rare: boolean; source: string; aliases: string[] }[] };
 
 function Review() {
   const { data, error, reload } = useLoad<ReviewRow[]>("/api/admin/review");
@@ -206,7 +258,7 @@ function Review() {
 function Decide({ row, onDone }: { row: ReviewRow; onDone: (msg: string) => void }) {
   const cat = useLoad<CatDetail>(`/api/admin/categories/${row.categoryId}`);
   const [canonical, setCanonical] = useState(row.examples[0] ?? row.normalized);
-  const [prior, setPrior] = useState("0.1");
+  const tier = useTierPrior();
   const [answerId, setAnswerId] = useState("");
   const [err, setErr] = useState("");
   const send = (body: object, label: string) =>
@@ -220,8 +272,8 @@ function Decide({ row, onDone }: { row: ReviewRow; onDone: (msg: string) => void
         <b>Novi točan odgovor</b>
         <div className="row">
           <input className="field" value={canonical} onChange={(e) => setCanonical(e.target.value)} aria-label="Kanonski oblik" />
-          <label className="small">procjena %<input className="field narrow" value={prior} onChange={(e) => setPrior(e.target.value)} /></label>
-          <button className="small-btn" onClick={() => send({ action: "answer", canonical, priorShare: Number(prior.replace(",", ".")) || 0.1 }, "Dodan odgovor")}>Dodaj</button>
+          {tier.select}
+          <button className="small-btn" onClick={() => send({ action: "answer", canonical, priorShare: tier.prior, rare: tier.rare }, "Dodan odgovor")}>Dodaj</button>
         </div>
       </div>
       <div className="decide">
@@ -364,6 +416,7 @@ function NewCategory({ groups, onDone }: { groups: Record<string, string>; onDon
         value={answers}
         onChange={(e) => setAnswers(e.target.value)}
       />
+      <TierLegend />
       <div className="row">
         <button
           className="small-btn"
@@ -389,7 +442,7 @@ function CategoryAnswers({ id, onChange }: { id: number; onChange: () => void })
   const { data, error, reload } = useLoad<CatDetail>(`/api/admin/categories/${id}`);
   const [canonical, setCanonical] = useState("");
   const [variants, setVariants] = useState("");
-  const [prior, setPrior] = useState("0.1");
+  const tier = useTierPrior();
   const [err, setErr] = useState("");
   if (!data) return <Err msg={error} />;
   return (
@@ -398,11 +451,11 @@ function CategoryAnswers({ id, onChange }: { id: number; onChange: () => void })
       <div className="row">
         <input className="field" placeholder="Novi odgovor" value={canonical} onChange={(e) => setCanonical(e.target.value)} />
         <input className="field" placeholder="Varijante, odvojene zarezom" value={variants} onChange={(e) => setVariants(e.target.value)} />
-        <label className="small">procjena %<input className="field narrow" value={prior} onChange={(e) => setPrior(e.target.value)} /></label>
+        {tier.select}
         <button
           className="small-btn"
           onClick={() =>
-            api(`/api/admin/categories/${id}/answers`, "POST", { canonical, variants: variants.split(","), priorShare: Number(prior.replace(",", ".")) || 0.1 }).then(
+            api(`/api/admin/categories/${id}/answers`, "POST", { canonical, variants: variants.split(","), priorShare: tier.prior, rare: tier.rare }).then(
               () => { setCanonical(""); setVariants(""); reload(); onChange(); },
               (e: Error) => setErr(e.message),
             )
@@ -413,10 +466,10 @@ function CategoryAnswers({ id, onChange }: { id: number; onChange: () => void })
       </div>
       <Err msg={err} />
       <table className="tbl">
-        <thead><tr><th>Odgovor</th><th>Varijante</th><th>Procjena %</th></tr></thead>
+        <thead><tr><th>Odgovor</th><th>Varijante</th><th>Prijevoz (procjena)</th></tr></thead>
         <tbody>
           {data.answers.map((a) => (
-            <tr key={a.id}><td>{a.canonical}{a.source === "review" && " ✎"}</td><td>{a.aliases.join(", ")}</td><td>{a.priorShare}</td></tr>
+            <tr key={a.id}><td>{a.canonical}{a.source === "review" && " ✎"}</td><td>{a.aliases.join(", ")}</td><td><TierLabel share={a.priorShare} rare={a.rare} /> <span className="small">{pct(a.priorShare)} %</span></td></tr>
           ))}
         </tbody>
       </table>

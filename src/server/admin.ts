@@ -134,7 +134,7 @@ export async function reviewQueue(skin: Skin, limit = 200) {
 }
 
 export type ReviewAction =
-  | { action: "answer"; categoryId: number; normalized: string; canonical: string; priorShare: number }
+  | { action: "answer"; categoryId: number; normalized: string; canonical: string; priorShare: number; rare?: boolean }
   | { action: "alias"; categoryId: number; normalized: string; answerId: number; alias: string }
   | { action: "reject"; categoryId: number; normalized: string };
 
@@ -143,7 +143,7 @@ export async function decide(skin: Skin, adminId: string | null, a: ReviewAction
   if (a.action === "answer") {
     const [row] = await db
       .insert(answers)
-      .values({ categoryId: a.categoryId, canonical: a.canonical.trim(), priorShare: a.priorShare, source: "review" })
+      .values({ categoryId: a.categoryId, canonical: a.canonical.trim(), priorShare: a.priorShare, rare: !!a.rare, source: "review" })
       .onConflictDoUpdate({ target: [answers.categoryId, answers.canonical], set: { source: "review" } })
       .returning();
     answerId = row.id;
@@ -234,15 +234,15 @@ export async function categoryDetail(id: number) {
   const [cat] = await db.select().from(categories).where(eq(categories.id, id));
   if (!cat) return null;
   const rows = await db
-    .select({ id: answers.id, canonical: answers.canonical, priorShare: answers.priorShare, source: answers.source, alias: answerAliases.alias })
+    .select({ id: answers.id, canonical: answers.canonical, priorShare: answers.priorShare, rare: answers.rare, source: answers.source, alias: answerAliases.alias })
     .from(answers)
     .leftJoin(answerAliases, eq(answerAliases.answerId, answers.id))
     .where(eq(answers.categoryId, id))
     .orderBy(desc(answers.priorShare), asc(answers.canonical));
-  const list: { id: number; canonical: string; priorShare: number; source: string; aliases: string[] }[] = [];
+  const list: { id: number; canonical: string; priorShare: number; rare: boolean; source: string; aliases: string[] }[] = [];
   for (const r of rows) {
     let a = list.find((x) => x.id === r.id);
-    if (!a) list.push((a = { id: r.id, canonical: r.canonical, priorShare: r.priorShare, source: r.source, aliases: [] }));
+    if (!a) list.push((a = { id: r.id, canonical: r.canonical, priorShare: r.priorShare, rare: r.rare, source: r.source, aliases: [] }));
     if (r.alias) a.aliases.push(r.alias);
   }
   return { ...cat, answers: list };
@@ -268,7 +268,7 @@ export async function createCategory(skin: Skin, input: { title: string; group: 
       })
       .returning();
     for (const a of parsed) {
-      const [ans] = await tx.insert(answers).values({ categoryId: cat.id, canonical: a.canonical, priorShare: a.share }).onConflictDoNothing().returning();
+      const [ans] = await tx.insert(answers).values({ categoryId: cat.id, canonical: a.canonical, priorShare: a.share, rare: a.rare }).onConflictDoNothing().returning();
       if (ans && a.variants.length)
         await tx.insert(answerAliases).values(a.variants.map((alias) => ({ answerId: ans.id, alias }))).onConflictDoNothing();
     }
@@ -285,11 +285,12 @@ export async function updateCategory(id: number, patch: { active?: boolean; titl
   clearCategoryCache(id);
 }
 
-export async function addAnswer(categoryId: number, input: { canonical: string; variants: string[]; priorShare: number }) {
+export async function addAnswer(categoryId: number, input: { canonical: string; variants: string[]; priorShare: number; rare?: boolean }) {
+  const rare = !!input.rare;
   const [ans] = await db
     .insert(answers)
-    .values({ categoryId, canonical: input.canonical.trim(), priorShare: input.priorShare, source: "review" })
-    .onConflictDoUpdate({ target: [answers.categoryId, answers.canonical], set: { priorShare: input.priorShare } })
+    .values({ categoryId, canonical: input.canonical.trim(), priorShare: input.priorShare, rare, source: "review" })
+    .onConflictDoUpdate({ target: [answers.categoryId, answers.canonical], set: { priorShare: input.priorShare, rare } })
     .returning();
   const variants = input.variants.map((v) => v.trim()).filter(Boolean);
   if (variants.length) await db.insert(answerAliases).values(variants.map((alias) => ({ answerId: ans.id, alias }))).onConflictDoNothing();

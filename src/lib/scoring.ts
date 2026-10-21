@@ -8,8 +8,22 @@ export function blendedShare(prior: number, count: number, total: number, k: num
   return (k * prior + 100 * count) / (k + total);
 }
 
-export function tierFor(cfg: SkinConfig, share: number): Tier {
-  return cfg.tiers.find((t) => share >= t.minShare) ?? cfg.tiers[cfg.tiers.length - 1];
+/** Tier po udjelu; odgovor označen kao najrjeđi (`rare`) umjesto najrjeđeg običnog tiera dobiva poseban tier. */
+export function tierFor(cfg: SkinConfig, share: number, rare = false): Tier {
+  const normal = cfg.tiers.filter((t) => !t.rare);
+  const t = normal.find((x) => share >= x.minShare) ?? normal[normal.length - 1];
+  return (rare && t === normal[normal.length - 1] && cfg.tiers.find((x) => x.rare)) || t;
+}
+
+/** Procjena za odgovore označene kao najrjeđi (helikopter). */
+export const RARE_PRIOR = 0.05;
+
+/** Početna procjena (%) iz sredine raspona tiera, za admin kad bira prijevoz umjesto postotka. */
+export function priorForTier(tiers: Pick<Tier, "minShare" | "rare">[], index: number): number {
+  if (tiers[index].rare) return RARE_PRIOR;
+  const min = tiers[index].minShare;
+  const max = index > 0 ? tiers[index - 1].minShare : min * 1.5;
+  return Math.round(((min + max) / 2) * 100) / 100;
 }
 
 export function speedFor(cfg: SkinConfig, elapsedMs: number): SpeedStep {
@@ -18,8 +32,8 @@ export function speedFor(cfg: SkinConfig, elapsedMs: number): SpeedStep {
 }
 
 /** Km za pogođeni odgovor: km tiera puta množitelj brzine, zaokruženo. */
-export function scoreKm(cfg: SkinConfig, share: number, elapsedMs: number): { tier: Tier; speed: SpeedStep; km: number } {
-  const tier = tierFor(cfg, share);
+export function scoreKm(cfg: SkinConfig, share: number, elapsedMs: number, rare = false): { tier: Tier; speed: SpeedStep; km: number } {
+  const tier = tierFor(cfg, share, rare);
   const speed = speedFor(cfg, elapsedMs);
   return { tier, speed, km: Math.round(tier.km * speed.multiplier) };
 }

@@ -37,7 +37,7 @@ describe("izgled tierova", () => {
     const { withVisuals } = await import("@/skins/maps");
     const old = { ...hrConfig, tiers: hrConfig.tiers.map(({ minShare, km, emoji, name }) => ({ minShare, km, emoji, name })) } as typeof hrConfig;
     const cfg = withVisuals("hr", old);
-    expect(cfg.tiers.map((t) => t.vehicle)).toEqual(["walk", "bike", "train", "bus", "car", "plane"]);
+    expect(cfg.tiers.map((t) => t.vehicle)).toEqual(["walk", "bike", "train", "bus", "car", "plane", "heli"]);
     expect(cfg.tiers[1].badge).toBe("/tiers/bajs.svg");
   });
 });

@@ -1,4 +1,5 @@
-// Puni bazu skinom i početnim kategorijama. Može se pokretati više puta: config skina osvježava, kategorije i odgovore samo dodaje.
+// Puni bazu skinom i početnim kategorijama. Može se pokretati više puta: config skina osvježava, kategorije i odgovore samo dodaje
+// (jedina izmjena postojećih je oznaka najrjeđeg odgovora za helikopter).
 import { and, eq } from "drizzle-orm";
 import { db, sql } from "../src/db";
 import { answerAliases, answers, categories, skins } from "../src/db/schema";
@@ -14,7 +15,7 @@ for (const { skin, categories: cats } of SKINS) {
     .values(skin)
     .onConflictDoUpdate({ target: skins.id, set: { name: skin.name, timezone: skin.timezone, config: skin.config } });
 
-  let added = 0;
+  let added = 0, marked = 0;
   for (const c of cats) {
     // postojeće kategorije se ne diraju (admin ih je možda uredio), dodaju se samo nove
     let [cat] = await db
@@ -26,11 +27,20 @@ for (const { skin, categories: cats } of SKINS) {
     for (const a of parseSeedAnswers(c.answers)) {
       let [ans] = await db
         .insert(answers)
-        .values({ categoryId: cat.id, canonical: a.canonical, priorShare: a.share })
+        .values({ categoryId: cat.id, canonical: a.canonical, priorShare: a.share, rare: a.rare })
         .onConflictDoNothing()
         .returning();
       if (ans) added++;
       else [ans] = await db.select().from(answers).where(and(eq(answers.categoryId, cat.id), eq(answers.canonical, a.canonical)));
+      // najrjeđi (helikopter) se označava i na postojećim odgovorima; procjena se smije samo spustiti
+      if (a.rare && !ans.rare) {
+        [ans] = await db
+          .update(answers)
+          .set({ rare: true, priorShare: Math.min(ans.priorShare, a.share) })
+          .where(eq(answers.id, ans.id))
+          .returning();
+        marked++;
+      }
       if (a.variants.length)
         await db
           .insert(answerAliases)
@@ -38,7 +48,7 @@ for (const { skin, categories: cats } of SKINS) {
           .onConflictDoNothing();
     }
   }
-  console.log(`${skin.id}: ${cats.length} kategorija, ${added} novih odgovora`);
+  console.log(`${skin.id}: ${cats.length} kategorija, ${added} novih odgovora, ${marked} označeno za helikopter`);
 }
 
 await sql.end();

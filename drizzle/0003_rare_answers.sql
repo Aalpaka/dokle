@@ -1,0 +1,1 @@
+ALTER TABLE "answers" ADD COLUMN "rare" boolean DEFAULT false NOT NULL;

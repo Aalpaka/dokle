@@ -1,7 +1,7 @@
 import { afterAll, describe, expect, it } from "vitest";
-import { inArray } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { db, sql } from "@/db";
-import { games, players } from "@/db/schema";
+import { answers, categories, games, players } from "@/db/schema";
 import { answerList, ensurePlayer, getSkin, startNext, submitAnswer } from "./game";
 
 // Integracijski test nad lokalnom bazom (npm run db:migrate && npm run db:seed).
@@ -36,5 +36,23 @@ describe.skipIf(!process.env.DATABASE_URL)("svi odgovori nakon igre", () => {
     expect(shares).toEqual([...shares].sort((a, b) => b - a));
     expect(list!.answers.every((a) => skin.config.tiers.some((t) => t.name === a.tier && t.km === a.km))).toBe(true);
     expect(await answerList(skin, id, state.perDay)).toBeNull();
+  });
+
+  it("najrjeđi odgovor vozi helikopter", async () => {
+    const skin = await getSkin("hr");
+    const id = crypto.randomUUID();
+    ids.push(id);
+    await ensurePlayer(id);
+    const state = await startNext(skin, id);
+    const [rare] = await db
+      .select({ canonical: answers.canonical })
+      .from(answers)
+      .innerJoin(categories, eq(categories.id, answers.categoryId))
+      .where(and(eq(categories.skinId, "hr"), eq(categories.title, state.current!.category.title), eq(answers.rare, true)));
+    const r = await submitAnswer(skin, id, rare.canonical, true);
+    if (r.status !== "scored") throw new Error(r.status);
+    const round = r.state.rounds[0];
+    expect(round.tier).toBe("Milanovićev helikopter");
+    expect(round.km).toBeGreaterThanOrEqual(150 * 0.9);
   });
 });

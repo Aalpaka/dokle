@@ -40,5 +40,9 @@ describe("hr kategorije", () => {
     const total = answers.reduce((s, a) => s + a.share, 0);
     expect(total).toBeGreaterThan(60);
     expect(total).toBeLessThan(130);
+    // helikopter: 1 najrjeđi odgovor, 2 u kategorijama sa 60+ odgovora
+    const rare = answers.filter((a) => a.rare);
+    expect(rare.length, "broj helikoptera").toBe(answers.length >= 60 ? 2 : 1);
+    for (const a of rare) expect(a.share, a.canonical).toBeLessThanOrEqual(0.3);
   });
 });

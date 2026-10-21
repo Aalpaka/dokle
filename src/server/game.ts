@@ -35,7 +35,7 @@ export async function getSkin(id: string): Promise<Skin> {
   return skin;
 }
 
-type CategoryData = { id: number; title: string; hint: string | null; group: string; index: MatchIndex; prior: Map<number, number> };
+type CategoryData = { id: number; title: string; hint: string | null; group: string; index: MatchIndex; prior: Map<number, number>; rare: Set<number> };
 const categoryCache = new Map<number, { at: number; data: CategoryData }>();
 
 async function getCategory(id: number): Promise<CategoryData> {
@@ -43,19 +43,21 @@ async function getCategory(id: number): Promise<CategoryData> {
   if (hit && Date.now() - hit.at < CACHE_MS) return hit.data;
   const [cat] = await db.select().from(categories).where(eq(categories.id, id));
   const rows = await db
-    .select({ id: answers.id, canonical: answers.canonical, prior: answers.priorShare, alias: answerAliases.alias })
+    .select({ id: answers.id, canonical: answers.canonical, prior: answers.priorShare, rare: answers.rare, alias: answerAliases.alias })
     .from(answers)
     .leftJoin(answerAliases, eq(answerAliases.answerId, answers.id))
     .where(eq(answers.categoryId, id))
     .orderBy(asc(answers.id));
   const byId = new Map<number, { id: number; canonical: string; variants: string[] }>();
   const prior = new Map<number, number>();
+  const rare = new Set<number>();
   for (const r of rows) {
+    if (r.rare) rare.add(r.id);
     if (!byId.has(r.id)) byId.set(r.id, { id: r.id, canonical: r.canonical, variants: [] });
     if (r.alias) byId.get(r.id)!.variants.push(r.alias);
     prior.set(r.id, r.prior);
   }
-  const data = { id, title: cat.title, hint: cat.hint, group: cat.group, index: buildIndex([...byId.values()], cat.strip), prior };
+  const data = { id, title: cat.title, hint: cat.hint, group: cat.group, index: buildIndex([...byId.values()], cat.strip), prior, rare };
   categoryCache.set(id, { at: Date.now(), data });
   return data;
 }
@@ -327,7 +329,7 @@ async function scoreRound(
     const cat = await getCategory(categoryId);
     const { count, total } = await answerCounts(puzzle.id, categoryId, answerId);
     share = blendedShare(cat.prior.get(answerId) ?? 0, count, total, cfg.priorWeight);
-    const scored = scoreKm(cfg, share, elapsedMs);
+    const scored = scoreKm(cfg, share, elapsedMs, cat.rare.has(answerId));
     km = scored.km;
     tier = scored.tier.name;
   }
@@ -373,7 +375,7 @@ async function categoryShares(skin: Skin, puzzleId: number, categoryId: number) 
   const byId = new Map(counts.map((c) => [c.answerId!, c.n]));
   const total = counts.reduce((a, c) => a + c.n, 0);
   return cat.index.answers
-    .map((a) => ({ canonical: a.canonical, share: blendedShare(cat.prior.get(a.id) ?? 0, byId.get(a.id) ?? 0, total, skin.config.priorWeight) }))
+    .map((a) => ({ canonical: a.canonical, rare: cat.rare.has(a.id), share: blendedShare(cat.prior.get(a.id) ?? 0, byId.get(a.id) ?? 0, total, skin.config.priorWeight) }))
     .sort((a, b) => b.share - a.share);
 }
 
@@ -410,7 +412,7 @@ export async function answerList(skin: Skin, playerId: string, position: number)
     title: cat.title,
     mine: mine?.canonical ?? null,
     answers: all.map((a) => {
-      const t = tierFor(skin.config, a.share);
+      const t = tierFor(skin.config, a.share, a.rare);
       return { canonical: a.canonical, share: a.share, tier: t.name, km: t.km };
     }),
   };
@@ -466,7 +468,7 @@ export async function rescoreMisses(skin: Skin, categoryId: number, normalized: 
     const share = blendedShare(cat.prior.get(answerId) ?? 0, count, total, skin.config.priorWeight);
     await db.transaction(async (tx) => {
       for (const h of list) {
-        const t = scoreKm(skin.config, share, h.answeredAt!.getTime() - h.startedAt.getTime());
+        const t = scoreKm(skin.config, share, h.answeredAt!.getTime() - h.startedAt.getTime(), cat.rare.has(answerId));
         await tx
           .update(rounds)
           .set({ share, km: t.km, tier: t.tier.name })

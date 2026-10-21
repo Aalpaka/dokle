@@ -3,13 +3,15 @@
 import { useSyncExternalStore } from "react";
 import type { Vehicle } from "@/skins/types";
 
-// Svi zvukovi su sintetizirani Web Audiom (nema datoteka ni licenci). Zvuk smije krenuti tek nakon
-// korisnikove interakcije, pa se kontekst otvara na prvi klik ili tipku.
+// Zvukovi su sintetizirani Web Audiom, osim snimki iz public/sounds (helikopter). Zvuk smije krenuti tek
+// nakon korisnikove interakcije, pa se kontekst otvara na prvi klik ili tipku.
 
 const KEY = "dokle-mute";
 let ctx: AudioContext | null = null;
 let master: GainNode | null = null;
 let noiseBuf: AudioBuffer | null = null;
+const samples: Partial<Record<string, AudioBuffer>> = {};
+const SAMPLES = { heli: "/sounds/helikopter.mp3" };
 let muted = false;
 const listeners = new Set<() => void>();
 
@@ -36,6 +38,12 @@ function init(): boolean {
   noiseBuf = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate);
   const d = noiseBuf.getChannelData(0);
   for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+  for (const [k, url] of Object.entries(SAMPLES))
+    fetch(url)
+      .then((r) => r.arrayBuffer())
+      .then((b) => ctx!.decodeAudioData(b))
+      .then((buf) => (samples[k] = buf))
+      .catch(() => {});
   return true;
 }
 
@@ -196,6 +204,24 @@ export const sfx = {
       s.start(t);
       s.stop(t + dur + 0.6);
       tone(c, "sine", 220, t, 0.3, 0.05, dur, 440);
+    } else if (v === "heli") {
+      // "Vežite se, polijećemo!" pa elisa, koja ubrzava pri uzlijetanju
+      const clip = samples.heli;
+      if (clip) {
+        const src = c.createBufferSource(), g = c.createGain();
+        src.buffer = clip;
+        g.gain.value = 1.3;
+        src.connect(g).connect(master!);
+        src.start(t);
+      }
+      let s = clip ? 0.6 : 0, gap = 0.16;
+      while (s < dur) {
+        noise(c, t + s, 0.05, "lowpass", 380, 1.4, clip && s < 1.5 ? 0.3 : 0.7);
+        noise(c, t + s, 0.02, "bandpass", 1600, 2, 0.12);
+        s += gap;
+        gap = Math.max(0.075, gap * 0.93);
+      }
+      tone(c, "sawtooth", 95, t, 0.4, 0.03, dur, 120);
     }
   },
 };

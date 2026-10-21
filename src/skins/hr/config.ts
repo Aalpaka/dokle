@@ -31,6 +31,7 @@ export const hrConfig: SkinConfig = {
     { minShare: 2, km: 70, emoji: "🚌", name: "Čazmatrans", badge: "/tiers/cazmatrans.png", vehicle: "bus", color: "#ee8a00" },
     { minShare: 0.5, km: 100, emoji: "🚗", name: "Rimac Robotaxi", badge: "/tiers/rimac.png", vehicle: "car", color: "#13804a" },
     { minShare: 0, km: 125, emoji: "✈️", name: "Croatia Airlines", badge: "/tiers/croatia-airlines.png", vehicle: "plane", color: "#7a3db8" },
+    { minShare: 0, km: 150, emoji: "🚁", name: "Milanovićev helikopter", badge: "/tiers/helikopter.png", vehicle: "heli", color: "#c8102e", rare: true },
   ],
   // brzina odgovora (vrijeme od otvaranja kategorije do prihvaćenog odgovora); sortirano po maxSeconds, zadnji bez granice
   speed: [
