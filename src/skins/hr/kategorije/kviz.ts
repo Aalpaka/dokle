@@ -368,4 +368,503 @@ export const kvizKategorije: SeedCategory[] = [
       Arheopteriks/Archaeopteryx=0.2; Kompsognatus/Compsognathus=0.1; Gallimimus=0.1;
       Terizinosaurus/Therizinosaurus=0.1; Edmontosaurus=0.1; Barionyx/Baryonyx=0.1; Deinonychus=0.1`,
   },
+  {
+    slug: "rimski-car",
+    group: "kviz",
+    title: "Rimski car",
+    hint: "Zapadni ili istočni (bizantski) car; Julije Cezar nije bio car",
+    strip: ["car"],
+    answers: `August/Oktavijan=12; Neron=12; Dioklecijan=10; Kaligula=8; Marko Aurelije=6;
+      Konstantin/Konstantin Veliki=6; Tiberije=4; Hadrijan=4; Trajan=4; Klaudije=3; Vespazijan=3; Komod=3;
+      Justinijan=3; Tit=2; Domicijan=2; Karakala=2; Septimije Sever=1.5; Nerva=1; Antonin Pio=1;
+      Elagabal/Heliogabal=1; Julijan/Julijan Apostata=1; Teodozije/Teodozije Veliki=1; Romul Augustul=1; Galba=0.5;
+      Oton=0.5; Vitelije=0.5; Lucije Ver=0.5; Geta=0.5; Aleksandar Sever=0.5; Filip Arapin=0.5; Decije=0.5;
+      Valerijan=0.5; Aurelijan=0.5; Prob=0.5; Maksimijan=0.5; Galerije=0.5; Maksencije=0.5; Valentinijan=0.5;
+      Valens=0.5; Honorije=0.5; Julije Nepot=0.5; Heraklije=0.5; Konstantin XI=0.5; Bazilije II=0.5; Teodora=0.5;
+      Pertinaks=0.3; Didije Julijan=0.3; Makrin=0.3; Maksimin Tračanin=0.3; Gordijan=0.3; Galijen=0.3;
+      Klaudije Gotski=0.3; Konstancije Klor=0.3; Licinije=0.3; Konstancije II=0.3; Gracijan=0.3; Arkadije=0.3;
+      Aleksije Komnen=0.3; Justin=0.3; Kar=0.2; Karin=0.2; Konstans=0.2; Irena=0.2; Lav III=0.2; Mihael Paleolog=0.2;
+      Manuel Komnen=0.2; Numerijan=0.1; Jovijan=0.1`,
+  },
+  {
+    slug: "bog-ostali",
+    group: "kviz",
+    title: "Bog iz nordijske, egipatske, slavenske ili druge negrčke mitologije",
+    hint: "Bilo koja mitologija osim grčke i rimske",
+    strip: ["bog", "bozica"],
+    answers: `Thor/Tor=12; Odin=10; Loki=8; Ra=6; Perun=6; Anubis=5; Oziris=4; Izida=4; Horus=4; Freya/Freja=3;
+      Veles=3; Šiva/Shiva=3; Višnu/Vishnu=2.5; Set=2; Svarog=2; Dažbog=2; Brahma=2; Ganeša/Ganesha=2; Quetzalcoatl=2;
+      Baldur=1.5; Heimdall=1.5; Mokoš=1.5; Morana=1.5; Tot/Thoth=1.5; Amon/Amon Ra=1.5; Bastet=1.5; Krišna=1.5;
+      Kali=1.5; Frigg=1; Tyr=1; Hel=1; Stribog=1; Jarilo=1; Lada=1; Svetovid=1; Triglav=1; Hator=1; Aton=1; Lakšmi=1;
+      Amaterasu=1; Marduk=1; Ištar=1; Baal=1; Njord=0.5; Freyr=0.5; Vesna=0.5; Ptah=0.5; Sekhmet=0.5; Sobek=0.5;
+      Maat=0.5; Hanuman=0.5; Indra=0.5; Rama=0.5; Huitzilopochtli=0.5; Tlaloc=0.5; Inti=0.5; Pachamama=0.5; Moloh=0.5;
+      Ahura Mazda=0.5; Mitra=0.5; Maui=0.5; Bragi=0.3; Idunn=0.3; Radegast=0.3; Živa=0.3; Hapi=0.3; Nut=0.3; Geb=0.3;
+      Durga=0.3; Agni=0.3; Susanoo=0.3; Izanagi=0.3; Raijin=0.3; Kukulkan=0.3; Viracocha=0.3; Enlil=0.3; Enki=0.3;
+      Inana=0.3; Tiamat=0.3; Dagda=0.3; Lugh=0.3; Morrigan=0.3; Cernunnos=0.3; Tengri=0.3; Kibela=0.3; Pele=0.3;
+      Anansi=0.3; Brigid=0.2; Nüwa=0.2; Žadni car=0.2; Olorun=0.2; Shango=0.2; Pangu=0.1; Ukko=0.1`,
+  },
+  {
+    slug: "grcki-junak",
+    group: "kviz",
+    title: "Junak ili čudovište iz grčke mitologije",
+    hint: "Junak, smrtnik, titan ili čudovište, ali ne bogovi s Olimpa",
+    strip: [],
+    answers: `Heraklo/Herkul=11.5; Ahilej=8; Odisej=6; Perzej=4; Minotaur=4; Tezej=3; Meduza=3; Kiklop/Polifem=3;
+      Jazon=2.5; Orfej=2.5; Hektor=2.5; Helena/Lijepa Helena=2.5; Ikar=2.5; Prometej=2.5; Hidra/Lernejska hidra=2.5;
+      Kerber/Cerber=2.5; Agamemnon=1.5; Paris=1.5; Edip=1.5; Narcis=1.5; Dedal=1.5; Atlas=1.5; Sizif=1.5; Pandora=1.5; Midas=1.5; Pegaz=1.5;
+      Sirene=1.5; Kentaur/Kentauri=1.5; Menelaj=1; Eneja=1; Penelopa=1; Sfinga=1; Tantal=0.8; Bellerofont=0.8;
+      Adonis=0.8; Patroklo=0.8; Ajant=0.8; Priam=0.8; Kasandra=0.8; Kirka=0.8; Kalipso=0.8; Medeja=0.8; Arijadna=0.8; Antigona=0.8;
+      Elektra=0.8; Andromeda=0.8; Kimera=0.8; Harpije=0.8; Scila=0.8; Haribda=0.8; Gorgone=0.8; Hiron=0.8; Nemejski lav=0.8; Kron=0.8;
+      Amazonke=0.8; Argonauti=0.8; Ganimed=0.4; Telemah=0.4; Orest=0.4; Ifigenija=0.4; Klitemnestra=0.4; Jokasta=0.4;
+      Atalanta=0.4; Psiha=0.4; Euridika=0.4; Leda=0.4; Europa=0.4; Danaja=0.4; Tifon=0.4; Satir=0.4; Piton=0.4;
+      Argus=0.4; Hipolita=0.4; Laokoont=0.4; Diomed=0.4; Nestor=0.4; Pigmalion=0.4; Arahna=0.4; Asklepije=0.4;
+      Feton=0.4; Endimion=0.2; Andromaha=0.2; Kasiopeja=0.2; Ehidna=0.2; Talos=0.2; Erimantski vepar=0.2;
+      Stimfalidske ptice=0.2; Lamija=0.2; Rea=0.2; Pentezileja=0.2; Filoktet=0.2; Kadmo=0.2; Galateja=0.2; Niobe=0.2;
+      Tetida=0.2; Ladon=0.2; Okean=0.2; Hiperion=0.2; Mirmidonci=0.2; Pelej=0.2; Graje=0.1; Empusa=0.1`,
+  },
+  {
+    slug: "hr-vladar",
+    group: "kviz",
+    title: "Hrvatski vladar, ban ili velikaš",
+    hint: "Kralj, knez, ban, velikaš ili šef hrvatske države, bilo kad",
+    strip: ["kralj", "ban", "knez"],
+    answers: `Tomislav/Kralj Tomislav=15; Josip Jelačić/Jelačić/Ban Jelačić=10; Franjo Tuđman/Tuđman=5;
+      Petar Krešimir IV/Krešimir=5; Zvonimir/Dmitar Zvonimir=5; Nikola Šubić Zrinski=5; Petar Zrinski=4;
+      Fran Krsto Frankopan=4; Trpimir=3; Branimir=3; Zoran Milanović=2; Višeslav=1.5; Borna=1.5;
+      Ljudevit Posavski=1.5; Petar Svačić/Petar Snačić=1.5; Stjepan Mesić=1.5; Kolinda Grabar-Kitarović=1.5;
+      Josip Broz Tito/Tito=1.5; Domagoj=1; Mislav=1; Koloman=1; Matija Korvin=1; Marija Terezija=1;
+      Hrvoje Vukčić Hrvatinić=1; Pavao Šubić Bribirski=1; Ivan Mažuranić=1; Khuen-Héderváry/Khuen=1;
+      Katarina Zrinska=1; Ivo Josipović=1; Ante Pavelić=1; Muncimir=0.5; Zdeslav=0.5; Mutimir=0.5;
+      Stjepan Držislav=0.5; Porin=0.5; Bela IV=0.5; Ludovik I=0.5; Žigmund=0.5; Franjo Josip=0.5; Ivan Karlović=0.5;
+      Petar Berislavić=0.5; Toma Bakač Erdedi=0.5; Krsto Frankopan=0.5; Nikola Jurišić=0.5; Nikola Iločki=0.5;
+      Mihajlo Krešimir II=0.3; Stjepan I=0.3; Krešimir III=0.3; Stjepan II=0.3; Mladen Šubić=0.3; Ferdinand=0.3;
+      Bernardin Frankopan=0.3; Juraj Drašković=0.3; Ivan Drašković=0.3; Ladislav Pejačević=0.3; Petar Keglević=0.3;
+      Ivaniš Korvin=0.3; Barbara Celjska=0.3; Vladimir Bakarić=0.3; Juraj Zrinski=0.2; Herman Celjski=0.2;
+      Svetoslav Suronja=0.1; Ivan Paližna=0.1`,
+  },
+  {
+    slug: "hr-olimpijac",
+    group: "kviz",
+    title: "Hrvatski osvajač olimpijske medalje",
+    hint: "Sportaš ili sportašica; vrijede i medalje Hrvata za Jugoslaviju",
+    strip: [],
+    answers: `Janica Kostelić/Janica=11.5; Blanka Vlašić/Vlašić=7.5; Sandra Perković/Perković=6; Ivica Kostelić=5.5;
+      Dražen Petrović/Dražen=4.5; Goran Ivanišević/Ivanišević/Goran=4.5; Ivano Balić/Balić=4; Toni Kukoč/Kukoč=3;
+      Sara Kolak/Kolak=2.5; Dino Rađa/Rađa=2.5; Martin Sinković=2.5; Valent Sinković=2.5; Matea Jelić=2.5; Mate Pavić=2;
+      Nikola Mektić/Mektić=2; Marin Čilić/Čilić=2; Donna Vekić/Vekić=2; Igor Vori/Vori=2;
+      Domagoj Duvnjak/Duvnjak=2; Ivan Čupić/Čupić=1.5; Ivan Dodig/Dodig=1.5; Mario Ančić/Ančić=1;
+      Ivan Ljubičić/Ljubičić=1; Duje Draganja/Draganja=1; Filip Hrgović/Hrgović=1; Tin Srbić/Srbić=1;
+      Barbara Matić=1; Damir Martin=1; Mirza Džomba/Džomba=1; Blaženko Lacković/Lacković=1;
+      Mate Parlov/Parlov=1; Krešimir Ćosić/Ćosić=1; Josip Pavić=0.9; Giovanni Cernogoraz/Cernogoraz=0.8;
+      Josip Glasnović/Glasnović=0.8; Tonći Stipanović/Stipanović=0.8; Šime Fantela/Fantela=0.8; Igor Marenić/Marenić=0.8;
+      Petar Metličić/Metličić=0.8; Slavko Goluža/Goluža=0.8; Venio Losert/Losert=0.8; Manuel Štrlek/Štrlek=0.8;
+      Mirko Alilović/Alilović=0.8; Zlatko Saračević/Saračević=0.8; Iztok Puc/Puc=0.6; Irfan Smajlagić/Smajlagić=0.6;
+      Patrik Ćavar/Ćavar=0.6; Valter Matošević/Matošević=0.6; Goran Perkovac/Perkovac=0.6;
+      Lucija Zaninović/Zaninović=0.6; Toni Kanaet/Kanaet=0.6; Matija Ljubek/Ljubek=0.6; Đurđa Bjedov/Bjedov=0.6;
+      Perica Bukić=0.6; Maro Joković/Joković=0.6; Sandro Sukno/Sukno=0.6; Sandra Šarić=0.4; Martina Zubčić/Zubčić=0.4;
+      Filip Ude/Ude=0.4; Snježana Pejčić/Pejčić=0.4; Dubravko Šimenc/Šimenc=0.4; Samir Barać/Barać=0.4;
+      Andro Bušlje/Bušlje=0.4; Petar Muslim/Muslim=0.4; Miho Bošković/Bošković=0.4; Nikša Dobud/Dobud=0.4;
+      Igor Hinić/Hinić=0.4; Xavier García/Xavi García/García=0.4; Marko Bijač/Bijač=0.4; Arijan Komazec/Komazec=0.4;
+      Stojko Vranković/Vranković=0.4; Žan Tabak/Tabak=0.4; Velimir Perasović/Perasović=0.4;
+      Zoran Primorac/Primorac=0.4; Ivan Buljubašić/Buljubašić=0.2; Paulo Obradović/Obradović=0.2;
+      Frano Vićan/Vićan=0.2; Damir Burić=0.2; Luka Lončar/Lončar=0.2; Anđelo Šetka/Šetka=0.2; Ivan Krapić/Krapić=0.2;
+      Luka Bukić=0.2; Antonio Petković=0.2; Danko Cvjetićanin/Cvjetićanin=0.2; Vladan Alanović/Alanović=0.2;
+      Aramis Naglić/Naglić=0.2; Alan Gregov/Gregov=0.2; Franjo Arapović/Arapović=0.2; Mihovil Nakić/Nakić=0.2;
+      Željko Jerkov/Jerkov=0.2; Nikša Kaleb/Kaleb=0.2; Davor Dominiković/Dominiković=0.2; Goran Šprem/Šprem=0.2;
+      Vedran Zrnić/Zrnić=0.2; Renato Sulić/Sulić=0.2; Denis Špoljarić/Špoljarić=0.2; Drago Vuković=0.2;
+      Marko Kopljar/Kopljar=0.2; Denis Buntić/Buntić=0.2; Jakov Gojun/Gojun=0.2; Željko Musa/Musa=0.2;
+      Zlatko Horvat=0.2; Hrvoje Horvat=0.2; Anton Josipović=0.2; Nikša Skelin=0.2; Siniša Skelin=0.2;
+      Goran Prpić/Prpić=0.2; Stjepan Bobek/Bobek=0.2; Bernard Vukas/Vukas=0.2; Andro Knego/Knego=0.2;
+      Tonči Valčić/Valčić=0.2; Bruno Gudelj/Gudelj=0.2; Božidar Jović=0.2; Nenad Kljaić/Kljaić=0.2;
+      Alvaro Načinović/Načinović=0.2; Zdravko Miljak/Miljak=0.2; Mirko Bašić/Bašić=0.2; Mirko Nišović/Nišović=0.2;
+      David Šain/Šain=0.2; Tomislav Smoljanović/Smoljanović=0.2; Igor Boraska/Boraska=0.2; Vlado Lisjak/Lisjak=0.1;
+      Franjo Mihalić/Mihalić=0.1`,
+  },
+  {
+    slug: "nobel",
+    group: "kviz",
+    title: "Dobitnik Nobelove nagrade",
+    hint: "Osoba ili organizacija, u bilo kojoj kategoriji",
+    strip: [],
+    answers: `Albert Einstein/Einstein=12.5; Marie Curie/Marija Curie/Curie/Marie Skłodowska-Curie=7;
+      Ivo Andrić/Andrić=6; Lavoslav Ružička/Leopold Ružička/Ružička=4.5; Vladimir Prelog/Prelog=3.5;
+      Majka Tereza/Majka Terezija=3.5; Martin Luther King/MLK=2.5; Nelson Mandela/Mandela=2.5; Barack Obama/Obama=2.5;
+      Malala Yousafzai/Malala=2; Ernest Hemingway/Hemingway=2; Dalaj Lama/Dalai Lama=2; Bob Dylan/Dylan=2;
+      Niels Bohr/Bohr=2; Max Planck/Planck=1.5; Richard Feynman/Feynman=1.5; Werner Heisenberg/Heisenberg=1.5;
+      Erwin Schrödinger/Schrödinger=1.5; Alexander Fleming/Fleming=1.5; Ivan Pavlov/Pavlov=1.5;
+      Gabriel García Márquez/Márquez=1.5; Albert Camus/Camus=1.5; Peter Handke/Handke=1.5;
+      Mihail Gorbačov/Gorbačov/Gorbačev=1.5; Winston Churchill/Churchill=1.5; Jean-Paul Sartre/Sartre=0.9;
+      Thomas Mann/Mann=0.9; Hermann Hesse/Hesse=0.9; Orhan Pamuk/Pamuk=0.9; Jaser Arafat/Arafat=0.9;
+      Henry Kissinger/Kissinger=0.9; Lech Wałęsa/Walesa=0.9; Aleksandr Solženjicin/Solženjicin=0.9;
+      Crveni križ/Međunarodni odbor Crvenog križa=0.9; Europska unija/EU=0.9; Ernest Rutherford/Rutherford=0.9;
+      Pierre Curie=0.9; Jimmy Carter/Carter=0.7; Al Gore/Gore=0.7; Kofi Annan/Annan=0.7; Boris Pasternak/Pasternak=0.7;
+      George Bernard Shaw/Shaw=0.7; Rudyard Kipling/Kipling=0.7; John Steinbeck/Steinbeck=0.7;
+      Wilhelm Röntgen/Röntgen=0.7; Enrico Fermi/Fermi=0.7; Guglielmo Marconi/Marconi=0.7; Peter Higgs/Higgs=0.7;
+      Ujedinjeni narodi/UN=0.7; Theodore Roosevelt=0.4; Woodrow Wilson/Wilson=0.4; Andrej Saharov/Saharov=0.4;
+      Mihail Šolohov/Šolohov=0.4; Rabindranath Tagore/Tagore=0.4; William Butler Yeats/Yeats=0.4;
+      T. S. Eliot/Eliot=0.4; Samuel Beckett/Beckett=0.4; William Faulkner/Faulkner=0.4; Toni Morrison=0.4;
+      Kazuo Ishiguro/Ishiguro=0.4; Pablo Neruda/Neruda=0.4; Mario Vargas Llosa/Vargas Llosa=0.4;
+      José Saramago/Saramago=0.4; Paul Dirac/Dirac=0.4; Linus Pauling/Pauling=0.4; Robert Koch/Koch=0.4;
+      James Watson/Watson=0.4; Francis Crick/Crick=0.4; John Nash/Nash=0.4; Albert Schweitzer/Schweitzer=0.4;
+      Willy Brandt/Brandt=0.4; Jicak Rabin/Rabin=0.4; Desmond Tutu/Tutu=0.4; Aung San Suu Kyi=0.4;
+      Henri Dunant/Dunant=0.4; UNICEF=0.4; Liječnici bez granica=0.4; Wolfgang Pauli/Pauli=0.3; Max Born=0.3;
+      Louis de Broglie/de Broglie=0.3; James Chadwick/Chadwick=0.3; Roger Penrose/Penrose=0.3; Fritz Haber/Haber=0.3;
+      Otto Hahn=0.3; Irène Joliot-Curie=0.3; Santiago Ramón y Cajal/Cajal=0.3; Camillo Golgi/Golgi=0.3;
+      Frederick Banting/Banting=0.3; Katalin Karikó/Karikó=0.3; Milton Friedman/Friedman=0.3;
+      Paul Krugman/Krugman=0.3; Friedrich Hayek/Hayek=0.3; Daniel Kahneman/Kahneman=0.3; Joseph Stiglitz/Stiglitz=0.3;
+      Ivan Bunjin/Bunjin=0.3; Olga Tokarczuk/Tokarczuk=0.3; Wisława Szymborska/Szymborska=0.3;
+      Czesław Miłosz/Miłosz=0.3; Henryk Sienkiewicz/Sienkiewicz=0.3; Gabriela Mistral=0.3; Octavio Paz=0.3;
+      Dario Fo=0.3; Luigi Pirandello/Pirandello=0.3; Knut Hamsun/Hamsun=0.3; Jon Fosse/Fosse=0.3;
+      Doris Lessing/Lessing=0.3; Harold Pinter/Pinter=0.3; Alice Munro/Munro=0.3; Han Kang=0.3;
+      Annie Ernaux/Ernaux=0.3; Günter Grass=0.3; Heinrich Böll/Böll=0.3; Anwar Sadat/Sadat=0.3; Menachem Begin=0.3;
+      Šimon Peres/Peres=0.3; Frederik de Klerk/de Klerk=0.3; Elie Wiesel/Wiesel=0.3; Martti Ahtisaari/Ahtisaari=0.3;
+      Bertha von Suttner/Suttner=0.3; Fridtjof Nansen/Nansen=0.3; Amnesty International=0.3; Imre Kertész/Kertész=0.2;
+      Elfriede Jelinek/Jelinek=0.2; Herta Müller=0.2; Svetlana Aleksijevič/Aleksijevič=0.2; Pieter Zeeman/Zeeman=0.2;
+      Andre Geim/Geim=0.2; Murray Gell-Mann/Gell-Mann=0.2; Steven Weinberg=0.2; Abdus Salam=0.2;
+      Albert Michelson/Michelson=0.2; Kip Thorne=0.2; Frederick Sanger/Sanger=0.2; Dorothy Hodgkin=0.2;
+      Jennifer Doudna/Doudna=0.2; Emmanuelle Charpentier/Charpentier=0.2; Svante Arrhenius/Arrhenius=0.2;
+      Karl Landsteiner/Landsteiner=0.2; Tu Youyou=0.2; Ferid Murad=0.2; Amartya Sen=0.2; Paul Samuelson/Samuelson=0.2;
+      Muhammad Yunus/Yunus=0.2; Wangari Maathai/Maathai=0.2; Abiy Ahmed=0.2; Maria Ressa=0.2;
+      Dmitrij Muratov/Muratov=0.2; Narges Mohammadi=0.2; Liu Xiaobo=0.2; Lester Pearson=0.2;
+      Svjetski program za hranu=0.2; Selma Lagerlöf/Lagerlöf=0.1; Hendrik Lorentz/Lorentz=0.1`,
+  },
+  {
+    slug: "oscar-film",
+    group: "kviz",
+    title: "Film koji je osvojio Oscara za najbolji film",
+    hint: "Bilo koja godina, od Krila (1929.) do Anore (2025.); hrvatski ili izvorni naslov",
+    strip: ["film"],
+    answers: `Titanic=10.5; Kum/The Godfather=9; Forrest Gump=7; Gladijator/Gladiator=6;
+      Gospodar prstenova: Povratak kralja/Povratak kralja/Gospodar prstenova/The Return of the King/Lord of the Rings=5.5;
+      Oppenheimer=4.5; Schindlerova lista/Schindler's List=3.5;
+      Let iznad kukavičjeg gnijezda/One Flew Over the Cuckoo's Nest=3.5; Parazit/Parasite=3; Casablanca/Kazablanka=2.5;
+      Kad jaganjci utihnu/The Silence of the Lambs=2.5; Prohujalo s vihorom/Gone with the Wind=2.5;
+      Hrabro srce/Braveheart=2.5; Ben-Hur=2.5; Rocky=2; Kum 2/Kum II/The Godfather Part II=2; Amadeus=2;
+      Kišni čovjek/Rain Man=2; Ples s vukovima/Dances with Wolves=2; Vrtlog života/American Beauty=1.5;
+      Pokojni/The Departed=1.5; Milijunaš s ulice/Slumdog Millionaire=1.5; Kraljev govor/The King's Speech=1.5;
+      Moje pjesme, moji snovi/The Sound of Music=1.5; Lawrence od Arabije/Lawrence of Arabia=1.5;
+      Nema zemlje za starce/No Country for Old Men=1.5; Engleski pacijent/The English Patient=0.9;
+      Genijalni um/A Beautiful Mind=0.9; Chicago=0.9; Djevojka od milijun dolara/Million Dollar Baby=0.9; Argo=0.9;
+      12 godina ropstva/12 Years a Slave=0.9; Birdman=0.9; Oblik vode/The Shape of Water=0.9; Zelena knjiga/Green Book=0.9;
+      Sve u isto vrijeme/Everything Everywhere All at Once=0.9; Vod smrti/Platoon=0.9; Lovac na jelene/The Deer Hunter=0.9;
+      Most na rijeci Kwai/The Bridge on the River Kwai=0.9; West Side Story=0.9; My Fair Lady=0.9; Gandhi=0.9;
+      Ponoćni kauboj/Midnight Cowboy=0.7; Moonlight=0.7; Anora=0.7; Zemlja nomada/Nomadland=0.7;
+      Umjetnik/The Artist=0.7; Katanac za bol/The Hurt Locker=0.7; Spotlight=0.7;
+      Zaljubljeni Shakespeare/Shakespeare in Love=0.7; Nepomirljivi/Unforgiven=0.7;
+      Posljednji kineski car/The Last Emperor=0.7; Žalac/The Sting=0.7; Francuska veza/The French Connection=0.7;
+      Na zapadu ništa novo/All Quiet on the Western Front=0.7; Kramer protiv Kramera/Kramer vs. Kramer=0.7;
+      Annie Hall=0.4; Moja Afrika/Out of Africa=0.4; CODA=0.4; Fatalna nesreća/Crash=0.4;
+      Vozeći gospođicu Daisy/Driving Miss Daisy=0.4; Vatrene kočije/Chariots of Fire=0.4;
+      Riječi nježnosti/Terms of Endearment=0.3; Obični ljudi/Ordinary People=0.3;
+      U vrelini noći/In the Heat of the Night=0.3; Patton=0.3; Oliver=0.3; Apartman/The Apartment=0.3; Gigi=0.3;
+      Put oko svijeta u 80 dana/Around the World in 80 Days=0.3; Odavde do vječnosti/From Here to Eternity=0.3;
+      Na dokovima New Yorka/On the Waterfront=0.3; Sve o Evi/All About Eve=0.3;
+      Amerikanac u Parizu/An American in Paris=0.3; Hamlet=0.3; Rebecca=0.3;
+      Pobuna na brodu Bounty/Mutiny on the Bounty=0.3; Svi kraljevi ljudi/All the King's Men=0.2; Marty=0.2;
+      Tom Jones=0.2; Čovjek za sva vremena/A Man for All Seasons=0.2;
+      Najbolje godine naših života/The Best Years of Our Lives=0.2; Izgubljeni vikend/The Lost Weekend=0.2;
+      Kako je bila zelena moja dolina/How Green Was My Valley=0.2; Gospođa Miniver/Mrs. Miniver=0.2;
+      Najveća predstava na svijetu/The Greatest Show on Earth=0.2; Dogodilo se jedne noći/It Happened One Night=0.2;
+      Krila/Wings=0.2; Grand Hotel=0.2; Veliki Ziegfeld/The Great Ziegfeld=0.1;
+      Život Emila Zole/The Life of Emile Zola=0.1; You Can't Take It with You=0.1; Going My Way=0.1;
+      Gentleman's Agreement=0.1; Cimarron=0.1; Cavalcade=0.1; The Broadway Melody=0.1`,
+  },
+  {
+    slug: "oscar-gluma",
+    group: "kviz",
+    title: "Dobitnik ili dobitnica Oscara za glumu",
+    hint: "Glavna ili sporedna uloga, do 2025.",
+    strip: [],
+    answers: `Leonardo DiCaprio/DiCaprio=7; Tom Hanks/Hanks=4; Meryl Streep/Streep=4; Jack Nicholson/Nicholson=3;
+      Anthony Hopkins/Hopkins=3; Marlon Brando/Brando=3; Al Pacino/Pacino=2.5; Robert De Niro/De Niro=2.5;
+      Denzel Washington/Denzel=2.5; Joaquin Phoenix/Phoenix=1.5; Russell Crowe/Crowe=1.5; Julia Roberts=1.5;
+      Nicole Kidman/Kidman=1.5; Daniel Day-Lewis/Day-Lewis=1.5; Brad Pitt/Pitt=1.5; Katharine Hepburn=1.5;
+      Audrey Hepburn=1.5; Natalie Portman/Portman=1.5; Will Smith=1.5; Heath Ledger/Ledger=1.5;
+      Morgan Freeman/Freeman=1; Charlize Theron/Theron=1; Kate Winslet/Winslet=1; Halle Berry=1; Jennifer Lawrence=1;
+      Emma Stone=1; Cillian Murphy/Murphy=1; Matthew McConaughey/McConaughey=1; Dustin Hoffman=1;
+      Sandra Bullock/Bullock=1; Robin Williams=1; Angelina Jolie/Jolie=1; Anne Hathaway/Hathaway=1;
+      Cate Blanchett/Blanchett=0.9; Kevin Spacey/Spacey=0.9; Sean Penn=0.9; Nicolas Cage/Cage=0.9;
+      Christoph Waltz/Waltz=0.9; Rami Malek/Malek=0.9; George Clooney/Clooney=0.9; Michael Caine/Caine=0.9;
+      Gary Oldman/Oldman=0.9; Javier Bardem/Bardem=0.9; Penélope Cruz=0.9; Elizabeth Taylor=0.9;
+      Ingrid Bergman/Bergman=0.9; Sophia Loren/Loren=0.9; Grace Kelly=0.6; Vivien Leigh=0.6; Clark Gable/Gable=0.6;
+      Humphrey Bogart/Bogart=0.6; James Stewart=0.6; Gregory Peck=0.6; John Wayne=0.6; Paul Newman/Newman=0.6;
+      Sidney Poitier/Poitier=0.6; Charlton Heston/Heston=0.6; Robert Downey Jr./Robert Downey=0.6; Brendan Fraser/Fraser=0.6;
+      Adrien Brody/Brody=0.6; Jamie Foxx/Foxx=0.6; Colin Firth/Firth=0.6; Eddie Redmayne/Redmayne=0.6;
+      Roberto Benigni/Benigni=0.6; Julie Andrews=0.6; Jodie Foster=0.6; Frances McDormand/McDormand=0.6; Hilary Swank/Swank=0.6;
+      Gwyneth Paltrow/Paltrow=0.6; Reese Witherspoon/Witherspoon=0.6; Helen Mirren/Mirren=0.6; Renée Zellweger/Zellweger=0.6;
+      Michelle Yeoh/Yeoh=0.6; Marion Cotillard/Cotillard=0.6; Cher=0.6; Whoopi Goldberg/Goldberg=0.6; Christian Bale/Bale=0.6;
+      Jamie Lee Curtis=0.5; Jared Leto/Leto=0.5; Philip Seymour Hoffman=0.5; Ben Kingsley/Kingsley=0.5;
+      Gene Hackman/Hackman=0.5; Tommy Lee Jones=0.5; Joe Pesci/Pesci=0.5; Sean Connery/Connery=0.5; Anthony Quinn=0.5;
+      Forest Whitaker/Whitaker=0.3; Jeremy Irons/Irons=0.3; Geoffrey Rush=0.3; Jack Lemmon/Lemmon=0.3;
+      Henry Fonda=0.3; Jane Fonda=0.3; Bette Davis=0.3; Diane Keaton/Keaton=0.3; Liza Minnelli/Minnelli=0.3;
+      Barbra Streisand/Streisand=0.3; Sally Field=0.3; Faye Dunaway/Dunaway=0.3; Susan Sarandon/Sarandon=0.3;
+      Kathy Bates=0.3; Emma Thompson=0.3; Holly Hunter=0.3; Jessica Lange/Lange=0.3; Julianne Moore=0.3;
+      Brie Larson/Larson=0.3; Olivia Colman/Colman=0.3; Catherine Zeta-Jones/Zeta-Jones=0.3;
+      Kim Basinger/Basinger=0.3; Juliette Binoche/Binoche=0.3; Judi Dench/Dench=0.3; Viola Davis=0.3;
+      Frank Sinatra/Sinatra=0.3; Maggie Smith=0.3; Laurence Olivier/Olivier=0.3; Gary Cooper=0.3; Michael Douglas=0.3;
+      Jessica Chastain/Chastain=0.2; Mikey Madison=0.2; Rachel Weisz/Weisz=0.2; Jennifer Connelly/Connelly=0.2;
+      Jennifer Hudson=0.2; Tilda Swinton/Swinton=0.2; Lupita Nyong'o/Nyong'o=0.2; Octavia Spencer=0.2;
+      Alicia Vikander/Vikander=0.2; Laura Dern/Dern=0.2; Regina King=0.2; Zoe Saldaña/Saldaña=0.2; Mahershala Ali=0.2;
+      J. K. Simmons/Simmons=0.2; Sam Rockwell/Rockwell=0.2; Mark Rylance/Rylance=0.2; Kieran Culkin=0.2;
+      Ke Huy Quan=0.2; Daniel Kaluuya/Kaluuya=0.2; Casey Affleck=0.2; Jean Dujardin/Dujardin=0.2;
+      Cuba Gooding Jr./Cuba Gooding=0.2; Kevin Kline/Kline=0.2; Martin Landau/Landau=0.2;
+      Benicio del Toro/Del Toro=0.2; Tim Robbins/Robbins=0.2; Alan Arkin/Arkin=0.2; Christopher Plummer/Plummer=0.2;
+      Peter Ustinov/Ustinov=0.2; Walter Matthau/Matthau=0.2; Rita Moreno=0.2; Goldie Hawn/Hawn=0.2;
+      Vanessa Redgrave/Redgrave=0.2; Anjelica Huston/Huston=0.2; Hattie McDaniel/McDaniel=0.2; Spencer Tracy=0.2;
+      Yul Brynner/Brynner=0.2; Alec Guinness/Guinness=0.2; William Holden=0.2; Burt Lancaster/Lancaster=0.2;
+      Lee Marvin=0.2; George C. Scott=0.2; Richard Dreyfuss/Dreyfuss=0.2; Jon Voight/Voight=0.2;
+      Robert Duvall/Duvall=0.2; Shirley MacLaine/MacLaine=0.2; Troy Kotsur=0.1; Jim Broadbent/Broadbent=0.1;
+      Chris Cooper=0.1; Rod Steiger/Steiger=0.1; F. Murray Abraham=0.1; William Hurt=0.1;
+      Ernest Borgnine/Borgnine=0.1; Maximilian Schell=0.1; Rex Harrison=0.1; Ray Milland=0.1; Jessica Tandy/Tandy=0.1;
+      Marlee Matlin/Matlin=0.1; Louise Fletcher=0.1; Ellen Burstyn/Burstyn=0.1; Glenda Jackson=0.1;
+      Julie Christie=0.1; Anne Bancroft/Bancroft=0.1; Joan Fontaine=0.1; Olivia de Havilland/de Havilland=0.1;
+      Joan Crawford=0.1; Ginger Rogers=0.1; Jason Robards/Robards=0.1; Mira Sorvino/Sorvino=0.1;
+      Dianne Wiest/Wiest=0.1; Patricia Arquette/Arquette=0.1; Allison Janney/Janney=0.1; Ariana DeBose/DeBose=0.1;
+      Da'Vine Joy Randolph=0.1; Walter Brennan=0.1; Greer Garson=0.1; Anna Magnani/Magnani=0.1;
+      Simone Signoret/Signoret=0.1; Louis Gossett Jr.=0.1; Haing S. Ngor=0.1; Marcia Gay Harden=0.1; Melissa Leo=0.1;
+      Youn Yuh-jung=0.1; Emil Jannings/Jannings=0.1; Luise Rainer=0.1`,
+  },
+  {
+    slug: "turcizam",
+    group: "kviz",
+    title: "Riječ turskog podrijetla",
+    hint: "Turcizam u hrvatskom, i ako je u turski došao iz arapskog ili perzijskog",
+    strip: [],
+    answers: `Čarapa=4; Jastuk=3.5; Šećer=3.5; Kava/Kahva=3.5; Ćevap/Ćevapčići=2.5; Burek=2.5; Boja=2.5; Džep=2.5; Sat=2;
+      Kutija=2; Papuča=2; Čekić=1.5; Tava=1.5; Majmun=1.5; Budala=1.5; Komšija=1.5; Sarma=1.5; Baklava=1.5; Rakija=1.5;
+      Jogurt=1.5; Duhan=1.5; Čizma=1.5; Dugme=1.5; Jorgan=1.5; Badava=1.5; Taman=1.5; Baš=1.5; Inat=1.5; Merak=1.5; Dućan=1.5; Kajsija=1;
+      Badem=1; Patlidžan=1; Kukuruz=1; Avlija=1; Čardak=1; Kapija=1; Sokak=1; Čaršija=1; Džamija=1;
+      Čelik=1; Sevdah=1; Kafana/Kavana=1; Top=0.7; Kat=0.7; Pamuk=0.7; Ćilim=0.7; Ćorav=0.7; Ćošak=0.7; Ćup=0.7; Ćuprija=0.7;
+      Ćef/Ćeif=0.7; Đubre=0.7; Halva/Alva=0.7; Lokum/Ratluk=0.7; Kajmak=0.7; Pekmez=0.7; Šerbet=0.7; Čorba=0.7; Pirinač=0.7; Biber=0.7;
+      Džezva=0.7; Tepsija=0.7; Sanduk=0.7; Ćebe=0.7; Peškir=0.7; Marama=0.7; Hajde=0.7; Pilav=0.3; Sirće=0.3; Zejtin=0.3;
+      Fildžan/Filjan=0.3; Ibrik=0.3; Kazan=0.3; Dolap=0.3; Raf=0.3; Minder=0.3; Jelek=0.3; Dimije=0.3; Šalvare=0.3;
+      Fes=0.3; Čakšire=0.3; Kadifa=0.3; Lula=0.3; Đerdan=0.3; Đul=0.3; Karanfil=0.3; Bubreg=0.3; Ćelav=0.3; Belaj=0.3;
+      Rahat=0.3; Kismet=0.3; Halal=0.3; Aferim=0.3; Jok=0.3; Mušterija=0.3; Pare=0.3; Bakšiš=0.3; Aga=0.3; Beg=0.3;
+      Paša=0.3; Sultan=0.3; Vezir=0.3; Harem=0.3; Barut=0.3; Tavan=0.3; Kula=0.3; Bunar=0.3; Kaldrma=0.3; Česma=0.3;
+      Mahala=0.3; Zanat=0.3; Alat=0.3; Bakar=0.3; Čobanin/Čoban=0.3; Torba=0.3; Čoha=0.2; Čibuk=0.2; Zumbul=0.2;
+      Lala=0.2; Šimšir=0.2; Đogat=0.2; Dorat=0.2; Hajvan=0.2; Bekrija=0.2; Dembel=0.2; Haber=0.2; Adet=0.2;
+      Kadija=0.2; Spahija=0.2; Janjičar=0.2; Hodža=0.2; Derviš=0.2; Hadžija=0.2; Harač=0.2; Handžar=0.2; Jatagan=0.2;
+      Buzdovan=0.2; Barjak/Bajrak=0.2; Čador=0.2; Odaja=0.2; Sofra=0.2; Hamam=0.2; Burgija=0.2; Turpija=0.2;
+      Merdevine=0.2; Kantar=0.2; Kalaj=0.2; Kujundžija=0.2; Terzija=0.2; Berberin=0.2; Kiosk=0.2; Divan=0.2;
+      Đuveč=0.2; Japrak=0.2; Dolma=0.2; Sudžuk=0.2; Tufahija=0.2; Hurmašica=0.2; Tulumba=0.2; Bamija=0.2; Dud=0.2;
+      Bostan=0.2; Pendžer=0.2; Kuluk=0.1; Aršin=0.1`,
+  },
+  {
+    slug: "germanizam",
+    group: "kviz",
+    title: "Riječ njemačkog podrijetla",
+    hint: "Germanizam u hrvatskom, i u svakodnevnom govoru",
+    strip: [],
+    answers: `Šnicla/Šnicl=3.5; Cimer=3; Šaraf/Šraf=2.5; Šarafciger/Šrafciger=2.5; Fajn=2.5; Ziher=2.5; Krumpir=2; Šlag=2;
+      Štrudla/Štrudl=2; Flaša=2; Pegla=2; Šporet/Šparet=2; Viršla/Hrenovka=2; Fleka=2; Vic=2; Farba=2; Frajer=2;
+      Gemišt=2; Špricer=1.5; Šunka=1.5; Špek=1.5; Puter=1.5; Šminka=1.5; Frizer=1.5; Ruksak=1.5; Kofer/Kufer=1.5;
+      Fertik=1; Ganc=1; Feler=1; Plac=1; Cajt=1; Ura=1; Štikla=1; Šlic=1; Šank=1; Kelner=1; Frajla=1; Majstor=1;
+      Cigla=1; Auspuh=1; Hauba=1; Šajba=1; Šoferšajbna=1; Rikverc=1; Gepek=0.9; Kuplung=0.9; Felga=0.9; Ler=0.9;
+      Štos=0.9; Štreber=0.9; Luft=0.9; Špajza=0.9; Firanga=0.9; Šlafrok=0.9; Šlapa/Šlape=0.9; Krafna=0.9;
+      Knedla/Knedle=0.9; Kifla=0.9; Paradajz=0.9; Krigla=0.9; Birtija=0.9; Cug=0.9; Štrom=0.9; Šteker=0.9;
+      Bormašina=0.9; Vešmašina=0.9; Fen=0.9; Fruštuk=0.6; Gablec=0.6; Šnaps=0.6; Ajnfoh=0.6; Švindl=0.6; Šverc=0.6; Tapete=0.6;
+      Malter=0.6; Ringla=0.6; Rerna=0.6; Lajsna=0.6; Šlauf=0.6; Ofinger=0.6; Fajercajg=0.6; Cvikeri=0.6; Šnajder=0.6; Šuster=0.6;
+      Tišljar=0.6; Vaga=0.6; Kremšnita=0.6; Šlosar=0.3; Bauštela=0.3; Drot=0.3; Štanga=0.3; Šina=0.3; Štof=0.3; Šaht=0.3;
+      Štih=0.3; Štimung=0.3; Kunšt=0.3; Dizna=0.3; Špigl=0.3; Šlager=0.3; Pleh=0.3; Puslica=0.3; Kugluf=0.3;
+      Šnenokle=0.3; Nokle/Njoki=0.3; Šufnudle=0.3; Fašnik=0.3; Vekerica=0.3; Cifra=0.3; Grof=0.3; Kelj=0.3; Griz=0.3;
+      Cušpajz=0.3; Šnita=0.3; Rajsferšlus=0.3; Fušer=0.3; Šlampav=0.3; Štand=0.3; Ceh=0.3; Herceg=0.2; Pinkl=0.2;
+      Ceker/Ceger=0.2; Šmek=0.2; Kšeft=0.2; Šlep=0.2; Štimati=0.2; Ajngemahtes=0.2; Lojtra=0.2; Štenge=0.2;
+      Špalir=0.2; Šoder=0.2; Cvancika=0.1; Štemajzl=0.1`,
+  },
+  {
+    slug: "kost",
+    group: "kviz",
+    title: "Kost u ljudskom tijelu",
+    hint: "Hrvatski ili latinski naziv; vrijede i skupine kostiju (npr. kosti zapešća)",
+    strip: ["kost"],
+    answers: `Bedrena kost/Femur/Bedrenica=10; Lubanja/Cranium=8; Rebro/Costa=7; Kralježak/Kralježnica/Vertebra=6;
+      Ključna kost/Klavikula/Clavicula=6; Zdjelična kost/Zdjelica/Kost kuka/Os coxae/Pelvis=5;
+      Goljenična kost/Goljenica/Tibia=5; Lopatica/Scapula=4; Čašica/Patella/Iver=4; Prsna kost/Sternum=4;
+      Nadlaktična kost/Humerus=4; Donja čeljust/Mandibula=4; Palčana kost/Radius=3; Lakatna kost/Ulna=3;
+      Lisna kost/Fibula=3; Trtica/Kokciks/Coccyx=3; Stremen/Stapes=3; Čekić/Malleus=2; Nakovanj/Incus=2;
+      Petna kost/Calcaneus=2; Gornja čeljust/Maxilla=2; Križna kost/Sacrum=2; Čeona kost/Os frontale=2;
+      Članak prsta/Falanga/Phalanx=2; Tjemena kost/Os parietale=1.5; Zatiljna kost/Os occipitale=1.5;
+      Sljepoočna kost/Os temporale=1.5; Nosna kost/Os nasale=1.5; Jagodična kost/Os zygomaticum=1.5; Atlas=1.5;
+      Gležanjska kost/Skočna kost/Talus=1.5; Aksis/Axis=1; Kosti zapešća/Karpalne kosti=1;
+      Kosti pešća/Metakarpalne kosti=1; Kosti nožja/Tarzalne kosti=0.5; Kosti donožja/Metatarzalne kosti=1;
+      Bočna kost/Ilium=1; Sjedna kost/Ischium=1; Preponska kost/Stidna kost/Pubis=1; Podjezična kost/Os hyoideum=1;
+      Vratni kralježak=0.5; Prsni kralježak=0.3; Slabinski kralježak=0.3; Klinasta kost/Os sphenoidale=0.5;
+      Rešetnica/Os ethmoidale=0.5; Suzna kost/Os lacrimale=0.5; Nepčana kost/Os palatinum=0.5;
+      Čunasta kost/Os scaphoideum/Os naviculare=0.5; Polumjesečasta kost/Os lunatum=0.3;
+      Trokutasta kost/Os triquetrum=0.3; Graškasta kost/Os pisiforme=0.3; Trapezna kost/Os trapezium=0.3;
+      Kockasta kost/Os cuboideum=0.3; Klinaste kosti stopala/Ossa cuneiformia=0.3; Donja nosna školjka=0.3;
+      Trapezoidna kost/Os trapezoideum=0.2; Glavičasta kost/Os capitatum=0.2; Kukasta kost/Os hamatum=0.2;
+      Sezamska kost=0.2; Raonik/Vomer=0.1; Šavna kost/Wormova kost=0.1`,
+  },
+  {
+    slug: "mjerna-jedinica",
+    group: "kviz",
+    title: "Mjerna jedinica",
+    hint: "Za bilo koju veličinu: duljinu, masu, vrijeme, struju, energiju, podatke...",
+    strip: [],
+    answers: `Metar=8.5; Kilogram/kg=6.5; Sekunda=5; Litra=5; Kilometar/km=4; Gram=3.5; Centimetar/cm=3.5; Milimetar/mm=2.5;
+      Sat=2.5; Minuta=2.5; Tona=2.5; Volt=2.5; Amper=2.5; Vat/Watt=2.5; Kelvin=2.5; Celzijev stupanj/Celzij/Stupanj Celzija=2.5;
+      Džul/Joule=2; Njutn/Newton=2; Om/Ohm=1.5; Herc/Hertz/Hz=1.5; Paskal/Pascal=1.5; Kalorija=1.5; Inč/Palac=1.5; Milja=1.5;
+      Kilovat-sat/kWh=1; Kilovat/kW=1; Stopa=1; Funta=1; Mol=1; Kandela=1; Hektar=1;
+      Svjetlosna godina=1; Kvadratni metar/Kvadrat=1; Jard=0.8; Unca=0.8; Galon=0.8; Bar=0.8; Atmosfera=0.8; Lumen=0.8;
+      Kulon/Coulomb=0.8; Farad=0.8; Tesla=0.8; Decilitar/dl=0.8; Mililitar/ml=0.8; Decimetar=0.8; Čvor=0.8; Konjska snaga/KS=0.8;
+      Bajt=0.8; Decibel=0.8; Karat=0.8; Fahrenheitov stupanj/Fahrenheit=0.8; Kubni metar/Kubik=0.8; Luks/Lux=0.4;
+      Bekerel/Becquerel=0.4; Sivert/Sievert=0.4; Henri/Henry=0.4; Veber/Weber=0.4; Simens/Siemens=0.4; Radijan=0.4;
+      Ar=0.4; Jutro=0.4; Hektolitar=0.4; Mikrometar=0.4; Nanometar=0.4; Parsek=0.4; Astronomska jedinica=0.4;
+      Nautička milja=0.4; Bit=0.4; Kilobajt=0.4; Megabajt=0.4; Gigabajt=0.4; Dioptrija=0.4; Kutni stupanj=0.4;
+      Dan=0.4; Tjedan=0.4; Godina=0.4; Milisekunda=0.4; Kilokalorija=0.4; Pinta=0.4; Barel=0.4; Mah/Mach=0.4;
+      Promil=0.4; Postotak=0.4; Grej/Gray=0.2; Steradijan=0.2; Angstrem/Ångström=0.2; Mjesec=0.2; Stoljeće=0.2;
+      Nanosekunda=0.2; Torr=0.2; Milibar=0.2; PSI=0.2; Elektronvolt=0.2; Lakat=0.2; Pedalj=0.2; Gaus/Gauss=0.2;
+      Rendgen/Röntgen=0.2; Kiri/Curie=0.2; Kilometar na sat/kmh=0.2; Terabajt=0.2; Dina=0.1; Bušel=0.1; Erg=0.1;
+      Hvat=0.1`,
+  },
+  {
+    slug: "filozof",
+    group: "kviz",
+    title: "Filozof ili filozofkinja",
+    hint: "Bilo koje doba i zemlja, i hrvatski filozofi",
+    strip: [],
+    answers: `Sokrat=9.5; Platon=8; Aristotel=8; Friedrich Nietzsche/Nietzsche/Niče=5; Immanuel Kant/Kant=4;
+      René Descartes/Descartes/Dekart=3; Konfucije=2.5; Karl Marx/Marx=2.5; Hegel=2.5; Jean-Paul Sartre/Sartre=2;
+      Diogen=2; Pitagora=1.5; Seneka=1.5; Marko Aurelije=1.5; Baruch Spinoza/Spinoza=1.5; Jean-Jacques Rousseau/Rousseau=1.5;
+      Voltaire=1.5; Arthur Schopenhauer/Schopenhauer=1.5; Søren Kierkegaard/Kierkegaard=1.5; Heraklit=1.5; Demokrit=1.5;
+      Epikur=1.5; Tales=1.5; John Locke/Locke=1; Thomas Hobbes/Hobbes=1; David Hume/Hume=1;
+      Niccolò Machiavelli/Machiavelli=1; Toma Akvinski=1; Sveti Augustin/Augustin=1;
+      Ludwig Wittgenstein/Wittgenstein=1; Martin Heidegger/Heidegger=1; Albert Camus/Camus=1; Lao Ce/Laozi=1;
+      Gottfried Leibniz/Leibniz=1; Bertrand Russell/Russell=1; Slavoj Žižek/Žižek=1; Buda=0.8; Zenon=0.8;
+      Parmenid=0.8; Ciceron=0.8; Erazmo Roterdamski=0.8; Francis Bacon/Bacon=0.8; Blaise Pascal/Pascal=0.8; Montesquieu=0.8;
+      John Stuart Mill/Mill=0.8; Friedrich Engels/Engels=0.8; Karl Popper/Popper=0.8; Simone de Beauvoir/Beauvoir=0.8;
+      Hannah Arendt/Arendt=0.8; Michel Foucault/Foucault=0.8; Frane Petrić/Franciscus Patricius=0.8; Ruđer Bošković=0.8;
+      Anaksagora=0.4; Anaksimandar=0.4; Anaksimen=0.4; Empedoklo=0.4; Protagora=0.4; Plotin=0.4; Epiktet=0.4;
+      Lukrecije=0.4; Vilim Ockham/Ockham=0.4; Thomas More/Toma More=0.4; George Berkeley/Berkeley=0.4;
+      Denis Diderot/Diderot=0.4; Fichte=0.4; Schelling=0.4; Auguste Comte/Comte=0.4; Ludwig Feuerbach/Feuerbach=0.4;
+      Edmund Husserl/Husserl=0.4; Henri Bergson/Bergson=0.4; Jacques Derrida/Derrida=0.4;
+      Jürgen Habermas/Habermas=0.4; Theodor Adorno/Adorno=0.4; Herbert Marcuse/Marcuse=0.4; Noam Chomsky/Chomsky=0.4;
+      Ayn Rand=0.4; Avicena/Ibn Sina=0.4; Averroes/Ibn Rušd=0.4; Hipatija=0.4; Michel de Montaigne/Montaigne=0.4;
+      Giordano Bruno=0.4; Herman Dalmatin=0.4; Marko Marulić=0.4; Matija Vlačić Ilirik/Flacius=0.4; Gajo Petrović=0.4;
+      Milan Kangrga/Kangrga=0.4; Gorgija=0.2; Boetije=0.2; Anselmo Canterburyjski=0.2; Petar Abelard/Abelard=0.2;
+      Duns Scot=0.2; Thomas Kuhn=0.2; John Rawls/Rawls=0.2; Peter Singer=0.2; Mencije=0.2; Zhuangzi/Džuang Ce=0.2;
+      Al-Farabi=0.2; Maimonides=0.2; William James=0.2; John Dewey/Dewey=0.2; Herbert Spencer=0.2;
+      Pico della Mirandola=0.2; Marko Antun de Dominis/De Dominis=0.2; Vladimir Filipović=0.2; Danko Grlić/Grlić=0.2;
+      Charles Sanders Peirce/Peirce=0.2; Hugo Grotius/Grotius=0.2; Marsilio Ficino/Ficino=0.2; Branko Bošnjak=0.2;
+      Pavao Vuk-Pavlović=0.2; Albert Bazala/Bazala=0.2; Stjepan Zimmermann=0.2; Juraj Dragišić=0.1; Pavao Skalić=0.1`,
+  },
+  {
+    slug: "vladar",
+    group: "kviz",
+    title: "Kralj, kraljica, car ili faraon",
+    hint: "Povijesni vladar ili vladarica bilo koje zemlje; i kraljice supruge",
+    strip: ["kralj","kraljica","car","carica","faraon"],
+    answers: `Ramzes II/Ramzes=4.5; Tutankamon=4.5; Kleopatra=4.5; Napoleon/Napoleon Bonaparte=4.5;
+      Luj XIV/Luj Četrnaesti/Kralj Sunce=4; Henrik VIII=4; Elizabeta II/Kraljica Elizabeta=4; Karlo Veliki=3;
+      Aleksandar Veliki/Aleksandar Makedonski=3; Petar Veliki=2.5; Katarina Velika=2.5; Marija Terezija=2.5; Franjo Josip=2.5;
+      Kraljica Viktorija/Viktorija=2.5; Džingis-kan/Džingis Kan=2; Sulejman Veličanstveni/Sulejman=2;
+      Elizabeta I=2; Karlo III/Charles III=2; Luj XVI=1.5; Marija Antoaneta=1.5; Nikola II=1.5; Ivan Grozni=1.5;
+      Richard Lavljeg Srca/Rikard Lavljeg Srca=1.5; Mehmed II/Mehmed Osvajač=1; Atila=1; Hamurabi=1;
+      Nabukodonosor=1; Keops=1; Ehnaton=1; Nefertiti=1; Kralj Salomon/Salomon=1; Kralj David=1;
+      Vilim Osvajač=1; Sisi/Elizabeta Bavarska=1; Kralj Tomislav/Tomislav=1; Qin Shi Huang/Šihuangdi=1;
+      Hatšepsut=0.8; Kserkso=0.8; Darije=0.8; Kir Veliki=0.8; Leonida=0.8; Herod=0.8; Kublaj-kan=0.8; Izabela Kastiljska=0.8;
+      Filip II=0.8; Karlo V=0.8; Fridrik Barbarossa=0.8; Fridrik Veliki=0.8; Vilim II/Wilhelm II=0.8; Matija Korvin=0.8;
+      Stefan Dušan=0.8; Tvrtko I/Tvrtko=0.8; Aleksandar Karađorđević=0.8; Juan Carlos=0.8; Hirohito=0.8; Pu Yi/Puyi=0.8;
+      Šah Džahan=0.8; Moctezuma/Montezuma=0.8; Haile Selassie=0.8; Mansa Musa=0.8; Ana Boleyn=0.8; Marija Stuart=0.8; August=0.8;
+      Neron=0.8; Dioklecijan=0.8; Konstantin Veliki=0.8; Justinijan=0.8; Kefren=0.4; Tutmozis III=0.4; Džoser=0.4; Saul=0.4;
+      Alfred Veliki=0.4; Edvard VIII=0.4; Juraj VI/George VI=0.4; Ferdinand Aragonski=0.4; Rudolf II=0.4;
+      Maksimilijan=0.4; Ludwig II Bavarski=0.4; Ludovik Veliki/Ludovik I=0.4; Petar I Karađorđević=0.4;
+      Nikola I Petrović=0.4; Simeon Veliki=0.4; Kazimir Veliki=0.4; Jan Sobieski=0.4; Gustav II Adolf=0.4;
+      Felipe VI=0.4; Willem-Alexander=0.4; Akihito=0.4; Naruhito=0.4; Car Meiji/Meiji=0.4; Ašoka=0.4; Akbar=0.4;
+      Atahualpa=0.4; Šaka Zulu=0.4; Mohammad Reza Pahlavi/Pahlavi=0.4; Aleksandar II=0.4; Marija I/Krvava Marija=0.4;
+      Eleonora Akvitanska=0.4; Josephine/Joséphine/Žozefina=0.4; Katarina Medici=0.4; Teodora=0.4;
+      Petar Krešimir IV=0.4; Dmitar Zvonimir/Zvonimir=0.4; Mikerin=0.2; Amenhotep III=0.2; Knut Veliki=0.2;
+      Beatrix=0.2; Carl XVI Gustaf=0.2; Kangxi=0.2; Wu Zetian=0.2; Kamehameha=0.2; Salman=0.2; Faruk=0.2;
+      Husein od Jordana=0.2; Ivan III=0.2; Bhumibol=0.2; Ranavalona=0.1; Pačakuti/Pachacuti=0.1`,
+  },
+  {
+    slug: "dinastija",
+    group: "kviz",
+    title: "Vladarska dinastija ili plemićka obitelj",
+    hint: "Bilo koja zemlja, i hrvatske plemićke obitelji",
+    strip: ["dinastija","obitelj","kuca"],
+    answers: `Habsburgovci/Habsburg/Habsburzi=10; Zrinski=8; Frankopani/Frankopan=8; Romanovi/Romanov=6;
+      Tudori/Tudor=5; Bourbon/Burbonci=4; Windsor/Windsori=4; Medici=4; Trpimirovići/Trpimirović=4;
+      Karađorđevići/Karađorđević=3; Osmanlije/Osmanska dinastija=3; Anžuvinci/Anžuvinska dinastija=3;
+      Arpadovići/Arpadović=3; Obrenovići/Obrenović=2; Kotromanići/Kotromanić=2; Nemanjići/Nemanjić=2; Hohenzollern=2;
+      Bonaparte=2; Ming=2; Borgia=1.5; Šubići/Šubić Bribirski=1.5; Petrović-Njegoš/Petrovići=1.5;
+      Plantageneti/Plantagenet=1.5; Stuarti/Stuart=1.5; Kapetovići/Kapetovci=1.5; Karolinzi=1.5; Merovinzi=1.5;
+      Qing=1.5; Ptolemejevići/Ptolemejevci=1.5; Kuća York/York=1; Kuća Lancaster/Lancaster=1; Valois=1; Han=1; Tang=1;
+      Mogulska dinastija/Moguli=1; Jagelovići/Jagelovci=1; Grimaldi=1; Rothschild=1; Draškovići/Drašković=1;
+      Erdődy/Erdedi=1; Pejačevići/Pejačević=1; Jelačić=1; Song=0.5; Yuan=0.5; Julijevci-Klaudijevci/Julijevci=0.5;
+      Flavijevci=0.5; Komneni=0.5; Paleolozi=0.5; Piastovići=0.5; Luksemburgovci=0.5; Wittelsbach=0.5;
+      Hannoverska dinastija/Hannover=0.5; Oranje-Nassau/Oranje=0.5; Savojska dinastija/Savojci=0.5; Sforza=0.5;
+      Keglevići/Keglević=0.5; Eltz=0.5; Oršići/Oršić=0.5; Gučetići/Gučetić=0.5; Gundulići/Gundulić=0.5;
+      Kačići/Kačić=0.5; Nelipići/Nelipić=0.5; Babonići/Babonić=0.5; Celjski=0.5; Esterházy=0.5; Hunjadi/Korvin=0.5;
+      Brankovići/Branković=0.5; Kosače/Kosača=0.5; Zhou=0.3; Shang=0.3; Severi=0.3; Braganza=0.3; Este=0.3;
+      Gonzaga=0.3; Visconti=0.3; Sachsen-Coburg-Gotha/Saxe-Coburg=0.3; Sorkočevići/Sorkočević=0.3; Bunići/Bunić=0.3;
+      Ratkaj=0.3; Rauch=0.3; Batthyány=0.3; Rákóczi=0.3; Hrvatinići/Hrvatinić=0.3; Berislavići/Berislavić=0.3;
+      Patačići/Patačić=0.3; Trastámara=0.2; Kulmer=0.2; Kurjakovići/Kurjaković=0.1; Talovci/Talovac=0.1`,
+  },
+  {
+    slug: "programski-jezik",
+    group: "kviz",
+    title: "Programski jezik",
+    hint: "I jezici za upite, označavanje i skripte (SQL, HTML...); C, C++ i C# su jedan odgovor",
+    strip: ["jezik"],
+    answers: `Python/Pajton=12; C, C++ ili C#/C/C++/C#/Cpp/C plus plus/C sharp/Csharp=10; Java=10; JavaScript/JS=8;
+      HTML=4; SQL=3; PHP=3; CSS=2; TypeScript/TS=2; Pascal/Paskal=2; Basic/QBasic=2; Ruby=1.5; Swift=1.5; Kotlin=1.5;
+      Go/Golang=1.5; Rust=1.5; Scratch=1.5; Asembler/Assembler/Assembly=1.5; Logo=1; Fortran=1; Cobol=1; Perl=1; R=1;
+      MATLAB=1; Bash/Shell=1; Visual Basic/VB=1; Lua=0.5; PowerShell=0.5; Lisp=0.5; Haskell=0.5; Prolog=0.5;
+      Scala=0.5; Dart=0.5; Objective-C=0.5; Delphi=0.5; XML=0.5; Ada=0.3; Erlang=0.3; Elixir=0.3; Julia=0.3; VBA=0.3;
+      LaTeX=0.3; Clojure=0.2; F sharp/F#/Fsharp=0.2; Groovy=0.2; Smalltalk=0.2; Algol=0.2; Scheme=0.2; OCaml=0.2;
+      Solidity=0.2; Brainfuck=0.2; APL=0.1; Zig=0.1; Racket=0.1; ABAP=0.1; Elm=0.1; WebAssembly=0.1; Modula-2=0.1;
+      Oberon=0.1; Tcl=0.1; Awk=0.1; Simula=0.1; Forth=0.1`,
+  },
+  {
+    slug: "zvijezda",
+    group: "kviz",
+    title: "Zviježđe ili zvijezda",
+    hint: "Hrvatski ili latinski naziv; planeti ne vrijede",
+    strip: ["zvijezda","zvijezde","zvijezdje"],
+    answers: `Sunce=10; Sjevernjača/Polaris/Polarna zvijezda=8; Veliki medvjed/Ursa Major/Velika kola=8;
+      Mali medvjed/Ursa Minor/Mala kola=5; Orion=6; Kasiopeja=4; Sirius=4; Betelgeuse/Betelgez=3;
+      Proxima Centauri/Proksima Kentaura=2.5; Vega=2; Alfa Kentaura/Alpha Centauri=2; Ovan/Aries=2; Bik/Taurus=2;
+      Blizanci/Gemini=2; Rak/Cancer=2; Lav/Leo=2; Djevica/Virgo=2; Vaga/Libra=2; Škorpion/Scorpius=2;
+      Strijelac/Sagittarius=2; Jarac/Capricornus=2; Vodenjak/Aquarius=2; Ribe/Pisces=2; Rigel=1.5; Andromeda=1.5;
+      Labud/Cygnus=1; Pegaz/Pegasus=1; Južni križ/Crux=1; Aldebaran=1; Antares=1; Arktur/Arcturus=1; Deneb=1;
+      Altair=1; Plejade/Vlašići=1; Lira/Lyra=0.5; Orao/Aquila=0.5; Perzej/Perseus=0.5; Zmaj/Draco=0.5;
+      Herkul/Hercules=0.5; Kentaur/Centaurus=0.5; Veliki pas/Canis Major=0.5; Zmijonosac/Ofiuh/Ophiuchus=0.5;
+      Spika/Spica=0.5; Kapela/Capella=0.5; Poluks/Pollux=0.5; Kastor/Castor=0.5; Regul/Regulus=0.5;
+      Procion/Procyon=0.5; Kanopus/Canopus=0.5; Algol=0.5; Bellatrix=0.5; Kefej/Cepheus=0.3; Volar/Bootes=0.3;
+      Sjeverna kruna=0.3; Mali pas/Canis Minor=0.3; Hidra/Vodena zmija=0.3; Feniks/Phoenix=0.3; Kočijaš/Auriga=0.3;
+      Dupin/Delphinus=0.3; Kit/Cetus=0.3; Fomalhaut=0.3; Mizar=0.3; UY Scuti=0.3; Zec/Lepus=0.2;
+      Jednorog/Monoceros=0.2; Gavran/Corvus=0.2; Vuk/Lupus=0.2; Zmija/Serpens=0.2; Eridan/Eridanus=0.2; Brod Argo=0.2;
+      Achernar=0.2; Mira=0.2; Dubhe=0.2; Mintaka=0.2; Alnilam=0.2; Alnitak=0.2; Barnardova zvijezda=0.2;
+      VY Canis Majoris=0.2; Tau Ceti=0.2; TRAPPIST-1=0.2; Golubica/Columba=0.1; Strijela/Sagitta=0.1;
+      Lisica/Vulpecula=0.1; Žirafa/Camelopardalis=0.1; Ris/Lynx=0.1; Čaša/Crater=0.1; Paun/Pavo=0.1; Tukan/Tucana=0.1;
+      Ždral/Grus=0.1; Štit/Scutum=0.1; Kobilica/Carina=0.1; Merak=0.1; Eta Carinae=0.1; Epsilon Eridani=0.1;
+      Saiph=0.1; Alkor/Alcor=0.1`,
+  },
+  {
+    slug: "astronaut",
+    group: "kviz",
+    title: "Astronaut ili svemirska misija",
+    hint: "Astronaut, kozmonaut, letjelica, sonda, teleskop ili svemirski program",
+    strip: [],
+    answers: `Neil Armstrong/Armstrong=12; Jurij Gagarin/Gagarin=10; Apollo 11=6; Buzz Aldrin/Aldrin=5;
+      ISS/Međunarodna svemirska postaja=4; Sputnik=4; Apollo 13=3; Apollo/Program Apollo=3;
+      Valentina Tereškova/Tereškova=3; Space Shuttle/Spejs šatl/Svemirski šatl=3; Lajka=2.5;
+      Voyager/Voyager 1/Voyager 2=2.5; Sojuz=2; Mir=2; Challenger=2; Hubble=2; James Webb/Teleskop James Webb=2;
+      Curiosity=2; Artemis=2; Michael Collins/Collins=1.5; John Glenn/Glenn=1.5; Vostok 1/Vostok=1.5; Columbia=1.5;
+      Perseverance=1.5; Alan Shepard/Shepard=1; Aleksej Leonov/Leonov=1; Sally Ride=1; Chris Hadfield/Hadfield=1;
+      Mercury/Projekt Mercury=1; Gemini=1; Discovery=1; Atlantis=1; Endeavour=1; Skylab=1; Pioneer=1; New Horizons=1;
+      Cassini=1; Opportunity=1; Crew Dragon/Dragon=1; Starship=1; Saturn V/Saturn 5=1; German Titov/Titov=0.5;
+      Samantha Cristoforetti/Cristoforetti=0.5; Scott Kelly=0.5; Christa McAuliffe=0.5; Gene Cernan/Cernan=0.5;
+      Jim Lovell/Lovell=0.5; Buran=0.5; Saljut=0.5; Tiangong=0.5; Juno=0.5; Galileo=0.5; Rosetta=0.5; Spirit=0.5;
+      Viking=0.5; Ingenuity=0.5; Luna=0.5; Falcon 9=0.5; Kepler=0.5; Ariane=0.5; Tim Peake=0.3; Thomas Pesquet=0.3;
+      Alexander Gerst=0.3; Mark Kelly=0.3; Peggy Whitson=0.3; Pete Conrad=0.3; Alan Bean=0.3; Gus Grissom/Grissom=0.3;
+      Ed White=0.3; Yang Liwei=0.3; Kalpana Chawla=0.3; Vladimir Komarov/Komarov=0.3; Dennis Tito=0.3;
+      Apollo-Sojuz=0.3; Philae=0.3; Sojourner=0.3; Pathfinder=0.3; Mariner=0.3; Venera=0.3; Chang'e=0.3;
+      Chandrayaan=0.3; Orion=0.3; Explorer 1=0.3; Parker Solar Probe/Parker=0.3; Edgar Mitchell=0.2; David Scott=0.2;
+      Harrison Schmitt=0.2; John Young=0.2; Charlie Duke=0.2; James Irwin=0.2; Roger Chaffee=0.2; Ilan Ramon=0.2;
+      Sigmund Jähn=0.2; Gaia=0.2; Hayabusa=0.2; DART=0.2; Rakesh Sharma=0.1; Jean-Loup Chrétien=0.1; OSIRIS-REx=0.1;
+      BepiColombo=0.1; Mars Express=0.1; ExoMars=0.1; JUICE=0.1; Vanguard=0.1; Lunohod=0.1`,
+  },
 ];
