@@ -267,12 +267,19 @@ export const zaigranoKategorije: SeedCategory[] = [
       Aladin=4; Auti/Cars=3; Bambi=3; Pinokio=3; Knjiga o džungli=3; Dumbo=2; Petar Pan=2; Mulan=2; Trnoružica=2;
       101 dalmatinac=2; Pocahontas=1.5; Tarzan=1.5; Alisa u zemlji čudesa=1.5; Lilo i Stitch=1.5;
       Matovilka/Zlatokosa/Tangled=1.5; Vaiana/Moana=1.5; Gore dolje/Up=1.5; Čudovišta iz ormara/Monsters Inc=1.5;
-      Izvrnuto obrnuto/Inside Out=1.5; Herkules=1; Aristocats/Mačke iz visokog društva=1; Maza i Lunja/Lady i Skitnica=1;
-      Robin Hood=1; Medo Winnie/Winnie the Pooh=1; Zootropola/Zootopia=1; Coco=1; Wall-E=1; Ratatouille=1;
-      Nevjerojatni/Incredibles=1; Encanto=1; Zvonar crkve Notre Dame=0.5; Život buba=0.5; Merida hrabra/Brave=0.5;
-      Princeza i žaba=0.5; Luca=0.3; Soul/Duša=0.3; Elementarno/Elemental=0.3; Big Hero 6=0.3; Ralph razbija/Ralph=0.3;
-      Mary Poppins=0.3; Fantazija/Fantasia=0.3; Lisica i pas=0.3; Bolt=0.3; Wish=0.2; Raya=0.2; Atlantis=0.2;
-      Careve nove ludorije=0.2; Avioni/Planes=0.2`,
+      Izvrnuto obrnuto/Inside Out=1.5; Herkules=1; Aristocats/Mačke iz visokog društva=1;
+      Maza i Lunja/Lady i Skitnica=1; Robin Hood=1; Medo Winnie/Winnie the Pooh=1; Zootropola/Zootopia=1; Coco=1;
+      Wall-E=1; Ratatouille=1; Nevjerojatni/Incredibles=1; Encanto=1; Zvonar crkve Notre Dame=0.5; Život buba=0.5;
+      Merida hrabra/Brave=0.5; Princeza i žaba=0.5; Luca=0.3; Soul/Duša=0.3; Elementarno/Elemental=0.3;
+      Big Hero 6=0.3; Ralph razbija/Ralph=0.3; Mary Poppins=0.3; Fantazija/Fantasia=0.3; Lisica i pas=0.3; Bolt=0.3;
+      Wish=0.2; Raya=0.2; Atlantis=0.2; Careve nove ludorije=0.2; Avioni/Planes=0.2; Potraga za Dory/Finding Dory=0.5;
+      Izvrnuto obrnuto 2/Inside Out 2=0.5; Snježno kraljevstvo 2/Frozen 2=0.5; Spasioci/Bernard i Bianca=0.5;
+      Mač u kamenu=0.5; Pirati s Kariba=0.5; Dobri dinosaur=0.3; Lightyear=0.3; Turning Red=0.3; Vaiana 2/Moana 2=0.3;
+      Čudovišta sa sveučilišta/Monsters University=0.3; Brat medvjed=0.3; Pileći Mali/Chicken Little=0.3;
+      Oliver i družina=0.3; Zvončica/Tinker Bell=0.3; Mufasa=0.3; Onward/Naprijed=0.2; Elio=0.2; Dinosaur=0.2;
+      Planet s blagom=0.2; Upoznajte Robinsonove=0.2; Veliki mišji detektiv=0.2; Steamboat Willie=0.2; Narnija=0.2;
+      Princezini dnevnici=0.2; Strange World/Čudnovati svijet=0.1; Krstarenje džunglom=0.1; Tron=0.1;
+      Kuća na prerijama/Home on the Range=0.1; Tri kabalera=0.1`,
   },
   {
     slug: "crtic-lik",
@@ -302,11 +309,19 @@ export const zaigranoKategorije: SeedCategory[] = [
       Mr. Burns/Burns/Gospodin Burns=4; Krusty/Klaun Krusty=3; Apu=3; Moe=3; Milhouse=3; Smithers=2; Barney=2;
       Nelson=2; Ralph/Ralph Wiggum=1.5; Djed Simpson/Abe/Abraham Simpson=1.5; Ravnatelj Skinner/Skinner=1.5;
       Načelnik Wiggum/Wiggum=1; Sideshow Bob/Bob=1; Selma=0.5; Patty=0.5; Edna Krabappel/Krabappel=0.5;
-      Itchy i Scratchy=0.5; Otto=0.5; Vrtlar Willie/Willie=0.5; Lenny=0.5; Carl=0.5; Prodavač stripova/Comic Book Guy=0.3;
-      Dr. Hibbert/Hibbert=0.3; Gradonačelnik Quimby/Quimby=0.3; Snowball=0.3; Djedičin mali pomoćnik/Mali pomoćnik=0.3;
-      Dr. Nick=0.2; Kent Brockman=0.2; Rod=0.2; Todd=0.2; Maude=0.2; Martin=0.2; Troy McClure=0.2; Fat Tony=0.2;
-      Profesor Frink/Frink=0.2; Luda mačja dama=0.2; Duffman=0.2; Cletus=0.2; Lionel Hutz=0.1; Jimbo=0.1;
-      Hans Moleman=0.1; Kang i Kodos=0.1; Gil=0.1`,
+      Itchy i Scratchy=0.5; Otto=0.5; Vrtlar Willie/Willie=0.5; Lenny=0.5; Carl=0.5;
+      Prodavač stripova/Comic Book Guy=0.3; Dr. Hibbert/Hibbert=0.3; Gradonačelnik Quimby/Quimby=0.3; Snowball=0.3;
+      Djedičin mali pomoćnik/Mali pomoćnik=0.3; Dr. Nick=0.2; Kent Brockman=0.2; Rod=0.2; Todd=0.2; Maude=0.2;
+      Martin=0.2; Troy McClure=0.2; Fat Tony=0.2; Profesor Frink/Frink=0.2; Luda mačja dama=0.2; Duffman=0.2;
+      Cletus=0.2; Lionel Hutz=0.1; Jimbo=0.1; Hans Moleman=0.1; Kang i Kodos=0.1; Gil=0.1; Chalmers=0.3;
+      Rainier Wolfcastle/McBain=0.3; Velečasni Lovejoy/Lovejoy=0.3; Snake=0.3; Spider-Pig/Svinja-pauk=0.3;
+      Sherri i Terri=0.2; Wendell=0.2; Kearney=0.2; Uter=0.2; Manjula=0.2; Jasper=0.2; Bumblebee Man=0.2;
+      Sideshow Mel=0.2; Agnes Skinner=0.2; Blinky/Troloka riba=0.2; El Barto=0.2; Radioactive Man=0.2;
+      Kirk Van Houten=0.2; Učiteljica Hoover=0.2; Frank Grimes=0.2; Hank Scorpio=0.2; Kapetan McCallister=0.2;
+      Squeaky-Voiced Teen=0.2; Poochie=0.2; Luigi=0.2; Bogati Teksašanin=0.2; Mona Simpson=0.2; Herb Powell=0.1;
+      Bleeding Gums Murphy=0.1; Dolph=0.1; Helen Lovejoy=0.1; Jessica Lovejoy=0.1; Brandine=0.1; Lou=0.1;
+      Luann Van Houten=0.1; Artie Ziff=0.1; Herman=0.1; Drederick Tatum=0.1; Sideshow Cecil=0.1; Kuharica Doris=0.1;
+      Arnie Pye=0.1; Sanjay=0.1`,
   },
   {
     slug: "harry-potter",
@@ -320,21 +335,41 @@ export const zaigranoKategorije: SeedCategory[] = [
       Dolores Umbridge/Umbridge=0.5; Vernon=0.3; Petunia/Petunija=0.3; Gilderoy Lockhart/Lockhart=0.3;
       Crvorep/Peter Pettigrew=0.3; Molly Weasley=0.3; Arthur Weasley=0.3; Filch=0.3; Grindelwald=0.3;
       Viktor Krum/Krum=0.3; Percy=0.2; Kreacher=0.2; Trelawney=0.2; Quirrell=0.2; Slughorn=0.2; Nagini=0.2;
-      Fawkes=0.2; Kljunoslav/Buckbeak=0.2; Fleur=0.2; Lily Potter=0.2; James Potter=0.2; Dementori=0.2;
-      Aragog=0.1; Tonks=0.1; Bill=0.1; Charlie=0.1`,
+      Fawkes=0.2; Kljunoslav/Buckbeak=0.2; Fleur=0.2; Lily Potter=0.2; James Potter=0.2; Dementori=0.2; Aragog=0.1;
+      Tonks=0.1; Bill=0.1; Charlie=0.1; Lavender Brown=0.3; Seamus Finnigan/Seamus=0.3; Dean Thomas=0.3;
+      Oliver Wood=0.3; Crabbe=0.3; Goyle=0.3; Narcissa Malfoy/Narcissa=0.3; Kingsley Shacklebolt/Kingsley=0.3;
+      Cornelius Fudge/Fudge=0.3; Barty Crouch/Crouch=0.3; Flitwick=0.3; Peeves=0.3;
+      Jecava Mirta/Mirta/Moaning Myrtle=0.3; Gotovo Bezglavi Nick=0.3; Newt Scamander/Scamander=0.3;
+      Ollivander/Olivander=0.3; Rita Skeeter=0.3; Godric Gryffindor/Gryffindor=0.3; Salazar Slytherin/Slytherin=0.3;
+      Helga Hufflepuff/Hufflepuff=0.3; Rowena Ravenclaw/Ravenclaw=0.3; Parvati Patil/Parvati=0.2; Colin Creevey=0.2;
+      Pansy Parkinson=0.2; Madam Pomfrey=0.2; Madam Hooch=0.2; Profesorica Sprout/Sprout=0.2; Firenze=0.2; Fang=0.2;
+      Crookshanks=0.2; Gospođa Norris=0.2; Aberforth=0.2; Regulus Black=0.2; Fenrir Greyback=0.2; Karkaroff=0.2;
+      Madame Maxime=0.2; Griphook=0.2; Teta Marge=0.2; Nicolas Flamel=0.2; Norbert=0.2; Fluffy=0.2; Bazilisk=0.2;
+      Smrtonoše=0.2; Padma Patil=0.1; Lee Jordan=0.1; Katie Bell=0.1; Angelina Johnson=0.1; Ernie Macmillan=0.1;
+      Hannah Abbott=0.1; Blaise Zabini=0.1; Mundungus Fletcher=0.1; Rufus Scrimgeour=0.1; Ludo Bagman=0.1; Binns=0.1;
+      Pigwidgeon=0.1; Errol=0.1; Krvavi Barun=0.1; Siva dama=0.1; Winky=0.1; Xenophilius Lovegood=0.1;
+      Arabella Figg=0.1; Thestrali=0.1; Scorpius Malfoy=0.1; Teddy Lupin=0.1; Bathilda Bagshot=0.1`,
   },
   {
     slug: "star-wars",
     group: "zaigrano",
     title: "Lik iz Ratova zvijezda",
     strip: [],
-    answers: `Darth Vader/Vader=20; Luke Skywalker/Luke=12; Yoda=12; Han Solo=7; Princeza Leia/Leia=6; Chewbacca/Chewie=5;
-      R2-D2/R2D2=4; Obi-Wan Kenobi/Obi-Wan=4; C-3PO/C3PO=3; Anakin Skywalker/Anakin=3; Darth Maul/Maul=1.5;
-      Palpatine/Imperator/Darth Sidious=1.5; Boba Fett=1.5; Grogu/Baby Yoda=1.5; Jabba=1; Kylo Ren=1; Rey=1;
-      Padmé/Padme Amidala=1; Mandalorac/Mandalorian/Din Djarin=1; Stormtrooper/Jurišnici=1; Finn=0.5; BB-8=0.5;
-      Qui-Gon Jinn=0.5; Mace Windu=0.5; Lando=0.5; Jar Jar Binks=0.5; Ahsoka=0.5; Ewok/Ewoki=0.5; Poe Dameron=0.3;
-      Grof Dooku/Dooku=0.3; General Grievous/Grievous=0.3; Admiral Ackbar=0.2; Snoke=0.2; Cassian Andor/Andor=0.2;
-      Jyn Erso=0.1`,
+    answers: `Darth Vader/Vader=20; Luke Skywalker/Luke=12; Yoda=12; Han Solo=7; Princeza Leia/Leia=6;
+      Chewbacca/Chewie=5; R2-D2/R2D2=4; Obi-Wan Kenobi/Obi-Wan=4; C-3PO/C3PO=3; Anakin Skywalker/Anakin=3;
+      Darth Maul/Maul=1.5; Palpatine/Imperator/Darth Sidious=1.5; Boba Fett=1.5; Grogu/Baby Yoda=1.5; Jabba=1;
+      Kylo Ren=1; Rey=1; Padmé/Padme Amidala=1; Mandalorac/Mandalorian/Din Djarin=1; Stormtrooper/Jurišnici=1;
+      Finn=0.5; BB-8=0.5; Qui-Gon Jinn=0.5; Mace Windu=0.5; Lando=0.5; Jar Jar Binks=0.5; Ahsoka=0.5; Ewok/Ewoki=0.5;
+      Poe Dameron=0.3; Grof Dooku/Dooku=0.3; General Grievous/Grievous=0.3; Admiral Ackbar=0.2; Snoke=0.2;
+      Cassian Andor/Andor=0.2; Jyn Erso=0.1; Jango Fett=0.3; General Hux/Hux=0.3; Kapetan Phasma/Phasma=0.3; Jawe=0.3;
+      Greedo=0.3; Asajj Ventress=0.2; Thrawn=0.2; Moff Gideon=0.2; Bo-Katan=0.2; K-2SO=0.2; Krennic=0.2;
+      Maz Kanata=0.2; Wedge Antilles=0.2; Mon Mothma=0.2; Bail Organa=0.2; Ujak Owen/Owen Lars=0.2;
+      Shmi Skywalker=0.2; Watto=0.2; Sebulba=0.2; Rancor=0.2; Tusken Raiders=0.2; Kapetan Rex=0.2;
+      Klonovi/Klonski vojnici=0.2; Kit Fisto=0.1; Plo Koon=0.1; Ki-Adi-Mundi=0.1; Aayla Secura=0.1; Cad Bane=0.1;
+      Ezra Bridger=0.1; Kanan Jarrus=0.1; Hera Syndulla=0.1; Sabine Wren=0.1; Greef Karga=0.1; Cara Dune=0.1;
+      IG-11=0.1; Chirrut Îmwe=0.1; Saw Gerrera=0.1; Galen Erso=0.1; Rose Tico=0.1; Holdo=0.1; Biggs=0.1;
+      Nute Gunray=0.1; Wicket=0.1; Bib Fortuna=0.1; Salacious Crumb=0.1; Sarlacc=0.1; Wampa=0.1; Bossk=0.1; IG-88=0.1;
+      Revan=0.1; Cal Kestis=0.1; Chopper=0.1; Fennec Shand=0.1; Veliki inkvizitor=0.1; Darth Plagueis=0.1`,
   },
   {
     slug: "tv-serija",
@@ -390,8 +425,13 @@ export const zaigranoKategorije: SeedCategory[] = [
       Twister=1; Memory=1; Potapanje brodova/Brodovi=1; Križić kružić=1; Tombola/Bingo=1; Slagalica/Puzzle=1;
       Pasijans=0.5; Bridž=0.5; Šnaps=0.5; Blackjack/21=0.5; Pictionary=0.5; Mikado=0.5; Pogodi tko/Tko je to=0.5;
       Alias=0.5; Preferans=0.3; Durak=0.3; Ajnc=0.3; Kanasta=0.3; Mahjong=0.3; Go=0.3; Carcassonne=0.3; Dixit=0.3;
-      Dungeons & Dragons/D&D=0.3; Igra života=0.2; Ticket to Ride=0.2; Exploding Kittens=0.2; Magic=0.2;
-      Pandemic=0.1`,
+      Dungeons & Dragons/D&D=0.3; Igra života=0.2; Ticket to Ride=0.2; Exploding Kittens=0.2; Magic=0.2; Pandemic=0.1;
+      Tablić=0.5; Ime, prezime, grad, država/Ime grad država=0.5; Tarok=0.3; Kineska dama=0.3; Kockice=0.3;
+      Četiri u nizu/Connect Four=0.3; Mastermind=0.3; Mafija/Vukodlak=0.3; Trivial Pursuit=0.3; Vješala=0.3;
+      Dobble=0.3; Pokemon karte=0.3; Rat=0.2; Varalica=0.2; Reversi/Othello=0.2; Operacija=0.2; Stratego=0.2;
+      Codenames=0.2; Yu-Gi-Oh=0.2; Warhammer=0.2; Mankala=0.1; Gladni nilski konji/Hungry Hippos=0.1; Mouse Trap=0.1;
+      Diplomacija/Diplomacy=0.1; Terraforming Mars=0.1; Azul=0.1; Splendor=0.1; Skip-Bo=0.1; Tangram=0.1; Bestija=0.1;
+      Crna kraljica/Hearts=0.1; Bakara=0.1; Halma=0.1`,
   },
   {
     slug: "aplikacija",
@@ -429,23 +469,35 @@ export const zaigranoKategorije: SeedCategory[] = [
     title: "Brza hrana: lanac ili jelo",
     strip: [],
     answers: `McDonald's/McDonalds/Mek=18; Hamburger/Burger=7; KFC=7; Burger King=7; Pizza=5; Burek=4; Kebab/Kebap=4;
-      Subway=4; Hot dog=3; Pomfrit=3; Ćevapi=3; Pljeskavica=2; Sendvič=2; Domino's=1.5; Pizza Hut=1.5;
-      Starbucks=1.5; Gyros=1; Tortilja/Wrap=1; Pileći medaljoni/Nuggets=1; Mlinar=1; Šaorma/Shawarma=0.5;
-      Wendy's=0.5; Taco Bell=0.5; Five Guys=0.5; Dunkin' Donuts/Dunkin=0.5; Submarine=0.5; Pan-pek=0.5; Taco=0.5;
-      Tost=0.5; Sushi=0.5; Pita=0.5; Langoš=0.5; Popeyes=0.3; Falafel=0.3; Nando's=0.2; Chipotle=0.2`,
+      Subway=4; Hot dog=3; Pomfrit=3; Ćevapi=3; Pljeskavica=2; Sendvič=2; Domino's=1.5; Pizza Hut=1.5; Starbucks=1.5;
+      Gyros=1; Tortilja/Wrap=1; Pileći medaljoni/Nuggets=1; Mlinar=1; Šaorma/Shawarma=0.5; Wendy's=0.5; Taco Bell=0.5;
+      Five Guys=0.5; Dunkin' Donuts/Dunkin=0.5; Submarine=0.5; Pan-pek=0.5; Taco=0.5; Tost=0.5; Sushi=0.5; Pita=0.5;
+      Langoš=0.5; Popeyes=0.3; Falafel=0.3; Nando's=0.2; Chipotle=0.2; Burrito=0.5; Cheeseburger=0.5; Big Mac=0.5;
+      Pileća krilca=0.3; Kolutići luka=0.3; Nachos=0.3; Fish and chips=0.3; Pohani sir=0.3; Happy Meal=0.3;
+      Milkshake=0.3; Panini=0.3; Rubelj grill/Rubelj=0.3; Quesadilla=0.2; Whopper=0.2; Kumpir=0.2;
+      Calzone/Kalcone=0.2; Papa John's=0.2; In-N-Out=0.2; Chick-fil-A=0.2; Nordsee=0.2; Corn dog=0.1; McFlurry=0.1;
+      Little Caesars=0.1; Carl's Jr.=0.1; Shake Shack=0.1; Jack in the Box=0.1; Dairy Queen=0.1; Tim Hortons=0.1;
+      Krispy Kreme=0.1; Panda Express=0.1; Vapiano=0.1; Arby's=0.1`,
   },
   {
     slug: "slatkis",
     group: "zaigrano",
     title: "Slatkiš ili čokoladica",
     strip: [],
-    answers: `Bajadera=6; Kinder/Kinder jaje/Kinder čokolada=6; Milka=6; Snickers=5; Haribo/Gumeni bomboni/Gumeni medvjedići=4;
-      Mars=3; Twix=3; Kit Kat=3; Ferrero Rocher/Ferrero=3; Nutella=3; Kiki/Kiki bombon=3; Orbit/Žvaka/Žvakaća=3;
-      Bounty=2; Toblerone=2; Dorina=2; M&M's/M&M=2; Lizalica=2; Raffaello=2; Napolitanke=2; Jaffa=2;
-      Domaćica=1.5; Smoki=1.5; Bananica=1.5; Plazma=1.5; Smarties=1; Chupa Chups=1; Merci=1; Lindt=1;
-      Životinjsko carstvo=1; Tic Tac=1; Mentos=1; Negro bomboni/Negro=1; Oreo=1; Kinder Bueno/Bueno=1;
-      Mon Chéri=0.5; Bobi=0.5; Najlepše želje=0.5; Turbo žvaka=0.5; Bronhi=0.5; Milky Way=0.5; Lion=0.5;
-      Galeb=0.5; Bazooka=0.3; Halls=0.3; Pez=0.3; Duplo=0.3; Kraš Express=0.3; Kinder Pingui=0.2`,
+    answers: `Bajadera=6; Kinder/Kinder jaje/Kinder čokolada=6; Milka=6; Snickers=5;
+      Haribo/Gumeni bomboni/Gumeni medvjedići=4; Mars=3; Twix=3; Kit Kat=3; Ferrero Rocher/Ferrero=3; Nutella=3;
+      Kiki/Kiki bombon=3; Orbit/Žvaka/Žvakaća=3; Bounty=2; Toblerone=2; Dorina=2; M&M's/M&M=2; Lizalica=2;
+      Raffaello=2; Napolitanke=2; Jaffa=2; Domaćica=1.5; Smoki=1.5; Bananica=1.5; Plazma=1.5; Smarties=1;
+      Chupa Chups=1; Merci=1; Lindt=1; Životinjsko carstvo=1; Tic Tac=1; Mentos=1; Negro bomboni/Negro=1; Oreo=1;
+      Kinder Bueno/Bueno=1; Mon Chéri=0.5; Bobi=0.5; Najlepše želje=0.5; Turbo žvaka=0.5; Bronhi=0.5; Milky Way=0.5;
+      Lion=0.5; Galeb=0.5; Bazooka=0.3; Halls=0.3; Pez=0.3; Duplo=0.3; Kraš Express=0.3; Kinder Pingui=0.2;
+      Skittles=0.5; Šećerna vuna/Šećerna vata=0.5; Čokolada=0.5; Griotte=0.3; Knoppers=0.3; Manner=0.3;
+      Mozart kugle=0.3; Ritter Sport=0.3; Toffifee=0.3; Mamba=0.3; Grilijaž=0.3; Ratluk/Lokum=0.3; Bomboni=0.3;
+      Marcipan=0.3; Pralina=0.3; Krašotice=0.2; Gorki listići=0.2; Kinder Country=0.2; Kinder Delice=0.2;
+      Schoko-Bons=0.2; Hanuta=0.2; Maltesers=0.2; Reese's=0.2; Hershey's=0.2; Cadbury=0.2; Daim=0.2; Werther's=0.2;
+      Ricola=0.2; Fisherman's Friend=0.2; Halva=0.2; Licitar=0.2; Tartufi=0.2; Bijela čokolada=0.2;
+      Sljezovi kolačići/Marshmallow=0.2; Corny=0.2; Kinder Happy Hippo=0.1; Butterfinger=0.1; Aero=0.1; Galaxy=0.1;
+      Crunch=0.1; Fruittella=0.1; Nerds=0.1; Jelly Belly=0.1; Sugus=0.1; Munchmallow=0.1`,
   },
   {
     slug: "sok",
@@ -453,12 +505,19 @@ export const zaigranoKategorije: SeedCategory[] = [
     title: "Bezalkoholno piće",
     strip: [],
     answers: `Coca-Cola/Coca Cola/Cola/Koka-kola=18; Fanta=8; Sprite=6; Cedevita=5; Pepsi=4; Pipi=3; Cockta=3; Voda=3;
-      Sok od naranče/Narančin sok=3; Ledeni čaj/Ice tea/Nestea=3; Red Bull=3; Jana=2; Jamnica=2;
-      Schweppes/Tonik=2; Limunada=2; Mineralna voda/Mineralna/Kisela voda=2; Monster=1; Kava=1; Čaj=1;
-      Mlijeko=1; Cappy=1; Fructal=1; Sok od jabuke=1; Sok od bazge/Bazga=1; Orangina=0.5; 7UP/Seven Up=0.5;
-      Kakao=0.5; Smoothie=0.5; Dona=0.5; Studena=0.5; Gazirana voda=0.5; Bezalkoholno pivo=0.5; Oranžada=0.5;
-      Mirinda=0.3; Mountain Dew=0.3; Dr Pepper=0.3; Jogurt=0.3; Römerquelle=0.3; Bitter lemon=0.3; Pago=0.3;
-      Kefir=0.2; Ginger ale=0.2; Kombucha=0.2; Sok od rajčice=0.2`,
+      Sok od naranče/Narančin sok=3; Ledeni čaj/Ice tea/Nestea=3; Red Bull=3; Jana=2; Jamnica=2; Schweppes/Tonik=2;
+      Limunada=2; Mineralna voda/Mineralna/Kisela voda=2; Monster=1; Kava=1; Čaj=1; Mlijeko=1; Cappy=1; Fructal=1;
+      Sok od jabuke=1; Sok od bazge/Bazga=1; Orangina=0.5; 7UP/Seven Up=0.5; Kakao=0.5; Smoothie=0.5; Dona=0.5;
+      Studena=0.5; Gazirana voda=0.5; Bezalkoholno pivo=0.5; Oranžada=0.5; Mirinda=0.3; Mountain Dew=0.3;
+      Dr Pepper=0.3; Jogurt=0.3; Römerquelle=0.3; Bitter lemon=0.3; Pago=0.3; Kefir=0.2; Ginger ale=0.2; Kombucha=0.2;
+      Sok od rajčice=0.2; Malinovac=0.5; Sirup=0.5; Coca-Cola Zero/Cola Zero=0.3; Sok od marelice=0.3;
+      Sok od višnje=0.3; Multivitaminski sok/Multivitamin=0.3; Čokoladno mlijeko=0.3; Topla čokolada=0.3;
+      Frape/Milkshake=0.3; Radenska=0.3; Sok od mrkve=0.2; Sok od ananasa=0.2; Sok od grejpa=0.2; Kokosova voda=0.2;
+      Bademovo mlijeko=0.2; Zobeno mlijeko=0.2; Cappuccino=0.2; Ledena kava=0.2; Guarana=0.2; Powerade=0.2;
+      Gatorade=0.2; Boza=0.2; Rauch=0.2; Granini=0.2; Vindi=0.2; Sinalco=0.2; Kiseljak=0.2; Knjaz Miloš=0.2;
+      Sok od borovnice=0.1; Sok od cikle=0.1; Sok od crnog ribiza=0.1; Sok od brusnice=0.1; Sok od aronije=0.1;
+      Sok od nara=0.1; Matcha=0.1; Burn=0.1; Hell=0.1; Isostar=0.1; Ayran=0.1; Hohes C=0.1; Tropicana=0.1;
+      Donat Mg=0.1; Evian=0.1; Perrier=0.1; San Pellegrino=0.1; Aqua Viva=0.1; Kvas=0.1`,
   },
   {
     slug: "bajka",
@@ -471,9 +530,17 @@ export const zaigranoKategorije: SeedCategory[] = [
       Zlatokosa i tri medvjeda/Zlatokosa=1.5; Vila/Dobra vila=1.5; Ali Baba=1.5; Šegrt Hlapić/Hlapić=1.5;
       Kralj Žabac/Žabac=1.5; Princ/Kraljević=1; Zmaj=1; Alisa=1; Zla kraljica=1; Regoč=1; Šuma Striborova/Stribor=1;
       Snježna kraljica=1; Zvončica=1; Djevojčica sa šibicama=0.8; Maćeha=0.8; Sinbad=0.5; Potjeh=0.5; Kosjenka=0.5;
-      Baba Jaga=0.5; Carevo novo ruho=0.5; Guliver=0.5; Robin Hood=0.5; Kapetan Kuka=0.5; Bijeli zec=0.3;
-      Palunko=0.3; Postojani kositreni vojnik=0.3; Bremenski gradski svirači=0.3; Đepeto/Geppetto=0.3; Div=0.3;
-      Ogledalce=0.3; Šeširdžija=0.2; Cvilidreta/Rumpelstiltskin=0.2; Trol=0.2; Jaglenac=0.1`,
+      Baba Jaga=0.5; Carevo novo ruho=0.5; Guliver=0.5; Robin Hood=0.5; Kapetan Kuka=0.5; Bijeli zec=0.3; Palunko=0.3;
+      Postojani kositreni vojnik=0.3; Bremenski gradski svirači=0.3; Đepeto/Geppetto=0.3; Div=0.3; Ogledalce=0.3;
+      Šeširdžija=0.2; Cvilidreta/Rumpelstiltskin=0.2; Trol=0.2; Jaglenac=0.1; Ljepotica i zvijer=1;
+      Vuk i sedam kozlića/Sedam kozlića=0.5; Jack i čarobni grah=0.5; Ribar i zlatna ribica/Zlatna ribica=0.5;
+      Šeherezada=0.5; Tisuću i jedna noć=0.5; Čarobnjak iz Oza=0.5; Princeza=0.5; Hrabri krojač/Hrabri krojačić=0.3;
+      Ježeva kućica=0.3; Crvene cipelice=0.3; Plavobradi=0.3; Palčić=0.3; Kraljica srca=0.3; Zubić vila=0.3;
+      Jednorog=0.3; Kućica od medenjaka=0.3; Staklena cipelica=0.3; Malik Tintilinić=0.2; Stolić, prostri se=0.2;
+      Zlatna guska=0.2; Divlji labudovi=0.2; Žar-ptica=0.2; Plava vila=0.2; Dorothy=0.2; Limeni čovjek=0.2;
+      Strašilo=0.2; Merlin=0.2; Vilenjak=0.2; Otrovna jabuka=0.2; Kralj=0.2; Sunce djever i Neva Nevičica=0.1;
+      Lutonjica Toporko=0.1; Dvanaest plesačica=0.1; Slavuj=0.1; Ivan Carević=0.1; Koščej Besmrtni=0.1; Vasilisa=0.1;
+      Morozko=0.1; Snjegurica=0.1; Jagor=0.1`,
   },
   {
     slug: "strani-izvodjac",
@@ -546,13 +613,21 @@ export const zaigranoKategorije: SeedCategory[] = [
     group: "zaigrano",
     title: "Prijevozno sredstvo",
     strip: [],
-    answers: `Auto=15; Bicikl/Bajs=8; Avion/Zrakoplov=8; Vlak=6; Autobus=6; Brod=5; Motor/Motocikl=4; Tramvaj=3; Romobil=2;
-      Trajekt=2; Helikopter=2; Taksi=1.5; Kamion=1.5; Podmornica=1; Raketa=1; Balon/Balon na vrući zrak=1;
+    answers: `Auto=15; Bicikl/Bajs=8; Avion/Zrakoplov=8; Vlak=6; Autobus=6; Brod=5; Motor/Motocikl=4; Tramvaj=3;
+      Romobil=2; Trajekt=2; Helikopter=2; Taksi=1.5; Kamion=1.5; Podmornica=1; Raketa=1; Balon/Balon na vrući zrak=1;
       Čamac/Barka=1; Žičara=1; Metro/Podzemna=1; Skuter/Vespa=1; Konj=1; Gliser=0.5; Jahta=0.5; Uspinjača=0.5;
       Kombi=0.5; Kočija=0.5; Sanjke=0.5; Traktor=0.5; Jedrilica=0.5; Pješice/Noge=0.5; Kajak=0.3; Kanu=0.3;
       Pasara=0.3; Gondola=0.3; Skije=0.3; Skateboard=0.3; Role=0.3; Kamper=0.3; Tenk=0.3; Svemirski brod/Šatl=0.3;
-      Dron=0.2; Cepelin/Zeppelin=0.2; Deva=0.2; Magarac=0.2; Kvad/ATV=0.2; Lokomotiva=0.2; Hoverkraft=0.1;
-      Segway=0.1; Slon=0.1; Leteći tepih=0.1`,
+      Dron=0.2; Cepelin/Zeppelin=0.2; Deva=0.2; Magarac=0.2; Kvad/ATV=0.2; Lokomotiva=0.2; Hoverkraft=0.1; Segway=0.1;
+      Slon=0.1; Leteći tepih=0.1; Splav=0.5; Pedalina=0.5; Gumenjak=0.5; Jet ski/Vodeni skuter=0.5; Kruzer=0.5;
+      Rikša=0.3; Tuk-tuk=0.3; Fijaker=0.3; Motorne sanjke=0.3; Daska za surfanje/Surf=0.3; SUP/Daska za veslanje=0.3;
+      Katamaran=0.3; Hidroavion=0.3; Padobran/Paraglajder=0.3; Sedežnica=0.3; Lift/Dizalo=0.3; Trolejbus=0.3;
+      Limuzina=0.3; Moped=0.3; Snowboard=0.3; Metla=0.3; Autostop=0.3; Uber=0.3; Tricikl=0.2; Pseće sanjke=0.2;
+      Zaprežna kola=0.2; Teretni brod=0.2; Nosač aviona=0.2; Vodeni taksi=0.2; Zmaj letač=0.2; Mlažnjak=0.2;
+      Concorde=0.2; NLO/Leteći tanjur=0.2; Šinkansen/Brzi vlak=0.2; Pokretne stepenice=0.2; Minibus=0.2;
+      Školski autobus=0.2; Džip=0.2; Formula=0.2; Karting=0.2; Tomos=0.2; Električni bicikl=0.2; Hoverboard=0.2;
+      Krplje=0.2; Klizaljke=0.2; Hitna pomoć=0.2; Bolt=0.2; Tandem=0.1; Nosiljka=0.1; Tegljač=0.1; Ledolomac=0.1;
+      Kabriolet=0.1; Mula=0.1; Maglev=0.1`,
   },
   {
     slug: "alat",
@@ -561,11 +636,19 @@ export const zaigranoKategorije: SeedCategory[] = [
     strip: [],
     answers: `Čekić=20; Odvijač/Šarafciger/Šrafciger=12; Kliješta/Klješta/Kombinirke=8; Pila=6; Bušilica=6;
       Ključ/Francuski ključ=5; Metar=3; Sjekira=3; Libela=2; Lopata=2; Brusilica/Flex=2; Turpija=1; Dlijeto=1;
-      Motika=1; Grablje=1; Kramp=1; Škare=1; Kist=1; Motorna pila=1; Kosilica=1; Ljestve=1; Lemilica=0.5;
-      Valjak=0.5; Špahtla/Gletarica=0.5; Mistrija/Zidarska žlica=0.5; Kosa=0.5; Srp=0.5; Vile=0.5; Tačke=0.5;
-      Ravnalo=0.5; Imbus/Imbus ključ=0.5; Pajser/Poluga=0.5; Brusni papir/Šmirgl=0.5; Kutomjer=0.3; Šestar=0.3;
-      Stega=0.3; Nakovanj=0.3; Ubodna pila=0.3; Blanja=0.3; Pištolj za silikon=0.3; Aparat za varenje=0.3;
-      Glodalica=0.2; Kompresor=0.2; Klin=0.2`,
+      Motika=1; Grablje=1; Kramp=1; Škare=1; Kist=1; Motorna pila=1; Kosilica=1; Ljestve=1; Lemilica=0.5; Valjak=0.5;
+      Špahtla/Gletarica=0.5; Mistrija/Zidarska žlica=0.5; Kosa=0.5; Srp=0.5; Vile=0.5; Tačke=0.5; Ravnalo=0.5;
+      Imbus/Imbus ključ=0.5; Pajser/Poluga=0.5; Brusni papir/Šmirgl=0.5; Kutomjer=0.3; Šestar=0.3; Stega=0.3;
+      Nakovanj=0.3; Ubodna pila=0.3; Blanja=0.3; Pištolj za silikon=0.3; Aparat za varenje=0.3; Glodalica=0.2;
+      Kompresor=0.2; Klin=0.2; Akumulatorski odvijač/Aku bušilica=0.3; Štemalica=0.3; Cirkular/Kružna pila=0.3;
+      Mačeta=0.3; Nož=0.3; Šubler/Pomično mjerilo=0.3; Macola/Malj=0.3; Škare za živicu=0.3; Trimer=0.3; Škripac=0.3;
+      Multimetar=0.3; Fazni ispitivač=0.3; Izolir traka=0.3; Čavli=0.3; Vijci=0.3; Dizalica=0.3;
+      Švicarski nožić/Multitool=0.3; Klamerica/Tacker=0.3; Okasti ključ=0.2; Gedora/Nasadni ključ=0.2;
+      Švedski ključ=0.2; Pištolj za ljepilo=0.2; Pila za metal=0.2; Laserski metar=0.2; Kutnik=0.2; Visak=0.2;
+      Ašov=0.2; Škare za lim=0.2; Puhalo za lišće=0.2; Freza=0.2; Kultivator=0.2; Skela=0.2; Mješalica=0.2; Rašpa=0.2;
+      Šilo=0.2; Tokarilica=0.2; Plamenik=0.2; Matice=0.2; Tiple=0.2; Križni ključ=0.2; Pumpa=0.2; Moment ključ=0.1;
+      Sječice=0.1; Špic kliješta=0.1; Papagaj kliješta=0.1; Cjepač=0.1; Skalpel=0.1; Mikrometar=0.1; Kreda=0.1;
+      Gumeni čekić=0.1; Zaštitne naočale=0.1; Lisičji rep=0.1`,
   },
   {
     slug: "zanr",
@@ -575,11 +658,22 @@ export const zaigranoKategorije: SeedCategory[] = [
     answers: `Rock=15; Pop=12; Jazz/Džez=6; Rap=6; Hip hop/Hip-hop=5; Narodnjaci/Narodna glazba/Turbofolk=5;
       Klasična glazba/Klasika=5; Metal/Heavy metal=4; Punk=3; Techno/Tehno=3; Blues=2; Country=2; Reggae/Rege=2;
       Klapa/Klapska pjesma=2; Tamburaška glazba/Tamburica=2; Disco/Disko=2; Elektronska glazba/Elektronika/EDM=2;
-      House=1.5; R&B/RnB=1.5; Opera=1.5; Funk=1; Soul=1; Trap=1; Folk=1; Grunge=0.5; Latino=0.5; Salsa=0.5;
-      Indie=0.5; Hard rock=0.5; K-pop=0.5; Rock and roll/Rock'n'roll=0.5; Sevdah/Sevdalinka=0.5; Novi val/New wave=0.5;
+      House=1.5; R&B/RnB=1.5; Opera=1.5; Funk=1; Soul=1; Trap=1; Folk=1; Grunge=0.5; Latino=0.5; Salsa=0.5; Indie=0.5;
+      Hard rock=0.5; K-pop=0.5; Rock and roll/Rock'n'roll=0.5; Sevdah/Sevdalinka=0.5; Novi val/New wave=0.5;
       Šansona=0.3; Gospel=0.3; Tango=0.3; Flamenco=0.3; Dubstep=0.3; Drum and bass/DnB=0.3; Trance=0.3;
       Alternativa=0.3; Ska=0.3; Swing=0.3; Ojkanje=0.3; Polka=0.3; Valcer=0.3; Reggaeton=0.3; Bossa nova=0.2;
-      Death metal=0.2; Emo=0.2; Barok=0.2; Ambient=0.1; Black metal=0.1; Thrash metal=0.1; Lo-fi=0.1`,
+      Death metal=0.2; Emo=0.2; Barok=0.2; Ambient=0.1; Black metal=0.1; Thrash metal=0.1; Lo-fi=0.1;
+      Zabavna glazba/Zabavnjak=0.5; Bećarac=0.5; Dance=0.3; Šlager=0.3; Starogradska glazba=0.3; Etno=0.3;
+      Mjuzikl=0.3; Filmska glazba/Soundtrack=0.3; Fado=0.3; Samba=0.3; Ganga=0.3; Progresivni rock=0.2;
+      Psihodelični rock=0.2; Glam rock=0.2; Pop rock=0.2; Britpop=0.2; Nu metal=0.2; Hardcore=0.2; Synthpop=0.2;
+      Eurodance=0.2; Drill=0.2; Gangsta rap=0.2; Trip hop=0.2; Bebop=0.2; Ragtime=0.2; Rockabilly=0.2; Bluegrass=0.2;
+      Afrobeat=0.2; Rumba=0.2; Bachata=0.2; Gregorijanski koral=0.2; Opereta=0.2; Limena glazba=0.2; A cappella=0.2;
+      Chillout=0.2; Deep house=0.2; Duhovna glazba=0.2; Post-punk=0.1; Soft rock=0.1; Power metal=0.1; Doom metal=0.1;
+      Metalcore=0.1; Industrial=0.1; Gotički rock=0.1; Shoegaze=0.1; Italo disco=0.1; Breakbeat=0.1; Jungle=0.1;
+      Grime=0.1; Dixieland=0.1; Boogie-woogie=0.1; Calypso=0.1; Dancehall=0.1; Dub=0.1; Cumbia=0.1; Merengue=0.1;
+      Mambo=0.1; Kajkavska popevka=0.1; Guslanje=0.1; Napolitanska pjesma=0.1; Jodlanje=0.1; Lounge=0.1; New age=0.1;
+      Synthwave=0.1; Vaporwave=0.1; Hyperpop=0.1; Phonk=0.1; Post-rock=0.1; Noise=0.1; Hardstyle=0.1; Psytrance=0.1;
+      Electro=0.1; Chiptune=0.1; Motown=0.1; Doo-wop=0.1`,
   },
   {
     slug: "pizza",
@@ -588,11 +682,18 @@ export const zaigranoKategorije: SeedCategory[] = [
     strip: [],
     answers: `Šunka=15; Gljive/Šampinjoni=12; Sir/Mozzarella=10; Salama/Pepperoni=6; Masline=5;
       Rajčica/Pelat/Umak od rajčice=4; Kukuruz=3; Ananas=3; Kulen=3; Origano=2; Tuna=2; Pršut=2; Kečap=2;
-      Feferoni=1.5; Luk=1.5; Paprika=1.5; Jaje=1.5; Rukola=1.5; Slanina/Panceta=1.5; Inćuni=1; Kobasica=1;
-      Bosiljak=1; Piletina=1; Plodovi mora=1; Gorgonzola=0.5; Parmezan=0.5; Majoneza=0.5; Vrhnje=0.5; Kapari=0.5;
+      Feferoni=1.5; Luk=1.5; Paprika=1.5; Jaje=1.5; Rukola=1.5; Slanina/Panceta=1.5; Inćuni=1; Kobasica=1; Bosiljak=1;
+      Piletina=1; Plodovi mora=1; Gorgonzola=0.5; Parmezan=0.5; Majoneza=0.5; Vrhnje=0.5; Kapari=0.5;
       Ljuta papričica/Čili=0.5; Kebab=0.3; Škampi=0.3; Artičoke=0.3; Špinat=0.3; Tikvice=0.3; Patlidžan=0.3;
       Češnjak=0.3; Mortadela=0.3; Tartuf=0.3; Hrenovke=0.3; Pesto=0.3; Rikota=0.2; Gauda=0.2; Burrata=0.2;
-      Pomfrit=0.2; Nutella=0.2; Brokula=0.1`,
+      Pomfrit=0.2; Nutella=0.2; Brokula=0.1; Krumpir=0.3; Mljeveno meso=0.3; Šparoge=0.3; Cherry rajčice=0.3;
+      Sušene rajčice=0.3; Jalapeño=0.3; Maslinovo ulje=0.3; BBQ umak=0.3; Cheddar=0.2; Ementaler=0.2; Feta=0.2;
+      Kozji sir=0.2; Dimljeni sir=0.2; Čvarci=0.2; Nduja=0.2; Ćevapi=0.2; Junetina=0.2; Losos=0.2; Lignje=0.2;
+      Dagnje=0.2; Grašak=0.2; Blitva=0.2; Radič=0.2; Ajvar=0.2; Mladi luk=0.2; Kruška=0.2; Smokve=0.2; Med=0.2;
+      Orasi=0.2; Čili ulje=0.2; Bešamel=0.2; Mascarpone=0.1; Pecorino=0.1; Provolone=0.1; Hobotnica=0.1; Srdele=0.1;
+      Grah=0.1; Zelena salata=0.1; Kiseli kupus=0.1; Mrkva=0.1; Poriluk=0.1; Avokado=0.1; Jabuka=0.1; Banana=0.1;
+      Pinjoli=0.1; Ružmarin=0.1; Peršin=0.1; Umak od češnjaka=0.1; Tabasco=0.1; Senf=0.1; Krem sir=0.1; Čokolada=0.1;
+      Gyros=0.1; Puretina=0.1; Sudžuk=0.1; Stracciatella=0.1`,
   },
   {
     slug: "plavo",

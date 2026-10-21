@@ -163,25 +163,44 @@ export const kvizKategorije: SeedCategory[] = [
     title: "Planet, mjesec, zvijezda ili drugo nebesko tijelo",
     strip: ["planet", "planeta", "zvijezda"],
     answers: `Mars=12; Jupiter=8; Saturn=7; Venera/Danica/Zornica/Večernjača=6; Zemlja=5; Sunce=5; Merkur=4; Mjesec=4;
-      Neptun=3; Uran=3; Pluton=3; Sjevernjača/Polaris=2; Sirius=1; Titan=1; Mliječna staza/Mliječni put=1;
-      Europa=0.8; Betelgeuse=0.5; Alfa Kentaura/Alpha Centauri=0.5; Io=0.5; Ganimed=0.5; Fobos=0.5;
-      Halleyev komet=0.5; Andromeda=0.5; Proxima Centauri=0.3; Vega=0.3; Kalisto=0.3; Deimos=0.3; Ceres=0.3;
-      Rigel=0.2; Aldebaran=0.2; Antares=0.2; Enkelad=0.2; Triton=0.2; Haron=0.2; Eris=0.2; Arktur=0.1; Deneb=0.1;
-      Altair=0.1; Mimas=0.1; Spika=0.05; Rea=0.05; Japet=0.05; Dione=0.05; Titanija=0.05; Oberon=0.05;
-      Miranda=0.05; Haumea=0.05; Makemake=0.05; Sedna=0.05; Kuiperov pojas=0.05`,
+      Neptun=3; Uran=3; Pluton=3; Sjevernjača/Polaris=2; Sirius=1; Titan=1; Mliječna staza/Mliječni put=1; Europa=0.8;
+      Betelgeuse=0.5; Alfa Kentaura/Alpha Centauri=0.5; Io=0.5; Ganimed=0.5; Fobos=0.5; Halleyev komet=0.5;
+      Andromeda=0.5; Proxima Centauri=0.3; Vega=0.3; Kalisto=0.3; Deimos=0.3; Ceres=0.3; Rigel=0.2; Aldebaran=0.2;
+      Antares=0.2; Enkelad=0.2; Triton=0.2; Haron=0.2; Eris=0.2; Arktur=0.1; Deneb=0.1; Altair=0.1; Mimas=0.1;
+      Spika=0.05; Rea=0.05; Japet=0.05; Dione=0.05; Titanija=0.05; Oberon=0.05; Miranda=0.05; Haumea=0.05;
+      Makemake=0.05; Sedna=0.05; Kuiperov pojas=0.05; Asteroidni pojas=0.5;
+      Veliki Magellanov oblak/Magellanovi oblaci=0.5; Crna rupa=0.5; Plejade/Vlašići=0.5; Vesta=0.3; Oortov oblak=0.3;
+      Oumuamua=0.3; Hale-Bopp=0.3; Komet=0.3; Sagittarius A*/Strijelac A=0.3; Supernova=0.3; Maglica=0.3;
+      Orionova maglica=0.3; Pallas/Palada=0.2; Apofis/Apophis=0.2; Bennu=0.2; Shoemaker-Levy 9=0.2; Kvazar=0.2;
+      Pulsar=0.2; Neutronska zvijezda=0.2; Bijeli patuljak=0.2; Crveni div=0.2; Rakova maglica=0.2; Kapela=0.2;
+      Poluks=0.2; Kastor=0.2; Regul=0.2; Procion=0.2; Kanopus=0.2; UY Scuti=0.2; Deveti planet/Planet Nine=0.2;
+      Feba/Phoebe=0.1; Hiperion=0.1; Pandora=0.1; Prometej=0.1; Ariel=0.1; Umbriel=0.1; Nereida=0.1; Proteus=0.1;
+      Amalteja=0.1; Nix=0.1; Hidra=0.1; Kvaoar/Quaoar=0.1; Orkus=0.1; Juno=0.1; Eros=0.1; Ryugu=0.1;
+      Čurjumov-Gerasimenko=0.1; Hyakutake=0.1; NEOWISE=0.1; Galaksija Trokut=0.1; Sombrero galaksija=0.1;
+      Galaksija Vrtlog=0.1; M87=0.1; Stupovi stvaranja=0.1; Hijade=0.1; Fomalhaut=0.1; Mira=0.1; Algol=0.1; Mizar=0.1;
+      Bellatrix=0.1; Barnardova zvijezda=0.1; VY Canis Majoris=0.1; Tau Ceti=0.1; TRAPPIST-1=0.1; Kepler-452b=0.1;
+      Proxima b=0.1; Gonggong=0.1`,
   },
   {
     slug: "bogovi",
     group: "kviz",
     title: "Grčki ili rimski bog ili božica",
     strip: ["bog", "bozica"],
-    answers: `Zeus=15; Posejdon/Poseidon=8; Had/Hades=6; Atena/Athena=5; Afrodita=5; Jupiter=4; Apolon=4; Ares=4; Hermes=4;
-      Neptun=3; Hera=3; Venera=2; Mars=2; Artemida=2; Dioniz/Dionis=2; Pluton=1.5; Merkur=1.5; Hefest=1.5;
+    answers: `Zeus=15; Posejdon/Poseidon=8; Had/Hades=6; Atena/Athena=5; Afrodita=5; Jupiter=4; Apolon=4; Ares=4;
+      Hermes=4; Neptun=3; Hera=3; Venera=2; Mars=2; Artemida=2; Dioniz/Dionis=2; Pluton=1.5; Merkur=1.5; Hefest=1.5;
       Kupid/Amor=1.5; Minerva=1; Junona=1; Dijana=1; Bakho/Bacchus=1; Vulkan=1; Demetra=1; Kron/Kronos=1; Eros=1;
       Nike=1; Saturn=0.5; Gea/Geja=0.5; Hestija=0.5; Pan=0.5; Persefona=0.5; Helije/Helios=0.5; Janus=0.5;
-      Prometej=0.5; Cerera=0.3; Uran=0.3; Vesta=0.3; Morfej=0.3; Fortuna/Tiha=0.3; Atlas=0.3; Selena=0.2;
-      Luna=0.2; Aurora=0.2; Hipnos=0.2; Tanatos=0.2; Nemeza=0.2; Asklepije/Eskulap=0.2; Prozerpina=0.1; Sol=0.1;
-      Eos=0.1; Iris=0.1; Hebe=0.1`,
+      Prometej=0.5; Cerera=0.3; Uran=0.3; Vesta=0.3; Morfej=0.3; Fortuna/Tiha=0.3; Atlas=0.3; Selena=0.2; Luna=0.2;
+      Aurora=0.2; Hipnos=0.2; Tanatos=0.2; Nemeza=0.2; Asklepije/Eskulap=0.2; Prozerpina=0.1; Sol=0.1; Eos=0.1;
+      Iris=0.1; Hebe=0.1; Herkul/Heraklo/Herakle=0.5; Hekata=0.3; Rea/Reja=0.3; Temida=0.3; Muze=0.3; Eol=0.3;
+      Kaos=0.3; Eris=0.3; Faun=0.3; Flora=0.3; Okean=0.2; Mnemozina=0.2; Moire=0.2; Erinije/Furije=0.2; Boreja=0.2;
+      Zefir=0.2; Kratos=0.2; Higija/Higieja=0.2; Nikta/Niks=0.2; Tifon=0.2; Epimetej=0.2; Leta=0.2; Ganimed=0.2;
+      Harmonija=0.2; Fobos=0.2; Hronos=0.2; Amfitrita=0.2; Triton=0.2; Pomona=0.2; Lari i penati/Lari=0.2;
+      Bellona=0.2; Viktorija=0.2; Tellus/Terra=0.2; Mitra=0.2; Dioskuri/Kastor i Poluks=0.2; Kaliopa=0.1; Klio=0.1;
+      Terpsihora=0.1; Melpomena=0.1; Talija=0.1; Harite/Gracije=0.1; Tetida=0.1; Protej=0.1; Nereus=0.1; Bija=0.1;
+      Zelos=0.1; Plutos=0.1; Panakeja=0.1; Erebo=0.1; Hiperion=0.1; Teja=0.1; Japet=0.1; Maja=0.1; Dejmos=0.1;
+      Enio=0.1; Ate=0.1; Kairos=0.1; Hermafrodit=0.1; Silvan=0.1; Vertumno=0.1; Kvirin=0.1; Orko=0.1; Dis Pater=0.1;
+      Liber=0.1; Terminus=0.1; Juventa=0.1; Konkordija=0.1; Pax=0.1; Ops=0.1; Ananke=0.1`,
   },
   {
     slug: "olimpijske",
@@ -220,16 +239,24 @@ export const kvizKategorije: SeedCategory[] = [
     group: "kviz",
     title: "NBA klub",
     strip: [],
-    answers: `Chicago Bulls/Bulls=15; Los Angeles Lakers/Lakers=15; Boston Celtics/Celtics=6; Golden State Warriors/Warriors=5;
-      Miami Heat/Heat=4; New York Knicks/Knicks=3; Houston Rockets/Rockets=2; San Antonio Spurs/Spurs=2;
-      Brooklyn Nets/Nets/New Jersey Nets=2; Dallas Mavericks/Mavericks/Mavs=2; Philadelphia 76ers/76ers/Sixers=1.5;
-      Detroit Pistons/Pistons=1.5; Phoenix Suns/Suns=1.5; Denver Nuggets/Nuggets=1.5;
-      Cleveland Cavaliers/Cavaliers/Cavs=1.5; Utah Jazz/Jazz=1.5; Orlando Magic/Magic=1;
-      Los Angeles Clippers/Clippers=1; Toronto Raptors/Raptors=1; Milwaukee Bucks/Bucks=1;
-      Sacramento Kings/Kings=0.8; Portland Trail Blazers/Trail Blazers/Blazers=0.8; Atlanta Hawks/Hawks=0.8;
+    answers: `Chicago Bulls/Bulls=15; Los Angeles Lakers/Lakers=15; Boston Celtics/Celtics=6;
+      Golden State Warriors/Warriors=5; Miami Heat/Heat=4; New York Knicks/Knicks=3; Houston Rockets/Rockets=2;
+      San Antonio Spurs/Spurs=2; Brooklyn Nets/Nets/New Jersey Nets=2; Dallas Mavericks/Mavericks/Mavs=2;
+      Philadelphia 76ers/76ers/Sixers=1.5; Detroit Pistons/Pistons=1.5; Phoenix Suns/Suns=1.5;
+      Denver Nuggets/Nuggets=1.5; Cleveland Cavaliers/Cavaliers/Cavs=1.5; Utah Jazz/Jazz=1.5; Orlando Magic/Magic=1;
+      Los Angeles Clippers/Clippers=1; Toronto Raptors/Raptors=1; Milwaukee Bucks/Bucks=1; Sacramento Kings/Kings=0.8;
+      Portland Trail Blazers/Trail Blazers/Blazers=0.8; Atlanta Hawks/Hawks=0.8;
       Oklahoma City Thunder/Thunder/OKC=0.8; Minnesota Timberwolves/Timberwolves=0.5; Indiana Pacers/Pacers=0.5;
       Memphis Grizzlies/Grizzlies=0.5; Charlotte Hornets/Hornets=0.5; Washington Wizards/Wizards=0.5;
-      New Orleans Pelicans/Pelicans=0.3`,
+      New Orleans Pelicans/Pelicans=0.3; Minneapolis Lakers=0.3; Vancouver Grizzlies=0.3;
+      Washington Bullets/Bullets=0.3; Charlotte Bobcats/Bobcats=0.2; New Orleans Hornets=0.2; Baltimore Bullets=0.1;
+      Buffalo Braves=0.1; San Diego Clippers=0.1; Kansas City Kings=0.1; Cincinnati Royals=0.1; Rochester Royals=0.1;
+      Philadelphia Warriors=0.1; San Francisco Warriors=0.1; Syracuse Nationals=0.1; Fort Wayne Pistons=0.1;
+      St. Louis Hawks=0.1; Milwaukee Hawks=0.1; Tri-Cities Blackhawks=0.1; Chicago Zephyrs=0.1; New Orleans Jazz=0.1;
+      San Diego Rockets=0.1; Anderson Packers=0.1; Waterloo Hawks=0.1; Indianapolis Olympians=0.1;
+      Washington Capitols=0.1; Chicago Stags=0.1; Providence Steamrollers=0.1; Toronto Huskies=0.1;
+      St. Louis Bombers=0.1; Cleveland Rebels=0.1; Detroit Falcons=0.1; Pittsburgh Ironmen=0.1;
+      Sheboygan Red Skins=0.1`,
   },
   {
     slug: "shakespeare",
@@ -242,7 +269,9 @@ export const kvizKategorije: SeedCategory[] = [
       Henrik V=0.5; Soneti=0.5; Henrik IV=0.3; Tit Andronik=0.3; Zimska priča=0.3; Komedija zabune=0.3;
       Vesele žene windsorske=0.3; Sve je dobro što se dobro svrši=0.3; Henrik VIII=0.2; Rikard II/Richard II=0.2;
       Koriolan=0.2; Dva veronska plemića=0.2; Uzaludni ljubavni trud=0.2; Mjera za mjeru=0.2; Henrik VI=0.1;
-      Kralj Ivan=0.1; Timon Atenjanin=0.1; Troilo i Kresida=0.1; Cimbelin=0.1; Perikle=0.1; Venera i Adonis=0.1`,
+      Kralj Ivan=0.1; Timon Atenjanin=0.1; Troilo i Kresida=0.1; Cimbelin=0.1; Perikle=0.1; Venera i Adonis=0.1;
+      Otmica Lukrecije/Lukrecija=0.3; Feniks i grlica=0.1; Ljubavnikova tužaljka=0.1; Strastveni hodočasnik=0.1;
+      Edvard III/Edward III=0.1; Sir Thomas More=0.1; Dva plemenita rođaka=0.1; Cardenio=0.1`,
   },
   {
     slug: "skladatelj",
@@ -253,19 +282,45 @@ export const kvizKategorije: SeedCategory[] = [
       Antonio Vivaldi/Vivaldi=6; Čajkovski/Tchaikovsky=5; Frédéric Chopin/Chopin=5; Giuseppe Verdi/Verdi=3;
       Franz Schubert/Schubert=2; Johann Strauss/Strauss=2; Richard Wagner/Wagner=2; Joseph Haydn/Haydn=2;
       Händel/Handel=1.5; Giacomo Puccini/Puccini=1.5; Johannes Brahms/Brahms=1.5; Ivan Zajc/Zajc=1.5;
-      Vatroslav Lisinski/Lisinski=1.5; Gioachino Rossini/Rossini=1; Franz Liszt/Liszt/List=1; Claude Debussy/Debussy=1;
-      Hans Zimmer/Zimmer=1; Ennio Morricone/Morricone=1; Maurice Ravel/Ravel=0.8; Edvard Grieg/Grieg=0.8;
-      Antonín Dvořák/Dvorak=0.8; Gustav Mahler/Mahler=0.5; Felix Mendelssohn/Mendelssohn=0.5;
+      Vatroslav Lisinski/Lisinski=1.5; Gioachino Rossini/Rossini=1; Franz Liszt/Liszt/List=1;
+      Claude Debussy/Debussy=1; Hans Zimmer/Zimmer=1; Ennio Morricone/Morricone=1; Maurice Ravel/Ravel=0.8;
+      Edvard Grieg/Grieg=0.8; Antonín Dvořák/Dvorak=0.8; Gustav Mahler/Mahler=0.5; Felix Mendelssohn/Mendelssohn=0.5;
       Robert Schumann/Schumann=0.5; Igor Stravinski/Stravinski/Stravinsky=0.5; Sergej Rahmanjinov/Rahmanjinov=0.5;
       Georges Bizet/Bizet=0.5; Niccolò Paganini/Paganini=0.5; John Williams=0.5; Jakov Gotovac/Gotovac=0.5;
       Sergej Prokofjev/Prokofjev=0.3; Dmitrij Šostakovič/Šostakovič=0.3; Modest Musorgski/Musorgski=0.3;
       Rimski-Korsakov=0.3; George Gershwin/Gershwin=0.3; Bedřich Smetana/Smetana=0.3; Dora Pejačević/Pejačević=0.3;
-      Antonio Salieri/Salieri=0.3; Ludovico Einaudi/Einaudi=0.3; Leonard Bernstein/Bernstein=0.2; Erik Satie/Satie=0.2;
-      Jean Sibelius/Sibelius=0.2; Béla Bartók/Bartok=0.2; Edward Elgar/Elgar=0.2; Boris Papandopulo/Papandopulo=0.2;
-      Blagoje Bersa/Bersa=0.2; Ivo Tijardović/Tijardović=0.2; Claudio Monteverdi/Monteverdi=0.1;
-      Henry Purcell/Purcell=0.1; Georg Philipp Telemann/Telemann=0.1; Luka Sorkočević/Sorkočević=0.1;
-      Christoph Willibald Gluck/Gluck=0.1; Jacques Offenbach/Offenbach=0.1; Camille Saint-Saëns/Saint-Saens=0.1;
-      Philip Glass=0.1; Julije Bajamonti/Bajamonti=0.05`,
+      Antonio Salieri/Salieri=0.3; Ludovico Einaudi/Einaudi=0.3; Leonard Bernstein/Bernstein=0.2;
+      Erik Satie/Satie=0.2; Jean Sibelius/Sibelius=0.2; Béla Bartók/Bartok=0.2; Edward Elgar/Elgar=0.2;
+      Boris Papandopulo/Papandopulo=0.2; Blagoje Bersa/Bersa=0.2; Ivo Tijardović/Tijardović=0.2;
+      Claudio Monteverdi/Monteverdi=0.1; Henry Purcell/Purcell=0.1; Georg Philipp Telemann/Telemann=0.1;
+      Luka Sorkočević/Sorkočević=0.1; Christoph Willibald Gluck/Gluck=0.1; Jacques Offenbach/Offenbach=0.1;
+      Camille Saint-Saëns/Saint-Saens=0.1; Philip Glass=0.1; Julije Bajamonti/Bajamonti=0.05; Pachelbel=0.5;
+      James Horner/Horner=0.5; Vangelis=0.5; Goran Bregović/Bregović=0.5; Andrew Lloyd Webber/Lloyd Webber=0.5;
+      Josip Hatze/Hatze=0.3; Fran Lhotka/Lhotka=0.3; Krešimir Baranović/Baranović=0.3; Alfi Kabiljo/Kabiljo=0.3;
+      Franz von Suppé/Suppé=0.3; Tomaso Albinoni/Albinoni=0.3; Domenico Scarlatti/Scarlatti=0.3;
+      Vincenzo Bellini/Bellini=0.3; Gaetano Donizetti/Donizetti=0.3; Hector Berlioz/Berlioz=0.3;
+      Anton Bruckner/Bruckner=0.3; Richard Strauss=0.3; Franz Lehár/Lehár=0.3; Aram Hačaturjan/Hačaturjan=0.3;
+      Gustav Holst/Holst=0.3; Carl Orff/Orff=0.3; Arnold Schönberg/Schönberg=0.3; John Cage=0.3;
+      Astor Piazzolla/Piazzolla=0.3; Yann Tiersen/Tiersen=0.3; Howard Shore=0.3; Danny Elfman/Elfman=0.3;
+      Ramin Djawadi/Djawadi=0.3; Joe Hisaishi/Hisaishi=0.3; Nino Rota=0.3; Ivan Lukačić=0.2; Stjepan Šulek/Šulek=0.2;
+      Milko Kelemen=0.2; Igor Kuljerić=0.2; Ferdo Livadić/Livadić=0.2; Josip Slavenski/Slavenski=0.2; Đelo Jusić=0.2;
+      Arcangelo Corelli/Corelli=0.2; Jean-Philippe Rameau/Rameau=0.2; Jean-Baptiste Lully/Lully=0.2; Palestrina=0.2;
+      Carl Czerny/Czerny=0.2; Carl Maria von Weber=0.2; Pietro Mascagni/Mascagni=0.2;
+      Ruggero Leoncavallo/Leoncavallo=0.2; Charles Gounod/Gounod=0.2; Gabriel Fauré/Fauré=0.2;
+      Emmerich Kálmán/Kálmán=0.2; Aleksandr Borodin/Borodin=0.2; Mihail Glinka/Glinka=0.2;
+      Aleksandr Skrjabin/Skrjabin=0.2; Leoš Janáček/Janáček=0.2; György Ligeti/Ligeti=0.2;
+      Benjamin Britten/Britten=0.2; Arvo Pärt=0.2; Aaron Copland/Copland=0.2; Scott Joplin=0.2;
+      Michael Nyman/Nyman=0.2; Alan Silvestri=0.2; Jerry Goldsmith=0.2; John Barry=0.2; Ludwig Göransson=0.2;
+      Alexandre Desplat=0.2; Henry Mancini=0.2; Bernard Herrmann=0.2; Michael Giacchino=0.2; Justin Hurwitz=0.2;
+      Krsto Odak=0.1; Antun Dobronić=0.1; Milo Cipra=0.1; Ivo Lhotka-Kalinski=0.1; Natko Devčić=0.1; Ruben Radica=0.1;
+      Ivo Malec=0.1; Frano Parać=0.1; Anđelko Klobučar=0.1; Ivan Padovec=0.1; Rudolf Matz=0.1; Božidar Kunc=0.1;
+      Pergolesi=0.1; François Couperin=0.1; Dietrich Buxtehude=0.1; C. P. E. Bach=0.1; Luigi Boccherini=0.1;
+      Muzio Clementi=0.1; Johann Nepomuk Hummel=0.1; Jules Massenet=0.1; Léo Delibes=0.1; César Franck=0.1;
+      Zoltán Kodály=0.1; Krzysztof Penderecki=0.1; Henryk Górecki=0.1; Witold Lutosławski=0.1;
+      Ralph Vaughan Williams=0.1; Paul Hindemith=0.1; Alban Berg=0.1; Anton Webern=0.1; Karlheinz Stockhausen=0.1;
+      Steve Reich=0.1; Samuel Barber=0.1; Heitor Villa-Lobos=0.1; Manuel de Falla=0.1; Joaquín Rodrigo=0.1;
+      Francis Poulenc=0.1; Olivier Messiaen=0.1; Pierre Boulez=0.1; Max Richter=0.1; Hildur Guðnadóttir=0.1;
+      Clint Mansell=0.1; Zbigniew Preisner=0.1; Koji Kondo=0.1; Hildegarda iz Bingena=0.1`,
   },
   {
     slug: "slikar",
@@ -359,14 +414,26 @@ export const kvizKategorije: SeedCategory[] = [
     group: "kviz",
     title: "Dinosaur ili pretpovijesni gmaz",
     strip: [],
-    answers: `Tiranosaurus/T-rex/Tyrannosaurus/Tiranosaurus rex=25; Triceratops=10; Velociraptor/Raptor=8; Brontosaurus=6;
-      Stegosaurus=6; Diplodokus/Diplodocus=4; Pterodaktil/Pterodactylus=4; Brahiosaurus/Brachiosaurus=3;
-      Spinosaurus=2; Ankilosaurus/Ankylosaurus=2; Alosaurus/Allosaurus=1; Parasaurolophus=0.5; Iguanodon=0.5;
-      Apatosaurus=0.5; Karnotaurus/Carnotaurus=0.5; Giganotosaurus=0.5; Mosasaurus=0.5;
-      Pleziosaurus/Plesiosaurus=0.5; Pteranodon=0.5; Dilofosaurus/Dilophosaurus=0.3;
+    answers: `Tiranosaurus/T-rex/Tyrannosaurus/Tiranosaurus rex=25; Triceratops=10; Velociraptor/Raptor=8;
+      Brontosaurus=6; Stegosaurus=6; Diplodokus/Diplodocus=4; Pterodaktil/Pterodactylus=4;
+      Brahiosaurus/Brachiosaurus=3; Spinosaurus=2; Ankilosaurus/Ankylosaurus=2; Alosaurus/Allosaurus=1;
+      Parasaurolophus=0.5; Iguanodon=0.5; Apatosaurus=0.5; Karnotaurus/Carnotaurus=0.5; Giganotosaurus=0.5;
+      Mosasaurus=0.5; Pleziosaurus/Plesiosaurus=0.5; Pteranodon=0.5; Dilofosaurus/Dilophosaurus=0.3;
       Pahicefalosaurus/Pachycephalosaurus=0.3; Argentinosaurus=0.2; Ihtiosaurus/Ichthyosaurus=0.2; Oviraptor=0.2;
       Arheopteriks/Archaeopteryx=0.2; Kompsognatus/Compsognathus=0.1; Gallimimus=0.1;
-      Terizinosaurus/Therizinosaurus=0.1; Edmontosaurus=0.1; Barionyx/Baryonyx=0.1; Deinonychus=0.1`,
+      Terizinosaurus/Therizinosaurus=0.1; Edmontosaurus=0.1; Barionyx/Baryonyx=0.1; Deinonychus=0.1; Megalosaurus=0.3;
+      Dimetrodon=0.3; Kvecalkoatl/Quetzalcoatlus=0.3; Hadrosaurus=0.2; Protoceratops=0.2;
+      Stirakosaurus/Styracosaurus=0.2; Mikroraptor/Microraptor=0.2; Utahraptor=0.2; Troodon=0.2; Albertosaurus=0.2;
+      Karharodontosaurus/Carcharodontosaurus=0.2; Ceratosaurus=0.2; Plateosaurus=0.2; Titanosaurus=0.2;
+      Elasmosaurus=0.2; Liopleurodon=0.2; Majasaura/Maiasaura=0.1; Koritosaurus/Corythosaurus=0.1; Lambeosaurus=0.1;
+      Centrosaurus=0.1; Pahirinosaurus/Pachyrhinosaurus=0.1; Kasmosaurus/Chasmosaurus=0.1; Torosaurus=0.1;
+      Kentrosaurus=0.1; Euoplocephalus=0.1; Nodosaurus=0.1; Gorgosaurus=0.1; Tarbosaurus=0.1; Daspletosaurus=0.1;
+      Suchomimus=0.1; Celofizis/Coelophysis=0.1; Herrerasaurus=0.1; Eoraptor=0.1; Mamenchisaurus=0.1;
+      Kamarasaurus/Camarasaurus=0.1; Patagotitan=0.1; Dreadnoughtus=0.1; Saltasaurus=0.1; Nigersaurus=0.1;
+      Kronosaurus=0.1; Notosaurus/Nothosaurus=0.1; Sarkosuhus/Sarcosuchus=0.1; Deinosuchus=0.1;
+      Ramforinhus/Rhamphorhynchus=0.1; Hatzegopteryx=0.1; Psitakosaurus/Psittacosaurus=0.1; Gigantoraptor=0.1;
+      Majungasaurus=0.1; Tanystropheus=0.1; Edafosaurus/Edaphosaurus=0.1; Listrosaurus/Lystrosaurus=0.1;
+      Histriasaurus=0.1`,
   },
   {
     slug: "rimski-car",
