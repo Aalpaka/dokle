@@ -16,6 +16,7 @@ import {
 import { buildIndex, fold, match, type MatchIndex } from "@/lib/matcher";
 import { blendedShare, scoreKm, speedFor, tierFor } from "@/lib/scoring";
 import { dayNumber, localDate } from "@/lib/day";
+import { compareDay, type DayCompare } from "@/lib/compare";
 import type { SkinConfig } from "@/skins/types";
 
 // Odgovor stigne s malim kašnjenjem mreže; toliko tolerancije na serveru.
@@ -413,6 +414,18 @@ export async function answerList(skin: Skin, playerId: string, position: number)
       return { canonical: a.canonical, share: a.share, tier: t.name, km: t.km };
     }),
   };
+}
+
+/** Usporedba s ostalim igračima dana; tek kad je igrač završio partiju. */
+export async function dayCompare(skin: Skin, playerId: string): Promise<(DayCompare & { mine: number }) | null> {
+  const puzzle = await getOrCreatePuzzle(skin, localDate(skin.timezone));
+  const game = await findGame(playerId, puzzle.id);
+  if (!game?.finishedAt) return null;
+  const rows = await db
+    .select({ km: games.totalKm })
+    .from(games)
+    .where(and(eq(games.puzzleId, puzzle.id), isNotNull(games.finishedAt)));
+  return { ...compareDay(skin.config, rows.map((r) => r.km), game.totalKm), mine: game.totalKm };
 }
 
 export function clearCategoryCache(id?: number) {

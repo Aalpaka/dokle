@@ -211,6 +211,28 @@ button:disabled { opacity: .5; cursor: default; }
 .recap .c { font-size: 12px; color: var(--muted); }
 .recap .a { font-weight: 700; overflow-wrap: anywhere; }
 .recap .k { font-family: var(--font-mono); font-weight: 700; font-variant-numeric: tabular-nums; }
+/* usporedba s ostalima: stupci igrača nad cestom, igrač na žutoj ploči */
+.compare { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px 12px; display: grid; gap: 8px; }
+.compare svg { width: 100%; height: auto; display: block; overflow: visible; }
+.cmp-head { font-weight: 700; font-size: 17px; }
+.cmp-pct {
+  display: inline-block; background: var(--town-sign); color: #111; border-radius: 3px; padding: 0 8px; margin-inline: 2px;
+  box-shadow: inset 0 0 0 2px var(--town-sign), inset 0 0 0 3px #111; font-family: var(--font-town); font-weight: 700; font-size: 22px;
+}
+.cmp-bin rect { fill: #4a5d61; }
+.cmp-bin.mine rect { fill: var(--signal); }
+.cmp-bin { transform-box: fill-box; transform-origin: bottom; animation: cmp-grow .6s cubic-bezier(.2,.8,.2,1) both; }
+.cmp-n { font-family: var(--font-mono); font-size: 12px; fill: var(--muted); }
+.cmp-road { fill: #2a3336; }
+.cmp-lane { stroke: var(--signal); stroke-width: 1.5; stroke-dasharray: 8 7; }
+.cmp-post { stroke: var(--muted); stroke-width: 1.5; }
+.cmp-label { font-size: 13px; fill: var(--muted); }
+.cmp-label.mine { fill: var(--ink); font-weight: 800; }
+.cmp-pin rect { fill: var(--town-sign); stroke: #111; stroke-width: 1; }
+.cmp-pin text { font-family: var(--font-town); font-weight: 700; font-size: 12px; fill: #111; }
+.cmp-pin { animation: cmp-drop .4s ease-out both; }
+@keyframes cmp-grow { from { transform: scaleY(0); } }
+@keyframes cmp-drop { from { opacity: 0; transform: translateY(-10px); } }
 pre.share { margin: 0; padding: 12px 14px; border-radius: 10px; background: var(--card); font-family: var(--font-mono); font-size: 14px; white-space: pre-wrap; overflow-wrap: anywhere; }
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
