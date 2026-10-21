@@ -111,9 +111,14 @@ export const opceKategorije: SeedCategory[] = [
     strip: [],
     answers: `Mrav=12; Pčela=12; Komarac=8; Muha=8; Leptir=8; Bubamara=6; Osa=4; Pauk=4; Skakavac=3; Žohar=3;
       Cvrčak/Cikada=3; Bumbar=2; Stršljen=2; Bogomoljka=2; Vilin konjic=2; Moljac=1.5; Buha=1.5; Krpelj=1; Uš=1;
-      Krijesnica=1; Gusjenica=1; Jelenak=0.8; Škorpion=0.5; Stjenica=0.5; Termit=0.5; Hrušt/Gundelj=0.5;
-      Kornjaš=0.5; Krumpirova zlatica/Zlatica=0.5; Obad=0.5; Mušica=0.5; Svilena buba=0.3; Grinja=0.3; Rilaš=0.2;
-      Strizibuba=0.2; Tarantula=0.3; Crna udovica=0.3; Skarabej=0.2`,
+      Krijesnica=1; Gusjenica=1; Jelenak=0.8; Škorpion=0.5; Stjenica=0.5; Termit=0.5; Hrušt/Gundelj=0.5; Kornjaš=0.5;
+      Krumpirova zlatica/Zlatica=0.5; Obad=0.5; Mušica=0.5; Svilena buba=0.3; Grinja=0.3; Rilaš=0.2; Strizibuba=0.2;
+      Tarantula=0.3; Crna udovica=0.3; Skarabej=0.2; Smrdljivi martin/Smrdibuba=1; Uholaža=1; Lisna uš/Biljna uš=0.5;
+      Zrikavac=0.5; Srebrna ribica=0.5; Tigrasti komarac/Tigar komarac=0.5; Muha ce-ce/Ce-ce muha=0.5;
+      Kukac štapić/Štapićar=0.5; Noćni leptir=0.5; Rovac=0.3; Nosorožac=0.3; Mrtvačka glava=0.3; Lastin rep=0.3;
+      Monarh=0.3; Vinska mušica=0.3; Žižak=0.3; Potkornjak=0.3; Zlatna mara=0.3; Vatreni martin=0.3; Križar=0.3;
+      Kosac=0.3; Mravlji lav=0.2; Vatreni mrav=0.2; Kupusov bijelac/Kupusar=0.2; Admiral=0.2; Paunče=0.2; Gubar=0.2;
+      Pauk skakač=0.2; Vučji pauk=0.2; Ptičar=0.2; Lisni kukac=0.2; Lisnorezac=0.2; Vodencvijet=0.1`,
   },
   {
     slug: "africka-zivotinja",
@@ -124,8 +129,14 @@ export const opceKategorije: SeedCategory[] = [
       Krokodil=3; Majmun=2; Antilopa=2; Hijena=2; Gnu=1.5; Noj=1.5; Šimpanza=1.5; Deva=1.5; Afrički bivol/Bivol=1;
       Bradavičasta svinja/Facočer=1; Surikata/Merkat=1; Lemur=1; Gazela=1; Pavijan=1; Kameleon=0.5; Impala=0.5;
       Šakal=0.5; Kobra=0.5; Mamba/Crna mamba=0.5; Piton=0.5; Okapi=0.3; Mungos=0.3; Flamingo=0.3; Mandril=0.3;
-      Hijenski pas/Divlji pas=0.3; Mravojed/Aardvark=0.3; Lešinar=0.3; Kudu=0.2; Oriks=0.2; Pangolin=0.2;
-      Marabu=0.2; Karakal=0.2; Serval=0.2; Bongo=0.1`,
+      Hijenski pas/Divlji pas=0.3; Mravojed/Aardvark=0.3; Lešinar=0.3; Kudu=0.2; Oriks=0.2; Pangolin=0.2; Marabu=0.2;
+      Karakal=0.2; Serval=0.2; Bongo=0.1; Bonobo=0.5; Medojed=0.5; Fenek=0.5; Eland=0.3; Springbok=0.3;
+      Kolobus/Gvereca=0.3; Dikobraz=0.3; Sekretar=0.3; Kljunorožac=0.3; Žako/Papiga žako=0.3; Ibis=0.3; Pelikan=0.3;
+      Divovska kornjača=0.3; Afrički pingvin=0.3; Muha ce-ce=0.3; Gerenuk=0.2; Galago=0.2; Aj-aj=0.2; Fosa=0.2;
+      Cibetka=0.2; Geneta=0.2; Magot=0.2; Gelada=0.2; Krunasti ždral=0.2; Varan=0.2; Termit=0.2; Skarabej=0.2;
+      Divlji magarac=0.2; Damani=0.2; Zemljani vuk=0.1; Etiopski vuk=0.1; Tkalac=0.1; Gekon=0.1; Gabonska šarka=0.1;
+      Bumslang=0.1; Tilapija=0.1; Celakant=0.1; Riječna svinja=0.1; Kapski tuljan=0.1; Nubijski kozorog=0.1;
+      Adaks=0.1`,
   },
   {
     slug: "morska-zivotinja",
@@ -136,7 +147,13 @@ export const opceKategorije: SeedCategory[] = [
       Jastog=3; Lignja=3; Morski jež=3; Sipa=2; Školjka=2; Morž=2; Orka=2; Koralj=1.5; Morski lav=1.5; Pingvin=1.5;
       Dagnja=1; Kamenica=1; Spužva=1; Škamp=1; Narval=0.5; Morska vidra/Vidra=0.5; Morski krastavac/Trp=0.5;
       Vlasulja=0.5; Kozica=0.5; Galeb=0.5; Morski puž=0.3; Manati/Morska krava=0.3; Prstac=0.3; Jakobova kapica=0.3;
-      Rakovica=0.3; Dugong=0.1`,
+      Rakovica=0.3; Dugong=0.1; Rak samac/Rak pustinjak=0.5; Hlap=0.5; Plavetni kit=0.5;
+      Sredozemna medvjedica/Medvjedica=0.5; Periska/Plemenita periska=0.5; Albatros=0.5; Polarni medvjed=0.5;
+      Volak=0.3; Prilepak=0.3; Beluga=0.3; Grbavi kit=0.3; Ulješura=0.3; Glavata želva=0.3; Pliskavica=0.3;
+      Kunjka=0.3; Portugalska galija=0.3; Kril=0.3; Grancigula=0.3; Pelikan=0.3; Kormoran=0.3; Morski slon=0.3;
+      Ogrc=0.2; Muzgavac=0.2; Brbavica=0.2; Kućica=0.2; Zmijača=0.2; Morska osa=0.2; Rebraš=0.2; Kraljevski rak=0.2;
+      Kanoća=0.2; Morski zec=0.2; Golać=0.2; Čigra=0.2; Morska zmija=0.2; Morska iguana=0.2; Morski krokodil=0.2;
+      Spirografis=0.1; Burnjak=0.1; Morski krin/Morski ljiljan=0.1`,
   },
   {
     slug: "cvijet",
@@ -148,8 +165,12 @@ export const opceKategorije: SeedCategory[] = [
       Tratinčica=2; Pelargonija/Muškatla=2; Perunika/Iris=1.5; Hortenzija=1.5; Jorgovan=1.5; Zumbul=1; Gerber=1;
       Kala=1; Jasmin=1; Magnolija=1; Ciklama=1; Božur=1; Neven=1; Kamilica=1; Oleandar/Oleander=1; Begonija=0.8;
       Gladiola=0.8; Mimoza=0.8; Lotos=0.5; Azaleja=0.5; Dalija=0.5; Runolist=0.5; Lokvanj=0.5; Šumarica/Anemona=0.5;
-      Kukurijek=0.5; Bugenvilija=0.5; Petunija=0.5; Kamelija=0.3; Vrijes=0.3; Encijan=0.3; Frezija=0.3;
-      Glicinija=0.3`,
+      Kukurijek=0.5; Bugenvilija=0.5; Petunija=0.5; Kamelija=0.3; Vrijes=0.3; Encijan=0.3; Frezija=0.3; Glicinija=0.3;
+      Maćuhica=1; Hibiskus=0.5; Zvončić=0.5; Potočnica/Nezaboravak=0.5; Šafran=0.5; Božićna zvijezda/Poinsetija=0.5;
+      Lopoč=0.3; Ladolež=0.3; Kadifica=0.3; Amarilis=0.3; Gardenija=0.3; Strelicija/Rajska ptica=0.3; Anturij=0.3;
+      Fuksija=0.3; Sljez=0.3; Dragoljub=0.3; Ljutić=0.3; Različak=0.3; Aster/Zvjezdan=0.3; Rododendron=0.3;
+      Orlovi nokti/Kozja krv=0.2; Kalanhoja=0.2; Verbena=0.2; Lupina=0.2; Kozmos=0.2; Cinija=0.2; Plumerija=0.1;
+      Kana=0.1; Šeboj=0.1; Gazanija=0.1; Mrazovac=0.1`,
   },
   {
     slug: "stablo",
@@ -159,9 +180,16 @@ export const opceKategorije: SeedCategory[] = [
     answers: `Hrast=15; Bor=10; Bukva=6; Jela=5; Smreka=5; Lipa=5; Breza=5; Maslina=4; Jabuka=3; Kesten=3; Javor=3;
       Vrba=3; Topola=3; Jasen=2; Čempres=2; Palma=2; Orah=2; Trešnja=1.5; Smokva=1.5; Grab=1; Brijest/Brest=1;
       Platana=1; Bagrem=1; Dud=1; Kruška=1; Šljiva=1; Lovor=0.8; Joha/Jalša=0.5; Ariš=0.5; Tisa=0.5; Cedar=0.5;
-      Baobab=0.5; Sekvoja=0.5; Eukaliptus=0.5; Ginko=0.5; Tuja=0.5; Lijeska/Ljeska=0.5; Divlji kesten=0.5;
-      Limun=0.5; Naranča=0.5; Magnolija=0.3; Rogač=0.3; Glog=0.3; Bazga=0.3; Hrast lužnjak=0.3; Cer=0.2;
-      Crnika=0.2; Plutnjak=0.1; Mandarina=0.2`,
+      Baobab=0.5; Sekvoja=0.5; Eukaliptus=0.5; Ginko=0.5; Tuja=0.5; Lijeska/Ljeska=0.5; Divlji kesten=0.5; Limun=0.5;
+      Naranča=0.5; Magnolija=0.3; Rogač=0.3; Glog=0.3; Bazga=0.3; Hrast lužnjak=0.3; Cer=0.2; Crnika=0.2;
+      Plutnjak=0.1; Mandarina=0.2; Jablan=0.5; Pinija=0.5; Žalosna vrba=0.5; Višnja=0.5; Marelica=0.5; Breskva=0.5;
+      Crni bor=0.3; Jasika=0.3; Dunja=0.3; Nar=0.3; Badem=0.3; Kaki=0.3; Kokosova palma/Kokos=0.3; Mahagonij=0.3;
+      Kleka/Borovica=0.3; Planika=0.3; Božikovina=0.3; Alepski bor=0.2; Medunac=0.2; Kitnjak=0.2; Klen=0.2;
+      Mušmula=0.2; Avokado=0.2; Mango=0.2; Datulja=0.2; Ebanovina=0.2; Tikovina=0.2; Tamaris=0.2; Koštela=0.2;
+      Pajasen=0.2; Paulovnija=0.2; Mimoza=0.2; Oskoruša=0.2; Jarebika=0.2; Drijen=0.2; Balza=0.1; Kaučukovac=0.1;
+      Kakaovac=0.1; Cimetovac=0.1; Sandalovina=0.1; Pistacija=0.1; Gledičija=0.1; Crni grab=0.1; Katalpa=0.1;
+      Tulipanovac=0.1; Metasekvoja=0.1; Araukarija=0.1; Zmajevac=0.1; Brekinja=0.1; Duglazija=0.1; Bor krivulj=0.1;
+      Munika=0.1; Molika=0.1`,
   },
   {
     slug: "zacin",
@@ -174,7 +202,12 @@ export const opceKategorije: SeedCategory[] = [
       Muškatni oraščić=1.5; Kopar=1.5; Čili/Feferoni=1.5; Curry/Kari=1.5; Lipa=1.5; Vlasac=1; Šafran=1; Lavanda=1;
       Matičnjak/Melisa=1; Vegeta=1; Šipak=0.8; Korijander/Korijandar=0.8; Celer=0.5; Gospina trava/Kantarion=0.5;
       Anis=0.5; Komorač=0.5; Hren=0.5; Senf/Gorušica=0.5; Kopriva=0.5; Estragon=0.3; Kardamom=0.3;
-      Mažuran/Majoran=0.3; Stolisnik=0.3; Hibiskus=0.3; Bazga=0.3`,
+      Mažuran/Majoran=0.3; Stolisnik=0.3; Hibiskus=0.3; Bazga=0.3; Sezam=0.5; Čaj/Zeleni čaj/Crni čaj=0.5;
+      Kajenski papar/Cayenne=0.3; Piment=0.3; Zvjezdasti anis/Badijan=0.3; Mak=0.3; Čubar=0.3; Wasabi=0.3;
+      Garam masala=0.3; Limunska trava=0.3; Rooibos=0.3; Sljez=0.3; Trputac=0.3; Ehinacea=0.3; Valerijana/Odoljen=0.3;
+      Pelin=0.3; Smilje=0.3; Kapar=0.3; Medvjeđi luk/Sremuš=0.3; Crni kim/Čurukot=0.2; Piskavica=0.2;
+      Yerba mate/Mate=0.2; Maslačak=0.2; Preslica=0.2; Ginseng=0.2; Vrisak=0.2; Sumak=0.1; Ras el hanout=0.1;
+      Za'atar=0.1; Galgant=0.1; Ružičasti papar=0.1; Krasuljica=0.1`,
   },
   {
     slug: "sport",
@@ -285,12 +318,19 @@ export const opceKategorije: SeedCategory[] = [
     group: "opce",
     title: "Valuta, nekad ili danas",
     strip: [],
-    answers: `Euro=20; Dolar/Američki dolar=15; Kuna=10; Funta=5; Franak/Švicarski franak=4; Jen=3; Rubalj=3;
-      Dinar=3; Konvertibilna marka/Marka/KM=3; Lira=2; Juan/Renminbi=1.5; Forinta=1.5; Kruna=1.5; Bitcoin=1.5;
-      Rupija=1; Zlot=1; Pezo=1; Lev=0.5; Lej/Leu=0.5; Real=0.5; Von/Won=0.5; Dirham=0.5; Tolar=0.5; Drahma=0.5;
-      Pezeta=0.5; Njemačka marka/DM=0.5; Rand=0.3; Šekel=0.3; Rijal=0.3; Šiling=0.3; Escudo=0.2; Gulden=0.2;
-      Hrivnja=0.2; Baht/Bat=0.2; Ringit=0.1; Tenge=0.1; Lari=0.1; Dram=0.1; Naira=0.1; Dukat=0.3; Florin=0.2;
-      Talir=0.2; Groš=0.2`,
+    answers: `Euro=20; Dolar/Američki dolar=15; Kuna=10; Funta=5; Franak/Švicarski franak=4; Jen=3; Rubalj=3; Dinar=3;
+      Konvertibilna marka/Marka/KM=3; Lira=2; Juan/Renminbi=1.5; Forinta=1.5; Kruna=1.5; Bitcoin=1.5; Rupija=1;
+      Zlot=1; Pezo=1; Lev=0.5; Lej/Leu=0.5; Real=0.5; Von/Won=0.5; Dirham=0.5; Tolar=0.5; Drahma=0.5; Pezeta=0.5;
+      Njemačka marka/DM=0.5; Rand=0.3; Šekel=0.3; Rijal=0.3; Šiling=0.3; Escudo=0.2; Gulden=0.2; Hrivnja=0.2;
+      Baht/Bat=0.2; Ringit=0.1; Tenge=0.1; Lari=0.1; Dram=0.1; Naira=0.1; Dukat=0.3; Florin=0.2; Talir=0.2; Groš=0.2;
+      Lipa=0.5; Cent=0.5; Hrvatski dinar=0.5; Penny/Peni=0.3; Krajcar=0.3; Para=0.3; Bolivar=0.3; Denar=0.3; Lek=0.3;
+      Ethereum/Ether=0.3; Pfennig/Pfenig=0.2; Kopejka=0.2; Manat=0.2; Dong=0.2; Sol=0.2; CFA franak=0.2; ECU/Ecu=0.2;
+      Sestercij=0.2; Dublon=0.2; Dogecoin=0.2; Fening=0.1; Taka=0.1; Afgani=0.1; Somoni=0.1; Som=0.1; Tugrik=0.1;
+      Kip=0.1; Riel=0.1; Kjat/Kyat=0.1; Kvecal/Quetzal=0.1; Kolon/Colón=0.1; Lempira=0.1; Kordoba/Córdoba=0.1;
+      Balboa=0.1; Gvarani/Guaraní=0.1; Cedi=0.1; Birr=0.1; Kvača/Kwacha=0.1; Kvanza/Kwanza=0.1; Ariary=0.1;
+      Dalasi=0.1; Nakfa=0.1; Litas=0.1; Lats=0.1; Finska marka=0.1; Irska funta/Punt=0.1; Solid/Solidus=0.1;
+      Pengő/Pengo=0.1; Reichsmark/Rajhsmarka=0.1; Kina=0.1; Vatu=0.1; Rufija=0.1; Litecoin=0.1; Tether=0.1;
+      Ngultrum=0.1`,
   },
   {
     slug: "grad-njemacka",
@@ -333,9 +373,19 @@ export const opceKategorije: SeedCategory[] = [
       Pittsburgh=0.8; Nashville=0.5; Memphis=0.5; Austin=0.5; Cleveland=0.5; Baltimore=0.5; Minneapolis=0.5;
       St. Louis/Saint Louis=0.5; San Antonio=0.5; Kansas City=0.3; Indianapolis=0.3; Milwaukee=0.3;
       Salt Lake City=0.3; Portland=0.3; Sacramento=0.3; Honolulu=0.3; Anchorage=0.2; Charlotte=0.2; Tampa=0.2;
-      Oklahoma City=0.2; Cincinnati=0.2; Buffalo=0.2; Albuquerque=0.2; Beverly Hills=0.2; San Jose=0.2;
-      Oakland=0.2; Tucson=0.1; El Paso=0.1; Jacksonville=0.1; Columbus=0.1; Princeton=0.1; Malibu=0.1;
-      Palo Alto=0.1; Newark=0.1; Atlantic City=0.1; Key West=0.1; Hollywood=0.3`,
+      Oklahoma City=0.2; Cincinnati=0.2; Buffalo=0.2; Albuquerque=0.2; Beverly Hills=0.2; San Jose=0.2; Oakland=0.2;
+      Tucson=0.1; El Paso=0.1; Jacksonville=0.1; Columbus=0.1; Princeton=0.1; Malibu=0.1; Palo Alto=0.1; Newark=0.1;
+      Atlantic City=0.1; Key West=0.1; Hollywood=0.3; Fort Worth=0.3; Long Beach=0.3; Virginia Beach=0.3; Omaha=0.3;
+      Raleigh=0.3; Colorado Springs=0.3; Louisville=0.3; Providence=0.3; Richmond=0.3; Savannah=0.3; Charleston=0.3;
+      Birmingham=0.3; Little Rock=0.3; Madison=0.3; Green Bay=0.3; Ann Arbor=0.3; Rochester=0.3; Albany=0.3; Reno=0.3;
+      Santa Fe=0.3; Santa Barbara=0.3; Berkeley=0.3; Pasadena=0.3; Santa Monica=0.3; Anaheim=0.3; Fort Lauderdale=0.3;
+      Palm Beach=0.3; Tallahassee=0.3; Daytona Beach=0.3; Galveston=0.3; Roswell=0.3; Aspen=0.3; Boulder=0.3;
+      Cambridge=0.3; Jersey City=0.3; Hoboken=0.3; Fresno=0.2; Arlington=0.2; Mesa=0.2; Wichita=0.2; New Haven=0.2;
+      Hartford=0.2; Norfolk=0.2; Lexington=0.2; Knoxville=0.2; Chattanooga=0.2; Des Moines=0.2; Lansing=0.2;
+      Grand Rapids=0.2; Toledo=0.2; Akron=0.2; Dayton=0.2; Syracuse=0.2; Boise=0.2; Spokane=0.2; Tacoma=0.2;
+      Burbank=0.2; Riverside=0.2; Bakersfield=0.2; Gainesville=0.2; St. Petersburg=0.2; Corpus Christi=0.2;
+      Laredo=0.2; Amarillo=0.2; Flagstaff=0.2; Scottsdale=0.2; Juneau=0.2; Fairbanks=0.2; Cheyenne=0.2; Billings=0.2;
+      Fargo=0.2; Sioux Falls=0.2; Salem=0.2; Plymouth=0.2; Yonkers=0.2; Lubbock=0.1`,
   },
   {
     slug: "otok-svijet",
@@ -414,9 +464,14 @@ export const opceKategorije: SeedCategory[] = [
     strip: [],
     answers: `Zmija=15; Gušter=10; Kornjača=10; Krokodil=10; Žaba=8; Aligator=3; Kameleon=3; Daždevnjak/Salamandra=3;
       Poskok=3; Kobra=2; Piton=2; Anakonda=2; Šarka=1.5; Iguana=1.5; Čovječja ribica=1.5; Boa=1; Gekon=1;
-      Komodski varan/Varan=1; Krastača=1; Zvečarka=1; Triton/Vodenjak=0.5; Sljepić=0.5; Bjelouška=0.5;
-      Zelembać=0.5; Mamba/Crna mamba=0.5; Gatalinka=0.3; Smukulja=0.2; Kajman=0.2; Kravosas=0.2; Gavijal=0.1;
-      Tuatara=0.1; Agama=0.1`,
+      Komodski varan/Varan=1; Krastača=1; Zvečarka=1; Triton/Vodenjak=0.5; Sljepić=0.5; Bjelouška=0.5; Zelembać=0.5;
+      Mamba/Crna mamba=0.5; Gatalinka=0.3; Smukulja=0.2; Kajman=0.2; Kravosas=0.2; Gavijal=0.1; Tuatara=0.1;
+      Agama=0.1; Riđovka=0.5; Otrovna žaba/Žaba strelica=0.5; Zidna gušterica=0.3; Blavor=0.3; Macaklin=0.3;
+      Bik žaba/Volovska žaba=0.3; Bazilisk=0.3; Divovska kornjača=0.3; Morska kornjača=0.3; Ribarica=0.2;
+      Barska kornjača=0.2; Čančara=0.2; Glavata želva=0.2; Crvenouha kornjača=0.2; Mukač/Crvenotrbi mukač=0.2;
+      Morska iguana=0.2; Gila=0.2; Skink=0.2; Tajpan=0.2; Koraljna zmija=0.2; Morska zmija=0.2; Šilac=0.1;
+      Primorska gušterica=0.1; Kožasta želva=0.1; Zelena krastača=0.1; Češnjača=0.1; Trnoviti đavao/Moloh=0.1;
+      Leteći zmaj=0.1; Kraljevska zmija=0.1; Cecilija=0.1`,
   },
   {
     slug: "dragi-kamen",
@@ -428,7 +483,14 @@ export const opceKategorije: SeedCategory[] = [
       Oniks=0.5; Ahat=0.5; Kristal=0.5; Koralj=0.5; Bronca=0.5; Titan=0.5; Malahit=0.3; Lapis lazuli=0.3;
       Turmalin=0.3; Cirkon=0.3; Mjesečev kamen=0.3; Granit=0.3; Mramor=0.3; Ružičasti kvarc/Rozenkvarc=0.3;
       Gorski kristal=0.2; Hematit=0.2; Pirit=0.2; Citrin=0.2; Kalcit=0.1; Grafit=0.1; Tanzanit=0.1;
-      Peridot/Olivin=0.1; Aleksandrit=0.1; Spinel=0.1; Obsidijan=0.2; Boksit=0.2; Ugljen=0.2`,
+      Peridot/Olivin=0.1; Aleksandrit=0.1; Spinel=0.1; Obsidijan=0.2; Boksit=0.2; Ugljen=0.2; Aluminij=0.5;
+      Paladij=0.3; Kositar=0.3; Olovo=0.3; Cink=0.3; Nikal=0.3; Živa=0.3; Tigrovo oko=0.3; Kremen=0.3; Volfram=0.2;
+      Krom=0.2; Kobalt=0.2; Litij=0.2; Uranij=0.2; Mjed=0.2; Čelik=0.2; Labradorit=0.2; Jaspis=0.2; Beril=0.2;
+      Korund=0.2; Sedef=0.2; Fluorit=0.2; Glinenac/Feldspat=0.2; Tinjac/Liskun=0.2; Talk=0.2; Gips=0.2;
+      Halit/Kamena sol=0.2; Magnetit=0.2; Dolomit=0.2; Sumpor=0.2; Vapnenac=0.2; Bazalt=0.2; Rodij=0.1; Iridij=0.1;
+      Osmij=0.1; Mangan=0.1; Morganit=0.1; Ametrin=0.1; Karneol=0.1; Kalcedon=0.1; Moissanit=0.1; Mačje oko=0.1;
+      Sodalit=0.1; Azurit=0.1; Rodonit=0.1; Rodokrozit=0.1; Amazonit=0.1; Galenit=0.1; Sfalerit=0.1; Kasiterit=0.1;
+      Cinabarit=0.1; Azbest=0.1; Kaolin=0.1; Rutenij=0.1`,
   },
   {
     slug: "gljiva",

@@ -23,7 +23,16 @@ export const prosirenja: Record<string, string> = {
     Ivica Šerfezi=0.1; Nenad Bach=0.1; Šime Jovanovac=0.1; Klapa Rišpet/Rišpet=0.1; Klapa Kampanel/Kampanel=0.1`,
   klub: `Varteks=0.5; Karlovac/NK Karlovac=0.3; GOŠK/GOŠK Dubrovnik=0.2; Lučko=0.1; Dubrava=0.1; Imotski=0.1;
     Slavonija Požega=0.1; BSK Bijelo Brdo/BSK=0.1; Mosor=0.1; Kamen Ingrad=0.1; Rudar Labin=0.05; Kurilovec=0.05;
-    Vinogradar=0.05; Pazinka=0.05; Novigrad=0.05; Graničar Županja=0.05; Oriolik=0.05`,
+    Vinogradar=0.05; Pazinka=0.05; Novigrad=0.05; Graničar Županja=0.05; Oriolik=0.05; Građanski/HŠK Građanski=1;
+    Concordia/HŠK Concordia=0.3; Samobor/NK Samobor=0.3; Zelina/NK Zelina=0.3; Čakovec/NK Čakovec=0.3;
+    Đakovo/Đakovo Croatia=0.3; Borovo/NK Borovo=0.3; Trogir/HNK Trogir=0.3; Zmaj Makarska/Zmaj=0.3;
+    Bistra/NK Bistra=0.2; Vrapče/NK Vrapče=0.2; Trnje/NK Trnje=0.2; Podravina Ludbreg/Podravina=0.2;
+    Polet Sveti Martin/Polet=0.2; Nedelišće/NK Nedelišće=0.2; Olimpija Osijek/Olimpija=0.2;
+    Crikvenica/NK Crikvenica=0.2; Grobničan/NK Grobničan=0.2; Krk/NK Krk=0.2; Rovinj/NK Rovinj=0.2; Umag/NK Umag=0.2;
+    Buje/NK Buje=0.2; Vodice/NK Vodice=0.2; Omiš/NK Omiš=0.2; Hrvace/NK Hrvace=0.2; Neretvanac Opuzen/Neretvanac=0.2;
+    Dinara Knin/Dinara=0.2; Dugo Selo/NK Dugo Selo=0.2; Darda/NK Darda=0.1; Bedem Ivankovo/Bedem=0.1;
+    Jadran Ploče=0.1; Tehničar Cvetkovec/Tehničar=0.1; Graničar Đurđevac=0.1; Kvarner/NK Kvarner=0.1;
+    Vrbovec/NK Vrbovec=0.1; Halubjan/NK Halubjan=0.1; Novalja/NK Novalja=0.1; Zagora Unešić/Zagora=0.1`,
   obala: `Baška=0.5; Selce=0.3; Njivice=0.3; Vrbnik=0.3; Vela Luka=0.3; Omišalj=0.2; Volosko=0.2; Bibinje=0.2;
     Zaton=0.2; Marina=0.2; Trpanj=0.2; Lumbarda=0.2; Kupari=0.2; Milna=0.2; Savudrija=0.2; Premantura=0.2;
     Mošćenice=0.1; Plomin=0.1; Brseč=0.1; Klenovica=0.1; Seline=0.1; Ražanac=0.1; Privlaka=0.1; Turanj=0.1;
@@ -71,4 +80,5 @@ export const prosirenja: Record<string, string> = {
     Kumpir=0.3; Škatula=0.3; Škura=0.3; Lipo=0.3; Kaić=0.2; Kogoma=0.2; Sić=0.2; Mudante=0.2; Komin=0.2;
     Mižerija=0.2; Šnita=0.2; Krigla=0.2; Ringišpil=0.2; Grincajg=0.2; Pinez=0.2; Grunt=0.2; Kuruza=0.2; Gajba=0.2;
     Tepsija=0.1; Lajbek=0.1; Šempre=0.1`,
+  glavni: `Astana=0.1`,
 };

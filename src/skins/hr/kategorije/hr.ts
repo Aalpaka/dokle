@@ -30,10 +30,14 @@ export const hrKategorije: SeedCategory[] = [
       Papuk=3; Žumberak/Žumberačko gorje/Samoborsko gorje=3; Kozjak=2; Ivanščica=2; Kalnik=1.5; Psunj=1;
       Kapela/Velika Kapela/Mala Kapela=1; Klek=1; Sveti Jure=1; Marjan=1; Petrova gora=0.8; Bjelolasica=0.8;
       Svilaja=0.8; Vidova gora=0.8; Srđ=0.8; Krndija=0.5; Moslavačka gora=0.5; Plješivica/Lička Plješivica=0.5;
-      Snježnik=0.5; Kamešnica=0.5; Ćićarija=0.5; Sveti Ilija=0.5; Bilogora=0.5; Dilj/Dilj gora=0.4;
-      Zrinska gora=0.4; Požeška gora=0.3; Obruč=0.3; Promina=0.3; Vojak=0.3; Strahinjčica=0.3; Ravna gora=0.3;
-      Zavižan=0.3; Tulove grede=0.3; Japetić=0.3; Sinjal=0.3; Vaganski vrh=0.3; Macelj=0.2; Moseć=0.2;
-      Lisina=0.2`,
+      Snježnik=0.5; Kamešnica=0.5; Ćićarija=0.5; Sveti Ilija=0.5; Bilogora=0.5; Dilj/Dilj gora=0.4; Zrinska gora=0.4;
+      Požeška gora=0.3; Obruč=0.3; Promina=0.3; Vojak=0.3; Strahinjčica=0.3; Ravna gora=0.3; Zavižan=0.3;
+      Tulove grede=0.3; Japetić=0.3; Sinjal=0.3; Vaganski vrh=0.3; Macelj=0.2; Moseć=0.2; Lisina=0.2; Sniježnica=0.3;
+      Rilić=0.3; Opor=0.3; Perun=0.3; Omiška Dinara=0.3; Visočica=0.3; Sveto brdo=0.3; Sveta Gera/Trdinov vrh=0.3;
+      Plešivica=0.3; Tuhobić=0.3; Šatorina=0.2; Crnopac=0.2; Viševica=0.2; Bitoraj=0.2; Hum=0.2; Sveti Nikola=0.2;
+      Osorščica=0.2; Obzova=0.2; Okić=0.2; Kuna gora=0.2; Trgovska gora=0.2; Šamarica=0.2; Vukomeričke gorice=0.2;
+      Brezovo polje=0.2; Matokit=0.1; Cesargradska gora=0.1; Oštrc=0.1; Ličko sredogorje=0.1; Orljak=0.1;
+      Kamenjak=0.1; Televrin=0.1; Žbevnica=0.1`,
   },
   {
     slug: "park",
@@ -42,13 +46,20 @@ export const hrKategorije: SeedCategory[] = [
     hint: "Nacionalni park, park prirode, rezervat ili spomenik prirode",
     strip: ["park", "np", "pp", "nacionalni"],
     answers: `Plitvička jezera/Plitvice/NP Plitvice=28; Krka/NP Krka/Slapovi Krke=14; Kopački rit=6; Kornati=5;
-      Brijuni/Brioni=5; Paklenica=5; Mljet=4; Risnjak=3; Biokovo=2.5; Lonjsko polje=2.5; Sjeverni Velebit=2;
-      Papuk=2; Telašćica=2; Velebit/Park prirode Velebit=2; Učka=1.5; Vransko jezero=1.5; Medvednica=1.5;
-      Žumberak=1; Lastovsko otočje/Lastovo=1; Kamenjak/Rt Kamenjak=0.8; Maksimir/Park Maksimir=0.8;
+      Brijuni/Brioni=5; Paklenica=5; Mljet=4; Risnjak=3; Biokovo=2.5; Lonjsko polje=2.5; Sjeverni Velebit=2; Papuk=2;
+      Telašćica=2; Velebit/Park prirode Velebit=2; Učka=1.5; Vransko jezero=1.5; Medvednica=1.5; Žumberak=1;
+      Lastovsko otočje/Lastovo=1; Kamenjak/Rt Kamenjak=0.8; Maksimir/Park Maksimir=0.8;
       Dinara/Park prirode Dinara=0.5; Marjan/Park-šuma Marjan=0.5; Lokrum=0.5; Rastoke=0.5; Delta Neretve=0.5;
       Crveno jezero=0.4; Modro jezero=0.4; Baćinska jezera=0.3; Malostonski zaljev=0.3; Cerovačke špilje=0.2;
       Vražji prolaz=0.2; Zeleni vir=0.2; Samarske stijene=0.2; Rožanski kukovi/Hajdučki kukovi=0.2;
-      Cetina/Izvor Cetine=0.2; Modrić špilja=0.1`,
+      Cetina/Izvor Cetine=0.2; Modrić špilja=0.1; Limski kanal/Limski zaljev=1; Modra špilja/Biševo=1;
+      Barać špilje/Baraćeve špilje=0.5; Zlatni rt=0.5; Arboretum Trsteno/Trsteno=0.5;
+      Mura-Drava/Regionalni park Mura-Drava=0.5; Palud=0.3; Pantan=0.3; Motovunska šuma=0.3;
+      Grabovača/Park Grabovača=0.3; Veternica=0.3; Lokvarka/Špilja Lokvarka=0.3; Vrelo/Špilja Vrelo=0.3;
+      Biserujka=0.3; Manita peć=0.3; Botanički vrt=0.3; Moslavačka gora=0.3; Kamačnik=0.3; Crna Mlaka=0.3;
+      Velebitski botanički vrt=0.3; Đula-Medvedica=0.2; Komrčar=0.2; Dundo=0.2; Tuškanac=0.2; Dotršćina=0.2;
+      Arboretum Opeke/Opeke=0.2; Golubovec=0.1; Šijana=0.1; Grmoščica=0.1; Turopoljski lug=0.1; Štirovača=0.1;
+      Krčić=0.1; Prašnik=0.1; Krapje Đol=0.1`,
   },
   {
     slug: "sportas",
@@ -109,15 +120,22 @@ export const hrKategorije: SeedCategory[] = [
     strip: [],
     answers: `Naše malo misto/Malo misto=10; Velo misto=6; Gruntovčani=5; Bitange i princeze=5; Smogovci=4;
       Profesor Baltazar/Baltazar=4; Tko pjeva zlo ne misli=3; Naši i vaši=3; Kud puklo da puklo=3; Larin izbor=3;
-      Zabranjena ljubav=3; Ruža vjetrova=2; Crno-bijeli svijet/Crno bijeli svijet=2; Stipe u gostima=2;
-      Luda kuća=2; Svećenikova djeca=2; Novine=1.5; Mejaši=1.5; Bračne vode=1.5; Odmori se, zaslužio si/Odmori se zasluzio si=1.5;
+      Zabranjena ljubav=3; Ruža vjetrova=2; Crno-bijeli svijet/Crno bijeli svijet=2; Stipe u gostima=2; Luda kuća=2;
+      Svećenikova djeca=2; Novine=1.5; Mejaši=1.5; Bračne vode=1.5; Odmori se, zaslužio si/Odmori se zasluzio si=1.5;
       Ne daj se, Nina/Ne daj se Nina=1.5; Što je muškarac bez brkova=1.5; Kad mrtvi zapjevaju=1; Maršal=1;
       Metastaze=1; Na terapiji=1; Pogrešan čovjek=1; Bumbari=1; Najbolje godine=1; Družba Pere Kvržice=1;
-      Koko i duhovi=1; Mamutica=0.8; Vlak u snijegu=0.8; Fine mrtve djevojke=0.8; Ne okreći se sine=0.5;
-      Breza=0.5; Ljudožder vegetarijanac=0.5; Seljačka buna=0.5; Dobre namjere=0.5; Počivali u miru=0.5;
-      Nemoj nikome reći=0.5; Dar mar=0.5; Oprosti za kung fu=0.4; Uspjeh=0.4; H8=0.3; Gospa=0.3; Surogat=0.3;
-      Zlatne godine=0.3; Libertas=0.3; Zora dubrovačka=0.3; Kotlovina=0.3; Duh babe Ilonke=0.3;
-      Čudnovate zgode šegrta Hlapića/Šegrt Hlapić/Hlapić=1`,
+      Koko i duhovi=1; Mamutica=0.8; Vlak u snijegu=0.8; Fine mrtve djevojke=0.8; Ne okreći se sine=0.5; Breza=0.5;
+      Ljudožder vegetarijanac=0.5; Seljačka buna=0.5; Dobre namjere=0.5; Počivali u miru=0.5; Nemoj nikome reći=0.5;
+      Dar mar=0.5; Oprosti za kung fu=0.4; Uspjeh=0.4; H8=0.3; Gospa=0.3; Surogat=0.3; Zlatne godine=0.3;
+      Libertas=0.3; Zora dubrovačka=0.3; Kotlovina=0.3; Duh babe Ilonke=0.3;
+      Čudnovate zgode šegrta Hlapića/Šegrt Hlapić/Hlapić=1; Zvizdan=1; Kako je počeo rat na mom otoku=1;
+      Bitka na Neretvi=1; Leteći medvjedići=1; Prosjaci i sinovi=0.5; U registraturi=0.5; Nepokoreni grad=0.5;
+      Zauvijek susjedi=0.5; Na granici=0.5; Kiklop=0.5; Okupacija u 26 slika=0.5; Glembajevi=0.5; Ježeva kućica=0.5;
+      Murina=0.5; Kapelski kresovi=0.3; Zakon ljubavi=0.3; Villa Maria=0.3; Obični ljudi=0.3;
+      Pjevajte nešto ljubavno=0.3; Što je Iva snimila 21. listopada 2003./Što je Iva snimila=0.3; Ničiji sin=0.3;
+      Ne gledaj mi u pijat=0.3; Duga mračna noć=0.3; Vuk samotnjak=0.3; Područje bez signala=0.3; Sigurno mjesto=0.3;
+      General=0.3; Sedamdeset i dva dana=0.3; Ne dao Bog većeg zla=0.3; Nikola Tesla=0.2; Putovanje u Vučjak=0.2;
+      Lisice=0.2; Tajna Nikole Tesle=0.2; Mali=0.2; Rondo=0.1`,
   },
   {
     slug: "pisac",
@@ -163,14 +181,22 @@ export const hrKategorije: SeedCategory[] = [
     title: "Kolač ili slastica",
     strip: ["kolac"],
     answers: `Kremšnita/Krempita/Samoborska kremšnita=10; Palačinke/Palačinka=8; Orahnjača=7; Makovnjača=5;
-      Štrudla/Savijača/Štrudl=5; Fritule/Fritole=4; Krafne/Krofne/Pokladnice=4; Torta=4; Pita od jabuka/Jabučnjak/Pita s jabukama=4;
-      Vanilin kiflice/Kiflice=3; Čupavci=3; Baklava=3; Tiramisu=3; Sladoled=3; Rožata=2.5; Rapska torta=2;
-      Kroštule=2; Breskvice=2; Mađarica=2; Puding=2; Knedle sa šljivama/Knedle=2; Medenjaci=1.5; Linzeri/Linzer=1.5;
-      Sacher torta/Sacher=1.5; Cheesecake/Torta od sira=1.5; Keksi=1.5; Kuglof=1.5; Šnenokle/Snježne kugle=1.5;
-      Bučnica=1; Paprenjaci=1; Šape=1; Tulumbe=1; Hurmašice=1; Muffini=1; Čokoladna torta=1; Doboš torta=1;
-      Pinca=1; Bajadera=1; Uštipci=1; Krem karamel=1; Rizogalo=1; Štrukli=1; Sirnica=0.8; Brownie=0.8;
-      Princes krafne=0.8; Ruske kape=0.5; Tufahije=0.5; Panna cotta=0.5; Kuglice=0.5; Torta od mrkve=0.5;
-      Arancini=0.4; Mandulat=0.3; Zlevka=0.3; Mantala=0.2; Ravani=0.2`,
+      Štrudla/Savijača/Štrudl=5; Fritule/Fritole=4; Krafne/Krofne/Pokladnice=4; Torta=4;
+      Pita od jabuka/Jabučnjak/Pita s jabukama=4; Vanilin kiflice/Kiflice=3; Čupavci=3; Baklava=3; Tiramisu=3;
+      Sladoled=3; Rožata=2.5; Rapska torta=2; Kroštule=2; Breskvice=2; Mađarica=2; Puding=2;
+      Knedle sa šljivama/Knedle=2; Medenjaci=1.5; Linzeri/Linzer=1.5; Sacher torta/Sacher=1.5;
+      Cheesecake/Torta od sira=1.5; Keksi=1.5; Kuglof=1.5; Šnenokle/Snježne kugle=1.5; Bučnica=1; Paprenjaci=1;
+      Šape=1; Tulumbe=1; Hurmašice=1; Muffini=1; Čokoladna torta=1; Doboš torta=1; Pinca=1; Bajadera=1; Uštipci=1;
+      Krem karamel=1; Rizogalo=1; Štrukli=1; Sirnica=0.8; Brownie=0.8; Princes krafne=0.8; Ruske kape=0.5;
+      Tufahije=0.5; Panna cotta=0.5; Kuglice=0.5; Torta od mrkve=0.5; Arancini=0.4; Mandulat=0.3; Zlevka=0.3;
+      Mantala=0.2; Ravani=0.2; Šampita=0.5; Mramorni kolač/Mramorni=0.5; Rolada/Biskvit rolada=0.5;
+      Lijena pita/Lenja pita=0.5; Ekler/Éclair=0.5; Kroasan/Croissant=0.5; Gofre/Vafli/Waffle=0.5; Kesten pire=0.5;
+      Švarcvald torta/Schwarzwald torta=0.5; Esterhazy torta/Esterházy=0.3; Gibanica/Pita od sira=0.3; Pusice=0.3;
+      Ledene kocke=0.3; Biskvit=0.3; Krokan=0.3; Paradižot=0.3; Pandišpanj=0.3; Pita od bundeve=0.3;
+      Pita od višanja=0.3; Profiterole=0.3; Makaron/Macarons=0.3; Cupcake/Kapkejk=0.3; Pavlova=0.3; Halva=0.3;
+      Indijaneri/Indijanci=0.3; Donut=0.3; Reform torta=0.2; Moskva šnita=0.2; Prekmurska gibanica=0.2;
+      Bruštulani=0.2; Rafioli=0.2; Cukarini=0.2; Vasina torta=0.2; Punč šnite/Punč torta=0.2; Kolač od rogača=0.2;
+      Lumblija=0.1`,
   },
   {
     slug: "vino",
@@ -179,11 +205,15 @@ export const hrKategorije: SeedCategory[] = [
     strip: ["vino"],
     answers: `Plavac mali/Plavac=15; Graševina=12; Malvazija/Malvazija istarska=10; Pošip=6; Teran=5; Dingač=5;
       Babić=3; Žlahtina=3; Traminac=3; Postup=2; Grk=2; Frankovka=2; Muškat/Muškat momjanski/Momjanski muškat=2;
-      Merlot=2; Cabernet/Cabernet sauvignon/Kabernet=2; Prošek=2; Rizling/Rajnski rizling=1.5;
-      Chardonnay/Šardone=1.5; Vugava=1; Debit=1; Maraština=1; Crljenak/Crljenak kaštelanski/Tribidrag=1; Škrlet=1;
+      Merlot=2; Cabernet/Cabernet sauvignon/Kabernet=2; Prošek=2; Rizling/Rajnski rizling=1.5; Chardonnay/Šardone=1.5;
+      Vugava=1; Debit=1; Maraština=1; Crljenak/Crljenak kaštelanski/Tribidrag=1; Škrlet=1;
       Sauvignon/Sauvignon bijeli=1; Pinot sivi/Sivi pinot=0.8; Bogdanjuša=0.5; Kujundžuša=0.5; Plavina=0.5;
       Kraljevina=0.5; Pinot crni=0.5; Portugizac=0.5; Lasina=0.3; Rukatac=0.3; Gegić=0.3; Ninčuša=0.2; Trnjak=0.2;
-      Zweigelt=0.2; Pinot bijeli=0.3; Syrah=0.2`,
+      Zweigelt=0.2; Pinot bijeli=0.3; Syrah=0.2; Ivan Dolac=0.5; Dobričić=0.3; Faros=0.3; Zlatan Plavac=0.3;
+      Pušipel=0.3; Malvasija dubrovačka=0.3; Bakarska vodica=0.3; Opolo=0.3; Kadarka=0.2;
+      Silvanac/Silvanac zeleni=0.2; Muškat žuti=0.2; Muškat ruža=0.2; Ružica=0.2; Moslavac/Furmint=0.2; Borgonja=0.2;
+      Cabernet franc=0.2; Müller-Thurgau/Muller Thurgau=0.2; Refošk=0.2; Babica=0.1; Hrvatica=0.1; Pagadebit=0.1;
+      Glavinuša=0.1; Ljutun=0.1; Plemenka=0.1; Drnekuša=0.1`,
   },
   {
     slug: "pice",
@@ -191,11 +221,17 @@ export const hrKategorije: SeedCategory[] = [
     title: "Rakija ili alkoholno piće",
     strip: [],
     answers: `Šljivovica/Šljivovača=14; Travarica=10; Lozovača/Loza=9; Pelinkovac/Pelin=7; Rakija=5;
-      Viljamovka/Vilijamovka/Kruškovača/Kruškovac=4; Medica/Medenica=4; Orahovac=3; Maraskino/Maraschino=3;
-      Pivo=3; Vino=3; Biska=2; Dunjevača/Dunja=2; Gemišt=2; Votka/Vodka=2; Viski/Whisky=2; Komovica=1.5;
-      Bambus=1.5; Prošek=1.5; Vinjak=1.5; Jägermeister/Jeger=1.5; Jabukovača=1; Smokovača=1; Bevanda=1;
-      Višnjevac/Višnja=1; Klekovača/Borovička=1; Gin=1; Rum=1; Tekila/Tequila=1; Rogačica=0.5; Kupinovac=0.5;
-      Liker=0.5; Šampanjac=0.5; Teranino=0.3; Bermet=0.2`,
+      Viljamovka/Vilijamovka/Kruškovača/Kruškovac=4; Medica/Medenica=4; Orahovac=3; Maraskino/Maraschino=3; Pivo=3;
+      Vino=3; Biska=2; Dunjevača/Dunja=2; Gemišt=2; Votka/Vodka=2; Viski/Whisky=2; Komovica=1.5; Bambus=1.5;
+      Prošek=1.5; Vinjak=1.5; Jägermeister/Jeger=1.5; Jabukovača=1; Smokovača=1; Bevanda=1; Višnjevac/Višnja=1;
+      Klekovača/Borovička=1; Gin=1; Rum=1; Tekila/Tequila=1; Rogačica=0.5; Kupinovac=0.5; Liker=0.5; Šampanjac=0.5;
+      Teranino=0.3; Bermet=0.2; Aperol=1; Baileys/Bejlis=1; Konjak/Cognac=1; Prosecco=1; Kuhano vino=1;
+      Absint/Absinthe=0.5; Ouzo=0.5; Sake=0.5; Brendi/Brandy=0.5; Vermut/Martini=0.5; Campari=0.5; Amaretto=0.5;
+      Limoncello=0.5; Sambuca=0.5; Medovina=0.5; Špricer=0.5; Šnaps=0.5; Kajsijevača/Marelovača=0.3;
+      Cherry/Cherry Brandy=0.3; Grappa=0.3; Porto=0.3; Becherovka=0.3; Malibu=0.3; Cider/Jabučno vino=0.3;
+      Bourbon=0.3; Brinjevec=0.2; Amaro=0.2; Soju=0.2; Mezcal=0.2; Kalvados/Calvados=0.2; Šeri/Sherry=0.2; Unicum=0.2;
+      Kahlúa=0.2; Cointreau=0.2; Mistrà/Mistra=0.2; Borovnica=0.2; Pálinka/Palinka=0.2; Cachaça=0.1; Armanjak=0.1;
+      Arak=0.1; Pastis=0.1; Pisco=0.1`,
   },
   {
     slug: "zupanija",
@@ -208,8 +244,12 @@ export const hrKategorije: SeedCategory[] = [
       Osječko-baranjska=1.5; Istarska=1.5; Dubrovačko-neretvanska=1.5; Međimurska=1.5; Srijem=1; Posavina=1;
       Moslavina=1; Kordun=1; Banovina/Banija=1; Konavle=1; Primorje/Hrvatsko primorje=1; Sisačko-moslavačka=1;
       Karlovačka=1; Koprivničko-križevačka=1; Bjelovarsko-bilogorska=1; Ličko-senjska=1; Šibensko-kninska=1;
-      Vukovarsko-srijemska=1; Virovitičko-podravska=0.8; Požeško-slavonska=0.8; Brodsko-posavska=0.8;
-      Prigorje=0.5; Turopolje=0.5; Ravni kotari=0.5; Bukovica=0.3; Dolina Neretve=0.3`,
+      Vukovarsko-srijemska=1; Virovitičko-podravska=0.8; Požeško-slavonska=0.8; Brodsko-posavska=0.8; Prigorje=0.5;
+      Turopolje=0.5; Ravni kotari=0.5; Bukovica=0.3; Dolina Neretve=0.3; Makarsko primorje/Makarska rivijera=0.5;
+      Žumberak=0.3; Pokuplje=0.3; Gacka=0.3; Krbava=0.3; Poljica=0.3; Cetinska krajina=0.3; Imotska krajina=0.3;
+      Vojna krajina=0.3; Pounje=0.2; Velebitsko podgorje/Podgorje=0.2; Pelješac=0.2; Dubrovačko primorje=0.2;
+      Župa dubrovačka/Župa=0.2; Đakovština=0.2; Podunavlje/Hrvatsko podunavlje=0.2; Bilogora=0.2; Vinodol=0.2;
+      Labinština=0.1; Bujština=0.1; Liburnija=0.1`,
   },
   {
     slug: "kvart",
@@ -239,10 +279,18 @@ export const hrKategorije: SeedCategory[] = [
       Dvorac Pejačević/Pejačević=1; Kamerlengo=1; Knežev dvor=1; Revelin=0.8; Barone=0.8; Ozalj/Stari grad Ozalj=0.8;
       Tvrđava Brod/Brodska tvrđava=0.8; Stari grad Čakovec/Čakovec=0.8; Tvrđava svetog Mihovila/Sveti Mihovil=0.5;
       Ružica grad=0.5; Oršić/Dvorac Oršić=0.5; Odescalchi/Dvorac Odescalchi=0.5; Kaštel Pazin/Pazin=0.5;
-      Mali Tabor=0.3; Prandau/Dvorac Prandau-Normann=0.3; Gvozdansko=0.3; Bosiljevo=0.3; Sokolac=0.3;
-      Drivenik=0.3; Grobnik=0.3; Kaštel Gomilica/Gomilica=0.3; Morosini-Grimani/Svetvinčenat=0.3;
-      Brezovica/Dvorac Brezovica=0.3; Lužnica/Dvorac Lužnica=0.2; Januševec/Dvorac Januševec=0.2;
-      Petrapilosa=0.2; Kostel=0.2; Cesargrad=0.2; Lukavec=0.2; Bokar=0.2; Oštrc=0.1`,
+      Mali Tabor=0.3; Prandau/Dvorac Prandau-Normann=0.3; Gvozdansko=0.3; Bosiljevo=0.3; Sokolac=0.3; Drivenik=0.3;
+      Grobnik=0.3; Kaštel Gomilica/Gomilica=0.3; Morosini-Grimani/Svetvinčenat=0.3; Brezovica/Dvorac Brezovica=0.3;
+      Lužnica/Dvorac Lužnica=0.2; Januševec/Dvorac Januševec=0.2; Petrapilosa=0.2; Kostel=0.2; Cesargrad=0.2;
+      Lukavec=0.2; Bokar=0.2; Oštrc=0.1; Zadarske zidine=0.5; Dvigrad=0.5; Tvrđava svetog Ivana/Sveti Ivan=0.3;
+      Kaštel Lukšić=0.3; Zrin=0.3; Kaštel Frankopan=0.3; Motovunske zidine/Motovun=0.3; Kaštel Pula/Pulski kaštel=0.3;
+      Susedgrad=0.3; Dvorac Novi Dvori/Novi Dvori=0.3; Dvorac Bežanec/Bežanec=0.2; Dvorac Miljana/Miljana=0.2;
+      Dvorac Bistra=0.2; Dvorac Mailáth/Mailáth=0.2; Dvorac Tikveš/Tikveš=0.2; Dvorac Khuen-Belasi/Nuštar=0.2;
+      Dvorac Erdődy/Erdődy=0.2; Dvorac Janković/Janković=0.2; Dvorac Kerestinec/Kerestinec=0.2; Modruš=0.2; Rmanj=0.2;
+      Drežnik=0.2; Cetin/Cetingrad=0.2; Ostrovica=0.2; Kalnik/Stari grad Kalnik=0.2;
+      Tvrđava Kostajnica/Kostajnica=0.2; Korčulanske zidine=0.2; Okić grad/Okić=0.2; Dvorac Kutjevo=0.1;
+      Dvorac Laduč/Laduč=0.1; Dvorac Gjalski/Gjalski=0.1; Dvorac Jakovlje=0.1; Stari grad Slunj/Slunj=0.1; Vrana=0.1;
+      Garić=0.1; Lobor=0.1; Grebengrad=0.1; Zelingrad=0.1; Kaštel Štafilić=0.1; Tržan=0.1`,
   },
   {
     slug: "eurovizija",
@@ -250,13 +298,15 @@ export const hrKategorije: SeedCategory[] = [
     title: "Hrvatski izvođač na Euroviziji",
     hint: "Uključujući Hrvate koji su nastupali za Jugoslaviju",
     strip: [],
-    answers: `Baby Lasagna=25; Let 3/Let tri=12; Severina=10; Doris Dragović/Doris=5; Riva=4; Tony Cetinski/Toni Cetinski=3;
-      Nina Badrić=3; Jacques Houdek=3; Danijela/Danijela Martinović=2; Roko/Roko Blažević=2; Albina=2;
-      Marko Bošnjak=2; Franka/Franka Batelić=1.5; Mia Dimšić=1.5; Nina Kraljić=1.5; Kraljevi ulice=1.5;
-      Magazin=1.5; Klapa s Mora=1; Boris Novković=1; Vanna=0.8; Goran Karan=0.8; Maja Blagdan=0.8;
+    answers: `Baby Lasagna=25; Let 3/Let tri=12; Severina=10; Doris Dragović/Doris=5; Riva=4;
+      Tony Cetinski/Toni Cetinski=3; Nina Badrić=3; Jacques Houdek=3; Danijela/Danijela Martinović=2;
+      Roko/Roko Blažević=2; Albina=2; Marko Bošnjak=2; Franka/Franka Batelić=1.5; Mia Dimšić=1.5; Nina Kraljić=1.5;
+      Kraljevi ulice=1.5; Magazin=1.5; Klapa s Mora=1; Boris Novković=1; Vanna=0.8; Goran Karan=0.8; Maja Blagdan=0.8;
       Feminnem=0.8; Damir Kedžo=0.8; Novi fosili=0.8; Igor Cukrov=0.5; Dado Topić=0.5; Ivan Mikulić=0.5;
       Claudia Beni=0.5; Vesna Pisarović=0.5; Tereza Kesovija=0.5; Daria Kinzer/Daria=0.4; Dragonfly=0.3;
-      E.N.I./ENI=0.3; Put=0.3; Andrea Šušnjara=0.3; 75 Cents=0.2; Lidija Horvat=0.2`,
+      E.N.I./ENI=0.3; Put=0.3; Andrea Šušnjara=0.3; 75 Cents=0.2; Lidija Horvat=0.2; Tajči=1; Vlado Kalember=0.5;
+      Srebrna krila=0.5; Emilija Kokić=0.5; Vice Vukov=0.5; Dubrovački trubaduri=0.5;
+      Krunoslav Slabinac/Kićo Slabinac=0.3; Izolda Barudžija/Izolda=0.2; Lado/Ansambl Lado=0.2`,
   },
   {
     slug: "zensko-ime",
@@ -301,7 +351,10 @@ export const hrKategorije: SeedCategory[] = [
       Trakošćansko jezero=1.5; Prošćansko jezero/Prošće=1; Bajer=1; Sabljaci=1; Baćinska jezera=1;
       Mljetska jezera/Veliko jezero/Malo jezero=1; Šoderica=1; Galovac=0.5; Jezero Mir/Mir=0.5; Sakadaš=0.5;
       Kopačko jezero=0.8; Kruščica=0.5; Rakitje=0.5; Gradinsko jezero=0.3; Kuti=0.3; Ponikve=0.3; Butoniga=0.3;
-      Borovik=0.3; Savica=0.3`,
+      Borovik=0.3; Savica=0.3; Prološko blato=0.3; Lepenica=0.3; Zajarki=0.2; Omladinsko jezero=0.2; Kaluđerovac=0.2;
+      Brljansko jezero/Brljan=0.2; Čiče/Jezero Čiče=0.2; Varaždinsko jezero=0.2; Tribalj=0.1; Gavanovac=0.1;
+      Milanovac=0.1; Okrugljak=0.1; Batinovac=0.1; Ciginovac=0.1; Novakovića brod=0.1; Ričice=0.1; Lapovac=0.1;
+      Ježevo=0.1; Siromaja=0.1; Dubravsko jezero=0.1; Čakovečko jezero=0.1`,
   },
   {
     slug: "politicar",

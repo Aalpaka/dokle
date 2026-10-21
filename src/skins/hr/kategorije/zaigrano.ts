@@ -7,27 +7,39 @@ export const zaigranoKategorije: SeedCategory[] = [
     group: "zaigrano",
     title: "Nešto žuto",
     strip: [],
-    answers: `Sunce=15; Banana=12; Limun=10; Žumanjak/Žumance=5; Kukuruz=3; Suncokret=3; Pile/Pilić=3; Sir=2; Maslačak=2;
-      Taksi=2; Minion/Minioni=2; Senf=1.5; Spužva Bob/SpongeBob=1.5; Gumena patkica/Patkica=1.5; Žuti karton=1.5;
-      Pikachu=1; Simpsoni/Homer Simpson=1; Med=1; Ananas=1; Paprika/Žuta paprika=1; Zlato=1; Pijesak=1;
-      Kanarinac=1; Teniska loptica=1; Semafor=1; Smajli/Smajlić=1; Mjesec=1; Školski autobus=1; Dinja=0.5;
+    answers: `Sunce=15; Banana=12; Limun=10; Žumanjak/Žumance=5; Kukuruz=3; Suncokret=3; Pile/Pilić=3; Sir=2;
+      Maslačak=2; Taksi=2; Minion/Minioni=2; Senf=1.5; Spužva Bob/SpongeBob=1.5; Gumena patkica/Patkica=1.5;
+      Žuti karton=1.5; Pikachu=1; Simpsoni/Homer Simpson=1; Med=1; Ananas=1; Paprika/Žuta paprika=1; Zlato=1;
+      Pijesak=1; Kanarinac=1; Teniska loptica=1; Semafor=1; Smajli/Smajlić=1; Mjesec=1; Školski autobus=1; Dinja=0.5;
       Kruška=0.5; Kurkuma=0.5; Maslac=0.5; Pčela=0.5; Narcis=0.5; Mimoza=0.5; Žuta kanta=0.5; Mango=0.5;
       Ljepljivi papirić/Post-it=0.5; Palenta/Polenta=0.5; Pomfrit=0.5; Zvijezda=0.5; Tulipan=0.3; Žutica=0.3;
-      Dunja=0.3; Kabanica=0.3; Kokice=0.3; Puding=0.3; Tweety=0.3; Čips=0.3; Munja=0.3; Žirafa=0.3; Šafran=0.2`,
+      Dunja=0.3; Kabanica=0.3; Kokice=0.3; Puding=0.3; Tweety=0.3; Čips=0.3; Munja=0.3; Žirafa=0.3; Šafran=0.2;
+      Žuti tisak=0.5; Žuta majica=0.5; Reflektirajući prsluk/Žuti prsluk=0.5; Pivo=0.5; Signir/Marker=0.5;
+      Brazilski dres/Brazil=0.5; Osa=0.3; Pače=0.3; Margarin=0.3; Ulje=0.3; Vanilija=0.3; Kari/Curry=0.3; Jaglac=0.3;
+      Neven=0.3; Olovka=0.3; Žute stranice=0.3; Pustinja=0.3; Sumpor=0.3; Ukrajinska zastava=0.3; Švedska zastava=0.3;
+      Borussia Dortmund/Dortmund=0.3; Pac-Man=0.3; Winnie Pooh/Medo Winnie=0.3; DHL=0.3; McDonald's=0.3;
+      Građevinska kaciga=0.3; Žuta podmornica/Yellow Submarine=0.3; Limunada=0.2; Snapchat=0.2; Jantar=0.2; Topaz=0.2;
+      Žuta groznica=0.2; Bart Simpson=0.2; Plava kosa=0.2; Citrin=0.1; Big Bird=0.1; Forsicija/Forzicija=0.1`,
   },
   {
     slug: "crveno",
     group: "zaigrano",
     title: "Nešto crveno",
     strip: [],
-    answers: `Jagoda=8; Rajčica/Paradajz/Pomidor=7; Krv=7; Ruža=5; Jabuka=4; Srce=4; Vatra/Plamen=3; Trešnja=3; Lubenica=2;
-      Ferrari=2; Ruž/Ruž za usne=2; Vatrogasno vozilo/Vatrogasci=2; Djed Mraz/Djed Božićnjak=2; Bubamara=2; Kečap=2;
-      Crveni karton=1.5; Paprika=1.5; Mak=1.5; Vino/Crno vino=1.5; Malina=1.5; Šahovnica/Hrvatska zastava=1.5;
-      Semafor=1; Višnja=1; Cikla=1; Coca-Cola=1; Stop znak=1; Crvenkapica=1; Mars=1; Ribiz=0.5; Kuhani rak=0.5;
-      Lak za nokte=0.5; Crveni tepih=0.5; Lava=0.5; Rubin=0.5; Cigla=0.5; Crijep=0.5; Nar/Šipak=0.5;
-      Čili/Feferon=0.5; Ajvar=0.5; Vrag=0.5; Londonski autobus/Dvokatni autobus=0.5; Kulen=0.3; Hidrant=0.3;
-      Nos klauna=0.3; Zalazak sunca=0.3; Telefonska govornica=0.3; Liverpool=0.2; Kineska zastava=0.2; Ruj=0.2;
-      Kardinal=0.2`,
+    answers: `Jagoda=8; Rajčica/Paradajz/Pomidor=7; Krv=7; Ruža=5; Jabuka=4; Srce=4; Vatra/Plamen=3; Trešnja=3;
+      Lubenica=2; Ferrari=2; Ruž/Ruž za usne=2; Vatrogasno vozilo/Vatrogasci=2; Djed Mraz/Djed Božićnjak=2;
+      Bubamara=2; Kečap=2; Crveni karton=1.5; Paprika=1.5; Mak=1.5; Vino/Crno vino=1.5; Malina=1.5;
+      Šahovnica/Hrvatska zastava=1.5; Semafor=1; Višnja=1; Cikla=1; Coca-Cola=1; Stop znak=1; Crvenkapica=1; Mars=1;
+      Ribiz=0.5; Kuhani rak=0.5; Lak za nokte=0.5; Crveni tepih=0.5; Lava=0.5; Rubin=0.5; Cigla=0.5; Crijep=0.5;
+      Nar/Šipak=0.5; Čili/Feferon=0.5; Ajvar=0.5; Vrag=0.5; Londonski autobus/Dvokatni autobus=0.5; Kulen=0.3;
+      Hidrant=0.3; Nos klauna=0.3; Zalazak sunca=0.3; Telefonska govornica=0.3; Liverpool=0.2; Kineska zastava=0.2;
+      Ruj=0.2; Kardinal=0.2; Crvendać=0.5; Crvena zvijezda/Crvena zvezda=0.5; Crveni križ=0.5;
+      Aparat za gašenje požara/Vatrogasni aparat=0.5; Crveni luk=0.5; Sovjetska zastava=0.3; Japanska zastava=0.3;
+      Švicarska zastava=0.3; Turska zastava=0.3; Mario/Super Mario=0.3; Spider-Man=0.3; Crveni gumb=0.3; Brusnica=0.3;
+      Rotkvica=0.3; Koralj=0.3; Rumenilo=0.3; Valentinovo=0.3; Karanfil=0.3; Božićna zvijezda=0.3;
+      Manchester United=0.3; Crveni trg=0.3; Crveni panda=0.2; Jastog=0.2; Kanadska zastava=0.2; Elmo=0.2; Flash=0.2;
+      Iron Man=0.2; Deadpool=0.2; Krvavica=0.2; Granat=0.2; Bayern=0.2; Arsenal=0.2; Kineski lampion=0.2;
+      Mala sirena=0.1; Crvena vrpca=0.1; Kavijar=0.1; Crvena krvna zrnca/Eritrociti=0.1`,
   },
   {
     slug: "okruglo",
@@ -35,23 +47,36 @@ export const zaigranoKategorije: SeedCategory[] = [
     title: "Nešto okruglo",
     strip: [],
     answers: `Lopta=20; Sunce=6; Kotač/Kolo=6; Sat=4; Pizza=4; Novčić/Kovanica=4; Prsten=3; Tanjur=3; Mjesec=3;
-      Zemlja/Planet=3; Kugla=2; Naranča=2; Krug=2; Gumb=2; Balon=2; Jabuka=1.5; CD/Disk=1.5; Krafna=1.5;
-      Torta=1.5; Oko=1; Lubenica=1; Kliker/Klikeri=1; Volan=1; Globus=1; Grašak=0.5; Biser=0.5; Frizbi=0.5;
-      Meta/Pikado meta=0.5; Obruč/Hula hoop=0.5; Gramofonska ploča/Ploča=0.5; Bubanj=0.5; Palačinka=0.5; Čep=0.5;
-      Tableta=0.5; Hamburger=0.5; Sir=0.3; Bunar=0.3; Okrugli stol/Stol=0.3; Rupa=0.3; Vijenac=0.3; Zdjela=0.3;
-      Lonac=0.3; Keks=0.3; Kapica=0.2`,
+      Zemlja/Planet=3; Kugla=2; Naranča=2; Krug=2; Gumb=2; Balon=2; Jabuka=1.5; CD/Disk=1.5; Krafna=1.5; Torta=1.5;
+      Oko=1; Lubenica=1; Kliker/Klikeri=1; Volan=1; Globus=1; Grašak=0.5; Biser=0.5; Frizbi=0.5; Meta/Pikado meta=0.5;
+      Obruč/Hula hoop=0.5; Gramofonska ploča/Ploča=0.5; Bubanj=0.5; Palačinka=0.5; Čep=0.5; Tableta=0.5;
+      Hamburger=0.5; Sir=0.3; Bunar=0.3; Okrugli stol/Stol=0.3; Rupa=0.3; Vijenac=0.3; Zdjela=0.3; Lonac=0.3;
+      Keks=0.3; Kapica=0.2; Guma=0.5; Hokejaški pak/Pak=0.5; Medalja=0.5; Bilijarska kugla=0.5; Jo-jo=0.5; Bedž=0.3;
+      Oreo=0.3; Pita=0.3; Kugla sladoleda=0.3; Kugla za kuglanje=0.3; Teniska loptica=0.3; Golf loptica=0.3;
+      Smajli=0.3; Grejp=0.3; Mandarina=0.3; Grožđe/Bobica=0.3; Trešnja=0.3; Rajčica=0.3; Pogača=0.3; Lizalica=0.3;
+      Zjenica=0.3; Pupak=0.3; Mjehurić od sapunice=0.3; Ruleta=0.3; Poklopac šahta/Šaht=0.3; Kompas=0.3; Tava=0.3;
+      Narukvica=0.3; Slovo O/Nula=0.3; Točka=0.3; Poklopac=0.3; Čigra=0.3; Trampolin=0.3; Bačva=0.3; Dinja=0.2;
+      Kokos=0.2; Bundeva=0.2; Luk=0.2; Kupus=0.2; Leća=0.2; Objektiv=0.2; Kap=0.2; Vrtuljak=0.2; Panoramski kotač=0.2;
+      Kupola=0.2; Iglu=0.2; Okrugli prozor=0.2; Tamburin=0.2; Činela=0.2; Gong=0.2; Tortilja=0.2; Lepinja=0.2;
+      Kristalna kugla=0.2; Disko kugla=0.2; Lampion=0.2; Đevrek=0.1; Mlinski kamen=0.1`,
   },
   {
     slug: "rupe",
     group: "zaigrano",
     title: "Nešto što ima rupe",
     strip: [],
-    answers: `Sir/Ementaler/Švicarski sir=20; Cjedilo/Sito=8; Čarapa/Čarape=6; Krafna=5; Mreža/Ribarska mreža=4; Spužva=4;
-      Gumb=3; Golf=3; Cesta=3; Nos=2; Frula/Flauta=2; Tenisice/Cipela/Cipele=2; Remen=2; Igla=2; Utičnica=2;
+    answers: `Sir/Ementaler/Švicarski sir=20; Cjedilo/Sito=8; Čarapa/Čarape=6; Krafna=5; Mreža/Ribarska mreža=4;
+      Spužva=4; Gumb=3; Golf=3; Cesta=3; Nos=2; Frula/Flauta=2; Tenisice/Cipela/Cipele=2; Remen=2; Igla=2; Utičnica=2;
       Kugla za kuglanje=1.5; Krtičnjak/Zemlja=1; Slamka=1; Tuš=1; Ključanica=1; Kruh=1; Umivaonik/Lavabo/Sudoper=1;
       Čipka=1; Uho=0.5; Usta=0.5; Bušilica=0.5; Ozonski omotač=0.5; WC školjka/Zahod=0.5; Gitara=0.5;
       Tegla/Saksija=0.5; Crna rupa/Svemir=0.5; Rešetka=0.5; Ograda=0.5; Zub=0.5; Džep=0.5; Hlače=0.5; Zid=0.3;
-      Pikado=0.3; Vafl=0.3; Lubanja=0.3; Mjesec=0.3; Telefon=0.3; Kaciga=0.2`,
+      Pikado=0.3; Vafl=0.3; Lubanja=0.3; Mjesec=0.3; Telefon=0.3; Kaciga=0.2; Bilijarski stol/Bilijar=0.5;
+      Krekeri=0.5; Ribež=0.5; Solnica=0.5; Bušač za papir=0.3; CD=0.3; Makaroni/Tjestenina=0.3; Klarinet=0.3;
+      Usna harmonika=0.3; Koža=0.3; Zvučnik=0.3; Mrežaste čarape=0.3; Crvotočina=0.3; Mravinjak=0.3;
+      Zečja rupa/Jazbina=0.3; Tunel=0.3; Odvod=0.3; Komarnik=0.3; Kavez=0.3; Koš=0.3; Reket=0.3;
+      Kanta za zalijevanje=0.3; Registrator=0.2; Žitarice kolutići=0.2; Bagel=0.2; Okarina=0.2; Kost=0.2; Pore=0.2;
+      Vulkan=0.2; Prskalica=0.2; Mikrofon=0.2; Džemper=0.2; Heklanje=0.2; Jabuka s crvom=0.2; Golf loptica=0.2;
+      Gol=0.2; Bušena kartica=0.1`,
   },
   {
     slug: "na-glavi",
@@ -60,34 +85,54 @@ export const zaigranoKategorije: SeedCategory[] = [
     strip: [],
     answers: `Kapa=20; Šešir=15; Kaciga/Šljem=6; Kruna=5; Kosa=4; Marama=3; Perika=3; Slušalice=3; Šiltarica/Kačket=3;
       Naočale=2; Traka za kosu/Traka=2; Kapuljača=2; Beretka=1; Turban=1; Veo=1; Ukosnica/Šnala=1; Vijenac=1;
-      Mitra=0.5; Fes=0.5; Cilindar=0.5; Tijara=0.5; Šubara=0.5; Lonac=0.5; Kapa za kupanje=0.5;
-      Gumica za kosu=0.5; Bandana=0.5; Hidžab=0.5; Sombrero=0.5; Frizura=0.5; Ručnik=0.5; Rogovi=0.3;
-      Lovorov vijenac=0.3; Oreol=0.3; Šajkača=0.3; Lička kapa=0.3; Kipa=0.2`,
+      Mitra=0.5; Fes=0.5; Cilindar=0.5; Tijara=0.5; Šubara=0.5; Lonac=0.5; Kapa za kupanje=0.5; Gumica za kosu=0.5;
+      Bandana=0.5; Hidžab=0.5; Sombrero=0.5; Frizura=0.5; Ručnik=0.5; Rogovi=0.3; Lovorov vijenac=0.3; Oreol=0.3;
+      Šajkača=0.3; Lička kapa=0.3; Kipa=0.2; Kaubojski šešir=0.5; Kuharska kapa=0.5; Sunčane naočale=0.5;
+      Rajf/Obruč za kosu=0.5; Slamnati šešir/Slamnjak=0.3; Fedora=0.3; Rođendanska kapica=0.3; Kapa Djeda Mraza=0.3;
+      Vještičji šešir=0.3; Fantomka/Balaklava=0.3; Čeona lampa=0.3; Ronilačka maska=0.3; Maska=0.3; Dijadema=0.3;
+      Naušnice=0.3; Uvijači/Vikleri=0.3; Mašna=0.3; Konjski rep=0.3; Pletenica=0.3; Punđa=0.3; Ušanka=0.3;
+      Perjanica=0.3; Panama šešir=0.2; Polucilindar/Melon=0.2; Kapa za tuširanje=0.2; Zečje uši=0.2; VR naočale=0.2;
+      Ekstenzije=0.2; Gel za kosu=0.2; Irokeza=0.2; Dredovi=0.2; Burka=0.2; Zavoj=0.2; Košara=0.2; Akademska kapa=0.2;
+      Knjiga=0.1; Nikab=0.1`,
   },
   {
     slug: "ladica",
     group: "zaigrano",
     title: "Nešto u kuhinjskoj ladici",
     strip: [],
-    answers: `Vilica/Viljuška=12; Žlica/Kašika=12; Nož=10; Žličica/Kašičica=4; Otvarač/Otvarač za konzerve/Otvarač za boce=4;
-      Folija/Aluminijska folija=3; Kuhača=3; Kuhinjska krpa/Krpa=3; Vadičep=2; Škare=2; Kutlača/Grabilica=2;
-      Vrećice=2; Ribež=1.5; Lopatica=1.5; Šibice=1; Prozirna folija=1; Papir za pečenje=1; Gumice=1; Baterije=1;
-      Upaljač=1; Selotejp/Ljepljiva traka=1; Olovka/Kemijska=1; Gulilica=1; Pjenjača/Mutilica=1;
-      Salvete/Ubrusi=1; Čačkalice=1; Svijeće=0.5; Računi=0.5; Jelovnici=0.5; Ključevi=0.5; Štapići za jelo=0.5;
-      Valjak=0.5; Hvataljka=0.5; Slamke=0.5; Odvijač/Šarafciger=0.5; Mjerne žlice=0.3; Kalup=0.3; Cjedilo=0.3;
-      Upute za uređaje/Upute=0.3; Gumene rukavice=0.3; Kvačice=0.3; Termometar=0.2; Konac=0.2`,
+    answers: `Vilica/Viljuška=12; Žlica/Kašika=12; Nož=10; Žličica/Kašičica=4;
+      Otvarač/Otvarač za konzerve/Otvarač za boce=4; Folija/Aluminijska folija=3; Kuhača=3; Kuhinjska krpa/Krpa=3;
+      Vadičep=2; Škare=2; Kutlača/Grabilica=2; Vrećice=2; Ribež=1.5; Lopatica=1.5; Šibice=1; Prozirna folija=1;
+      Papir za pečenje=1; Gumice=1; Baterije=1; Upaljač=1; Selotejp/Ljepljiva traka=1; Olovka/Kemijska=1; Gulilica=1;
+      Pjenjača/Mutilica=1; Salvete/Ubrusi=1; Čačkalice=1; Svijeće=0.5; Računi=0.5; Jelovnici=0.5; Ključevi=0.5;
+      Štapići za jelo=0.5; Valjak=0.5; Hvataljka=0.5; Slamke=0.5; Odvijač/Šarafciger=0.5; Mjerne žlice=0.3; Kalup=0.3;
+      Cjedilo=0.3; Upute za uređaje/Upute=0.3; Gumene rukavice=0.3; Kvačice=0.3; Termometar=0.2; Konac=0.2;
+      Rezač za pizzu=0.5; Gnječilica za krumpir/Gnječilica=0.5; Punjač=0.5;
+      Kuhinjska rukavica/Rukavica za pećnicu=0.5; Pregača/Kecelja=0.5; Vrećice za smeće=0.5; Daska za rezanje=0.3;
+      Drobilica oraha=0.3; Preša za češnjak=0.3; Minutnik=0.3; Žlica za sladoled=0.3; Kistić=0.3; Lijevak=0.3;
+      Spajalice=0.3; Bilježnica/Blok=0.3; Kabel=0.3; Garancije=0.3; Žarulja=0.3; Baterijska svjetiljka/Lampa=0.3;
+      Rođendanske svjećice=0.3; Spužva=0.3; Podmetači=0.3; Stolnjak=0.3; Modlice=0.3; Čepovi=0.3;
+      Oštrač za noževe/Brus=0.3; Mlinac za papar/Mlinac=0.3; Ljepilo=0.2; Flomaster=0.2; Kalkulator=0.2; Kuponi=0.2;
+      Čekić=0.2; Metar=0.2; Mjerica=0.2; Kuhinjska vaga=0.2; Rezač za sir=0.2; Igla=0.2; Sitniš=0.2; Tablete=0.1;
+      Šprica za kolače=0.1`,
   },
   {
     slug: "kotaci",
     group: "zaigrano",
     title: "Nešto što ima kotače",
     strip: [],
-    answers: `Auto=20; Bicikl/Bajs=10; Kamion=5; Autobus=5; Motor/Motocikl=4; Romobil=3; Kolica/Dječja kolica=3; Vlak=3;
-      Kofer=3; Traktor=3; Tramvaj=2; Skateboard/Skejt=2; Role/Rolere=2; Avion=2; Invalidska kolica=1.5;
-      Uredska stolica=1.5; Tačke/Kariola=1.5; Kolica za kupovinu=1; Kombi=1; Kamper=1; Prikolica=1; Bager=1;
-      Kočija=1; Tricikl=1; Kombajn=0.5; Taksi=0.5; Bolid/Formula=0.5; Lokomotiva=0.5; Viličar=0.5; Kosilica=0.5;
-      Hoverboard=0.3; Segway=0.3; Usisavač=0.3; Top=0.3; Hrčkov kotač=0.2; Bolnički krevet=0.2; Klavir=0.2;
-      Kotač sreće=0.2`,
+    answers: `Auto=20; Bicikl/Bajs=10; Kamion=5; Autobus=5; Motor/Motocikl=4; Romobil=3; Kolica/Dječja kolica=3;
+      Vlak=3; Kofer=3; Traktor=3; Tramvaj=2; Skateboard/Skejt=2; Role/Rolere=2; Avion=2; Invalidska kolica=1.5;
+      Uredska stolica=1.5; Tačke/Kariola=1.5; Kolica za kupovinu=1; Kombi=1; Kamper=1; Prikolica=1; Bager=1; Kočija=1;
+      Tricikl=1; Kombajn=0.5; Taksi=0.5; Bolid/Formula=0.5; Lokomotiva=0.5; Viličar=0.5; Kosilica=0.5; Hoverboard=0.3;
+      Segway=0.3; Usisavač=0.3; Top=0.3; Hrčkov kotač=0.2; Bolnički krevet=0.2; Klavir=0.2; Kotač sreće=0.2;
+      Trolejbus=0.5; Quad=0.5; Karting=0.5; Vatrogasno vozilo=0.5; Hitna pomoć=0.5; Zaprežna kola/Kola=0.5; Autić=0.5;
+      Golf kolica=0.3; Kolica za prtljagu=0.3; Kamionet/Pick-up=0.3; Džip/Terenac=0.3; Valjak=0.3;
+      Mješalica za beton=0.3; Dizalica=0.3; Policijski auto=0.3; Kamion za smeće=0.3; Tegljač/Šleper=0.3;
+      Motokultivator/Freza=0.3; Fijaker=0.3; Tandem=0.3; Monocikl=0.3; Koturaljke=0.3; Dubak/Hodalica za bebe=0.3;
+      Autić na daljinski=0.3; Rover/Mars rover=0.3; Robot usisavač=0.3; Hodalica=0.3; Panoramski kotač=0.3;
+      Rollercoaster=0.3; Autodrom=0.3; Servirna kolica=0.2; Cisterna=0.2; BMX=0.2; Hot Wheels=0.2; Nosila=0.2;
+      Vodenica=0.2; Lončarsko kolo=0.2; Bojna kola=0.2; Longboard=0.1; Kolovrat=0.1`,
   },
   {
     slug: "skupljaju",
@@ -97,11 +142,17 @@ export const zaigranoKategorije: SeedCategory[] = [
     answers: `Markice/Poštanske marke=12; Sličice=10; Novčići/Kovanice=10; Magneti=5; Salvete=3; Razglednice=3;
       Karte/Pokemon karte=2; Lego=2; Gramofonske ploče/Ploče=2; Autići=2; Lutke/Barbike=1.5; Figurice=1.5;
       Stripovi=1.5; Knjige=1.5; Čepovi=1.5; Školjke=1.5; Novčanice=1.5; Satovi=1; Kamenčići/Kamenje=1;
-      Tenisice/Cipele=1; Dresovi=1; Šalovi=1; Autogrami=1; Slike/Umjetnine=1; Plišanci/Plišane igračke=1;
-      Boce=0.5; Torbe=0.5; Ulaznice=0.5; Upaljači=0.5; Vino=0.5; Antikviteti/Starine=0.5; Igračke=0.5;
-      Videoigre=0.5; Privjesci=0.5; Plastične vrećice=0.5; Kemijske olovke=0.3; Leptiri=0.3; Minerali=0.3;
-      Fosili=0.3; Podmetači=0.3; Filmovi/DVD=0.3; CD-i=0.3; Bodovi=0.3; Kuponi=0.3; Kutije šibica=0.2;
-      Zastavice=0.2`,
+      Tenisice/Cipele=1; Dresovi=1; Šalovi=1; Autogrami=1; Slike/Umjetnine=1; Plišanci/Plišane igračke=1; Boce=0.5;
+      Torbe=0.5; Ulaznice=0.5; Upaljači=0.5; Vino=0.5; Antikviteti/Starine=0.5; Igračke=0.5; Videoigre=0.5;
+      Privjesci=0.5; Plastične vrećice=0.5; Kemijske olovke=0.3; Leptiri=0.3; Minerali=0.3; Fosili=0.3; Podmetači=0.3;
+      Filmovi/DVD=0.3; CD-i=0.3; Bodovi=0.3; Kuponi=0.3; Kutije šibica=0.2; Zastavice=0.2; Kinder jaja=0.5;
+      Šalice=0.3; Limenke=0.3; Bedževi=0.3; Pinovi=0.3; Tetovaže=0.3; Posjećene zemlje=0.3; Fotografije=0.3;
+      Lajkovi=0.3; Pratitelji=0.3; Pokemoni=0.3; Funko Pop=0.3; Biljke=0.3; Recepti=0.3; Oldtimeri=0.3; Makete=0.3;
+      Snježne kugle=0.3; Nakit=0.3; Uspomene=0.3; Parfemi=0.2; Čaše=0.2; Etikete=0.2; Vrećice šećera=0.2; Medalje=0.2;
+      Trofeji=0.2; Kape=0.2; Majice=0.2; Prijatelji=0.2; Kukci=0.2; Kaktusi=0.2; Kuharice=0.2; Kazete=0.2;
+      Stari mobiteli=0.2; Fotoaparati=0.2; Oružje=0.2; Noževi=0.2; Puzzle=0.2; Društvene igre=0.2; Ukrasi za bor=0.2;
+      Dugovi=0.2; Kilogrami=0.2; Prašina=0.2; Mačke=0.2; Medvjedići=0.2; Avionske milje=0.1; Sjemenke=0.1; Mačevi=0.1;
+      Militarija=0.1; Zvončići=0.1; Kriptovalute=0.1; NFT=0.1; Pepeljare=0.1`,
   },
   {
     slug: "novcanik",
@@ -111,35 +162,58 @@ export const zaigranoKategorije: SeedCategory[] = [
     answers: `Novac/Novci/Pare/Lova=20; Osobna/Osobna iskaznica=12; Kartica/Bankovna kartica/Kreditna kartica=10;
       Vozačka/Vozačka dozvola=8; Računi/Račun=5; Kovanice/Sitniš=5; Slika/Fotografija=3;
       Zdravstvena/Zdravstvena iskaznica=3; Kartica vjernosti/Kartice za bodove=2; Novčanice=2; Pokaz/Karta za bus=1.5;
-      Kondom=1.5; Ceduljica/Papirić=1; Posjetnica/Vizitka=1; Studentska iskaznica/X-ica=1; Ništa/Prazno=1;
-      Ključ=0.5; Prometna dozvola=0.5; Loto listić/Lutrijski listić=0.5; Ulaznica=0.3; Bonovi=0.3; Kupon=0.3;
-      Tableta=0.3; Moljci=0.3; Recept=0.2; Sličica sveca/Svetac=0.3; Djetelina s četiri lista/Djetelina=0.2`,
+      Kondom=1.5; Ceduljica/Papirić=1; Posjetnica/Vizitka=1; Studentska iskaznica/X-ica=1; Ništa/Prazno=1; Ključ=0.5;
+      Prometna dozvola=0.5; Loto listić/Lutrijski listić=0.5; Ulaznica=0.3; Bonovi=0.3; Kupon=0.3; Tableta=0.3;
+      Moljci=0.3; Recept=0.2; Sličica sveca/Svetac=0.3; Djetelina s četiri lista/Djetelina=0.2;
+      Tiket/Listić za kladionicu=0.5; Kartica za knjižnicu=0.3; Žeton=0.3; Strana valuta/Devize=0.3; Kune=0.3;
+      Kalendarić=0.3; Popis za kupovinu=0.3; PIN/Lozinke=0.3; Uplatnica=0.3; Dopunsko osiguranje=0.3;
+      Poklon bon/Poklon kartica=0.3; SIM kartica=0.3; Kartica za teretanu=0.2; Karta za kino=0.2; Dolari=0.2;
+      Sretni novčić=0.2; Broj telefona=0.2; Ljubavno pismo/Poruka=0.2; Mrvice=0.2; Prašina=0.2; Članska kartica=0.2;
+      Kartica za gorivo=0.2; Flaster=0.2; Memorijska kartica=0.2; Žvakaća guma=0.2; Parking kartica=0.1;
+      Hotelska kartica=0.1; Avionska karta=0.1; Karta za vlak=0.1; Krunica=0.1; Molitvica=0.1; Garancija=0.1;
+      Europska kartica zdravstvenog osiguranja/EKZO=0.1; Stranačka iskaznica=0.1; USB=0.1; Ukosnica=0.1; Bombon=0.1;
+      Čačkalica=0.1; Pramen kose=0.1`,
   },
   {
     slug: "kupaonica",
     group: "zaigrano",
     title: "Nešto u kupaonici",
     strip: [],
-    answers: `Četkica za zube/Četkica=8; Pasta za zube/Pasta=8; Sapun=8; Šampon=7; Ručnik=6; WC papir/Toaletni papir=6;
-      Tuš=4; Kada=4; WC/Zahod/WC školjka=4; Ogledalo=4; Umivaonik/Lavabo=3; Češalj=2; Fen/Sušilo za kosu=2;
-      Gel za tuširanje=2; Brijač/Žilet=2; Perilica rublja/Veš mašina=2; Dezodorans=1.5; Četka za kosu=1;
-      Pjena za brijanje=1; Parfem=1; Krema=1; Štapići za uši/Vata=1; Bojler=1; Četka za WC=1; Spužva=1;
-      Kupaonski tepih/Tepih=0.5; Kanta za smeće=0.5; Šminka=0.5; Lak za kosu=0.5; Konac za zube=0.5;
+    answers: `Četkica za zube/Četkica=8; Pasta za zube/Pasta=8; Sapun=8; Šampon=7; Ručnik=6;
+      WC papir/Toaletni papir=6; Tuš=4; Kada=4; WC/Zahod/WC školjka=4; Ogledalo=4; Umivaonik/Lavabo=3; Češalj=2;
+      Fen/Sušilo za kosu=2; Gel za tuširanje=2; Brijač/Žilet=2; Perilica rublja/Veš mašina=2; Dezodorans=1.5;
+      Četka za kosu=1; Pjena za brijanje=1; Parfem=1; Krema=1; Štapići za uši/Vata=1; Bojler=1; Četka za WC=1;
+      Spužva=1; Kupaonski tepih/Tepih=0.5; Kanta za smeće=0.5; Šminka=0.5; Lak za kosu=0.5; Konac za zube=0.5;
       Ulošci=0.5; Grickalica/Škarice za nokte=0.5; Regenerator/Balzam=0.5; Bide=0.5; Osvježivač zraka=0.5;
-      Ormarić=0.5; Košara za rublje=0.5; Pločice=0.5; Vaga=0.5; Zavjesa za tuš=0.5; Kozmetika=0.3;
-      Gel za kosu=0.3; Vodica za ispiranje usta=0.3; Tamponi=0.3; Pinceta=0.3; Gumena patkica/Patkica=0.3;
-      Lijekovi=0.3; Mobitel=0.3; Turpija=0.2; Ventilator=0.2; Pauk=0.2`,
+      Ormarić=0.5; Košara za rublje=0.5; Pločice=0.5; Vaga=0.5; Zavjesa za tuš=0.5; Kozmetika=0.3; Gel za kosu=0.3;
+      Vodica za ispiranje usta=0.3; Tamponi=0.3; Pinceta=0.3; Gumena patkica/Patkica=0.3; Lijekovi=0.3; Mobitel=0.3;
+      Turpija=0.2; Ventilator=0.2; Pauk=0.2; Bade mantil/Kućni ogrtač=0.5; Pjena za kupanje/Kupka=0.5;
+      Pegla za kosu=0.5; Slavina=0.5; Maskara=0.3; Puder=0.3; Micelarna voda/Skidač šminke=0.3; Vatice=0.3;
+      Losion=0.3; After shave=0.3; Uvijač za kosu=0.3; Držač za ručnike=0.3; Papuče=0.3; Sredstvo za čišćenje=0.3;
+      Deterdžent=0.3; Omekšivač=0.3; Sušilica=0.3; Sušilo za rublje=0.3; Radijator=0.3; Odvod=0.3; Tuš kabina=0.3;
+      Vodokotlić=0.3; Daska za WC=0.3; Dozator sapuna=0.3; Tekući sapun=0.3; Pelene=0.3; Neseser=0.3;
+      Kutija prve pomoći=0.3; Flasteri=0.3; Čaša za četkice=0.3; Vlažne maramice=0.3; Časopis/Novine=0.3;
+      Plijesan=0.3; Mačji WC/Mačji pijesak=0.3; Krema za sunčanje=0.2; Sol za kupanje=0.2; Bombica za kupanje=0.2;
+      Piling=0.2; Maska za lice=0.2; Gumice za kosu=0.2; Škare=0.2; Trimer=0.2; Vosak za depilaciju=0.2; Epilator=0.2;
+      Kuka/Vješalica=0.2; Varikina=0.2; Krpa=0.2; Mop=0.2; Sifon=0.2; Čep za kadu=0.2; Pumpa za WC=0.2; Toplomjer=0.2;
+      Kontaktne leće=0.2; Papirnate maramice=0.2; Knjiga=0.2; Kamenac=0.2; Kadica=0.2; Noša=0.2; Ukosnice=0.1;
+      Utičnica=0.1; Pisoar=0.1; Svijeća=0.1; Igračke za kadu=0.1; Proteza=0.1`,
   },
   {
     slug: "ljubimac",
     group: "zaigrano",
     title: "Kućni ljubimac",
     strip: [],
-    answers: `Pas=25; Mačka=20; Hrčak=6; Ribica/Zlatna ribica/Riba=6; Papiga/Papigica/Valovita papigica=5; Zec/Zečić/Kunić=4;
-      Kornjača=4; Zamorac=3; Kanarinac=2; Činčila=1; Miš=1; Štakor=1; Zmija=1; Konj=1; Gušter=0.5; Iguana=0.5;
-      Mini prase/Prase/Svinja=0.5; Tvor/Feret=0.5; Gekon=0.3; Tarantula/Pauk=0.3; Jež=0.3; Kokoš=0.3; Golub=0.3;
-      Gerbil=0.3; Tamagotchi=0.3; Koza=0.2; Žaba=0.2; Puž=0.2; Aksolotl=0.2; Kameleon=0.2; Patka=0.2; Degu=0.1;
-      Mravi/Mravinjak=0.1`,
+    answers: `Pas=25; Mačka=20; Hrčak=6; Ribica/Zlatna ribica/Riba=6; Papiga/Papigica/Valovita papigica=5;
+      Zec/Zečić/Kunić=4; Kornjača=4; Zamorac=3; Kanarinac=2; Činčila=1; Miš=1; Štakor=1; Zmija=1; Konj=1; Gušter=0.5;
+      Iguana=0.5; Mini prase/Prase/Svinja=0.5; Tvor/Feret=0.5; Gekon=0.3; Tarantula/Pauk=0.3; Jež=0.3; Kokoš=0.3;
+      Golub=0.3; Gerbil=0.3; Tamagotchi=0.3; Koza=0.2; Žaba=0.2; Puž=0.2; Aksolotl=0.2; Kameleon=0.2; Patka=0.2;
+      Degu=0.1; Mravi/Mravinjak=0.1; Poni=0.5; Magarac=0.3; Alpaka/Lama=0.3; Majmun=0.3; Ptica=0.3; Kakadu=0.3;
+      Nimfa=0.3; Bradata agama=0.3; Riba borac/Beta=0.3; Gupi=0.3; Ovca=0.2; Janje=0.2; Lisica=0.2; Rakun=0.2;
+      Ara=0.2; Agapornis=0.2; Sova=0.2; Pijetao=0.2; Guska=0.2; Vodena kornjača=0.2; Bogomoljka=0.2; Pčele=0.2;
+      Ahatina=0.2; Vjeverica=0.2; Kamen ljubimac=0.2; Fenek=0.1; Gavran=0.1; Sokol=0.1; Prepelica=0.1; Paun=0.1;
+      Daždevnjak=0.1; Morski konjić=0.1; Rak=0.1; Škorpion=0.1; Crvi=0.1; Krava=0.1; Biljka=0.1;
+      Šećerni jedriličar=0.1`,
   },
   {
     slug: "rima-kava",
@@ -148,11 +222,14 @@ export const zaigranoKategorije: SeedCategory[] = [
     hint: "Bilo koja riječ koja završava na -ava",
     strip: [],
     answers: `Glava=10; Trava=9; Krava=8; Kava=6; Država=5; Slava=4; Sava=4; Drava=4; Brava=3; Zabava=3; Poplava=2;
-      Plava=2; Strava=1.5; Prava=1; Java=1; Morava=1; Dubrava=1; Ostava=1; Uprava=1; Izjava=1; Prijava=1;
-      Zastava=1; Proslava=1; Lava=0.5; Postava=0.5; Pojava=0.5; Najava=0.5; Rasprava=0.5; Naprava=0.5; Spava=0.5;
-      Bratislava=0.5; Košava=0.5; Mršava=0.5; Pristava=0.3; Odjava=0.3; Krvava=0.3; Garava=0.3; Prašnjava=0.3;
-      Pjegava=0.3; Kudrava=0.3; Čupava=0.3; Kovrčava=0.3; Gubava=0.2; Kržljava=0.2; Ljigava=0.2; Rđava=0.2;
-      Hrapava=0.2; Rava=0.1; Jaroslava=0.1; Crvenkava=0.1`,
+      Plava=2; Strava=1.5; Prava=1; Java=1; Morava=1; Dubrava=1; Ostava=1; Uprava=1; Izjava=1; Prijava=1; Zastava=1;
+      Proslava=1; Lava=0.5; Postava=0.5; Pojava=0.5; Najava=0.5; Rasprava=0.5; Naprava=0.5; Spava=0.5; Bratislava=0.5;
+      Košava=0.5; Mršava=0.5; Pristava=0.3; Odjava=0.3; Krvava=0.3; Garava=0.3; Prašnjava=0.3; Pjegava=0.3;
+      Kudrava=0.3; Čupava=0.3; Kovrčava=0.3; Gubava=0.2; Kržljava=0.2; Ljigava=0.2; Rđava=0.2; Hrapava=0.2; Rava=0.1;
+      Jaroslava=0.1; Crvenkava=0.1; Zdrava=0.5; Prljava=0.5; Dostava=0.5; Nastava=0.5; Predstava=0.5; Ćelava=0.3;
+      Rastava=0.3; Šugava=0.2; Šepava=0.2; Ćorava=0.2; Kilava=0.2; Mlitava=0.2; Blatnjava=0.2; Ustava=0.2; Mrava=0.2;
+      Rukava=0.2; Podstava=0.2; Otava=0.2; Ava=0.2; Splava=0.1; Sastava=0.1; Branislava=0.1; Miroslava=0.1;
+      Stanislava=0.1; Gizdava=0.1`,
   },
   {
     slug: "superheroj",
@@ -168,7 +245,17 @@ export const zaigranoKategorije: SeedCategory[] = [
       Star-Lord=0.3; Scarlet Witch/Wanda=0.3; Zorro=0.3; Hellboy=0.3; Mr. Incredible=0.3; Jean Grey=0.2;
       Kiklop/Cyclops=0.2; Rocket=0.2; Gamora=0.2; Vision=0.2; Falcon=0.2; Invincible=0.2; Fantom/Phantom=0.2;
       Blade=0.2; Shang-Chi=0.1; Kick-Ass=0.1; Nightwing=0.1; Kapetan Planet=0.1; She-Hulk=0.1; Moon Knight=0.1;
-      Ms. Marvel=0.1; Wasp=0.1`,
+      Ms. Marvel=0.1; Wasp=0.1; Osvetnici/Avengers=0.5; Power Rangers=0.5; Miles Morales=0.3;
+      Green Arrow/Zelena strijela=0.3; Mladi Titani/Teen Titans=0.3; Liga pravde/Justice League=0.3;
+      Čuvari galaksije/Guardians of the Galaxy=0.3; Sailor Moon=0.3; Inspektor Gadget=0.3; Elastigirl=0.3;
+      Hancock=0.3; Nick Fury=0.2; War Machine=0.2; Winter Soldier/Bucky=0.2; Quicksilver=0.2; Beast=0.2; Rogue=0.2;
+      Gambit=0.2; Nightcrawler=0.2; Ljudska baklja/Human Torch=0.2; Stvor/The Thing=0.2; Mister Fantastic=0.2;
+      Nevidljiva žena/Invisible Woman=0.2; Elektra=0.2; Luke Cage=0.2; Jessica Jones=0.2;
+      Spider-Woman/Spider-Gwen=0.2; Drax=0.2; Hawkman/Hawkgirl=0.2; Starfire=0.2; Beast Boy=0.2; Spawn=0.2; Goku=0.2;
+      One-Punch Man=0.2; Kapetan Gaća/Captain Underpants=0.2; Frozone=0.2; Megamind=0.2; Iceman=0.1; Colossus=0.1;
+      Iron Fist=0.1; Mantis=0.1; Black Canary=0.1; Zatanna=0.1; Raven=0.1; Rorschach=0.1; Dr. Manhattan=0.1;
+      Judge Dredd=0.1; Plastic Man=0.1; Astro Boy=0.1; Ultraman=0.1; Batwoman=0.1; Darkwing Duck=0.1;
+      Martian Manhunter=0.1`,
   },
   {
     slug: "disney",
