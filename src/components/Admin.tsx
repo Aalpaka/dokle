@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
-import { commonCount, priorForTier } from "@/lib/scoring";
+import { assignTiers, priorForTier, tierFor } from "@/lib/scoring";
 
 async function api<T>(path: string, method = "GET", body?: unknown): Promise<T> {
   const res = await fetch(path, {
@@ -33,15 +33,6 @@ type Meta = { skin: { id: string; groups: Record<string, string>; perDay: number
 // tierovi skina, sortirani od najčešćeg prema najrjeđem (kao u configu)
 const Tiers = createContext<TierInfo[]>([]);
 
-// kao tierFor u lib/scoring: najčešći odgovori su uvijek prvi tier, označeni najrjeđi odgovor umjesto najrjeđeg običnog tiera dobiva poseban
-const tierIndex = (tiers: TierInfo[], share: number, rare = false, common = false) => {
-  if (common) return 0;
-  const normal = tiers.filter((t) => !t.rare);
-  const t = normal.find((x) => share >= x.minShare) ?? normal[normal.length - 1];
-  const special = tiers.findIndex((x) => x.rare);
-  return rare && t === normal[normal.length - 1] && special >= 0 ? special : tiers.indexOf(t);
-};
-
 const pct = (n: number) => String(n).replace(".", ",");
 
 // kanonski odgovori počinju velikim slovom (server to i sam osigura)
@@ -67,9 +58,10 @@ function Modal({ title, onClose, children }: { title: string; onClose: () => voi
   );
 }
 
-function TierLabel({ share, rare, common }: { share: number; rare?: boolean; common?: boolean }) {
+/** Oznaka prijevoza; `tier` kad je već izračunat za cijelu kategoriju (assignTiers), inače po udjelu. */
+function TierLabel({ share, rare, tier }: { share: number; rare?: boolean; tier?: TierInfo }) {
   const tiers = useContext(Tiers);
-  const t = tiers[tierIndex(tiers, share, rare, common)];
+  const t = tier ?? (tiers.length ? tierFor({ tiers }, share, rare) : undefined);
   return t ? <span className="chip">{t.emoji} {t.name}</span> : null;
 }
 
@@ -520,10 +512,11 @@ function CategoryAnswers({ id, onChange, onClose }: { id: number; onChange: () =
   const [canonical, setCanonical] = useState("");
   const [variants, setVariants] = useState("");
   const tier = useTierPrior();
+  const tiers = useContext(Tiers);
   const [err, setErr] = useState("");
   if (!data) return error ? <Modal title="Odgovori" onClose={onClose}><Err msg={error} /></Modal> : null;
-  // odgovori dolaze sortirani po procjeni, pa su prvi commonCount uvijek pješice
-  const top = commonCount(data.answers.length);
+  // odgovori dolaze sortirani po procjeni; prijevoz kao u igri prije prvih igrača (najčešći pješice, bez praznih)
+  const assigned = tiers.length ? assignTiers({ tiers }, data.answers.map((a) => ({ share: a.priorShare, rare: a.rare }))) : [];
   return (
     <Modal title={`${data.title} · ${data.answers.length}`} onClose={onClose}>
       <div className="row">
@@ -547,7 +540,7 @@ function CategoryAnswers({ id, onChange, onClose }: { id: number; onChange: () =
         <thead><tr><th>Odgovor</th><th>Varijante</th><th>Prijevoz (procjena)</th></tr></thead>
         <tbody>
           {data.answers.map((a, i) => (
-            <tr key={a.id}><td>{a.canonical}{a.source === "review" && " ✎"}</td><td>{a.aliases.join(", ")}</td><td><TierLabel share={a.priorShare} rare={a.rare} common={i < top} /> <span className="small">{pct(a.priorShare)} %</span></td></tr>
+            <tr key={a.id}><td>{a.canonical}{a.source === "review" && " ✎"}</td><td>{a.aliases.join(", ")}</td><td><TierLabel share={a.priorShare} rare={a.rare} tier={assigned[i]} /> <span className="small">{pct(a.priorShare)} %</span></td></tr>
           ))}
         </tbody>
       </table>

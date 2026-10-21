@@ -14,7 +14,7 @@ import {
   rounds,
 } from "@/db/schema";
 import { capitalize, fold, parseSeedAnswers } from "@/lib/matcher";
-import { stationAt, tierFor } from "@/lib/scoring";
+import { stationAt } from "@/lib/scoring";
 import { computeStats } from "@/lib/stats";
 import { dayNumber, localDate } from "@/lib/day";
 import { isAdminEmail } from "./accounts";
@@ -99,7 +99,7 @@ export async function dayOverview(skin: Skin, date: string) {
         canonical: a.canonical,
         n: a.n,
         share: a.share,
-        tier: tierFor(skin.config, a.share, a.rare, a.common).name,
+        tier: a.tier.name,
       })),
     );
 
