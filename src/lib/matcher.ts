@@ -112,11 +112,11 @@ function matchIndex(idx: MatchIndex, input: string): number | null {
   return null;
 }
 
-/** "Krk=22;Lošinj/Mali Lošinj=3" -> [{canonical, variants, share}] */
+/** "Krk=22;Lošinj/Mali Lošinj=3;Silba=0.05!" -> [{canonical, variants, share, rare}]; "!" iza udjela = najrjeđi (helikopter) */
 export function parseSeedAnswers(d: string) {
   return d.split(";").map((e) => {
-    const [names, share] = e.split("=");
+    const [names, share = ""] = e.split("=");
     const [canonical, ...variants] = names.split("/").map((s) => s.trim());
-    return { canonical, variants, share: parseFloat(share) };
+    return { canonical, variants, share: parseFloat(share), rare: share.trim().endsWith("!") };
   });
 }

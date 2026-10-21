@@ -47,6 +47,7 @@ export const answers = pgTable(
     categoryId: integer("category_id").notNull().references(() => categories.id),
     canonical: text("canonical").notNull(),
     priorShare: real("prior_share").notNull(), // procijenjeni % igrača prije stvarnih podataka
+    rare: boolean("rare").notNull().default(false), // najrjeđi odgovor kategorije (poseban tier, helikopter)
     source: text("source").notNull().default("seed"), // seed | review
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },

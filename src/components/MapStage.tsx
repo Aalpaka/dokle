@@ -9,7 +9,7 @@ import { sfx } from "@/lib/sound";
 import { MISS_COLOR, crashSign, vehicleIcons } from "./vehicleIcons";
 
 // trajanje vožnje po vozilu (s); pješak je najsporiji, a prijeđe i najmanje km
-const DURATION: Record<Vehicle, number> = { walk: 3.4, bike: 3.0, train: 2.9, bus: 2.9, car: 2.6, plane: 2.8 };
+const DURATION: Record<Vehicle, number> = { walk: 3.4, bike: 3.0, train: 2.9, bus: 2.9, car: 2.6, plane: 2.8, heli: 3.2 };
 
 const EASE: Record<Vehicle, (t: number) => number> = {
   walk: (t) => t,
@@ -18,6 +18,8 @@ const EASE: Record<Vehicle, (t: number) => number> = {
   bus: (t) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2),
   car: (t) => (t < 0.5 ? 8 * t ** 4 : 1 - 8 * (1 - t) ** 4),
   plane: (t) => (t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2),
+  // helikopter prvo uzleti na mjestu, pa juri i sleti
+  heli: (t) => (t < 0.18 ? 0 : t > 0.9 ? 1 : (1 - Math.cos(((t - 0.18) / 0.72) * Math.PI)) / 2),
 };
 
 type Segment = { a: number; b: number; tier: Tier };
@@ -102,6 +104,9 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false }: { 
         case "plane":
           h += `<path class="seg" d="${d}" stroke="${c}" stroke-width="3.5" stroke-dasharray="9 6"/>`;
           break;
+        case "heli":
+          h += `<path class="seg" d="${d}" stroke="#fff" stroke-width="7" stroke-dasharray="2 6"/><path class="seg" d="${d}" stroke="${c}" stroke-width="4" stroke-dasharray="2 6"/>`;
+          break;
         default: {
           const w = s.tier.vehicle === "bike" ? 3.5 : 5.5;
           h += `<path class="seg" d="${d}" stroke="#fff" stroke-width="${w + 2.5}"/><path class="seg" d="${d}" stroke="${c}" stroke-width="${w}"/>`;
@@ -174,6 +179,17 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false }: { 
         S.rot = ang - lift * 0.25 * Math.sign(Math.cos(ang) || 1);
         S.flip = 1;
         trailRef.current?.setAttribute("d", `M${x0},${y0} Q${(x0 + bx) / 2},${(y0 + by) / 2 - S.lift * 0.6} ${bx},${by - S.lift}`);
+        break;
+      }
+      case "heli": {
+        // helikopter leti ravno i nisko: podigne se, ljulja se pod elisom i spusti na cilj
+        const up = raw < 0.18 ? raw / 0.18 : raw > 0.9 ? (1 - raw) / 0.1 : 1;
+        const [x0, y0] = a.p0, [x1, y1] = a.p1;
+        S.lift = Math.sin((up * Math.PI) / 2) * 55 + Math.sin(raw * 30) * 2;
+        S.pos = { x: x0 + (x1 - x0) * e, y: y0 + (y1 - y0) * e };
+        const lean = raw > 0.18 && raw < 0.9 ? 0.18 : 0;
+        S.flip = x1 >= x0 ? 1 : -1;
+        S.rot = lean * S.flip + Math.sin(raw * 47) * 0.04;
         break;
       }
       default:
@@ -323,7 +339,7 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false }: { 
         tx = overview.x;
         ty = overview.y;
       } else {
-        tw = S.anim ? (S.anim.tier.vehicle === "plane" ? 820 : 640) : 760;
+        tw = S.anim ? (S.anim.tier.vehicle === "plane" || S.anim.tier.vehicle === "heli" ? 820 : 640) : 760;
         if (cw < 700) tw *= 0.85;
         tx = S.pos.x;
         ty = S.pos.y - S.lift * 0.4;

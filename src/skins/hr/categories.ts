@@ -1,6 +1,9 @@
 // Kategorije za seed. Format answers: "Kanonski/varijanta/varijanta=udio%; ..."
 // Udio = procjena postotka igrača koji bi dali taj odgovor; stvarni podaci je s vremenom nadjačaju.
 // Seed samo dodaje nove kategorije i odgovore, pa se stare kategorije proširuju kroz prosirenja.ts.
+import { parseSeedAnswers } from "../../lib/matcher";
+import { RARE_PRIOR } from "../../lib/scoring";
+import { helikopter } from "./kategorije/helikopter";
 import { hrKategorije } from "./kategorije/hr";
 import { kvizKategorije } from "./kategorije/kviz";
 import { opceKategorije } from "./kategorije/opce";
@@ -29,10 +32,27 @@ const pocetne: SeedCategory[] = [
   { "slug":"dijalekt","group":"zaigrano","title":"Dalmatinska ili kajkavska riječ","strip":[],"answers":"Fjaka=12;Kaj=12;Gušt=6;Pomidor=6;Balun=4;Ćakula/Ćakulati=3;Pjat=3;Kužina=3;Pirun=3;Tovar=3;Šugaman=3;Marenda=3;Kak=2;Hiža=2;Kušin=2;Mularija=2;Đir=2;Barba=2;Ćaća=1.5;Nono=1.5;Nona=1.5;Gemišt=1.5;Škovacera=1.5;Zakaj=1;Purger=1;Fruštuk/Fruštik=1;Šufit=1;Teća=1;Tić=1;Škaf=1;Bevanda=1;Japa/Japica=0.8;Šporko=0.8;Bedast=0.6;Cuker=0.6;Bonaca=0.6;Kantun=0.6;Kaleta=0.6;Ponistra=0.6;Štramac=0.6;Mona=0.6;Nevera=0.6;Šjor=0.6;Lumbrela=0.6;Lancun=0.5;Fletno=0.5;Tavaja=0.5;Feral=0.5;Gda=0.4;Fajn=0.4;Ofinger=0.4;Lešo=0.4;Žmul=0.4;Štagalj=0.3;Fertik=0.3;Ganc=0.3;Cajt=0.3;Vužgati/Vužgi=0.3;Pajcek=0.3;Šlafrok=0.3;Brokva=0.3;Tecija=0.3;Armerun=0.3;Bocun=0.3;Kmica=0.2;Žnora=0.2;Kala=0.2;Piškota=0.2;Dibot=0.2;Kotula=0.1" },
 ];
 
+// najrjeđi nikad nije iznad ovoga, inače ne bi mogao do helikoptera (vidi tierFor)
+const RARE_MAX = 0.3;
+
 export const hrCategories: SeedCategory[] = [
   ...pocetne.map((c) => (prosirenja[c.slug] ? { ...c, answers: `${c.answers};${prosirenja[c.slug]}` } : c)),
   ...hrKategorije,
   ...opceKategorije,
   ...zaigranoKategorije,
   ...kvizKategorije,
-];
+].map(withRare);
+
+/** Označi najrjeđe odgovore iz helikopter.ts ("!" iza udjela); kojih još nema, dodaju se. */
+function withRare(c: SeedCategory): SeedCategory {
+  const names = helikopter[c.slug];
+  if (!names) return c;
+  const list = parseSeedAnswers(c.answers);
+  for (const n of names) {
+    const [canonical, ...variants] = n.split("/");
+    const a = list.find((x) => x.canonical === canonical);
+    if (a) Object.assign(a, { share: Math.min(a.share, RARE_MAX), rare: true });
+    else list.push({ canonical, variants, share: RARE_PRIOR, rare: true });
+  }
+  return { ...c, answers: list.map((a) => `${[a.canonical, ...a.variants].join("/")}=${a.share}${a.rare ? "!" : ""}`).join(";") };
+}

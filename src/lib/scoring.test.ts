@@ -15,10 +15,18 @@ describe("scoring", () => {
     expect(tierFor(hrConfig, 0.4).km).toBe(125);
     expect(tierFor(hrConfig, 2).km).toBe(70);
   });
+  it("helikopter samo za označene najrjeđe odgovore", () => {
+    expect(tierFor(hrConfig, 0.05).name).toBe("Croatia Airlines");
+    expect(tierFor(hrConfig, 0.05, true).name).toBe("Milanovićev helikopter");
+    expect(tierFor(hrConfig, 0.05, true).km).toBe(150);
+    // kad ga puno igrača da, gubi helikopter
+    expect(tierFor(hrConfig, 3, true).name).toBe("Čazmatrans");
+  });
   it("procjena iz tiera pada u isti tier", () => {
-    hrConfig.tiers.forEach((t, i) => expect(tierFor(hrConfig, priorForTier(hrConfig.tiers, i)).name).toBe(t.name));
+    hrConfig.tiers.forEach((t, i) => expect(tierFor(hrConfig, priorForTier(hrConfig.tiers, i), t.rare).name).toBe(t.name));
     expect(priorForTier(hrConfig.tiers, 0)).toBe(25);
-    expect(priorForTier(hrConfig.tiers, hrConfig.tiers.length - 1)).toBe(0.25);
+    expect(priorForTier(hrConfig.tiers, hrConfig.tiers.length - 2)).toBe(0.25);
+    expect(priorForTier(hrConfig.tiers, hrConfig.tiers.length - 1)).toBe(0.05);
   });
   it("postaje", () => {
     expect(stationAt(hrConfig, 0).name).toBe("Vukovar");
