@@ -40,7 +40,7 @@ describe("scoring", () => {
     const marked = base.map((a, i) => (i === 20 ? { ...a, rare: true, share: 1.5, n: 1 } : a));
     expect(heli(marked)).toEqual([20]);
     // a izgubi kad ga da puno igrača; tada ga dobije najrjeđi ostali
-    const lost = base.map((a, i) => (i === 20 ? { ...a, rare: true, share: 2.5, n: 6 } : a));
+    const lost = base.map((a, i) => (i === 20 ? { ...a, rare: true, share: 2.5, n: 12 } : a));
     expect(heli(lost)).toEqual([29]);
     // 60+ odgovora: dva helikoptera
     expect(heli(Array.from({ length: 70 }, (_, i) => ({ share: 10 - i * 0.1, n: 0, rare: false })))).toEqual([68, 69]);

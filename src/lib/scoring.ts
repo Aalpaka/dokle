@@ -48,7 +48,7 @@ export function rareCount(answers: number): number {
 }
 
 // označeni helikopter gubi titulu tek kad ga taj dan da puno igrača
-export const RARE_LOSE = { minPlayers: 5, minShare: 2 };
+export const RARE_LOSE = { minPlayers: 10, minShare: 2 };
 
 /**
  * Tierovi za sve odgovore kategorije (sortirane od najčešćeg; `n` = koliko ih je taj dan dalo).
