@@ -42,15 +42,35 @@ export function speedFor(cfg: SkinConfig, elapsedMs: number): SpeedStep {
   return steps.find((s) => s.maxSeconds === undefined || elapsedMs <= s.maxSeconds * 1000) ?? { multiplier: 1, emoji: "", name: "" };
 }
 
+/** Koliko helikopter odgovora kategorija uvijek ima: 1, a 2 u kategorijama sa 60+ odgovora. */
+export function rareCount(answers: number): number {
+  return answers >= 60 ? 2 : 1;
+}
+
+// označeni helikopter gubi titulu tek kad ga taj dan da puno igrača
+export const RARE_LOSE = { minPlayers: 5, minShare: 2 };
+
 /**
- * Tierovi za sve odgovore kategorije (sortirane od najčešćeg). Najčešći idu pješice (commonCount), ostali po
- * udjelu, a nijedan obični tier ne ostaje prazan: ako ga nitko ne dosegne, u njega se podigne najčešći odgovor
- * iz rjeđih tierova (ili, kad rjeđih nema, spusti najrjeđi iz češćeg). Helikopter odgovori se ne pomiču.
+ * Tierovi za sve odgovore kategorije (sortirane od najčešćeg; `n` = koliko ih je taj dan dalo).
+ * - Najčešći idu pješice (commonCount).
+ * - Helikopter: označeni najrjeđi odgovori, osim ako ga je taj dan dalo puno igrača (RARE_LOSE). Uvijek ih je
+ *   bar rareCount; što fali, popune najrjeđi ostali odgovori.
+ * - Ostali po udjelu, a nijedan obični tier ne ostaje prazan: u prazan se podigne najčešći iz rjeđih
+ *   (ili, kad rjeđih nema, spusti najrjeđi iz češćeg).
  */
-export function assignTiers<T extends TierLike>(cfg: { tiers: T[] }, answers: { share: number; rare?: boolean }[]): T[] {
+export function assignTiers<T extends TierLike>(cfg: { tiers: T[] }, answers: { share: number; rare?: boolean; n?: number }[]): T[] {
   const normal = cfg.tiers.filter((t) => !t.rare);
+  const heli = cfg.tiers.find((t) => t.rare);
   const top = commonCount(answers.length);
-  const out = answers.map((a, i) => tierFor(cfg, a.share, a.rare, i < top));
+  const out = answers.map((a, i) => tierFor(cfg, a.share, false, i < top));
+  if (heli) {
+    const lost = (a: { share: number; n?: number }) => (a.n ?? 0) >= RARE_LOSE.minPlayers && a.share >= RARE_LOSE.minShare;
+    answers.forEach((a, i) => {
+      if (a.rare && i >= top && !lost(a)) out[i] = heli;
+    });
+    for (let i = answers.length - 1; i >= top && out.filter((t) => t === heli).length < rareCount(answers.length); i--)
+      if (out[i] !== heli && !lost(answers[i])) out[i] = heli;
+  }
   const level = (t: T) => (t.rare ? -1 : normal.indexOf(t));
   const count = (k: number) => out.filter((t) => level(t) === k).length;
   for (let k = 1; k < normal.length; k++) {
