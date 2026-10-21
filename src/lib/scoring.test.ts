@@ -31,6 +31,20 @@ describe("scoring", () => {
     expect(t.slice(0, 2)).toEqual(["Pješice", "Pješice"]);
     expect(t.at(-1)).toBe("Milanovićev helikopter");
   });
+  it("helikopter uvijek postoji i gubi se tek kad ga da puno igrača", () => {
+    const base = Array.from({ length: 30 }, (_, i) => ({ share: 10 - i * 0.3, n: 0, rare: false }));
+    const heli = (list: typeof base) => assignTiers(hrConfig, list).flatMap((t, i) => (t.rare ? [i] : []));
+    // bez oznaka: najrjeđi odgovor dobije helikopter
+    expect(heli(base)).toEqual([29]);
+    // označeni ga zadrži i kad ga je dao jedan igrač
+    const marked = base.map((a, i) => (i === 20 ? { ...a, rare: true, share: 1.5, n: 1 } : a));
+    expect(heli(marked)).toEqual([20]);
+    // a izgubi kad ga da puno igrača; tada ga dobije najrjeđi ostali
+    const lost = base.map((a, i) => (i === 20 ? { ...a, rare: true, share: 2.5, n: 12 } : a));
+    expect(heli(lost)).toEqual([29]);
+    // 60+ odgovora: dva helikoptera
+    expect(heli(Array.from({ length: 70 }, (_, i) => ({ share: 10 - i * 0.1, n: 0, rare: false })))).toEqual([68, 69]);
+  });
   it("helikopter samo za označene najrjeđe odgovore", () => {
     expect(tierFor(hrConfig, 0.05).name).toBe("Croatia Airlines");
     expect(tierFor(hrConfig, 0.05, true).name).toBe("Milanovićev helikopter");
