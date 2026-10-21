@@ -91,7 +91,7 @@ function LoggedIn({ me, onChange }: { me: NonNullable<ReturnType<typeof useMe>>;
           <button className="danger" onClick={del}>Obriši račun</button>
         </div>
       </div>
-      <p className="small"><a href="/privatnost">Privatnost</a></p>
+      <p className="small"><a href="/privatnost">Privatnost</a>{me.user!.isAdmin && <> · <a href="/admin">Admin</a></>}</p>
     </div>
   );
 }
