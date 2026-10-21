@@ -156,3 +156,5 @@ textarea.field { width: 100%; font-family: var(--font-mono); }
 .bar { display: grid; grid-template-columns: 130px minmax(0, 1fr) 40px; gap: 8px; align-items: center; font-size: 14px; }
 .bar i { height: 10px; border-radius: 5px; background: var(--sign); display: block; }
 .bar b { font-family: var(--font-mono); text-align: right; }
+
+.tier-icon { height: 1em; width: auto; max-width: 3em; object-fit: contain; vertical-align: -0.12em; }

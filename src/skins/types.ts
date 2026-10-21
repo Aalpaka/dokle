@@ -1,7 +1,7 @@
 export type Station = {
   name: string;
   genitive?: string; // "Do Osijeka ti je falilo..."
-  dative?: string; // "putuješ prema Cavtatu"
+  dative?: string; // "putuješ prema Dubrovniku"
   km: number;
   lon: number;
   lat: number;
@@ -10,7 +10,11 @@ export type Station = {
   alwaysLabel?: boolean;
 };
 
-export type Tier = { minShare: number; km: number; emoji: string; name: string };
+// icon = URL sličice (logo) koja u igri zamjenjuje emoji; emoji ostaje za tekst za dijeljenje
+export type Tier = { minShare: number; km: number; emoji: string; name: string; icon?: string };
+
+// množitelj km prema brzini odgovora; emoji/name prazni = bez oznake
+export type SpeedStep = { maxSeconds?: number; multiplier: number; emoji: string; name: string };
 
 export type SkinMap = {
   viewBox: [number, number];
@@ -29,6 +33,7 @@ export type SkinConfig = {
   maxKm: number;
   stations: Station[];
   tiers: Tier[]; // sortirano od najčešćeg prema najrjeđem
+  speed: SpeedStep[]; // sortirano po maxSeconds, zadnji bez granice
   miss: { km: number; emoji: string; name: string };
   map: SkinMap;
   // k iz koncepta: koliko "virtualnih" igrača vrijedi procjena prije stvarnih podataka

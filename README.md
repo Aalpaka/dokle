@@ -1,7 +1,7 @@
 # Dokle?
 
 Dnevna igra: svaki dan 8 kategorija, za svaku jedan odgovor. Što je točan odgovor rjeđi među igračima,
-to dalje putuješ od Iloka prema Cavtatu.
+to dalje putuješ od Vukovara prema Dubrovniku.
 
 ## Stack
 

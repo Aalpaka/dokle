@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Dokle?",
-  description: "Dnevna igra: koliko daleko stigneš od Iloka do Cavtata?",
+  description: "Dnevna igra: koliko daleko stigneš od Vukovara do Dubrovnika?",
 };
 
 export const viewport: Viewport = { width: "device-width", initialScale: 1, viewportFit: "cover" };
