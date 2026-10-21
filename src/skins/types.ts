@@ -10,7 +10,8 @@ export type Station = {
   alwaysLabel?: boolean;
 };
 
-export type Tier = { minShare: number; km: number; emoji: string; name: string };
+// icon = URL sličice (logo) koja u igri zamjenjuje emoji; emoji ostaje za tekst za dijeljenje
+export type Tier = { minShare: number; km: number; emoji: string; name: string; icon?: string };
 
 // množitelj km prema brzini odgovora; emoji/name prazni = bez oznake
 export type SpeedStep = { maxSeconds?: number; multiplier: number; emoji: string; name: string };

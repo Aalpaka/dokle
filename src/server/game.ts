@@ -140,6 +140,7 @@ export type RoundView = {
   km: number;
   tier: string;
   emoji: string;
+  icon?: string;
   speed: { multiplier: number; emoji: string; name: string } | null; // samo kad je brzina promijenila km
 };
 
@@ -199,6 +200,7 @@ export async function getState(skin: Skin, playerId: string | null): Promise<Gam
         km: r.km ?? 0,
         tier: r.tier ?? skin.config.miss.name,
         emoji: base?.emoji ?? skin.config.miss.emoji,
+        icon: base?.icon,
         speed: base && r.km !== base.km && step.multiplier !== 1 ? { multiplier: step.multiplier, emoji: step.emoji, name: step.name } : null,
       });
     } else {

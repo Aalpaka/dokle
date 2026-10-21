@@ -98,7 +98,7 @@ function Intro({ cfg, perDay, onStart }: { cfg: SkinConfig; perDay: number; onSt
       </ul>
       <div className="tiers">
         {cfg.tiers.map((t) => (
-          <div key={t.name}><span>{t.emoji} {t.name}</span><span>+{t.km}</span></div>
+          <div key={t.name}><span><TierIcon emoji={t.emoji} icon={t.icon} /> {t.name}</span><span>+{t.km}</span></div>
         ))}
         <div><span>{cfg.miss.emoji} Promašaj</span><span>0</span></div>
       </div>
@@ -237,7 +237,7 @@ function Reveal({ state, onNext }: { state: GameState; onNext: () => void }) {
       <div className="cat">{r.category.title}</div>
       <div className={"result" + (r.canonical ? "" : " miss")}>
         <div className="big">
-          <span className="emo">{r.emoji}</span>
+          <span className="emo"><TierIcon emoji={r.emoji} icon={r.icon} /></span>
           <div>
             <div>{what(r)}</div>
             <div className="small">{r.tier}{r.speed && <> · {r.speed.emoji} {r.speed.name} ×{String(r.speed.multiplier).replace(".", ",")}</>}</div>
@@ -259,6 +259,13 @@ function Reveal({ state, onNext }: { state: GameState; onNext: () => void }) {
       </div>
     </div>
   );
+}
+
+/** Logo prijevoza ako ga tier ima, inače emoji (i kad se slika ne učita). */
+function TierIcon({ emoji, icon }: { emoji: string; icon?: string }) {
+  const [broken, setBroken] = useState(false);
+  if (!icon || broken) return <>{emoji}</>;
+  return <img className="tier-icon" src={icon} alt={emoji} onError={() => setBroken(true)} />;
 }
 
 function speedRange(steps: SkinConfig["speed"], i: number) {
@@ -305,7 +312,7 @@ function End({ state, me }: { state: GameState; me: Me | null }) {
       <ul className="recap">
         {state.rounds.map((r) => (
           <li key={r.position}>
-            <span>{r.emoji}{r.speed?.emoji}</span>
+            <span><TierIcon emoji={r.emoji} icon={r.icon} />{r.speed?.emoji}</span>
             <span>
               <span className="c">{r.category.title}</span><br />
               <span className="a">{r.canonical ?? (r.raw ? `„${r.raw}”` : "—")}</span>
