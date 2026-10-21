@@ -147,18 +147,34 @@ export const hrKategorije: SeedCategory[] = [
       Marin Držić/Držić=4; Ivan Mažuranić/Mažuranić=3; Ivo Andrić/Andrić=3; Dobriša Cesarić/Cesarić=2;
       Vladimir Nazor/Nazor=2; Silvije Strahimir Kranjčević/Kranjčević=2; Dragutin Tadijanović/Tadijanović=2;
       Vesna Parun/Parun=2; Mato Lovrak/Lovrak=2; Antun Branko Šimić/Šimić=1.5; Ivan Goran Kovačić/Goran Kovačić=1.5;
-      Petar Preradović/Preradović=1.5; Miro Gavran/Gavran=1.5; Ranko Marinković/Marinković=1; Pavao Pavličić/Pavličić=1;
-      Ante Tomić=1; Miljenko Jergović/Jergović=1; Petar Hektorović/Hektorović=0.8; Ksaver Šandor Gjalski/Gjalski=0.8;
-      Ante Kovačić=0.8; Josip Kozarac/Kozarac=0.8; Vjenceslav Novak=0.8; Dinko Šimunović/Šimunović=0.8;
-      Grigor Vitez/Vitez=0.8; Ivan Kušan/Kušan=0.8; Goran Tribuson/Tribuson=0.8; Dubravka Ugrešić/Ugrešić=0.8;
-      Petar Zoranić/Zoranić=0.5; Eugen Kumičić/Kumičić=0.5; Ivo Vojnović/Vojnović=0.5; Slobodan Novak=0.5;
-      Slavko Kolar/Kolar=0.5; Zvonimir Balog/Balog=0.5; Hrvoje Hitrec/Hitrec=0.5; Luko Paljetak/Paljetak=0.5;
-      Jure Kaštelan/Kaštelan=0.5; Hanibal Lucić/Lucić=0.4; Antun Šoljan/Šoljan=0.4; Slavenka Drakulić/Drakulić=0.4;
-      Ivana Simić Bodrožić=0.4; Zoran Ferić/Ferić=0.4; Fran Galović/Galović=0.4; Janko Polić Kamov/Kamov=0.4;
-      Vladan Desnica/Desnica=0.4; Ivan Aralica/Aralica=0.4; Janko Leskovar/Leskovar=0.3; Milan Begović/Begović=0.3;
-      Ivan Slamnig/Slamnig=0.3; Kristian Novak=0.3; Arsen Dedić=0.3; Dragutin Domjanić/Domjanić=0.3;
-      Nedjeljko Fabrio/Fabrio=0.3; Josip Pupačić/Pupačić=0.3; Faust Vrančić=0.2; Andrija Kačić Miošić/Kačić=0.5;
-      Matija Antun Reljković/Reljković=0.4; Ljudevit Gaj/Gaj=0.5; Tituš Brezovački/Brezovački=0.2`,
+      Petar Preradović/Preradović=1.5; Miro Gavran/Gavran=1.5; Ranko Marinković/Marinković=1;
+      Pavao Pavličić/Pavličić=1; Ante Tomić=1; Miljenko Jergović/Jergović=1; Petar Hektorović/Hektorović=0.8;
+      Ksaver Šandor Gjalski/Gjalski=0.8; Ante Kovačić=0.8; Josip Kozarac/Kozarac=0.8; Vjenceslav Novak=0.8;
+      Dinko Šimunović/Šimunović=0.8; Grigor Vitez/Vitez=0.8; Ivan Kušan/Kušan=0.8; Goran Tribuson/Tribuson=0.8;
+      Dubravka Ugrešić/Ugrešić=0.8; Petar Zoranić/Zoranić=0.5; Eugen Kumičić/Kumičić=0.5; Ivo Vojnović/Vojnović=0.5;
+      Slobodan Novak=0.5; Slavko Kolar/Kolar=0.5; Zvonimir Balog/Balog=0.5; Hrvoje Hitrec/Hitrec=0.5;
+      Luko Paljetak/Paljetak=0.5; Jure Kaštelan/Kaštelan=0.5; Hanibal Lucić/Lucić=0.4; Antun Šoljan/Šoljan=0.4;
+      Slavenka Drakulić/Drakulić=0.4; Ivana Simić Bodrožić=0.4; Zoran Ferić/Ferić=0.4; Fran Galović/Galović=0.4;
+      Janko Polić Kamov/Kamov=0.4; Vladan Desnica/Desnica=0.4; Ivan Aralica/Aralica=0.4; Janko Leskovar/Leskovar=0.3;
+      Milan Begović/Begović=0.3; Ivan Slamnig/Slamnig=0.3; Kristian Novak=0.3; Arsen Dedić=0.3;
+      Dragutin Domjanić/Domjanić=0.3; Nedjeljko Fabrio/Fabrio=0.3; Josip Pupačić/Pupačić=0.3; Faust Vrančić=0.2;
+      Andrija Kačić Miošić/Kačić=0.5; Matija Antun Reljković/Reljković=0.4; Ljudevit Gaj/Gaj=0.5;
+      Tituš Brezovački/Brezovački=0.2; Marija Jurić Zagorka/Zagorka=0.5; Antun Mihanović/Mihanović=0.3;
+      Miljenko Smoje/Smoje=0.3; Fran Krsto Frankopan/Frankopan=0.2; Stanko Vraz/Vraz=0.2; Gustav Krklec/Krklec=0.2;
+      Ivo Brešan/Brešan=0.2; Šiško Menčetić/Menčetić=0.1; Džore Držić=0.1; Mavro Vetranović/Vetranović=0.1;
+      Nikola Nalješković/Nalješković=0.1; Juraj Baraković/Baraković=0.1; Ivan Bunić Vučić/Bunić=0.1;
+      Junije Palmotić/Palmotić=0.1; Ignjat Đurđević/Đurđević=0.1; Antun Kanižlić/Kanižlić=0.1;
+      Filip Grabovac/Grabovac=0.1; Pavao Ritter Vitezović/Vitezović=0.1; Bartol Kašić/Kašić=0.1;
+      Juraj Križanić/Križanić=0.1; Dimitrija Demeter/Demeter=0.1; Ivan Kukuljević Sakcinski/Kukuljević=0.1;
+      Luka Botić/Botić=0.1; August Harambašić/Harambašić=0.1; Josip Eugen Tomić=0.1; Fran Mažuranić=0.1;
+      Vladimir Vidrić/Vidrić=0.1; Milutin Cihlar Nehajev/Nehajev=0.1; Viktor Car Emin/Car Emin=0.1;
+      August Cesarec/Cesarec=0.1; Nikola Šop/Šop=0.1; Ivo Kozarčanin/Kozarčanin=0.1; Petar Šegedin/Šegedin=0.1;
+      Vjekoslav Kaleb/Kaleb=0.1; Slavko Mihalić/Mihalić=0.1; Vesna Krmpotić/Krmpotić=0.1; Zvonimir Golob/Golob=0.1;
+      Tonko Maroević/Maroević=0.1; Danijel Dragojević/Dragojević=0.1; Irena Vrkljan/Vrkljan=0.1;
+      Daša Drndić/Drndić=0.1; Sunčana Škrinjarić/Škrinjarić=0.1; Jagoda Truhelka/Truhelka=0.1; Anto Gardaš/Gardaš=0.1;
+      Milivoj Matošec/Matošec=0.1; Pajo Kanižaj/Kanižaj=0.1; Božidar Prosenjak/Prosenjak=0.1;
+      Damir Karakaš/Karakaš=0.1; Renato Baretić/Baretić=0.1; Robert Perišić=0.1; Edo Popović=0.1; Jurica Pavičić=0.1;
+      Ivan Raos/Raos=0.1`,
   },
   {
     slug: "brend",
@@ -166,14 +182,26 @@ export const hrKategorije: SeedCategory[] = [
     title: "Hrvatski proizvod, tvrtka ili brend",
     strip: [],
     answers: `Vegeta=12; Kraš=8; Podravka=8; Cedevita=7; Ledo=5; Ožujsko=4; Franck=3; Jamnica=3; Karlovačko=3;
-      Bajadera=3; Dorina=2; Jana=2; Dukat=2; Vindija=2; Gavrilović=2; Čokolino=2; Rimac/Rimac Automobili=2;
-      Konzum=2; Ki-Ki/Kiki/Kiki bombon=1.5; Domaćica=1.5; Napolitanke=1.5; Lino Lada/Linolada=1.5; Pliva=1.5;
-      Jadrolinija=1.5; INA=1.5; Borovo=1.5; Studena=1; Zvijezda=1; PIK Vrbovec/PIK=1; Životinjsko carstvo=1;
-      Croatia Airlines=1; Končar=1; Studenac=1; Badel/Badel 1862=0.8; Belupo=0.8; Tisak=0.8; Tommy=0.8;
-      Kraš Express=0.5; Pan/Pan pivo=0.5; Koestlin=0.5; Atlantic/Atlantic Grupa=0.5; Infobip=0.5; Plodine=0.5;
-      Varteks=0.5; Fant=0.5; Brionka=0.3; Fortenova=0.3; Ronhill=0.3; Walter Wolf=0.3; Kamensko=0.3; Galeb=0.3;
-      Paški sir=1; Maraschino Maraska/Maraska=0.5; Nanobit=0.3; Photomath=0.3; HEP=0.5; Hrvatska pošta=0.3;
-      HT/Hrvatski Telekom=0.5; Agrokor=0.8`,
+      Bajadera=3; Dorina=2; Jana=2; Dukat=2; Vindija=2; Gavrilović=2; Čokolino=2; Rimac/Rimac Automobili=2; Konzum=2;
+      Ki-Ki/Kiki/Kiki bombon=1.5; Domaćica=1.5; Napolitanke=1.5; Lino Lada/Linolada=1.5; Pliva=1.5; Jadrolinija=1.5;
+      INA=1.5; Borovo=1.5; Studena=1; Zvijezda=1; PIK Vrbovec/PIK=1; Životinjsko carstvo=1; Croatia Airlines=1;
+      Končar=1; Studenac=1; Badel/Badel 1862=0.8; Belupo=0.8; Tisak=0.8; Tommy=0.8; Kraš Express=0.5;
+      Pan/Pan pivo=0.5; Koestlin=0.5; Atlantic/Atlantic Grupa=0.5; Infobip=0.5; Plodine=0.5; Varteks=0.5; Fant=0.5;
+      Brionka=0.3; Fortenova=0.3; Ronhill=0.3; Walter Wolf=0.3; Kamensko=0.3; Galeb=0.3; Paški sir=1;
+      Maraschino Maraska/Maraska=0.5; Nanobit=0.3; Photomath=0.3; HEP=0.5; Hrvatska pošta=0.3;
+      HT/Hrvatski Telekom=0.5; Agrokor=0.8; Kravata/Kravate=0.5; Kulen/Slavonski kulen=0.5;
+      Licitar/Licitarsko srce=0.5; Zagrebačka banka/Zaba=0.5; Pršut/Dalmatinski pršut/Istarski pršut=0.3; Penkala=0.3;
+      Čazmatrans=0.3; PBZ/Privredna banka=0.3; 24sata=0.3; Nova TV=0.3; HRT=0.3; HŽ/Hrvatske željeznice=0.3;
+      Belje=0.3; Osječko=0.3; Mlinar=0.3; Kandit=0.3; Pipi=0.3; Saponia=0.3; Emmezeta=0.3; Pevex=0.3; KTC=0.3;
+      Bronhi=0.3; Z bregov=0.3; Croata=0.3; Jutarnji list/Jutarnji=0.2; Večernji list/Večernji=0.2;
+      Slobodna Dalmacija=0.2; Index/Index.hr=0.2; Ribola=0.2; Koka=0.2; Kutjevo=0.2; Tomislav pivo=0.2;
+      Velebitsko=0.2; Ličanka=0.2; Zvečevo=0.2; Bakina tajna=0.2; Krašotice=0.2; Pelinkovac=0.2; Travarica=0.2;
+      Đuro Đaković=0.2; Uljanik=0.2; Brodosplit=0.2; DOK-ING/Doking=0.2; Faks helizim/Faks=0.2; Eva=0.2;
+      Hrvatska lutrija/Loto=0.2; Super Sport=0.2; ZET=0.2; HPB/Hrvatska poštanska banka=0.2;
+      TDR/Tvornica duhana Rovinj=0.2; Links=0.2; Griotte=0.1; Sirela=0.1; Pivac=0.1; Iločki podrumi=0.1; Zmajsko=0.1;
+      Žito=0.1; Klara=0.1; Greyp=0.1; Microblink=0.1; Gideon=0.1; Orqa=0.1; Verne=0.1; Ericsson Nikola Tesla=0.1;
+      Dalekovod=0.1; Petrokemija=0.1; Sancta Domenica=0.1; Benston=0.1; Filter 160=0.1; Iskon=0.1; Samoborček=0.1;
+      Bermet=0.1; Torpedo=0.1`,
   },
   {
     slug: "kolac",
@@ -259,13 +287,19 @@ export const hrKategorije: SeedCategory[] = [
     answers: `Trešnjevka=8; Dubrava=6; Maksimir=5; Sesvete=5; Novi Zagreb=4; Trnje=4; Gornji grad=4; Špansko=3;
       Črnomerec=3; Jarun=3; Donji grad=3; Podsused=2; Medveščak=2; Peščenica=2; Knežija=2; Travno=2; Vrapče=2;
       Kaptol=2; Savica=1.5; Kustošija=1.5; Utrina=1; Siget=1; Sopot=1; Zapruđe=1; Dugave=1; Trnsko=1; Remetinec=1;
-      Stenjevec=1; Šalata=1; Šestine=1; Gračani=1; Rudeš=1; Sloboština=0.8; Malešnica=0.8; Tuškanac=0.8;
-      Voltino=0.8; Ljubljanica=0.8; Prečko=0.8; Gajnice=0.5; Ribnjak=0.5; Pantovčak=0.5; Markuševec=0.5; Vrbik=0.5;
-      Martinovka=0.5; Kajzerica=0.5; Lanište=0.5; Blato=0.5; Sveta Klara=0.5; Jakuševec=0.5; Žitnjak=0.5;
-      Borongaj=0.5; Ferenščica=0.5; Kozari bok/Kozari=0.5; Svetice=0.5; Ravnice=0.5; Srednjaci=0.5;
-      Cvjetno naselje=0.5; Kvatrić=0.5; Ksaver=0.3; Botinec=0.3; Hrelić=0.3; Volovčica=0.3;
-      Folnegovićevo naselje/Folnegovićevo=0.3; Retkovec=0.3; Mlinovi=0.3; Bukovac=0.3; Petruševec=0.3;
-      Granešina=0.3; Jelkovec/Novi Jelkovec=0.3; Staglišće=0.3; Kruge=0.3; Studentski grad=0.2; Brestje=0.1`,
+      Stenjevec=1; Šalata=1; Šestine=1; Gračani=1; Rudeš=1; Sloboština=0.8; Malešnica=0.8; Tuškanac=0.8; Voltino=0.8;
+      Ljubljanica=0.8; Prečko=0.8; Gajnice=0.5; Ribnjak=0.5; Pantovčak=0.5; Markuševec=0.5; Vrbik=0.5; Martinovka=0.5;
+      Kajzerica=0.5; Lanište=0.5; Blato=0.5; Sveta Klara=0.5; Jakuševec=0.5; Žitnjak=0.5; Borongaj=0.5;
+      Ferenščica=0.5; Kozari bok/Kozari=0.5; Svetice=0.5; Ravnice=0.5; Srednjaci=0.5; Cvjetno naselje=0.5;
+      Kvatrić=0.5; Ksaver=0.3; Botinec=0.3; Hrelić=0.3; Volovčica=0.3; Folnegovićevo naselje/Folnegovićevo=0.3;
+      Retkovec=0.3; Mlinovi=0.3; Bukovac=0.3; Petruševec=0.3; Granešina=0.3; Jelkovec/Novi Jelkovec=0.3;
+      Staglišće=0.3; Kruge=0.3; Studentski grad=0.2; Brestje=0.1; Brezovica=0.2; Podsljeme=0.2; Lučko=0.2;
+      Jankomir=0.2; Sveti Duh=0.2; Gornja Dubrava=0.1; Donja Dubrava=0.1; Dubec=0.1; Trnava=0.1; Čulinec=0.1;
+      Poljanice=0.1; Ivanja Reka=0.1; Resnik=0.1; Kozari putevi=0.1; Hrastje=0.1; Sesvetski Kraljevec=0.1; Kašina=0.1;
+      Vugrovec=0.1; Jordanovac=0.1; Laščina=0.1; Remete=0.1; Prekrižje=0.1; Jabukovac=0.1; Zelengaj=0.1; Vrbani=0.1;
+      Prisavlje=0.1; Savski gaj=0.1; Središće=0.1; Odra=0.1; Kupinečki Kraljevec=0.1; Perjavica=0.1; Mikulići=0.1;
+      Horvati=0.1; Borovje=0.1; Čučerje=0.1; Sigečica=0.1; Hrvatski Leskovac=0.1; Mala Mlaka=0.1; Veliko Polje=0.1;
+      Buzin=0.1`,
   },
   {
     slug: "utvrda",
@@ -377,7 +411,22 @@ export const hrKategorije: SeedCategory[] = [
       Ruža Tomašić=0.5; Dalija Orešković=0.5; Dragan Primorac=0.5; Zdravko Marić=0.5; Mika Tripalo=0.3;
       Andrija Hebrang=0.3; Hrvoje Šarinić=0.3; Nikica Valentić=0.3; Zlatko Mateša=0.3; Franjo Gregurić=0.3;
       Josip Manolić=0.3; Marijana Petir=0.3; Bruna Esih=0.3; Anka Mrak-Taritaš=0.3; Ivan Anušić=0.3;
-      Gordan Grlić Radman=0.3; Nikola Grmoja=0.3; Davor Ivo Stier=0.3; Damir Kajin=0.3; Ljudevit Gaj=0.5`,
+      Gordan Grlić Radman=0.3; Nikola Grmoja=0.3; Davor Ivo Stier=0.3; Damir Kajin=0.3; Ljudevit Gaj=0.5;
+      Josip Juraj Strossmayer/Strossmayer=0.5; Nikola Tesla/Tesla=0.3; Matija Gubec/Gubec=0.3;
+      Trpimir/Knez Trpimir=0.3; Branimir/Knez Branimir=0.3; Ante Gotovina/Gotovina=0.3;
+      Alojzije Stepinac/Stepinac=0.3; Ljudevit Posavski=0.2; Petar Svačić=0.2; Ivan Mažuranić=0.2;
+      Ante Trumbić/Trumbić=0.2; Frano Supilo/Supilo=0.2; Vladimir Bakarić/Bakarić=0.2; Rade Končar=0.2;
+      Ante Marković=0.2; Janko Bobetko/Bobetko=0.2; Vlado Gotovac/Gotovac=0.2; Branimir Glavaš/Glavaš=0.2;
+      Ruđer Bošković/Bošković=0.2; Višeslav/Knez Višeslav=0.1; Borna/Knez Borna=0.1; Domagoj/Knez Domagoj=0.1;
+      Mutimir=0.1; Stjepan Držislav/Držislav=0.1; Kraljica Jelena/Jelena Slavna=0.1; Toma Bakač Erdödy/Bakač=0.1;
+      Pavao Šubić=0.1; Karoly Khuen-Héderváry/Khuen=0.1; Franjo Rački/Rački=0.1; Juraj Dobrila/Dobrila=0.1;
+      Ivan Šubašić/Šubašić=0.1; Ana Katarina Zrinska/Katarina Zrinska=0.1; Faust Vrančić/Vrančić=0.1;
+      Milka Planinc/Planinc=0.1; Stipe Šuvar/Šuvar=0.1; Ivo Lola Ribar=0.1; Mladen Markač/Markač=0.1; Blago Zadro=0.1;
+      Josip Reihl-Kir=0.1; Ivić Pašalić/Pašalić=0.1; Zdravko Tomac=0.1; Dobroslav Paraga/Paraga=0.1;
+      Anto Đapić/Đapić=0.1; Marko Veselica=0.1; Mirela Holy=0.1; Ivan Jakovčić/Jakovčić=0.1; Ljubo Jurčić=0.1;
+      Slavko Linić/Linić=0.1; Tonino Picula/Picula=0.1; Dubravka Šuica/Šuica=0.1; Ranko Ostojić=0.1;
+      Damir Polančec=0.1; Berislav Rončević=0.1; Milijan Brkić=0.1; Marko Primorac=0.1; Ivana Kekin=0.1;
+      Vojko Obersnel/Obersnel=0.1; Žarko Domljan=0.1; Luka Bebić=0.1`,
   },
   {
     slug: "prezime",

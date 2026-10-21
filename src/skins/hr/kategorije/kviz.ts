@@ -331,17 +331,46 @@ export const kvizKategorije: SeedCategory[] = [
       Michelangelo=6; Salvador Dalí/Dali=5; Claude Monet/Monet=4; Rembrandt=3; Rafael/Raffaello=2;
       Frida Kahlo/Frida=2; Edvard Munch/Munch=1.5; Gustav Klimt/Klimt=1.5; Andy Warhol/Warhol=1.5;
       Vlaho Bukovac/Bukovac=1.5; Ivan Meštrović/Meštrović=1.5; Botticelli=1; Caravaggio=1; Renoir=1; Banksy=1;
-      Ivan Generalić/Generalić=1; Paul Cézanne/Cezanne=0.8; Edgar Degas/Degas=0.8; Edo Murtić/Murtić=0.8;
-      Tizian=0.5; Édouard Manet/Manet=0.5; Paul Gauguin/Gauguin=0.5; Henri Matisse/Matisse=0.5;
+      Ivan Generalić/Generalić=1; Paul Cézanne/Cezanne=0.8; Edgar Degas/Degas=0.8; Edo Murtić/Murtić=0.8; Tizian=0.5;
+      Édouard Manet/Manet=0.5; Paul Gauguin/Gauguin=0.5; Henri Matisse/Matisse=0.5;
       Vasilij Kandinski/Kandinski/Kandinsky=0.5; Rubens=0.5; Francisco Goya/Goya=0.5; Vermeer=0.5;
       Jackson Pollock/Pollock=0.5; Auguste Rodin/Rodin=0.5; Piet Mondrian/Mondrian=0.3; René Magritte/Magritte=0.3;
       Diego Velázquez/Velazquez=0.3; El Greco=0.3; Albrecht Dürer/Dürer=0.3; Hieronymus Bosch/Bosch=0.3;
       Toulouse-Lautrec=0.3; Marc Chagall/Chagall=0.3; Ivan Rabuzin/Rabuzin=0.3; Antun Augustinčić/Augustinčić=0.3;
       Donatello=0.3; Pieter Bruegel/Bruegel=0.2; William Turner/Turner=0.2; Joan Miró/Miro=0.2;
-      Egon Schiele/Schiele=0.2; Giotto=0.2; Miroslav Kraljević=0.2; Josip Račić/Račić=0.2;
-      Oton Iveković/Iveković=0.2; Julije Klović/Juraj Klović/Klović=0.2; Bernini=0.2; Hokusai=0.1; Tintoretto=0.1;
-      Celestin Medović/Medović=0.1; Mirko Virius/Virius=0.1; Ignjat Job=0.1; Andrija Medulić/Medulić=0.1;
-      Menci Clement Crnčić/Crnčić=0.1; Ljubo Babić=0.1; Ivo Dulčić/Dulčić=0.1`,
+      Egon Schiele/Schiele=0.2; Giotto=0.2; Miroslav Kraljević=0.2; Josip Račić/Račić=0.2; Oton Iveković/Iveković=0.2;
+      Julije Klović/Juraj Klović/Klović=0.2; Bernini=0.2; Hokusai=0.1; Tintoretto=0.1; Celestin Medović/Medović=0.1;
+      Mirko Virius/Virius=0.1; Ignjat Job=0.1; Andrija Medulić/Medulić=0.1; Menci Clement Crnčić/Crnčić=0.1;
+      Ljubo Babić=0.1; Ivo Dulčić/Dulčić=0.1; Amedeo Modigliani/Modigliani=0.3; Juraj Dalmatinac=0.3; Bob Ross=0.2;
+      Paul Klee/Klee=0.2; Georges Seurat/Seurat=0.2; Eugène Delacroix/Delacroix=0.2; Edward Hopper/Hopper=0.2;
+      Mark Rothko/Rothko=0.2; Jean-Michel Basquiat/Basquiat=0.2; Kazimir Maljevič/Maljevič/Malevich=0.2;
+      Alfons Mucha/Mucha=0.2; Fernando Botero/Botero=0.2; Majstor Radovan/Radovan=0.2; Slava Raškaj/Raškaj=0.2;
+      Oton Gliha/Gliha=0.2; Ivan Kožarić/Kožarić=0.2; Ivan Lacković Croata/Lacković=0.2;
+      Krsto Hegedušić/Hegedušić=0.2; Vjekoslav Karas/Karas=0.2; Camille Pissarro/Pissarro=0.1; Henri Rousseau=0.1;
+      Jan van Eyck/Van Eyck=0.1; Anthony van Dyck/Van Dyck=0.1; Fra Angelico=0.1; Piero della Francesca=0.1;
+      Masaccio=0.1; Andrea Mantegna/Mantegna=0.1; Giovanni Bellini/Bellini=0.1; Giorgione=0.1;
+      Paolo Veronese/Veronese=0.1; Canaletto=0.1; Tiepolo=0.1; Nicolas Poussin/Poussin=0.1; Jacques-Louis David=0.1;
+      Jean-Auguste-Dominique Ingres/Ingres=0.1; Gustave Courbet/Courbet=0.1; Jean-François Millet/Millet=0.1;
+      Caspar David Friedrich=0.1; John Constable/Constable=0.1; Thomas Gainsborough/Gainsborough=0.1;
+      William Blake=0.1; Dante Gabriel Rossetti/Rossetti=0.1; James Whistler/Whistler=0.1; Georgia O’Keeffe=0.1;
+      Roy Lichtenstein/Lichtenstein=0.1; Keith Haring/Haring=0.1; David Hockney/Hockney=0.1; Francis Bacon=0.1;
+      Lucian Freud=0.1; Damien Hirst/Hirst=0.1; Jeff Koons/Koons=0.1; Ai Weiwei=0.1; Marcel Duchamp/Duchamp=0.1;
+      Max Ernst=0.1; Giorgio de Chirico/De Chirico=0.1; Umberto Boccioni/Boccioni=0.1; Ilja Rjepin/Rjepin=0.1;
+      Ivan Ajvazovski/Ajvazovski=0.1; Oskar Kokoschka/Kokoschka=0.1; Franz Marc=0.1; Frans Hals=0.1;
+      Bartolomé Esteban Murillo/Murillo=0.1; Joaquín Sorolla/Sorolla=0.1; Diego Rivera=0.1;
+      Constantin Brâncuși/Brancusi=0.1; Alberto Giacometti/Giacometti=0.1; Henry Moore=0.1; Antonio Canova/Canova=0.1;
+      Camille Claudel=0.1; Fidija/Phidias=0.1; Praksitel/Praxiteles=0.1; Lorenzo Ghiberti/Ghiberti=0.1;
+      Benvenuto Cellini/Cellini=0.1; Artemisia Gentileschi/Gentileschi=0.1; Tamara de Lempicka/Lempicka=0.1;
+      Yayoi Kusama/Kusama=0.1; Norman Rockwell/Rockwell=0.1; Utagawa Hiroshige/Hiroshige=0.1; Nikola Firentinac=0.1;
+      Andrija Aleši/Aleši=0.1; Federiko Benković/Benković=0.1; Frano Kršinić/Kršinić=0.1; Vanja Radauš/Radauš=0.1;
+      Kosta Angeli Radovani=0.1; Dušan Džamonja/Džamonja=0.1; Vojin Bakić/Bakić=0.1; Marija Ujević-Galetović=0.1;
+      Nasta Rojc/Rojc=0.1; Emanuel Vidović/Vidović=0.1; Nikola Mašić/Mašić=0.1; Đuro Seder/Seder=0.1;
+      Julije Knifer/Knifer=0.1; Josip Generalić=0.1; Ivan Večenaj/Večenaj=0.1; Dragan Gaži/Gaži=0.1; Mijo Kovačić=0.1;
+      Marino Tartaglia/Tartaglia=0.1; Ljubo Ivančić=0.1; Gabrijel Jurkić/Jurkić=0.1; Bela Čikoš Sesija/Čikoš=0.1;
+      Jerolim Miše/Miše=0.1; Zlatko Prica/Prica=0.1; Edo Kovačević=0.1; Antun Motika/Motika=0.1;
+      Blaž Jurjev Trogiranin=0.1; Nikola Božidarević/Božidarević=0.1; Lovro Dobričević=0.1;
+      Robert Frangeš-Mihanović/Frangeš=0.1; Rudolf Valdec/Valdec=0.1; Toma Rosandić/Rosandić=0.1;
+      Branislav Dešković/Dešković=0.1`,
   },
   {
     slug: "pokemon",
@@ -363,20 +392,38 @@ export const kvizKategorije: SeedCategory[] = [
     group: "kviz",
     title: "Pjesma Beatlesa",
     strip: [],
-    answers: `Yesterday=15; Let It Be=12; Hey Jude=12; Yellow Submarine=8; Help=5; Come Together=4; Here Comes the Sun=4;
-      All You Need Is Love=3; Twist and Shout=3; Love Me Do=3; She Loves You=2; I Want to Hold Your Hand=2;
-      Strawberry Fields Forever/Strawberry Fields=2; Penny Lane=1.5; Michelle=1.5; A Hard Day's Night=1.5;
-      Eleanor Rigby=1.5; Lucy in the Sky with Diamonds/Lucy in the Sky=1.5; Ob-La-Di, Ob-La-Da/Obladi Oblada=1.5;
-      Something=1; Can't Buy Me Love=1; Get Back=1; Blackbird=1; Hello, Goodbye/Hello Goodbye=1;
-      While My Guitar Gently Weeps=0.8; Norwegian Wood=0.5; All My Loving=0.5; Drive My Car=0.5;
-      Eight Days a Week=0.5; Ticket to Ride=0.5; Revolution=0.5; In My Life=0.5;
+    answers: `Yesterday=15; Let It Be=12; Hey Jude=12; Yellow Submarine=8; Help=5; Come Together=4;
+      Here Comes the Sun=4; All You Need Is Love=3; Twist and Shout=3; Love Me Do=3; She Loves You=2;
+      I Want to Hold Your Hand=2; Strawberry Fields Forever/Strawberry Fields=2; Penny Lane=1.5; Michelle=1.5;
+      A Hard Day's Night=1.5; Eleanor Rigby=1.5; Lucy in the Sky with Diamonds/Lucy in the Sky=1.5;
+      Ob-La-Di, Ob-La-Da/Obladi Oblada=1.5; Something=1; Can't Buy Me Love=1; Get Back=1; Blackbird=1;
+      Hello, Goodbye/Hello Goodbye=1; While My Guitar Gently Weeps=0.8; Norwegian Wood=0.5; All My Loving=0.5;
+      Drive My Car=0.5; Eight Days a Week=0.5; Ticket to Ride=0.5; Revolution=0.5; In My Life=0.5;
       With a Little Help from My Friends=0.5; Sgt. Pepper's Lonely Hearts Club Band/Sgt. Pepper=0.5;
       The Long and Winding Road=0.5; Day Tripper=0.3; Paperback Writer=0.3; Nowhere Man=0.3; A Day in the Life=0.3;
       Helter Skelter=0.3; I Am the Walrus=0.3; Across the Universe=0.3; Don't Let Me Down=0.3; Octopus's Garden=0.3;
       And I Love Her=0.3; Girl=0.3; Please Please Me=0.3; Back in the USSR=0.3; Taxman=0.2;
       Here, There and Everywhere=0.2; From Me to You=0.2; I Saw Her Standing There=0.2; Golden Slumbers=0.1;
-      Rocky Raccoon=0.1; Maxwell's Silver Hammer=0.1; Dear Prudence=0.1; Julia=0.1;
-      The Ballad of John and Yoko=0.1; Hey Bulldog=0.1; Got to Get You into My Life=0.1; Tomorrow Never Knows=0.1`,
+      Rocky Raccoon=0.1; Maxwell's Silver Hammer=0.1; Dear Prudence=0.1; Julia=0.1; The Ballad of John and Yoko=0.1;
+      Hey Bulldog=0.1; Got to Get You into My Life=0.1; Tomorrow Never Knows=0.1; I Feel Fine=0.5;
+      We Can Work It Out=0.5; Lady Madonna=0.5; Magical Mystery Tour=0.3; The Fool on the Hill/Fool on the Hill=0.3;
+      When I'm Sixty-Four/When I'm 64=0.3; Now and Then=0.3; Oh! Darling=0.3; Rain=0.2; Birthday=0.2;
+      Getting Better=0.2; She's Leaving Home=0.2; Lovely Rita=0.2; Good Day Sunshine=0.2; All Together Now=0.2;
+      Free as a Bird=0.2; Rock and Roll Music=0.2; Roll Over Beethoven=0.2; P.S. I Love You=0.2;
+      I've Got a Feeling=0.2; I Should Have Known Better=0.2; You've Got to Hide Your Love Away=0.2; Because=0.1;
+      Sun King=0.1; Mean Mr. Mustard=0.1; Polythene Pam=0.1; Carry That Weight=0.1; Her Majesty=0.1; Two of Us=0.1;
+      Dig a Pony=0.1; One After 909=0.1; I Me Mine=0.1; Fixing a Hole=0.1; Flying=0.1; Blue Jay Way=0.1;
+      Your Mother Should Know=0.1; Glass Onion=0.1; Happiness Is a Warm Gun=0.1; Martha My Dear=0.1; Sexy Sadie=0.1;
+      Honey Pie=0.1; Yer Blues=0.1; Good Night=0.1; Cry Baby Cry=0.1; Savoy Truffle=0.1; Mother Nature's Son=0.1;
+      I Will=0.1; Doctor Robert=0.1; And Your Bird Can Sing=0.1; For No One=0.1; She Said She Said=0.1;
+      I'm Only Sleeping=0.1; Think for Yourself=0.1; I'm Looking Through You=0.1; If I Needed Someone=0.1;
+      Run for Your Life=0.1; You Won't See Me=0.1; I've Just Seen a Face=0.1; I'm Down=0.1; The Night Before=0.1;
+      No Reply=0.1; I'm a Loser=0.1; Baby's in Black=0.1; She's a Woman=0.1; I'll Follow the Sun=0.1;
+      Things We Said Today=0.1; Tell Me Why=0.1; Till There Was You=0.1; Please Mister Postman/Please Mr. Postman=0.1;
+      It Won't Be Long=0.1; Misery=0.1; Do You Want to Know a Secret=0.1; This Boy=0.1; Long Tall Sally=0.1;
+      Old Brown Shoe=0.1; Real Love=0.1; Dizzy Miss Lizzy=0.1; Act Naturally=0.1;
+      The Continuing Story of Bungalow Bill/Bungalow Bill=0.1; If I Fell=0.1; Within You Without You=0.1;
+      Good Morning Good Morning=0.1; Being for the Benefit of Mr. Kite/Mr. Kite=0.1`,
   },
   {
     slug: "f1-prvak",
@@ -403,11 +450,19 @@ export const kvizKategorije: SeedCategory[] = [
       Ivan Krstitelj/Ivan=2; Abel=2; Samson=2; Lazar=1.5; Marija Magdalena=1.5; Poncije Pilat/Pilat=1.5;
       Sotona/Lucifer/Đavao=1.5; Dalila=1; Toma/Nevjerni Toma=1; Matej=1; Marko=1; Luka=1; Jakov=1; Izak=1; Jona=1;
       Job=1; Herod=1; Arkanđeo Gabrijel/Gabrijel=1; Ilija=0.5; Daniel=0.5; Saul=0.5; Arkanđeo Mihael/Mihael=0.5;
-      Tri kralja=0.5; Ruta=0.3; Ester=0.3; Sara=0.3; Izaija=0.3; Jošua/Jozue=0.3; Andrija=0.3; Lot=0.3;
-      Metuzalem=0.3; Baraba=0.3; Rafael=0.2; Rebeka=0.2; Rahela=0.2; Jeremija=0.2; Ezekiel=0.2; Gideon=0.2;
-      Stjepan=0.2; Filip=0.2; Šimun=0.2; Elizabeta=0.2; Zaharija=0.2; Lea=0.1; Elizej=0.1; Barnaba=0.1;
-      Bartolomej=0.1; Tadej=0.1; Matija=0.1; Nikodem=0.1; Zakej=0.1; Set=0.1; Absalom=0.1; Batšeba=0.1;
-      Jezabela=0.1`,
+      Tri kralja=0.5; Ruta=0.3; Ester=0.3; Sara=0.3; Izaija=0.3; Jošua/Jozue=0.3; Andrija=0.3; Lot=0.3; Metuzalem=0.3;
+      Baraba=0.3; Rafael=0.2; Rebeka=0.2; Rahela=0.2; Jeremija=0.2; Ezekiel=0.2; Gideon=0.2; Stjepan=0.2; Filip=0.2;
+      Šimun=0.2; Elizabeta=0.2; Zaharija=0.2; Lea=0.1; Elizej=0.1; Barnaba=0.1; Bartolomej=0.1; Tadej=0.1; Matija=0.1;
+      Nikodem=0.1; Zakej=0.1; Set=0.1; Absalom=0.1; Batšeba=0.1; Jezabela=0.1; Bog/Jahve/Bog Otac=0.5; Aron=0.3;
+      Faraon=0.3; Duh Sveti=0.2; Zmija=0.2; Ezav=0.2; Benjamin=0.2; Samuel=0.2; Kraljica od Sabe=0.2;
+      Nabukodonozor=0.2; Judita=0.2; Marta=0.2; Salome=0.2; Kajfa=0.2; Belzebub=0.2; Šem=0.1; Ham=0.1; Jafet=0.1;
+      Hagara=0.1; Jišmael=0.1; Laban=0.1; Ruben=0.1; Levi=0.1; Mirjam=0.1; Kaleb=0.1; Rahaba=0.1; Debora=0.1; Ana=0.1;
+      Jonatan=0.1; Natan=0.1; Urija=0.1; Ahab=0.1; Baltazar=0.1; Gašpar=0.1; Melkior=0.1; Holoferno=0.1; Tobija=0.1;
+      Mardohej=0.1; Nehemija=0.1; Ezra=0.1; Amos=0.1; Hošea=0.1; Joel=0.1; Mihej=0.1; Malahija=0.1; Nahum=0.1;
+      Hagaj=0.1; Josip iz Arimateje=0.1; Herodijada=0.1; Šimun Cirenac=0.1; Timotej=0.1; Tit=0.1; Ananija=0.1;
+      Kornelije=0.1; Zebedej=0.1; Simeon=0.1; Filemon=0.1; Levijatan=0.1; Behemot=0.1; Nimrod=0.1; Henok=0.1;
+      Lamek=0.1; Melkisedek=0.1; Lotova žena=0.1; Potifar=0.1; Bileam=0.1; Jišaj=0.1; Boaz=0.1; Noemi=0.1; Jiftah=0.1;
+      Joab=0.1; Ezekija=0.1`,
   },
   {
     slug: "dinosaur",

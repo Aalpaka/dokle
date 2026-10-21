@@ -55,22 +55,44 @@ export const opceKategorije: SeedCategory[] = [
       Ararat=0.5; Tatre=0.5; Šar planina=0.3; Igman=0.3; Vlašić=0.3; Rila=0.3; Zugspitze=0.3; Eiger=0.3;
       Annapurna=0.3; Ben Nevis=0.3; Sinaj=0.3; Mount Rushmore=0.3; Pirin=0.2; Musala=0.2; Kangchenjunga=0.2;
       Nanga Parbat=0.2; Stolna planina/Table Mountain=0.2; Krakatau=0.2; Lhotse=0.1; Makalu=0.1; Mount Kenya=0.1;
-      Mauna Kea=0.1; Vinson=0.1; Kosciuszko=0.1; Maglić=0.2; Romanija=0.2; Zlatibor=0.3; Velež=0.2; Čvrsnica=0.2`,
+      Mauna Kea=0.1; Vinson=0.1; Kosciuszko=0.1; Maglić=0.2; Romanija=0.2; Zlatibor=0.3; Velež=0.2; Čvrsnica=0.2;
+      Teide=0.2; Sierra Nevada=0.2; Rtanj=0.2; Fruška gora=0.2; Trebević=0.2; Kozara=0.2; Orjen=0.2; Pohorje=0.2;
+      Stara planina/Balkan=0.2; Pamir=0.2; Hindukuš=0.2; Popokatepetl/Popocatepetl=0.2; Apalači/Apalačko gorje=0.2;
+      Monte Rosa=0.1; Jungfrau=0.1; Dachstein=0.1; Gran Paradiso=0.1; Bernina/Piz Bernina=0.1;
+      Mont Ventoux/Ventoux=0.1; Marmolada=0.1; Tre Cime/Tri Cime=0.1; Gran Sasso=0.1; Stromboli=0.1; Parnas=0.1;
+      Athos/Sveta Gora=0.1; Vitoša=0.1; Rodopi=0.1; Pind=0.1; Korab=0.1; Pelister=0.1; Bjelasica=0.1; Komovi=0.1;
+      Rumija=0.1; Treskavica=0.1; Prenj=0.1; Grmeč=0.1; Vranica=0.1; Zelengora=0.1; Ozren=0.1; Majevica=0.1;
+      Cincar=0.1; Tara=0.1; Snežnik=0.1; Krn=0.1; Vogel=0.1; Nanos=0.1; Mulhacén=0.1; Montserrat=0.1; Aneto=0.1;
+      Snowdon=0.1; Hekla=0.1; Harz=0.1; Schwarzwald/Crna šuma=0.1; Sudeti=0.1; Šumava=0.1; Gerlach=0.1; Rysy=0.1;
+      Altaj=0.1; Tjenšan/Tian Shan=0.1; Karakorum=0.1; Kailas/Kailash=0.1; Cho Oyu=0.1; Dhaulagiri=0.1; Manaslu=0.1;
+      Broad Peak=0.1; Gašerbrum=0.1; Demavend=0.1; Zagros=0.1; Tabor=0.1; Hermon=0.1; Maslinska gora=0.1;
+      Kinabalu=0.1; Pinatubo=0.1; Tambora=0.1; Drakensberg=0.1; Ruwenzori=0.1; Toubkal=0.1; Chimborazo=0.1;
+      Cotopaxi=0.1; Huascarán=0.1; Fitz Roy=0.1; Mount St. Helens/St. Helens=0.1; Rainier=0.1;
+      Mount Whitney/Whitney=0.1; Kordiljeri=0.1; Šećerna glava/Pão de Açúcar=0.1; Corcovado=0.1; Erebus=0.1;
+      Aoraki/Mount Cook=0.1`,
   },
   {
     slug: "svjetska-rijeka",
     group: "opce",
     title: "Rijeka u svijetu",
     strip: ["rijeka", "reka"],
-    answers: `Nil=15; Amazona=12; Dunav=8; Mississippi/Misisipi=5; Temza=5; Rajna=4; Sena=4; Volga=3; Sava=3; Jangce/Yangtze=2;
-      Ganges/Ganga=2; Drina=2; Neretva=2; Drava=2; Tigris=1.5; Eufrat=1.5; Jordan=1; Mekong=1; Kongo=1;
-      Kolorado/Colorado=1; Po=1; Tibar/Tiber=1; Morava=1; Bosna=1; Una=1; Tisa=1; Niger=0.5; Zambezi=0.5;
+    answers: `Nil=15; Amazona=12; Dunav=8; Mississippi/Misisipi=5; Temza=5; Rajna=4; Sena=4; Volga=3; Sava=3;
+      Jangce/Yangtze=2; Ganges/Ganga=2; Drina=2; Neretva=2; Drava=2; Tigris=1.5; Eufrat=1.5; Jordan=1; Mekong=1;
+      Kongo=1; Kolorado/Colorado=1; Po=1; Tibar/Tiber=1; Morava=1; Bosna=1; Una=1; Tisa=1; Niger=0.5; Zambezi=0.5;
       Missouri=0.5; Rio Grande=0.5; Ind=0.5; Žuta rijeka/Huang He=0.5; Don=0.5; Dnjepar=0.5; Visla=0.5; Odra=0.5;
       Laba/Elba=0.5; Loire=0.5; Vardar=0.5; Vrbas=0.5; Mura=0.5; Soča=0.5; Hudson=0.3; Orinoco/Orinoko=0.3;
       Parana=0.3; Brahmaputra=0.3; Amur=0.3; Jenisej=0.3; Majna=0.3; Rona=0.3; Arno=0.3; Ljubljanica=0.3;
       Sveti Lovro=0.2; Jukon/Yukon=0.2; La Plata/Rio de la Plata=0.2; Lena=0.2; Ob=0.2; Ural=0.2; Dnjestar=0.2;
       Mosel/Moselle=0.2; Ebro=0.2; Tajo/Tejo=0.2; Inn=0.2; Limpopo=0.2; Mackenzie=0.1; Garonne=0.1; Douro=0.1;
-      Shannon=0.1; Ibar=0.2; Lim=0.2; Tara=0.3; Timok=0.1; Marica=0.1`,
+      Shannon=0.1; Ibar=0.2; Lim=0.2; Tara=0.3; Timok=0.1; Marica=0.1; Vltava=0.2; Ohio=0.2; Niagara=0.2; Neva=0.2;
+      Kupa=0.2; Krka=0.1; Cetina=0.1; Korana=0.1; Sana=0.1; Kolubara=0.1; Tamiš=0.1; Piva=0.1; Morača=0.1; Zeta=0.1;
+      Bojana=0.1; Drim=0.1; Struma=0.1; Savinja=0.1; Piave=0.1; Adige=0.1; Brenta=0.1; Isar=0.1; Neckar=0.1;
+      Weser=0.1; Spree=0.1; Ruhr=0.1; Maas/Meuse=0.1; Schelde/Šelda=0.1; Somme=0.1; Marne=0.1; Dordogne=0.1;
+      Guadalquivir=0.1; Guadiana=0.1; Severn=0.1; Liffey=0.1; Váh=0.1; Bug=0.1; Salzach=0.1; Njemen=0.1; Prut=0.1;
+      Daugava=0.1; Pečora=0.1; Irtiš=0.1; Kolima=0.1; Amu Darja=0.1; Sir Darja=0.1; Kura=0.1; Iravadi=0.1;
+      Biserna rijeka=0.1; Han=0.1; Jamuna=0.1; Plavi Nil=0.1; Bijeli Nil=0.1; Orange/Oranje=0.1; Senegal=0.1;
+      Volta=0.1; Murray=0.1; Darling=0.1; Columbia=0.1; Tennessee=0.1; Potomac=0.1; Arkansas=0.1; Fraser=0.1;
+      Urugvaj=0.1; Paragvaj=0.1; Magdalena=0.1; São Francisco=0.1; Rio Negro=0.1`,
   },
   {
     slug: "pas",
@@ -80,16 +102,27 @@ export const opceKategorije: SeedCategory[] = [
     answers: `Labrador=10; Njemački ovčar/Vučjak=10; Dalmatiner=8; Zlatni retriver/Golden retriver=6; Pudla=4;
       Čivava/Chihuahua=4; Haski/Sibirski haski=4; Engleski buldog/Buldog/Bulldog=3; Francuski buldog=3;
       Rottweiler/Rotvajler=3; Jazavčar=3; Doberman=2.5; Pitbull/Pit bull=2.5; Bigl/Beagle=2; Tornjak=2;
-      Jorkširski terijer/Yorkshire terijer/Jorki=2; Maltezer=2; Mops=2; Jack Russell=1.5; Bernardinac=1.5;
-      Bokser=1.5; Mješanac/Avlijaner=1.5; Bernski planinski pas=1; Šnaucer=1; Shih Tzu/Šicu=1;
-      Koker španijel/Koker=1; Njemačka doga/Doga=1; Hrt/Greyhound=1; Border koli/Border collie=1; Samojed=0.8;
-      Akita=0.8; Pekinezer=0.8; Shiba Inu/Šiba=0.5; Mastif=0.5; Koli/Collie=0.5; Aljaški malamut/Malamut=0.5;
-      Hrvatski ovčar=0.5; Šarplaninac=0.5; Cane corso=0.5; Bulterijer=0.5; Stafford/Staford=0.5;
-      Velški korgi/Korgi/Corgi=0.5; Pomeranac=0.5; Belgijski ovčar/Malinois/Malinoa=0.5; Afganistanski hrt=0.3;
-      Vižla=0.3; Weimaraner/Vajmarski ptičar=0.3; Pointer=0.3; Seter/Setter=0.3; Istarski gonič=0.3;
-      Posavski gonič=0.3; Dogo argentino=0.3; Šar pej/Shar Pei=0.3; Čau čau/Chow chow=0.3; Baset/Basset=0.3;
-      Australski ovčar=0.3; Newfoundland/Njufaundlender=0.3; Papiljon=0.2; Kavalir King Charles=0.2;
-      Talijanski hrtić=0.1; Lhasa apso=0.1`,
+      Jorkširski terijer/Yorkshire terijer/Jorki=2; Maltezer=2; Mops=2; Jack Russell=1.5; Bernardinac=1.5; Bokser=1.5;
+      Mješanac/Avlijaner=1.5; Bernski planinski pas=1; Šnaucer=1; Shih Tzu/Šicu=1; Koker španijel/Koker=1;
+      Njemačka doga/Doga=1; Hrt/Greyhound=1; Border koli/Border collie=1; Samojed=0.8; Akita=0.8; Pekinezer=0.8;
+      Shiba Inu/Šiba=0.5; Mastif=0.5; Koli/Collie=0.5; Aljaški malamut/Malamut=0.5; Hrvatski ovčar=0.5;
+      Šarplaninac=0.5; Cane corso=0.5; Bulterijer=0.5; Stafford/Staford=0.5; Velški korgi/Korgi/Corgi=0.5;
+      Pomeranac=0.5; Belgijski ovčar/Malinois/Malinoa=0.5; Afganistanski hrt=0.3; Vižla=0.3;
+      Weimaraner/Vajmarski ptičar=0.3; Pointer=0.3; Seter/Setter=0.3; Istarski gonič=0.3; Posavski gonič=0.3;
+      Dogo argentino=0.3; Šar pej/Shar Pei=0.3; Čau čau/Chow chow=0.3; Baset/Basset=0.3; Australski ovčar=0.3;
+      Newfoundland/Njufaundlender=0.3; Papiljon=0.2; Kavalir King Charles=0.2; Talijanski hrtić=0.1; Lhasa apso=0.1;
+      Špic/Spitz=0.3; Pinč/Patuljasti pinč=0.3; Bišon/Bichon=0.3; Westie/West highland terijer=0.3;
+      Foks terijer/Fox terijer=0.2; Springer španijel/Springer=0.2; Šeltie/Sheltie/Šetlandski ovčar=0.2;
+      Bobtail/Staroengleski ovčar=0.2; Bladhaund/Bloodhound=0.2; Whippet/Vipet=0.2; Borzoj/Ruski hrt=0.2;
+      Irski vučji hrt=0.2; Tibetanski mastif=0.2; Kangal=0.2; Kavkaski ovčar=0.2; Amstaf/Američki staford=0.2;
+      Njemački kratkodlaki ptičar/Kratkodlaki ptičar=0.2; Havanez/Havanski bišon=0.1; Bolonjez=0.1;
+      Škotski terijer=0.1; Erdel terijer/Airedale=0.1; Bostonski terijer=0.1; Cairn terijer=0.1; Napuljski mastif=0.1;
+      Bordoška doga=0.1; Bulmastif=0.1; Presa canario=0.1; Američki buldog=0.1; Alabai/Srednjoazijski ovčar=0.1;
+      Leonberger=0.1; Hovawart=0.1; Pirinejski pas=0.1; Bijeli švicarski ovčar=0.1; Kraški ovčar=0.1; Puli=0.1;
+      Komondor=0.1; Kuvasz=0.1; Rodezijski ridžbek/Ridgeback=0.1; Saluki=0.1; Faraonski pas=0.1;
+      Čehoslovački vučjak=0.1; Bosanski barak/Barak=0.1; Srpski gonič=0.1; Bretonski španijel/Breton=0.1;
+      Ravnodlaki retriver=0.1; Australski govedar=0.1; Kineski kukmasti pas=0.1; Japanski čin=0.1; Grifon=0.1;
+      Meksički goli pas/Xolo=0.1`,
   },
   {
     slug: "ptica",
@@ -101,8 +134,18 @@ export const opceKategorije: SeedCategory[] = [
       Jastreb=1.5; Kanarinac=1.5; Kolibrić=1.5; Puran=1; Grlica=1; Fazan=1; Prepelica=1; Sjenica=1; Češljugar=1;
       Slavuj=1; Kukavica=1; Čaplja=1; Pelikan=1; Zeba=0.5; Tukan=0.5; Ždral=0.5; Kondor=0.5; Lešinar=0.5;
       Bjeloglavi sup/Sup=0.5; Ćuk=0.5; Crvendać=0.5; Čvorak=0.5; Albatros=0.3; Šojka/Kreja=0.3; Kraljić=0.3;
-      Pupavac=0.3; Vodomar=0.3; Kormoran=0.3; Emu=0.3; Žuna=0.2; Vuga=0.2; Liska=0.2; Kivi=0.2; Ara=0.2;
-      Kakadu=0.2; Tetrijeb=0.2; Jarebica=0.3; Šljuka=0.2; Drozd=0.3`,
+      Pupavac=0.3; Vodomar=0.3; Kormoran=0.3; Emu=0.3; Žuna=0.2; Vuga=0.2; Liska=0.2; Kivi=0.2; Ara=0.2; Kakadu=0.2;
+      Tetrijeb=0.2; Jarebica=0.3; Šljuka=0.2; Drozd=0.3; Pijetao/Pijevac/Kokot=0.5; Tigrica/Valovita papigica=0.5;
+      Ševa=0.5; Čavka=0.3; Gugutka=0.3; Kukuvija=0.3; Čiopa=0.3; Kobac=0.3; Vjetruša=0.3; Škanjac/Mišar=0.3;
+      Čigra=0.3; Palčić=0.3; Pastirica=0.3; Pčelarica=0.3; Dodo=0.3; Ušara=0.2; Gnjurac=0.2; Žličarka=0.2; Vivak=0.2;
+      Strnadica=0.2; Zelendur=0.2; Krstokljun=0.2; Brgljez=0.2; Crvenrepka=0.2; Svračak=0.2;
+      Grivnjaš/Golub grivnjaš=0.2; Biserka=0.2; Nandu=0.2; Kazuar=0.2; Ibis=0.2; Rajska ptica=0.2; Štekavac=0.1;
+      Eja=0.1; Lunj=0.1; Strvinar=0.1; Ronac=0.1; Kaukal=0.1; Gregula=0.1; Morski vranac=0.1; Bukavac=0.1; Gak=0.1;
+      Mlakuša=0.1; Kulik=0.1; Droplja=0.1; Lještarka=0.1; Kamenjarka=0.1; Mandarinka=0.1; Kržulja=0.1;
+      Konopljarka=0.1; Žutarica=0.1; Batokljun=0.1; Zimovka=0.1; Puzavac=0.1; Trepteljka=0.1; Muharica=0.1;
+      Grmuša=0.1; Zviždak=0.1; Trstenjak=0.1; Zlatovrana=0.1; Legnjak=0.1; Bregunica=0.1; Gačac=0.1; Galica=0.1;
+      Orašarka=0.1; Marabu=0.1; Fregata=0.1; Kljunorožac=0.1; Nimfa=0.1; Žako=0.1; Kea=0.1; Kakapo=0.1; Harpija=0.1;
+      Sekretar=0.1`,
   },
   {
     slug: "kukac",
@@ -219,10 +262,21 @@ export const opceKategorije: SeedCategory[] = [
       Badminton=1; Gimnastika=1; Judo=1; Karate=1; Taekwondo=1; Veslanje=1; Jedrenje=1; Trčanje=1;
       Mali nogomet/Futsal=1; Boćanje/Balote=1; Hrvanje=0.8; Ragbi=0.8; Bejzbol=0.8; Pikado=0.8; Biljar=0.8;
       Picigin=0.8; Kajak=0.5; Surfanje=0.5; Snowboard=0.5; Klizanje=0.5; Američki nogomet=0.5; Kriket=0.5;
-      Kuglanje=0.5; Mačevanje=0.5; Streljaštvo=0.5; Konjički sport/Jahanje=0.5; Padel=0.5; Dizanje utega=0.5;
-      MMA=0.5; Kik boks/Kickboxing=0.5; Rafting=0.3; Umjetničko klizanje=0.3; Streličarstvo=0.3; Triatlon=0.3;
-      Curling=0.3; Biatlon=0.3; Skijaški skokovi=0.3; Sportsko penjanje/Penjanje=0.3; Ronjenje=0.3; Bob=0.2;
-      Sankanje=0.2; Alpinizam=0.2; Polo=0.2; Softball=0.1; Lacrosse=0.1; Sumo=0.2; Squash=0.2; Skateboard=0.2`,
+      Kuglanje=0.5; Mačevanje=0.5; Streljaštvo=0.5; Konjički sport/Jahanje=0.5; Padel=0.5; Dizanje utega=0.5; MMA=0.5;
+      Kik boks/Kickboxing=0.5; Rafting=0.3; Umjetničko klizanje=0.3; Streličarstvo=0.3; Triatlon=0.3; Curling=0.3;
+      Biatlon=0.3; Skijaški skokovi=0.3; Sportsko penjanje/Penjanje=0.3; Ronjenje=0.3; Bob=0.2; Sankanje=0.2;
+      Alpinizam=0.2; Polo=0.2; Softball=0.1; Lacrosse=0.1; Sumo=0.2; Squash=0.2; Skateboard=0.2;
+      Odbojka na pijesku=0.3; Planinarenje=0.2; Bowling=0.2; Motokros/Motocross=0.2; Motociklizam/MotoGP=0.2;
+      Reli/Rally=0.2; Karting=0.2; Fitness/Fitnes=0.2; Bodybuilding/Bodibilding=0.2; Kung fu=0.2; Skokovi u vodu=0.2;
+      Umjetničko plivanje/Sinkronizirano plivanje=0.2; Maraton=0.2; Sportski ribolov/Ribolov=0.1;
+      Skijaško trčanje=0.1; Nordijska kombinacija=0.1; Brzo klizanje=0.1; Skeleton=0.1; Spidvej/Speedway=0.1;
+      Kajtanje/Kitesurfing=0.1; Jedrenje na dasci/Windsurfing=0.1; Kanu=0.1; Paragliding/Paraglajding=0.1;
+      Padobranstvo=0.1; Orijentacijsko trčanje=0.1; Sportsko hodanje=0.1; Crossfit=0.1; Aerobik=0.1;
+      Sportski ples/Ples=0.1; Ritmička gimnastika=0.1; Trampolin=0.1; Parkour=0.1; Aikido=0.1;
+      Jiu-jitsu/Džiju-džicu=0.1; Muay thai/Tajlandski boks=0.1; Kendo=0.1; Sambo=0.1; Hokej na travi=0.1;
+      Floorball=0.1; Futnet/Nogotenis=0.1; Teqball=0.1; Pickleball=0.1; Ultimate frizbi/Frizbi=0.1; Kroket=0.1;
+      Galop/Konjske utrke=0.1; Rodeo=0.1; Minigolf=0.1; Snooker=0.1; Bridž=0.1; Rolanje=0.1; BMX=0.1;
+      Brdski biciklizam/MTB=0.1; Moderni petoboj/Petoboj=0.1; Desetoboj=0.1; Cheerleading=0.1`,
   },
   {
     slug: "strani-klub",
@@ -254,10 +308,18 @@ export const opceKategorije: SeedCategory[] = [
       Mađarski=1.5; Češki=1; Poljski=1; Grčki=1; Turski=1; Nizozemski/Holandski=1; Slovački=0.8; Švedski=0.8;
       Bosanski=0.5; Albanski=0.5; Makedonski=0.5; Bugarski=0.5; Rumunjski=0.5; Ukrajinski=0.5; Norveški=0.5;
       Danski=0.5; Finski=0.5; Hebrejski=0.5; Hindi=0.5; Korejski=0.5; Svahili=0.5; Esperanto=0.5; Islandski=0.3;
-      Irski=0.3; Starogrčki=0.3; Perzijski/Farsi=0.3; Romski=0.3; Baskijski=0.3; Katalonski=0.3;
-      Znakovni jezik=0.3; Vijetnamski=0.2; Tajlandski=0.2; Indonezijski=0.2; Estonski=0.2; Litavski=0.2;
-      Latvijski=0.2; Crnogorski=0.2; Velški=0.1; Bjeloruski=0.1; Gruzijski=0.1; Armenski=0.1; Kurdski=0.1;
-      Urdu=0.1; Bengalski=0.1; Mongolski=0.1; Zulu=0.1; Klingonski=0.1; Staroslavenski=0.2`,
+      Irski=0.3; Starogrčki=0.3; Perzijski/Farsi=0.3; Romski=0.3; Baskijski=0.3; Katalonski=0.3; Znakovni jezik=0.3;
+      Vijetnamski=0.2; Tajlandski=0.2; Indonezijski=0.2; Estonski=0.2; Litavski=0.2; Latvijski=0.2; Crnogorski=0.2;
+      Velški=0.1; Bjeloruski=0.1; Gruzijski=0.1; Armenski=0.1; Kurdski=0.1; Urdu=0.1; Bengalski=0.1; Mongolski=0.1;
+      Zulu=0.1; Klingonski=0.1; Staroslavenski=0.2; Sanskrt=0.2; Aramejski=0.2; Jidiš=0.2; Afrikaans=0.2; Maltski=0.2;
+      Kantonski=0.2; Dalmatski=0.2; Istrorumunjski=0.1; Rusinski=0.1; Malajski=0.1; Javanski=0.1; Tamilski=0.1;
+      Telugu=0.1; Pandžapski=0.1; Paštu=0.1; Tadžički=0.1; Uzbečki=0.1; Kazaški=0.1; Kirgiski=0.1; Turkmenski=0.1;
+      Azerski/Azerbajdžanski=0.1; Tatarski=0.1; Čečenski=0.1; Koptski=0.1; Staroegipatski=0.1; Akadski=0.1;
+      Sumerski=0.1; Hetitski=0.1; Etruščanski=0.1; Gotski=0.1; Ladino=0.1; Amharski=0.1; Somalski=0.1; Joruba=0.1;
+      Hausa=0.1; Xhosa=0.1; Malgaški=0.1; Berberski=0.1; Luksemburški=0.1; Frizijski=0.1; Škotski gaelski/Gaelski=0.1;
+      Bretonski=0.1; Okcitanski/Provansalski=0.1; Korzikanski=0.1; Sardinijski=0.1; Furlanski=0.1; Ladinski=0.1;
+      Galicijski=0.1; Lužičkosrpski=0.1; Kečua=0.1; Gvarani=0.1; Nahuatl=0.1; Maorski=0.1; Havajski=0.1; Navaho=0.1;
+      Tibetanski=0.1; Burmanski=0.1; Kmerski=0.1; Laoski=0.1; Nepalski=0.1; Sinhalski=0.1; Dothraki=0.1`,
   },
   {
     slug: "zanimanje",
@@ -283,18 +345,34 @@ export const opceKategorije: SeedCategory[] = [
     group: "opce",
     title: "Bolest ili zdravstvena tegoba",
     strip: [],
-    answers: `Gripa=15; Prehlada=10; Korona/COVID/Covid-19/Koronavirus=8; Rak/Karcinom=6; Dijabetes/Šećerna bolest/Šećer=5;
-      Upala pluća/Pneumonija=3; Angina=3; Vodene kozice/Kozice=3; Ospice=2; Astma=2; Alergija=2;
-      Migrena/Glavobolja=2; Visoki tlak/Hipertenzija/Tlak=2; Infarkt/Srčani udar=2; Zaušnjaci=1.5;
+    answers: `Gripa=15; Prehlada=10; Korona/COVID/Covid-19/Koronavirus=8; Rak/Karcinom=6;
+      Dijabetes/Šećerna bolest/Šećer=5; Upala pluća/Pneumonija=3; Angina=3; Vodene kozice/Kozice=3; Ospice=2; Astma=2;
+      Alergija=2; Migrena/Glavobolja=2; Visoki tlak/Hipertenzija/Tlak=2; Infarkt/Srčani udar=2; Zaušnjaci=1.5;
       Tuberkuloza/TBC=1.5; Kuga=1.5; AIDS/HIV/Sida=1.5; Rubeola=1; Kolera=1; Malarija=1; Hepatitis/Žutica=1;
-      Moždani udar/Inzult=1; Alzheimer/Alzheimerova bolest=1; Upala grla=1; Proljev/Dijareja=1; Bronhitis=1;
-      Kašalj=1; Parkinson/Parkinsonova bolest=0.5; Upala uha=0.5; Tetanus=0.5; Bjesnoća=0.5; Boginje=0.5;
-      Šarlah=0.5; Hemoroidi/Šuljevi=0.5; Sinusitis=0.5; Depresija=0.5; Reuma/Reumatizam=0.5; Mononukleoza=0.5;
+      Moždani udar/Inzult=1; Alzheimer/Alzheimerova bolest=1; Upala grla=1; Proljev/Dijareja=1; Bronhitis=1; Kašalj=1;
+      Parkinson/Parkinsonova bolest=0.5; Upala uha=0.5; Tetanus=0.5; Bjesnoća=0.5; Boginje=0.5; Šarlah=0.5;
+      Hemoroidi/Šuljevi=0.5; Sinusitis=0.5; Depresija=0.5; Reuma/Reumatizam=0.5; Mononukleoza=0.5;
       Upala slijepog crijeva/Apendicitis=0.5; Mamurluk=0.5; Temperatura/Groznica=0.5; Demencija=0.3; Lepra/Guba=0.3;
       Ebola=0.3; Hripavac=0.3; Difterija=0.3; Dječja paraliza/Polio=0.3; Cistitis=0.3; Gastritis=0.3; Čir=0.3;
       Anemija/Slabokrvnost=0.3; Artritis=0.3; Giht/Kostobolja=0.3; Epilepsija=0.3; Leukemija=0.3; Herpes=0.3;
       Akne=0.3; Borelioza/Lajmska bolest=0.3; Kila=0.2; Osteoporoza=0.2; Skolioza=0.2; Ekcem=0.2; Psorijaza=0.2;
-      Celijakija=0.2; Salmoneloza=0.2; Šuga/Svrab=0.2; Konjunktivitis=0.2; Lumbago/Išijas=0.3; Kamenac/Bubrežni kamenac=0.2`,
+      Celijakija=0.2; Salmoneloza=0.2; Šuga/Svrab=0.2; Konjunktivitis=0.2; Lumbago/Išijas=0.3;
+      Kamenac/Bubrežni kamenac=0.2; Karijes=0.3; Zubobolja=0.3; Sunčanica=0.3; Vrtoglavica=0.3; Nesanica=0.3;
+      Zatvor/Opstipacija=0.3; Žgaravica/Refluks=0.3; Križobolja/Bol u leđima=0.3; Mučnina=0.2;
+      Hunjavica/Curenje nosa=0.2; Ječmenac=0.2; Uši=0.2; Aneurizma=0.2; Tromboza=0.2; Ciroza=0.2; Žučni kamenac=0.2;
+      Pretilost/Debljina=0.2; Anoreksija=0.2; Alkoholizam=0.2; Shizofrenija=0.2; ADHD=0.2; Autizam=0.2;
+      Anksioznost=0.2; PTSP=0.2; Multipla skleroza=0.2; Downov sindrom=0.2; Hashimoto=0.2; Tumor=0.2; Sifilis=0.2;
+      Meningitis=0.2; Prijelom/Lom=0.2; Uganuće=0.2; Potres mozga=0.2; Embolija=0.1; Aritmija=0.1;
+      Angina pektoris=0.1; Ateroskleroza=0.1; Pankreatitis=0.1; Crohnova bolest=0.1; Paradentoza=0.1; Afte=0.1;
+      Bulimija=0.1; Ovisnost=0.1; Bipolarni poremećaj=0.1; Panični napadaj=0.1; Disleksija=0.1; ALS=0.1;
+      Cerebralna paraliza=0.1; Hemofilija=0.1; Cistična fibroza=0.1; Mišićna distrofija=0.1; Lupus=0.1;
+      Touretteov sindrom=0.1; Gušavost/Struma=0.1; Hipotireoza=0.1; Melanom=0.1; Limfom=0.1; Gonoreja/Triper=0.1;
+      Klamidija=0.1; Tifus=0.1; Žuta groznica=0.1; Denga=0.1; Ptičja gripa=0.1; Svinjska gripa=0.1;
+      Kravlje ludilo=0.1; Encefalitis=0.1; Sepsa=0.1; Gangrena=0.1; Kandida/Gljivice=0.1; Bradavice=0.1;
+      Pojasni herpes/Herpes zoster=0.1; Majmunske boginje/Mpox=0.1; SARS=0.1; Opekline=0.1; Toplinski udar=0.1;
+      Ozebline=0.1; Žuljevi=0.1; Morska bolest=0.1; Glaukom=0.1; Mrena/Katarakta=0.1; Kratkovidnost=0.1;
+      Daltonizam=0.1; Tinitus=0.1; Proširene vene=0.1; Upala bubrega=0.1; Fibromialgija=0.1; Endometrioza=0.1;
+      Španjolska gripa=0.1`,
   },
   {
     slug: "dio-tijela",
@@ -339,14 +417,22 @@ export const opceKategorije: SeedCategory[] = [
     strip: ["grad"],
     answers: `Berlin=18; München/Minhen=12; Hamburg=8; Frankfurt=7; Köln/Keln=6; Stuttgart=5; Dortmund=4;
       Düsseldorf/Diseldorf=3; Dresden=3; Leipzig/Lajpcig=3; Hannover/Hanover=2; Bremen=2; Nürnberg/Nirnberg=2;
-      Bonn=1.5; Essen=1; Heidelberg=0.8; Duisburg=0.5; Bochum=0.5; Gelsenkirchen=0.5; Wolfsburg=0.5;
-      Ingolstadt=0.5; Augsburg=0.5; Regensburg=0.5; Freiburg=0.5; Mannheim=0.5; Karlsruhe=0.5; Mainz=0.5;
-      Potsdam=0.5; Leverkusen=0.5; Wiesbaden=0.3; Aachen=0.3; Münster=0.3; Bielefeld=0.3; Kiel=0.3; Lübeck=0.3;
-      Rostock=0.3; Magdeburg=0.3; Erfurt=0.3; Weimar=0.3; Ulm=0.3; Kaiserslautern=0.3; Mönchengladbach=0.3;
-      Jena=0.2; Kassel=0.2; Göttingen=0.2; Trier=0.2; Koblenz=0.2; Würzburg=0.2; Bamberg=0.2; Passau=0.2;
-      Rosenheim=0.2; Garmisch-Partenkirchen/Garmisch=0.2; Wuppertal=0.2; Saarbrücken=0.2; Chemnitz=0.2;
-      Braunschweig=0.2; Sindelfingen=0.2; Konstanz=0.2; Bayreuth=0.1; Halle=0.1; Oldenburg=0.1; Osnabrück=0.1;
-      Heilbronn=0.1; Pforzheim=0.1; Offenbach=0.1; Darmstadt=0.1; Hoffenheim=0.1`,
+      Bonn=1.5; Essen=1; Heidelberg=0.8; Duisburg=0.5; Bochum=0.5; Gelsenkirchen=0.5; Wolfsburg=0.5; Ingolstadt=0.5;
+      Augsburg=0.5; Regensburg=0.5; Freiburg=0.5; Mannheim=0.5; Karlsruhe=0.5; Mainz=0.5; Potsdam=0.5; Leverkusen=0.5;
+      Wiesbaden=0.3; Aachen=0.3; Münster=0.3; Bielefeld=0.3; Kiel=0.3; Lübeck=0.3; Rostock=0.3; Magdeburg=0.3;
+      Erfurt=0.3; Weimar=0.3; Ulm=0.3; Kaiserslautern=0.3; Mönchengladbach=0.3; Jena=0.2; Kassel=0.2; Göttingen=0.2;
+      Trier=0.2; Koblenz=0.2; Würzburg=0.2; Bamberg=0.2; Passau=0.2; Rosenheim=0.2;
+      Garmisch-Partenkirchen/Garmisch=0.2; Wuppertal=0.2; Saarbrücken=0.2; Chemnitz=0.2; Braunschweig=0.2;
+      Sindelfingen=0.2; Konstanz=0.2; Bayreuth=0.1; Halle=0.1; Oldenburg=0.1; Osnabrück=0.1; Heilbronn=0.1;
+      Pforzheim=0.1; Offenbach=0.1; Darmstadt=0.1; Hoffenheim=0.1; Baden-Baden=0.2; Dachau=0.2; Herzogenaurach=0.1;
+      Lindau=0.1; Friedrichshafen=0.1; Füssen=0.1; Berchtesgaden=0.1; Oberstdorf=0.1; Landshut=0.1; Erlangen=0.1;
+      Fürth=0.1; Schweinfurt=0.1; Aschaffenburg=0.1; Memmingen=0.1; Fulda=0.1; Gießen/Giessen=0.1; Marburg=0.1;
+      Ludwigshafen=0.1; Speyer=0.1; Worms=0.1; Tübingen=0.1; Reutlingen=0.1; Esslingen=0.1; Ludwigsburg=0.1;
+      Heidenheim=0.1; Sinsheim=0.1; Ravensburg=0.1; Flensburg=0.1; Schwerin=0.1; Stralsund=0.1; Bremerhaven=0.1;
+      Lüneburg=0.1; Celle=0.1; Hildesheim=0.1; Hameln=0.1; Paderborn=0.1; Oberhausen=0.1; Hagen=0.1; Krefeld=0.1;
+      Neuss=0.1; Solingen=0.1; Siegen=0.1; Cottbus=0.1; Frankfurt na Odri=0.1; Zwickau=0.1; Dessau=0.1;
+      Wittenberg=0.1; Eisenach=0.1; Meissen/Meißen=0.1; Rothenburg ob der Tauber/Rothenburg=0.1; Freising=0.1;
+      Coburg=0.1`,
   },
   {
     slug: "grad-italija",
@@ -357,10 +443,22 @@ export const opceKategorije: SeedCategory[] = [
       Trst/Trieste=4; Bologna=2; Verona=2; Pisa=2; Genova/Đenova=2; Palermo=2; Bari=1; Udine=1; Padova/Padua=1;
       Ancona=1; Rimini=1; Siena=0.8; Pescara=0.5; Como=0.5; Bergamo=0.5; Brescia=0.5; Parma=0.5; Modena=0.5;
       Catania=0.5; Messina=0.3; Cagliari=0.3; Salerno=0.3; Perugia=0.3; Livorno=0.3; Ravenna=0.3; Treviso=0.3;
-      Trento=0.3; Sanremo=0.3; Monza=0.3; Amalfi=0.3; Pompeji=0.3; Lignano=0.3; Jesolo=0.3; Taranto=0.2;
-      Lecce=0.2; Brindisi=0.2; Assisi=0.2; Lucca=0.2; Ferrara=0.2; Vicenza=0.2; Bolzano=0.2; Gorizia=0.2;
-      La Spezia=0.2; Sorrento=0.2; Bibione=0.2; Sassari=0.1; Cremona=0.1; Mantova/Mantua=0.1; Pavia=0.1;
-      Reggio Calabria=0.1; Foggia=0.1; Matera=0.1; Sirakuza/Siracusa=0.1; Palmanova=0.1; Maranello=0.2`,
+      Trento=0.3; Sanremo=0.3; Monza=0.3; Amalfi=0.3; Pompeji=0.3; Lignano=0.3; Jesolo=0.3; Taranto=0.2; Lecce=0.2;
+      Brindisi=0.2; Assisi=0.2; Lucca=0.2; Ferrara=0.2; Vicenza=0.2; Bolzano=0.2; Gorizia=0.2; La Spezia=0.2;
+      Sorrento=0.2; Bibione=0.2; Sassari=0.1; Cremona=0.1; Mantova/Mantua=0.1; Pavia=0.1; Reggio Calabria=0.1;
+      Foggia=0.1; Matera=0.1; Sirakuza/Siracusa=0.1; Palmanova=0.1; Maranello=0.2; Capri=0.3; Taormina=0.2;
+      Positano=0.2; Portofino=0.2; Riccione=0.2; Imola=0.2; Piacenza=0.2; Reggio Emilia=0.2;
+      Cortina d'Ampezzo/Cortina=0.2; Aquileia/Akvileja=0.2; Grado=0.2; Ostia=0.1; Fiumicino=0.1; Tivoli=0.1;
+      Civitavecchia=0.1; Latina=0.1; Frosinone=0.1; Viterbo=0.1; Orvieto=0.1; Terni=0.1; Spoleto=0.1; Arezzo=0.1;
+      Grosseto=0.1; Prato=0.1; Pistoia=0.1; San Gimignano=0.1; Montepulciano=0.1; Forlì=0.1; Cesena=0.1; Faenza=0.1;
+      Cattolica=0.1; Pesaro=0.1; Fano=0.1; Macerata=0.1; Ascoli Piceno=0.1; Teramo=0.1; L'Aquila/Aquila=0.1;
+      Chieti=0.1; Campobasso=0.1; Termoli=0.1; Vieste=0.1; Barletta=0.1; Andria=0.1; Trani=0.1; Monopoli=0.1;
+      Ostuni=0.1; Alberobello=0.1; Gallipoli=0.1; Otranto=0.1; Potenza=0.1; Cosenza=0.1; Catanzaro=0.1; Crotone=0.1;
+      Trapani=0.1; Marsala=0.1; Agrigento=0.1; Ragusa=0.1; Cefalù=0.1; Olbia=0.1; Alghero=0.1; Nuoro=0.1;
+      Oristano=0.1; Caserta=0.1; Benevento=0.1; Avellino=0.1; Pozzuoli=0.1; Ercolano/Herkulanej=0.1; Savona=0.1;
+      Imperia=0.1; Ventimiglia=0.1; Rapallo=0.1; Aosta=0.1; Asti=0.1; Alessandria=0.1; Novara=0.1; Vercelli=0.1;
+      Biella=0.1; Cuneo=0.1; Alba=0.1; Varese=0.1; Lecco=0.1; Lodi=0.1; Bellagio=0.1; Livigno=0.1; Merano=0.1;
+      Belluno=0.1; Rovigo=0.1; Chioggia=0.1; Caorle=0.1; Pordenone=0.1; Cividale=0.1; Monfalcone/Tržič=0.1`,
   },
   {
     slug: "grad-sad",
@@ -398,9 +496,20 @@ export const opceKategorije: SeedCategory[] = [
       Mikonos=1; Rodos=1; Capri=1; Zakintos=0.8; Tasmanija=0.5; Borneo=0.5; Sumatra=0.5; Java=0.5; Elba=0.5;
       Sejšeli=0.5; Mauricijus=0.5; Zanzibar=0.5; Tahiti=0.5; Bora Bora=0.5; Galapagos=0.5; Uskršnji otok=0.5;
       Bahami=0.5; Madeira=0.5; Nova Gvineja=0.3; Filipini=0.3; Kefalonija=0.3; Lezbos=0.3; Kos=0.3; Ischia=0.3;
-      Fidži=0.3; Barbados=0.3; Portoriko=0.3; Manhattan=0.3; Phuket=0.3; Azori=0.3; Gran Canaria=0.3;
-      Lanzarote=0.3; Alcatraz=0.2; Svalbard=0.2; Farski otoci=0.2; Sveta Helena=0.2; Fuerteventura=0.2;
-      Menorca=0.2; Hokaido=0.1; Sahalin=0.1; Thassos/Tasos=0.3`,
+      Fidži=0.3; Barbados=0.3; Portoriko=0.3; Manhattan=0.3; Phuket=0.3; Azori=0.3; Gran Canaria=0.3; Lanzarote=0.3;
+      Alcatraz=0.2; Svalbard=0.2; Farski otoci=0.2; Sveta Helena=0.2; Fuerteventura=0.2; Menorca=0.2; Hokaido=0.1;
+      Sahalin=0.1; Thassos/Tasos=0.3; Lampedusa=0.2; Murano=0.2; Lefkada=0.2; Itaka=0.2; Réunion=0.2;
+      Hispaniola/Haiti=0.2; Bermudi=0.2; Singapur=0.2; Falklandi/Malvini=0.2; Lofoti/Lofoten=0.2; Blejski otok=0.2;
+      Sveti Stefan=0.2; Stromboli=0.1; Lipari=0.1; Procida=0.1; Burano=0.1; Giglio=0.1; Gotland=0.1; Bornholm=0.1;
+      Shetland/Šetlandski otoci=0.1; Hebridi=0.1; Otok Man/Isle of Man=0.1; Jersey=0.1; Guernsey=0.1; Rügen=0.1;
+      Sylt=0.1; Helgoland=0.1; Naksos=0.1; Paros=0.1; Hidra=0.1; Egina=0.1; Skiatos=0.1; Samos=0.1; Hios=0.1;
+      Patmos=0.1; Eubeja=0.1; Milos=0.1; Delos=0.1; Formentera=0.1; La Palma=0.1; Martinik=0.1; Gvadalupa=0.1;
+      Nova Kaledonija=0.1; Mont-Saint-Michel=0.1; Gozo=0.1; Trinidad=0.1; Aruba=0.1; Curaçao/Kurasao=0.1;
+      Kajmanski otoci=0.1; Guam=0.1; Samoa=0.1; Tonga=0.1; Pitcairn=0.1; Nauru=0.1; Bikini=0.1; Honšu=0.1; Kjušu=0.1;
+      Okinava=0.1; Hainan=0.1; Sulavesi=0.1; Lombok=0.1; Komodo=0.1; Timor=0.1; Luzon=0.1; Mindanao=0.1;
+      Koh Samui=0.1; Bahrein=0.1; Sokotra=0.1; Zelenortski otoci=0.1; Komori=0.1; Vancouverov otok=0.1;
+      Newfoundland=0.1; Nova Zemlja=0.1; Baffinov otok=0.1; Long Island=0.1; Ellis Island=0.1; Key West=0.1;
+      Ognjena zemlja=0.1; Zemlja Franje Josipa=0.1; Gospa od Škrpjela=0.1`,
   },
   {
     slug: "tenis",
@@ -425,7 +534,26 @@ export const opceKategorije: SeedCategory[] = [
       Janko Tipsarević/Tipsarević=0.1; Viktor Troicki/Troicki=0.1; Holger Rune/Rune=0.1; Gael Monfils/Monfils=0.1;
       Jo-Wilfried Tsonga/Tsonga=0.1; Gustavo Kuerten/Kuerten=0.1; Billie Jean King=0.1; Chris Evert/Evert=0.1;
       Jelena Dokić/Dokić=0.1; Tim Henman/Henman=0.1; Elena Rybakina/Rybakina=0.1; Emma Raducanu/Raducanu=0.1;
-      Ilie Nastase/Nastase=0.1; Taylor Fritz/Fritz=0.1; Casper Ruud/Ruud=0.1`,
+      Ilie Nastase/Nastase=0.1; Taylor Fritz/Fritz=0.1; Casper Ruud/Ruud=0.1; Gabriela Sabatini/Sabatini=0.2;
+      Anna Kurnikova/Kurnikova=0.2; Željko Franulović/Franulović=0.2; Nikola Pilić/Pilić=0.2;
+      Karolina Šprem/Šprem=0.2; Ivan Dodig/Dodig=0.2; Dino Prižmić/Prižmić=0.2; Ajla Tomljanović/Tomljanović=0.2;
+      Goran Prpić/Prpić=0.1; Silvija Talaja=0.1; Franko Škugor=0.1; Darija Jurak=0.1; Ken Rosewall/Rosewall=0.1;
+      Mats Wilander/Wilander=0.1; Michael Chang=0.1; Jim Courier/Courier=0.1; Jevgenij Kafeljnikov/Kafelnikov=0.1;
+      Patrick Rafter/Rafter=0.1; Carlos Moyà/Moya=0.1; Juan Carlos Ferrero/Ferrero=0.1; Marcelo Ríos=0.1;
+      Richard Krajicek/Krajicek=0.1; Michael Stich/Stich=0.1; Tommy Haas/Haas=0.1; Nikolaj Davidenko/Davidenko=0.1;
+      David Ferrer=0.1; Tomáš Berdych/Berdych=0.1; Milos Raonic/Raonić=0.1; Richard Gasquet/Gasquet=0.1;
+      Andrej Rubljov/Rubljov/Rublev=0.1; Alex de Minaur/De Minaur=0.1; Félix Auger-Aliassime/Auger-Aliassime=0.1;
+      Hubert Hurkacz/Hurkacz=0.1; Ben Shelton/Shelton=0.1; Frances Tiafoe/Tiafoe=0.1;
+      Matteo Berrettini/Berrettini=0.1; Lorenzo Musetti/Musetti=0.1; Jack Draper/Draper=0.1; João Fonseca/Fonseca=0.1;
+      Yannick Noah/Noah=0.1; Guillermo Vilas/Vilas=0.1; Fabio Fognini/Fognini=0.1; Fred Perry=0.1;
+      Arantxa Sánchez Vicario/Sánchez Vicario=0.1; Lindsay Davenport/Davenport=0.1; Jennifer Capriati/Capriati=0.1;
+      Amélie Mauresmo/Mauresmo=0.1; Svetlana Kuznjecova/Kuznjecova=0.1; Dinara Safina=0.1;
+      Victoria Azarenka/Azarenka=0.1; Petra Kvitová/Kvitová=0.1; Agnieszka Radwańska/Radwańska=0.1; Li Na=0.1;
+      Angelique Kerber/Kerber=0.1; Garbiñe Muguruza/Muguruza=0.1; Ashleigh Barty/Barty=0.1;
+      Bianca Andreescu/Andreescu=0.1; Jeļena Ostapenko/Ostapenko=0.1; Madison Keys=0.1; Jessica Pegula/Pegula=0.1;
+      Ons Jabeur/Jabeur=0.1; Barbora Krejčíková/Krejčíková=0.1; Markéta Vondroušová/Vondroušová=0.1;
+      Mirra Andreeva/Andreeva=0.1; Jasmine Paolini/Paolini=0.1; Zheng Qinwen=0.1; Eugenie Bouchard/Bouchard=0.1;
+      Amanda Anisimova/Anisimova=0.1; Margaret Court=0.1; Mary Pierce=0.1`,
   },
   {
     slug: "nogometas",

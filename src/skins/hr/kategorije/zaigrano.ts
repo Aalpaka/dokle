@@ -443,25 +443,45 @@ export const zaigranoKategorije: SeedCategory[] = [
       Telegram=1; Pinterest=1; Reddit=1; Bolt=1; Glovo=1; Wolt=1; Duolingo=1; Zoom=1; Skype=1; Discord=1; Google=1;
       Booking=0.5; Airbnb=0.5; Shazam=0.5; Teams/Microsoft Teams=0.5; Twitch=0.5; Chrome=0.5; Revolut=0.5;
       Njuškalo=0.5; Amazon=0.5; Temu=0.5; AliExpress=0.5; Google Translate/Google prevoditelj=0.5; HBO Max/Max=0.5;
-      Claude=0.3; Threads=0.3; Signal=0.3; Waze=0.3; Candy Crush=0.3; Pokemon Go=0.3; Vinted=0.3; eBay=0.3;
-      Shein=0.3; Wikipedia=0.3; BeReal=0.2; Safari=0.2; Aircash=0.2; Tumblr=0.2; Strava=0.2; Apple Music=0.2;
-      Disney+=0.2; Deezer=0.1; Tidal=0.1; MyFitnessPal=0.1`,
+      Claude=0.3; Threads=0.3; Signal=0.3; Waze=0.3; Candy Crush=0.3; Pokemon Go=0.3; Vinted=0.3; eBay=0.3; Shein=0.3;
+      Wikipedia=0.3; BeReal=0.2; Safari=0.2; Aircash=0.2; Tumblr=0.2; Strava=0.2; Apple Music=0.2; Disney+=0.2;
+      Deezer=0.1; Tidal=0.1; MyFitnessPal=0.1; Canva=0.3; CapCut=0.3; Outlook=0.3; PayPal=0.3; e-Dnevnik/eDnevnik=0.3;
+      Google Drive=0.3; Dropbox=0.2; Word/Microsoft Word=0.2; Excel=0.2; Photoshop=0.2; Slack=0.2; FaceTime=0.2;
+      Gemini=0.2; Firefox=0.2; KEKS Pay/Keks=0.2; m-zaba=0.2; e-Građani/eGrađani=0.2; Prime Video/Amazon Prime=0.2;
+      Voyo=0.2; SoundCloud=0.2; MySpace=0.2; Bluesky=0.2; Badoo=0.2; WeChat=0.2; IMDb=0.2; Tripadvisor=0.2;
+      Clash of Clans=0.2; Subway Surfers=0.2; Angry Birds=0.2; Roblox=0.2; Steam=0.2; Zalando=0.2; Lidl Plus=0.2;
+      Cammeo=0.2; PowerPoint=0.1; OneDrive=0.1; Notion=0.1; Trello=0.1; Google Meet=0.1; iMessage=0.1; Copilot=0.1;
+      Perplexity=0.1; DeepSeek=0.1; Midjourney=0.1; Opera=0.1; Edge/Microsoft Edge=0.1; Brave=0.1; Wise=0.1;
+      Binance=0.1; Nextbike=0.1; SkyShowtime=0.1; HRTi=0.1; Pickbox=0.1; Kindle=0.1; Clubhouse=0.1; Vine=0.1;
+      Quora=0.1; Bumble=0.1; Hinge=0.1; Grindr=0.1; Flickr=0.1; Letterboxd=0.1; Google Pay=0.1; Apple Pay=0.1;
+      Clash Royale=0.1; Among Us=0.1; Brawl Stars=0.1; Google Photos/Google fotografije=0.1; OLX=0.1; Periscope=0.1;
+      Orkut=0.1`,
   },
   {
     slug: "brend-odjece",
     group: "zaigrano",
     title: "Brend odjeće ili obuće",
     strip: [],
-    answers: `Nike=18; Adidas=15; Zara=6; Puma=5; H&M/HM=5; Gucci=3; Levi's/Levis=2; Tommy Hilfiger/Tommy=2; Calvin Klein=2;
-      Lacoste=2; Louis Vuitton/LV=2; Hugo Boss/Boss=1.5; Prada=1.5; Chanel=1.5; Versace=1.5; Armani=1.5; Guess=1;
-      Dolce & Gabbana/D&G=1; Converse=1; Vans=1; New Balance=1; Reebok=1; Fila=0.5; Kappa=0.5; Asics=0.5;
-      The North Face/North Face=0.5; Timberland=0.5; Dr. Martens/Martensice=0.5; Ralph Lauren/Polo=0.5;
+    answers: `Nike=18; Adidas=15; Zara=6; Puma=5; H&M/HM=5; Gucci=3; Levi's/Levis=2; Tommy Hilfiger/Tommy=2;
+      Calvin Klein=2; Lacoste=2; Louis Vuitton/LV=2; Hugo Boss/Boss=1.5; Prada=1.5; Chanel=1.5; Versace=1.5;
+      Armani=1.5; Guess=1; Dolce & Gabbana/D&G=1; Converse=1; Vans=1; New Balance=1; Reebok=1; Fila=0.5; Kappa=0.5;
+      Asics=0.5; The North Face/North Face=0.5; Timberland=0.5; Dr. Martens/Martensice=0.5; Ralph Lauren/Polo=0.5;
       Burberry=0.5; Balenciaga=0.5; Dior=0.5; Diesel=0.5; Pull&Bear=0.5; Bershka=0.5; Mango=0.5; Reserved=0.5;
       Borovo=0.5; Crocs=0.5; Umbro=0.3; Diadora=0.3; Under Armour=0.3; Hermès/Hermes=0.3; Moncler=0.3;
       Stone Island=0.3; Stradivarius=0.3; C&A=0.3; Primark=0.3; Shein=0.3; Benetton=0.3; Varteks=0.3; Startas=0.3;
       UGG=0.3; Birkenstock=0.3; Skechers=0.3; Champion=0.3; Fendi=0.2; Uniqlo=0.2; Esprit=0.2; s.Oliver=0.2;
-      Tom Tailor=0.2; Supreme=0.2; Superdry=0.2; Jack & Jones=0.2; Wrangler=0.2; Lee=0.2; Napapijri=0.2;
-      Ellesse=0.2; Hummel=0.2; Joma=0.2; Givenchy=0.2; Valentino=0.2; Off-White=0.1; Ferragamo=0.1`,
+      Tom Tailor=0.2; Supreme=0.2; Superdry=0.2; Jack & Jones=0.2; Wrangler=0.2; Lee=0.2; Napapijri=0.2; Ellesse=0.2;
+      Hummel=0.2; Joma=0.2; Givenchy=0.2; Valentino=0.2; Off-White=0.1; Ferragamo=0.1; Jordan/Air Jordan=0.3;
+      Calzedonia=0.2; Massimo Dutti=0.2; Deichmann=0.2; Columbia=0.2; Jack Wolfskin=0.2; Salomon=0.1; Patagonia=0.1;
+      Helly Hansen=0.1; Quiksilver=0.1; Billabong=0.1; O'Neill=0.1; Carhartt=0.1; Dickies=0.1; Fred Perry=0.1;
+      Gant=0.1; Oysho=0.1; Lefties=0.1; COS=0.1; Cropp=0.1; House=0.1; Sinsay=0.1; Pepco=0.1; Takko=0.1; KiK=0.1;
+      New Yorker=0.1; Humanic=0.1; CCC=0.1; Geox=0.1; Ecco=0.1; Clarks=0.1; Bata=0.1; Peko=0.1; Alpina=0.1; Galeb=0.1;
+      Croata=0.1; Lisca=0.1; Intimissimi=0.1; Tezenis=0.1; Victoria's Secret=0.1;
+      Saint Laurent/YSL/Yves Saint Laurent=0.1; Balmain=0.1; Bottega Veneta=0.1; Celine=0.1; Miu Miu=0.1;
+      Moschino=0.1; Kenzo=0.1; Max Mara=0.1; Michael Kors=0.1; Alexander McQueen/McQueen=0.1; Tom Ford=0.1;
+      Philipp Plein=0.1; Dsquared2/Dsquared=0.1; Roberto Cavalli/Cavalli=0.1; Trussardi=0.1; Mizuno=0.1; Hoka=0.1;
+      Le Coq Sportif=0.1; Lotto=0.1; Lonsdale=0.1; Everlast=0.1; Gymshark=0.1; Lululemon=0.1; Pepe Jeans=0.1;
+      G-Star=0.1; Mustang=0.1; Vero Moda=0.1; Orsay=0.1; Desigual=0.1; Canada Goose=0.1; Havaianas=0.1; Superga=0.1`,
   },
   {
     slug: "fast-food",

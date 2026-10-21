@@ -6,8 +6,9 @@ export const prosirenja: Record<string, string> = {
     Budikovac=0.05; Majsan=0.05; Kakan=0.05; Skrda=0.05; Trstenik=0.05; Logorun=0.05; Zmajan=0.05; Katarina=0.05`,
   rijeka: `Spačva=0.2; Bregana=0.2; Dragonja=0.2; Odra=0.1; Kamačnik=0.1; Krčić=0.1; Butišnica=0.1; Plitvica=0.1;
     Kupica=0.1; Čabranka=0.1; Petrinjčica=0.1; Sunja=0.1; Londža=0.1; Biđ=0.1; Tounjčica=0.1; Pazinčica=0.1;
-    Norin=0.1; Vrljika=0.1; Kosovčica=0.05; Dretulja=0.05; Lička Jesenica=0.05; Novčica=0.05; Otuča=0.05;
-    Jadova=0.05; Ričica=0.05; Maja=0.05; Voćinka=0.05; Studva=0.05; Boljunčica=0.05`,
+    Norin=0.1; Vrljika=0.1; Kosovčica=0.05; Dretulja=0.05; Lička Jesenica=0.05; Novčica=0.05; Otuča=0.05; Jadova=0.05;
+    Ričica=0.05; Maja=0.05; Voćinka=0.05; Studva=0.05; Boljunčica=0.05; Dubračina=0.1; Krupa=0.1; Utinja=0.1;
+    Radonja=0.1; Glogovnica=0.1; Bračana=0.1`,
   jelo: `Janjetina/Janjac=1.5; Gulaš=1; Odojak/Pečeni odojak=1; Žganci=1; Pljeskavica=1; Ražnjići=1;
     Pašta fažol/Pasta fažol=0.8; Blitva s krumpirom/Blitva=0.8; Bečki odrezak/Pohani odrezak=0.8; Sataraš=0.5;
     Pečenka=0.5; Palenta/Polenta=0.5; Krpice sa zeljem=0.5; Kiseli kupus=0.5; Ričet=0.5; Tripice/Fileki=0.5;
@@ -72,10 +73,12 @@ export const prosirenja: Record<string, string> = {
     Rakija=0.1; Red Bull/Energetsko piće=0.1; Inzulin=0.1; Kozmetika=0.1; Celer=0.05; Med=0.05;
     Ljuti umak/Tabasco=0.05; Baterije=0.05; Hrana za psa=0.05`,
   psovka: `Sto mu gromova=0.5; Pobogu=0.5; Zaboga=0.3; Bože dragi=0.3; Majko Božja=0.3; Joj=0.3; Mamicu mu=0.3;
-    Majke mi=0.3; Ajme majko=0.3; Mamma mia/Mama mia=0.3; Grom i pakao=0.2; Tisuću mu gromova=0.2;
-    Bože sačuvaj=0.2; Isuse Kriste=0.2; Sunce ti kalajisano=0.2; Pas mu mater=0.2; Ma koji vrag/Koji vrag=0.2;
-    Bogme=0.2; Bem ti miša=0.2; Prokleto=0.2; Jao meni=0.2; Kriste Bože=0.1; Tako mi svega=0.1; Bezveze=0.1;
-    Ma briga me=0.1; Ma kakvi=0.1`,
+    Majke mi=0.3; Ajme majko=0.3; Mamma mia/Mama mia=0.3; Grom i pakao=0.2; Tisuću mu gromova=0.2; Bože sačuvaj=0.2;
+    Isuse Kriste=0.2; Sunce ti kalajisano=0.2; Pas mu mater=0.2; Ma koji vrag/Koji vrag=0.2; Bogme=0.2;
+    Bem ti miša=0.2; Prokleto=0.2; Jao meni=0.2; Kriste Bože=0.1; Tako mi svega=0.1; Bezveze=0.1; Ma briga me=0.1;
+    Ma kakvi=0.1; Bog te mazo/Bog te mazao=0.3; Kuku lele/Kuku/Lele=0.3; Grom te ubio=0.2; Boga mi=0.2; Majku ti=0.2;
+    Vrag odnio šalu=0.2; Jezuš Marija/Jezuš=0.2; Au/Aua=0.2; Ma bježi=0.2; Mrš/Marš=0.2; Svašta=0.1; Šipak=0.1;
+    Bljak=0.1; Ma pusti=0.1; Kuga te odnijela/Kuga te odnila=0.1; Tako mi Boga=0.1; OMG=0.1`,
   dijalekt: `Ća/Ca=1; Spiza=0.5; Butiga=0.5; Pjaca=0.5; Kapula=0.3; Đardin=0.3; Bukara=0.3; Šporet=0.3; Fažol=0.3;
     Kumpir=0.3; Škatula=0.3; Škura=0.3; Lipo=0.3; Kaić=0.2; Kogoma=0.2; Sić=0.2; Mudante=0.2; Komin=0.2;
     Mižerija=0.2; Šnita=0.2; Krigla=0.2; Ringišpil=0.2; Grincajg=0.2; Pinez=0.2; Grunt=0.2; Kuruza=0.2; Gajba=0.2;
