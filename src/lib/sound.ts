@@ -19,9 +19,23 @@ if (typeof window !== "undefined") {
   try {
     muted = localStorage.getItem(KEY) === "1";
   } catch {}
-  const unlock = () => void init();
-  window.addEventListener("pointerdown", unlock, { once: true, capture: true });
-  window.addEventListener("keydown", unlock, { once: true, capture: true });
+  // Mobilni preglednici zvuk otključavaju tek na dodir koji se računa kao gesta (touchend, click), ne na
+  // pointerdown, pa se pokušava na svaki od njih dok kontekst ne proradi.
+  const events = ["pointerdown", "pointerup", "touchend", "click", "keydown"] as const;
+  const unlock = () => {
+    if (!init() || !ctx) return;
+    // iOS: tihi zvuk unutar geste otvara audio, a "playback" sesija svira i kad je zvono utišano
+    const nav = navigator as Navigator & { audioSession?: { type: string } };
+    if (nav.audioSession) nav.audioSession.type = "playback";
+    const s = ctx.createBufferSource();
+    s.buffer = ctx.createBuffer(1, 1, ctx.sampleRate);
+    s.connect(ctx.destination);
+    s.start(0);
+    void ctx.resume().then(() => {
+      if (ctx?.state === "running") events.forEach((e) => window.removeEventListener(e, unlock, true));
+    });
+  };
+  events.forEach((e) => window.addEventListener(e, unlock, true));
 }
 
 function init(): boolean {

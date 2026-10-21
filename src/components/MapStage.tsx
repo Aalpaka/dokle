@@ -70,6 +70,7 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false }: { 
     anim: null as Anim | null,
     seen: -1,
     replay: 0,
+    busyUntil: 0,
     cam: { x: 0, y: 0, w: 760 },
     pos: { x: 0, y: 0 },
     lift: 0,
@@ -205,6 +206,7 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false }: { 
       S.lift = S.bob = S.rot = 0;
       S.km = a.to;
       setTimeout(() => trailRef.current?.setAttribute("d", ""), 600);
+      if (!a.quiet) S.busyUntil = Math.max(S.busyUntil, now + 2000);
       a.onDone?.();
     }
   }
@@ -230,6 +232,8 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false }: { 
       return;
     }
     if (rounds.length <= S.seen) return;
+    // replay na kraju čeka da se odvozi i pročita zadnji odgovor
+    S.busyUntil = performance.now() + 4500;
     const fresh = rounds.slice(S.seen);
     S.seen = rounds.length;
     if (S.anim) {
@@ -299,7 +303,14 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false }: { 
 
   useEffect(() => {
     if (!ended) return;
-    const t = setTimeout(replay, 500);
+    // zadnji odgovor stiže zajedno s krajem igre, pa replay kreće tek kad njegova vožnja završi i malo odstoji
+    let t = 0;
+    const wait = () => {
+      const S = sim.current;
+      if (S.anim || performance.now() < S.busyUntil) t = window.setTimeout(wait, 300);
+      else replay();
+    };
+    t = window.setTimeout(wait, 500);
     return () => {
       clearTimeout(t);
       sim.current.replay++;
