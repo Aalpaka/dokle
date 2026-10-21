@@ -359,14 +359,6 @@ function Reveal({ state, onNext }: { state: GameState; onNext: () => void }) {
         </div>
         {after !== before && <p className="small">Prošao si: <b>{after.name}</b></p>}
       </div>
-      {state.reveal && (
-        <div className="stack" style={{ gap: 6 }}>
-          <span className="eyebrow">Najčešći odgovori</span>
-          <Chips items={state.reveal.top} />
-          <span className="eyebrow" style={{ marginTop: 6 }}>Rijetki koje si mogao</span>
-          <Chips items={state.reveal.rare} />
-        </div>
-      )}
       <div className="row">
         <button autoFocus onClick={onNext}>{last ? "Vidi dokle si stigao" : "Dalje"}</button>
       </div>
@@ -396,16 +388,6 @@ function what(r: RoundView) {
   if (r.canonical) return <><b>{r.canonical}</b> · {formatShare(r.share ?? 0)} igrača</>;
   if (r.raw) return <>„{r.raw}” nije na našem popisu.</>;
   return <>Nisi stigao odgovoriti.</>;
-}
-
-function Chips({ items }: { items: { canonical: string; share: number }[] }) {
-  return (
-    <div className="chips">
-      {items.map((a) => (
-        <span className="chip" key={a.canonical}>{a.canonical}<span>{formatShare(a.share)}</span></span>
-      ))}
-    </div>
-  );
 }
 
 function End({ state, me }: { state: GameState; me: Me | null }) {
