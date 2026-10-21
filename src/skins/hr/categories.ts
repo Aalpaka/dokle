@@ -1,7 +1,16 @@
-// Početne kategorije iz prototipa. Format answers: "Kanonski/varijanta/varijanta=udio%; ..."
+// Kategorije za seed. Format answers: "Kanonski/varijanta/varijanta=udio%; ..."
+// Udio = procjena postotka igrača koji bi dali taj odgovor; stvarni podaci je s vremenom nadjačaju.
+// Seed samo dodaje nove kategorije i odgovore, pa se stare kategorije proširuju kroz prosirenja.ts.
+import { hrKategorije } from "./kategorije/hr";
+import { kvizKategorije } from "./kategorije/kviz";
+import { opceKategorije } from "./kategorije/opce";
+import { prosirenja } from "./kategorije/prosirenja";
+import { zaigranoKategorije } from "./kategorije/zaigrano";
+
 export type SeedCategory = { slug: string; group: string; title: string; hint?: string; strip: string[]; answers: string };
 
-export const hrCategories: SeedCategory[] = [
+// početne kategorije iz prototipa
+const pocetne: SeedCategory[] = [
   { "slug":"otok","group":"hr","title":"Hrvatski otok","strip":["otok","otoku","otoka"],"answers":"Krk=22;Hvar=16;Brač=14;Korčula=8;Pag=7;Cres=5;Rab=4;Vis=4;Lošinj/Mali Lošinj/Veli Lošinj=3;Mljet=2.5;Lastovo=1.5;Šolta=1.5;Dugi otok=1.2;Ugljan=1;Pašman=0.8;Murter=0.8;Čiovo=0.7;Brijuni/Veliki Brijun/Brioni=0.7;Kornat/Kornati=0.6;Vir=0.5;Šipan=0.4;Lopud=0.4;Susak=0.4;Lokrum=0.4;Goli otok=0.3;Silba=0.3;Koločep=0.2;Unije=0.2;Ilovik=0.2;Iž=0.2;Prvić=0.2;Zlarin=0.25;Olib=0.15;Žirje=0.15;Krapanj=0.15;Biševo=0.15;Premuda=0.1;Molat=0.1;Kaprije=0.1;Palagruža=0.1;Badija=0.1;Galešnjak=0.1;Drvenik Veli/Drvenik=0.08;Rava=0.05;Ist=0.05;Vrgada=0.05;Sveti Grgur=0.05;Sveti Klement=0.05;Jabuka=0.03;Sušac=0.03;Zverinac=0.03;Sestrunj=0.03;Obonjan=0.03;Plavnik=0.03" },
   { "slug":"rijeka","group":"hr","title":"Rijeka u Hrvatskoj","strip":["rijeka","rijeku","reka"],"answers":"Sava=25;Drava=18;Dunav=15;Kupa=9;Neretva=6;Krka=5;Cetina=4;Una=3;Korana=2.5;Mrežnica=1.5;Dobra=1.2;Zrmanja=1.2;Mirna=1;Gacka=0.8;Lika=0.7;Mura=0.6;Rječina=0.6;Vuka=0.6;Bosut=0.5;Krapina=0.4;Sutla=0.4;Lonja=0.3;Glina=0.3;Ilova=0.2;Orljava=0.2;Bednja=0.2;Raša=0.2;Česma=0.15;Jadro=0.15;Ombla/Rijeka dubrovačka=0.1;Čikola=0.1;Slunjčica=0.1;Žrnovnica=0.08;Pakra=0.08;Karašica=0.08;Ruda=0.05;Guduča=0.05;Kupčina=0.05;Vučica=0.05;Ljuta=0.05;Trebež=0.03;Matica=0.03" },
   { "slug":"jelo","group":"hr","title":"Jelo iz hrvatske kuhinje","strip":[],"answers":"Sarma=10;Pašticada=9;Štrukli/Zagorski štrukli/Štruklji=8;Kulen/Kulin=6;Fiš paprikaš/Fiš/Riblji paprikaš=5;Čobanac=5;Peka/Ispod peke=5;Burek=4;Ćevapi/Ćevapčići/Ćevap=4;Punjene paprike/Punjena paprika=3.5;Grah/Varivo od graha=3;Brudet/Brodet/Brujet=3;Crni rižot/Crni rizot=3;Fritule/Fritole=2.5;Pršut=2.5;Kremšnita/Samoborska kremšnita=2;Purica s mlincima/Mlinci/Pura s mlincima=2;Sir i vrhnje/Sir vrhnje=1.5;Zagrebački odrezak=1.5;Rožata/Rozata=1.2;Soparnik/Zeljanica=1.2;Bakalar/Bakalar na bijelo=1.2;Paški sir=1;Maneštra/Menestra=1;Čvarci=1;Kobasice/Kobasica=1;Zagorska juha=0.8;Fuži=0.8;Buzara=0.8;Orahnjača/Orehnjača=0.8;Makovnjača=0.6;Krvavice/Krvavica=0.6;Mađarica=0.6;Krafne=0.5;Pljukanci=0.4;Gregada=0.4;Bučnica=0.4;Hladetina=0.4;Ajngemahtes=0.4;Kotlovina=0.3;Kroštule=0.3;Viška pogača=0.3;Komiška pogača=0.2;Zlevanka=0.2;Paprenjaci=0.2;Licitar=0.2;Japrak=0.2;Rafioli=0.15;Arambašići/Sinjski arambašići=0.15;Ličke pole/Lički krumpir=0.15;Visovačka begavica=0.03" },
@@ -18,4 +27,12 @@ export const hrCategories: SeedCategory[] = [
   { "slug":"frizider","group":"zaigrano","title":"Nešto što imaš u frižideru","strip":[],"answers":"Mlijeko=20;Jaja/Jaje=10;Sir=10;Maslac/Puter=6;Pivo=5;Jogurt=5;Šunka=3;Voda=3;Kobasice/Hrenovke=2.5;Majoneza=2;Vrhnje/Kiselo vrhnje=2;Salata=1.5;Kečap=1.5;Ajvar=1.5;Sok=1.5;Meso=1.5;Vino=1.2;Senf=1;Salama=1;Pašteta=0.8;Piletina=0.8;Kiseli krastavci/Krastavci=0.6;Čokolada=0.6;Kefir=0.5;Mrkva=0.5;Coca-Cola/Cola/Koka kola=0.5;Rajčica=0.4;Limun=0.4;Torta=0.4;Svježi sir=0.4;Margarin=0.4;Pršut=0.4;Ostaci/Ostaci ručka=0.3;Kulen=0.3;Jabuke=0.3;Juha=0.3;Mineralna=0.3;Sladoled=0.3;Slanina/Panceta=0.3;Kvasac=0.2;Sarma=0.2;Riba=0.2;Masline=0.2;Mozzarella/Mocarela=0.2;Led=0.2;Puding=0.2;Ništa=0.2;Lijekovi=0.1;Žaruljica=0.1;Kapari=0.05;Tofu=0.05;Humus/Hummus=0.05;Lak za nokte=0.03" },
   { "slug":"psovka","group":"zaigrano","title":"Psovka bez psovke","hint":"Blaži izrazi, npr. „sto mu gromova”","strip":[],"answers":"Kvragu=15;Majku mu=8;Bokte/Bog te=6;Dovraga/Do vraga=6;Ajme/Ajme meni=5;Ma daj=3;Prokletstvo=3;Sunce ti=3;Kog vraga=2;Pas mater/Pas ti mater=2;Isuse=2;Bože moj=2;Jao=2;Sunce ti žarko=1.5;Bemti/Bem ti=1.5;Ma idi=1;Gospe moja/Gospe=1;Boga ti=1;Grom te spalio=0.8;Ma koji=0.8;Krasno=0.5;Šit=0.5;Fuj=0.4;Kruca/Kruca fiks=0.4;Uf=0.4;Opa=0.4;Vrag te odnio/Vrag te odnija=0.4;Uh=0.3;Ups=0.3;Ma nemoj=0.3;Jarca=0.3;Ajoj=0.3;Đava/Vrag=0.3;Ijuu=0.2;Ajde bok=0.2;Svetog mi=0.2;Sakramento=0.2;Porca miseria/Porka miserija=0.2;Fak=0.2;Himmel=0.1;Muke Isusove=0.1;Zemljo otvori se=0.05" },
   { "slug":"dijalekt","group":"zaigrano","title":"Dalmatinska ili kajkavska riječ","strip":[],"answers":"Fjaka=12;Kaj=12;Gušt=6;Pomidor=6;Balun=4;Ćakula/Ćakulati=3;Pjat=3;Kužina=3;Pirun=3;Tovar=3;Šugaman=3;Marenda=3;Kak=2;Hiža=2;Kušin=2;Mularija=2;Đir=2;Barba=2;Ćaća=1.5;Nono=1.5;Nona=1.5;Gemišt=1.5;Škovacera=1.5;Zakaj=1;Purger=1;Fruštuk/Fruštik=1;Šufit=1;Teća=1;Tić=1;Škaf=1;Bevanda=1;Japa/Japica=0.8;Šporko=0.8;Bedast=0.6;Cuker=0.6;Bonaca=0.6;Kantun=0.6;Kaleta=0.6;Ponistra=0.6;Štramac=0.6;Mona=0.6;Nevera=0.6;Šjor=0.6;Lumbrela=0.6;Lancun=0.5;Fletno=0.5;Tavaja=0.5;Feral=0.5;Gda=0.4;Fajn=0.4;Ofinger=0.4;Lešo=0.4;Žmul=0.4;Štagalj=0.3;Fertik=0.3;Ganc=0.3;Cajt=0.3;Vužgati/Vužgi=0.3;Pajcek=0.3;Šlafrok=0.3;Brokva=0.3;Tecija=0.3;Armerun=0.3;Bocun=0.3;Kmica=0.2;Žnora=0.2;Kala=0.2;Piškota=0.2;Dibot=0.2;Kotula=0.1" },
+];
+
+export const hrCategories: SeedCategory[] = [
+  ...pocetne.map((c) => (prosirenja[c.slug] ? { ...c, answers: `${c.answers};${prosirenja[c.slug]}` } : c)),
+  ...hrKategorije,
+  ...opceKategorije,
+  ...zaigranoKategorije,
+  ...kvizKategorije,
 ];

@@ -3,9 +3,9 @@ import type { SkinConfig } from "../types";
 export const hrConfig: SkinConfig = {
   title: "Dokle?",
   secondsPerCategory: 25,
-  // miješano, nikad dvije zaigrane zaredom
-  dailyPattern: ["hr", "opce", "zaigrano", "hr", "opce", "hr", "zaigrano", "opce"],
-  groups: { hr: "Hrvatska", opce: "Općenito", zaigrano: "Zaigrano" },
+  // 2 + 2 + 2 + 2, nikad ista grupa zaredom
+  dailyPattern: ["hr", "opce", "kviz", "zaigrano", "hr", "opce", "kviz", "zaigrano"],
+  groups: { hr: "Hrvatska", opce: "Općenito", zaigrano: "Zaigrano", kviz: "Kviz" },
   maxKm: 1200,
   stations: [
     { name: "Vukovar", genitive: "Vukovara", km: 0, lon: 19.0, lat: 45.35, message: "Još gledaš vodotoranj, ni krenuo nisi.", labelOffset: [-12, 18], alwaysLabel: true },
