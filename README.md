@@ -20,7 +20,7 @@ npm run db:seed             # skin HR + početne kategorije
 npm run dev                 # http://localhost:3000
 ```
 
-Testovi: `npm test`. Provjera tipova: `npm run typecheck`.
+Testovi: `npm test` (testovi računa trebaju lokalnu bazu s migracijama i seedom). Provjera tipova: `npm run typecheck`.
 
 Promjena sheme: uredi `src/db/schema.ts`, pa `npm run db:generate` (nova migracija u `drizzle/`) i `npm run db:migrate`.
 
@@ -35,7 +35,15 @@ Promjena sheme: uredi `src/db/schema.ts`, pa `npm run db:generate` (nova migraci
   `udio = (k * procjena + 100 * broj) / (k + ukupno)`, k = 50 (`src/lib/scoring.ts`).
 - **Dnevna zagonetka** se slaže sama pri prvom zahtjevu dana (najdulje nekorištene kategorije po
   rasporedu grupa iz skina). Dan počinje u ponoć po zagrebačkom vremenu.
-- **Igrači**: zasad anonimni, prepoznaju se po kolačiću `dokle_pid`. Google prijava dolazi u fazi 2.
+- **Igrači**: igra radi bez prijave (kolačić `dokle_pid`). Google prijava ide preko Supabase Autha
+  (`/auth/callback`); pri prijavi se anonimne partije s tog preglednika prebacuju na račun, osim dana koje
+  je račun već odigrao (`src/server/accounts.ts`). Kolačić igrača s računom vrijedi samo uz važeću sesiju.
+- **Profil** (`/profil`): streakovi, povijest, nadimak, odjava i brisanje računa. Streak = uzastopni dani,
+  živi dok je zadnja partija danas ili jučer (`src/lib/stats.ts`).
+- **Admin**: tko je admin određuje `ADMIN_EMAILS` (sučelje dolazi u fazi 3).
+
+Bez `NEXT_PUBLIC_SUPABASE_*` varijabli igra radi normalno, samo bez prijave. Upute za postavljanje
+Supabasea i Google OAutha su u dokumentu projekta.
 
 ## Skinovi
 
