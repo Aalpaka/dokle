@@ -133,7 +133,8 @@ export default function MapStage({ cfg, map, rounds, perDay }: { cfg: SkinConfig
 
   function step(now: number) {
     const S = sim.current, a = S.anim!;
-    const raw = Math.min(1, (now - a.start) / a.dur), e = EASE[a.tier.vehicle](raw);
+    // rAF vrijeme okvira može biti malo prije početka vožnje, zato donja granica 0
+    const raw = Math.max(0, Math.min(1, (now - a.start) / a.dur)), e = EASE[a.tier.vehicle](raw);
     const prev = S.km, k = a.from + (a.to - a.from) * e;
     a.seg.b = k;
     S.km = k;

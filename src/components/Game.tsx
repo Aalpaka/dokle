@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { GameState, RoundView } from "@/server/game";
+import type { AnswerList, GameState, RoundView } from "@/server/game";
 import type { SkinConfig } from "@/skins/types";
 import { formatShare, stationAt } from "@/lib/scoring";
 import { maps } from "@/skins/maps";
@@ -342,16 +342,10 @@ function End({ state, me }: { state: GameState; me: Me | null }) {
         <span>{st.message}</span>
       </div>
       {next && <p className="small">Do {next.genitive ?? next.name} ti je falilo još {next.km - km} km.</p>}
+      <span className="small">Klikni kategoriju za sve moguće odgovore i koliko je koji vrijedio.</span>
       <ul className="recap">
         {state.rounds.map((r) => (
-          <li key={r.position}>
-            <span><TierIcon emoji={r.emoji} icon={r.icon} />{r.speed?.emoji}</span>
-            <span>
-              <span className="c">{r.category.title}</span><br />
-              <span className="a">{r.canonical ?? (r.raw ? `„${r.raw}”` : "—")}</span>
-            </span>
-            <span className="k">+{r.km}</span>
-          </li>
+          <RecapRow key={r.position} r={r} cfg={cfg} />
         ))}
       </ul>
       <pre className="share">{share}</pre>
@@ -378,6 +372,65 @@ function End({ state, me }: { state: GameState; me: Me | null }) {
         </p>
       )}
       <Countdown timezone={state.skin.timezone} />
+    </div>
+  );
+}
+
+function RecapRow({ r, cfg }: { r: RoundView; cfg: SkinConfig }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <li className={open ? "open" : ""}>
+      <button type="button" className="recap-row" aria-expanded={open} onClick={() => setOpen(!open)}>
+        <span><TierIcon emoji={r.emoji} icon={r.icon} />{r.speed?.emoji}</span>
+        <span>
+          <span className="c">{r.category.title}</span><br />
+          <span className="a">{r.canonical ?? (r.raw ? `„${r.raw}”` : "—")}</span>
+        </span>
+        <span className="k">+{r.km}</span>
+        <span className="chev" aria-hidden="true">{open ? "▴" : "▾"}</span>
+      </button>
+      {open && <AllAnswers position={r.position} cfg={cfg} />}
+    </li>
+  );
+}
+
+/** Svi odgovori kategorije s udjelom i prijevozom, s pretragom. */
+function AllAnswers({ position, cfg }: { position: number; cfg: SkinConfig }) {
+  const [list, setList] = useState<AnswerList | null | "error">(null);
+  const [q, setQ] = useState("");
+  useEffect(() => {
+    api<AnswerList | null>(`/api/game/answers?position=${position}`).then((l) => setList(l ?? "error"), () => setList("error"));
+  }, [position]);
+  if (list === null) return <div className="allans small">Učitavam odgovore…</div>;
+  if (list === "error") return <div className="allans small">Odgovori se ne mogu učitati.</div>;
+  const fold = (s: string) => s.toLowerCase().replace(/đ/g, "d").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const f = fold(q.trim());
+  const shown = f ? list.answers.filter((a) => fold(a.canonical).includes(f)) : list.answers;
+  return (
+    <div className="allans">
+      <input
+        className="field"
+        type="search"
+        placeholder={`Traži među ${list.answers.length} odgovora`}
+        aria-label="Traži odgovor"
+        value={q}
+        onChange={(e) => setQ(e.target.value)}
+      />
+      <span className="small">Udio igrača danas i km koje odgovor donosi, bez bonusa za brzinu.</span>
+      <ol>
+        {shown.map((a) => {
+          const t = cfg.tiers.find((x) => x.name === a.tier);
+          return (
+            <li key={a.canonical} className={a.canonical === list.mine ? "mine" : ""}>
+              <span className="ti">{t && <TierIcon emoji={t.emoji} icon={t.icon} />}</span>
+              <span className="n">{a.canonical}{a.canonical === list.mine && <em> · tvoj</em>}</span>
+              <span className="s">{formatShare(a.share)}</span>
+              <span className="k">+{a.km}</span>
+            </li>
+          );
+        })}
+        {!shown.length && <li className="small">Nema takvog odgovora.</li>}
+      </ol>
     </div>
   );
 }
