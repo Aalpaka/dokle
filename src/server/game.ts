@@ -14,7 +14,7 @@ import {
   skins,
 } from "@/db/schema";
 import { buildIndex, fold, match, type MatchIndex } from "@/lib/matcher";
-import { blendedShare, tierFor } from "@/lib/scoring";
+import { blendedShare, scoreKm, speedFor, tierFor } from "@/lib/scoring";
 import { dayNumber, localDate } from "@/lib/day";
 import type { SkinConfig } from "@/skins/types";
 
@@ -140,6 +140,7 @@ export type RoundView = {
   km: number;
   tier: string;
   emoji: string;
+  speed: { multiplier: number; emoji: string; name: string } | null; // samo kad je brzina promijenila km
 };
 
 export type GameState = {
@@ -156,8 +157,9 @@ export type GameState = {
 
 export type Reveal = { top: { canonical: string; share: number }[]; rare: { canonical: string; share: number }[] };
 
-function emojiFor(cfg: SkinConfig, tier: string) {
-  return cfg.tiers.find((t) => t.name === tier)?.emoji ?? cfg.miss.emoji;
+// stari nazivi tierova (prije Bajsa i Motora) se prepoznaju po udjelu
+function baseTier(cfg: SkinConfig, tier: string, share: number | null) {
+  return cfg.tiers.find((t) => t.name === tier) ?? (share !== null ? tierFor(cfg, share) : null);
 }
 
 export async function getState(skin: Skin, playerId: string | null): Promise<GameState> {
@@ -186,6 +188,8 @@ export async function getState(skin: Skin, playerId: string | null): Promise<Gam
     const cat = await getCategory(r.categoryId);
     const category = { title: cat.title, hint: cat.hint, group: cat.group };
     if (r.answeredAt) {
+      const base = r.answerId !== null ? baseTier(skin.config, r.tier ?? "", r.share) : null;
+      const step = speedFor(skin.config, r.answeredAt.getTime() - r.startedAt.getTime());
       views.push({
         position: r.position,
         category,
@@ -194,7 +198,8 @@ export async function getState(skin: Skin, playerId: string | null): Promise<Gam
         share: r.share,
         km: r.km ?? 0,
         tier: r.tier ?? skin.config.miss.name,
-        emoji: emojiFor(skin.config, r.tier ?? ""),
+        emoji: base?.emoji ?? skin.config.miss.emoji,
+        speed: base && r.km !== base.km && step.multiplier !== 1 ? { multiplier: step.multiplier, emoji: step.emoji, name: step.name } : null,
       });
     } else {
       const remainingMs = skin.config.secondsPerCategory * 1000 - (Date.now() - r.startedAt.getTime());
@@ -272,7 +277,7 @@ export async function submitAnswer(skin: Skin, playerId: string, raw: string, fi
   if (!hit && !final && !timedOut) return { status: "rejected", normalized: fold(input) };
 
   // zakašnjeli upis je spremljen u attempts, ali se boduje kao isteklo vrijeme
-  await scoreRound(skin, puzzle, game.id, open.position, open.categoryId, timedOut ? null : input || null, hit?.id ?? null);
+  await scoreRound(skin, puzzle, game.id, open.position, open.categoryId, timedOut ? null : input || null, hit?.id ?? null, elapsedMs);
   return { status: "scored", state: await getState(skin, playerId) };
 }
 
@@ -297,7 +302,7 @@ async function expireOpenRound(skin: Skin, puzzle: Puzzle, gameId: number) {
     .from(rounds)
     .where(and(eq(rounds.gameId, gameId), isNull(rounds.answeredAt)));
   if (open && Date.now() - open.startedAt.getTime() > limit) {
-    await scoreRound(skin, puzzle, gameId, open.position, open.categoryId, null, null);
+    await scoreRound(skin, puzzle, gameId, open.position, open.categoryId, null, null, 0);
   }
 }
 
@@ -309,6 +314,7 @@ async function scoreRound(
   categoryId: number,
   raw: string | null,
   answerId: number | null,
+  elapsedMs: number,
 ) {
   const cfg = skin.config;
   let share: number | null = null;
@@ -318,9 +324,9 @@ async function scoreRound(
     const cat = await getCategory(categoryId);
     const { count, total } = await answerCounts(puzzle.id, categoryId, answerId);
     share = blendedShare(cat.prior.get(answerId) ?? 0, count, total, cfg.priorWeight);
-    const t = tierFor(cfg, share);
-    km = t.km;
-    tier = t.name;
+    const scored = scoreKm(cfg, share, elapsedMs);
+    km = scored.km;
+    tier = scored.tier.name;
   }
   await db.transaction(async (tx) => {
     const updated = await tx
@@ -384,7 +390,14 @@ export function clearCategoryCache(id?: number) {
 export async function rescoreMisses(skin: Skin, categoryId: number, normalized: string, answerId: number): Promise<number> {
   clearCategoryCache(categoryId);
   const misses = await db
-    .select({ gameId: rounds.gameId, position: rounds.position, raw: rounds.raw, puzzleId: games.puzzleId })
+    .select({
+      gameId: rounds.gameId,
+      position: rounds.position,
+      raw: rounds.raw,
+      puzzleId: games.puzzleId,
+      startedAt: rounds.startedAt,
+      answeredAt: rounds.answeredAt,
+    })
     .from(rounds)
     .innerJoin(games, eq(games.id, rounds.gameId))
     .where(and(eq(rounds.categoryId, categoryId), isNull(rounds.answerId), isNotNull(rounds.raw), isNotNull(rounds.answeredAt)));
@@ -401,12 +414,12 @@ export async function rescoreMisses(skin: Skin, categoryId: number, normalized: 
     });
     const { count, total } = await answerCounts(puzzleId, categoryId, answerId);
     const share = blendedShare(cat.prior.get(answerId) ?? 0, count, total, skin.config.priorWeight);
-    const t = tierFor(skin.config, share);
     await db.transaction(async (tx) => {
       for (const h of list) {
+        const t = scoreKm(skin.config, share, h.answeredAt!.getTime() - h.startedAt.getTime());
         await tx
           .update(rounds)
-          .set({ share, km: t.km, tier: t.name })
+          .set({ share, km: t.km, tier: t.tier.name })
           .where(and(eq(rounds.gameId, h.gameId), eq(rounds.position, h.position)));
         await tx
           .update(games)

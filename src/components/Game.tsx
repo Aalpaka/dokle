@@ -94,12 +94,21 @@ function Intro({ cfg, perDay, onStart }: { cfg: SkinConfig; perDay: number; onSt
         <li><span className="k">{perDay}×</span><span>kategorija, svaki dan iste za sve</span></li>
         <li><span className="k">{cfg.secondsPerCategory}s</span><span>po kategoriji, Enter šalje odgovor</span></li>
         <li><span className="k">1×</span><span>jedan odgovor; ako ga nemamo na popisu, probaj opet</span></li>
+        <li><span className="k">⚡</span><span>brži odgovor množi kilometre, spori ih malo smanjuje</span></li>
       </ul>
       <div className="tiers">
         {cfg.tiers.map((t) => (
           <div key={t.name}><span>{t.emoji} {t.name}</span><span>+{t.km}</span></div>
         ))}
         <div><span>{cfg.miss.emoji} Promašaj</span><span>0</span></div>
+      </div>
+      <div className="tiers">
+        {cfg.speed.map((s, i) => (
+          <div key={i}>
+            <span>{s.emoji || "⏱️"} {speedRange(cfg.speed, i)}</span>
+            <span>×{String(s.multiplier).replace(".", ",")}</span>
+          </div>
+        ))}
       </div>
       <div className="row">
         <button autoFocus onClick={onStart}>Kreni iz {first.genitive ?? first.name}</button>
@@ -231,7 +240,7 @@ function Reveal({ state, onNext }: { state: GameState; onNext: () => void }) {
           <span className="emo">{r.emoji}</span>
           <div>
             <div>{what(r)}</div>
-            <div className="small">{r.tier}</div>
+            <div className="small">{r.tier}{r.speed && <> · {r.speed.emoji} {r.speed.name} ×{String(r.speed.multiplier).replace(".", ",")}</>}</div>
           </div>
           <span className="km">+{r.km}</span>
         </div>
@@ -250,6 +259,12 @@ function Reveal({ state, onNext }: { state: GameState; onNext: () => void }) {
       </div>
     </div>
   );
+}
+
+function speedRange(steps: SkinConfig["speed"], i: number) {
+  const max = steps[i].maxSeconds, prev = steps[i - 1]?.maxSeconds;
+  if (max === undefined) return `sporije od ${prev} s`;
+  return prev === undefined ? `do ${max} s` : `${prev}–${max} s`;
 }
 
 function what(r: RoundView) {
@@ -276,7 +291,7 @@ function End({ state, me }: { state: GameState; me: Me | null }) {
   const first = cfg.stations[0];
   const [copied, setCopied] = useState("");
   const share =
-    `Dokle? #${state.number}\n${state.rounds.map((r) => r.emoji).join("")}\n${first.name} → ${st.name} · ${km} km` +
+    `Dokle? #${state.number}\n${state.rounds.map((r) => r.emoji + (r.speed?.emoji ?? "")).join(" ")}\n${first.name} → ${st.name} · ${km} km` +
     (km >= cfg.maxKm ? `\nStigao sam u ${st.name}! 🏝️` : "");
   return (
     <div className="stack">
@@ -290,7 +305,7 @@ function End({ state, me }: { state: GameState; me: Me | null }) {
       <ul className="recap">
         {state.rounds.map((r) => (
           <li key={r.position}>
-            <span>{r.emoji}</span>
+            <span>{r.emoji}{r.speed?.emoji}</span>
             <span>
               <span className="c">{r.category.title}</span><br />
               <span className="a">{r.canonical ?? (r.raw ? `„${r.raw}”` : "—")}</span>

@@ -1,4 +1,4 @@
-import type { SkinConfig, Station, Tier } from "@/skins/types";
+import type { SkinConfig, SpeedStep, Station, Tier } from "@/skins/types";
 
 /**
  * Udio igrača (%) za odgovor: procjena pomiješana sa stvarnim brojevima.
@@ -10,6 +10,18 @@ export function blendedShare(prior: number, count: number, total: number, k: num
 
 export function tierFor(cfg: SkinConfig, share: number): Tier {
   return cfg.tiers.find((t) => share >= t.minShare) ?? cfg.tiers[cfg.tiers.length - 1];
+}
+
+export function speedFor(cfg: SkinConfig, elapsedMs: number): SpeedStep {
+  const steps = cfg.speed ?? [];
+  return steps.find((s) => s.maxSeconds === undefined || elapsedMs <= s.maxSeconds * 1000) ?? { multiplier: 1, emoji: "", name: "" };
+}
+
+/** Km za pogođeni odgovor: km tiera puta množitelj brzine, zaokruženo. */
+export function scoreKm(cfg: SkinConfig, share: number, elapsedMs: number): { tier: Tier; speed: SpeedStep; km: number } {
+  const tier = tierFor(cfg, share);
+  const speed = speedFor(cfg, elapsedMs);
+  return { tier, speed, km: Math.round(tier.km * speed.multiplier) };
 }
 
 export function stationAt(cfg: SkinConfig, km: number): Station {

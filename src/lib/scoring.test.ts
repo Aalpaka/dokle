@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { blendedShare, stationAt, tierFor } from "./scoring";
+import { blendedShare, scoreKm, speedFor, stationAt, tierFor } from "./scoring";
 import { dayNumber, localDate } from "./day";
 import { hrConfig } from "@/skins/hr/config";
 
@@ -16,9 +16,24 @@ describe("scoring", () => {
     expect(tierFor(hrConfig, 2).km).toBe(70);
   });
   it("postaje", () => {
-    expect(stationAt(hrConfig, 0).name).toBe("Ilok");
-    expect(stationAt(hrConfig, 339).name).toBe("Zagreb");
-    expect(stationAt(hrConfig, 1000).name).toBe("Cavtat");
+    expect(stationAt(hrConfig, 0).name).toBe("Vukovar");
+    expect(stationAt(hrConfig, 300).name).toBe("Zagreb");
+    expect(stationAt(hrConfig, 540).name).toBe("Pula");
+    expect(stationAt(hrConfig, 1200).name).toBe("Dubrovnik");
+    expect(stationAt(hrConfig, 1290).name).toBe("Dubrovnik");
+  });
+  it("brzina", () => {
+    expect(speedFor(hrConfig, 3000).multiplier).toBe(1.3);
+    expect(speedFor(hrConfig, 5000).multiplier).toBe(1.3);
+    expect(speedFor(hrConfig, 9000).multiplier).toBe(1.15);
+    expect(speedFor(hrConfig, 15000).multiplier).toBe(1);
+    expect(speedFor(hrConfig, 26000).multiplier).toBe(0.9);
+  });
+  it("km s brzinom", () => {
+    expect(scoreKm(hrConfig, 0.1, 4000).km).toBe(163); // 125 × 1,3
+    expect(scoreKm(hrConfig, 3, 9000).km).toBe(81); // 70 × 1,15
+    expect(scoreKm(hrConfig, 30, 24000).km).toBe(9); // 10 × 0,9
+    expect(8 * scoreKm(hrConfig, 0, 0).km).toBeGreaterThan(hrConfig.maxKm);
   });
 });
 
