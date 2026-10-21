@@ -378,14 +378,34 @@ export const kvizKategorije: SeedCategory[] = [
     title: "Pokémon",
     strip: [],
     answers: `Pikachu/Pikaču=30; Charizard=8; Charmander=6; Bulbasaur=5; Squirtle=5; Jigglypuff=3; Mewtwo=3; Mew=2;
-      Psyduck=2; Meowth=2; Eevee=2; Snorlax=2; Gengar=1.5; Magikarp=1.5; Lucario=1; Gyarados=1; Dragonite=1;
-      Onix=1; Togepi=1; Raichu=1; Blastoise=0.8; Ditto=0.8; Geodude=0.5; Venusaur=0.5; Pichu=0.5; Vulpix=0.5;
-      Butterfree=0.5; Pidgey=0.5; Rattata=0.5; Zubat=0.5; Lapras=0.5; Ivysaur=0.3; Wartortle=0.3; Charmeleon=0.3;
-      Caterpie=0.3; Ekans=0.3; Machamp=0.3; Abra=0.3; Alakazam=0.3; Slowpoke=0.3; Vaporeon=0.3; Articuno=0.3;
-      Zapdos=0.3; Moltres=0.3; Lugia=0.3; Rayquaza=0.3; Greninja=0.3; Ninetales=0.2; Weedle=0.2; Arbok=0.2;
-      Kadabra=0.2; Jolteon=0.2; Flareon=0.2; Chikorita=0.2; Cyndaquil=0.2; Totodile=0.2; Ho-Oh=0.2; Mudkip=0.2;
-      Sylveon=0.2; Umbreon=0.2; Marill=0.2; Wobbuffet=0.2; Chansey=0.2; Clefairy=0.2; Cubone=0.2; Celebi=0.1;
-      Treecko=0.1; Torchic=0.1; Groudon=0.1; Kyogre=0.1; Piplup=0.1; Espeon=0.1; Gardevoir=0.1; Garchomp=0.1`,
+      Psyduck=2; Meowth=2; Eevee=2; Snorlax=2; Gengar=1.5; Magikarp=1.5; Lucario=1; Gyarados=1; Dragonite=1; Onix=1;
+      Togepi=1; Raichu=1; Blastoise=0.8; Ditto=0.8; Geodude=0.5; Venusaur=0.5; Pichu=0.5; Vulpix=0.5; Butterfree=0.5;
+      Pidgey=0.5; Rattata=0.5; Zubat=0.5; Lapras=0.5; Ivysaur=0.3; Wartortle=0.3; Charmeleon=0.3; Caterpie=0.3;
+      Ekans=0.3; Machamp=0.3; Abra=0.3; Alakazam=0.3; Slowpoke=0.3; Vaporeon=0.3; Articuno=0.3; Zapdos=0.3;
+      Moltres=0.3; Lugia=0.3; Rayquaza=0.3; Greninja=0.3; Ninetales=0.2; Weedle=0.2; Arbok=0.2; Kadabra=0.2;
+      Jolteon=0.2; Flareon=0.2; Chikorita=0.2; Cyndaquil=0.2; Totodile=0.2; Ho-Oh=0.2; Mudkip=0.2; Sylveon=0.2;
+      Umbreon=0.2; Marill=0.2; Wobbuffet=0.2; Chansey=0.2; Clefairy=0.2; Cubone=0.2; Celebi=0.1; Treecko=0.1;
+      Torchic=0.1; Groudon=0.1; Kyogre=0.1; Piplup=0.1; Espeon=0.1; Gardevoir=0.1; Garchomp=0.1; Diglett=0.3;
+      Pidgeot=0.2; Sandshrew=0.2; Growlithe=0.2; Arcanine=0.2; Machop=0.2; Ponyta=0.2; Magnemite=0.2; Gastly=0.2;
+      Haunter=0.2; Voltorb=0.2; Koffing=0.2; Staryu=0.2; Mr. Mime=0.2; Scyther=0.2; Dratini=0.2; Metapod=0.2;
+      Rowlet=0.2; Mimikyu=0.2; Arceus=0.2; Blaziken=0.2; Pidgeotto=0.1; Raticate=0.1; Spearow=0.1; Fearow=0.1;
+      Sandslash=0.1; Nidoran=0.1; Nidoking=0.1; Nidoqueen=0.1; Clefable=0.1; Wigglytuff=0.1; Golbat=0.1; Oddish=0.1;
+      Gloom=0.1; Vileplume=0.1; Paras=0.1; Venonat=0.1; Dugtrio=0.1; Persian=0.1; Golduck=0.1; Mankey=0.1;
+      Primeape=0.1; Poliwag=0.1; Poliwhirl=0.1; Poliwrath=0.1; Machoke=0.1; Bellsprout=0.1; Tentacool=0.1;
+      Tentacruel=0.1; Graveler=0.1; Golem=0.1; Rapidash=0.1; Slowbro=0.1; Magneton=0.1; Farfetch'd=0.1; Doduo=0.1;
+      Seel=0.1; Dewgong=0.1; Grimer=0.1; Muk=0.1; Shellder=0.1; Cloyster=0.1; Drowzee=0.1; Hypno=0.1; Krabby=0.1;
+      Kingler=0.1; Electrode=0.1; Exeggcute=0.1; Exeggutor=0.1; Marowak=0.1; Hitmonlee=0.1; Hitmonchan=0.1;
+      Lickitung=0.1; Weezing=0.1; Rhyhorn=0.1; Rhydon=0.1; Tangela=0.1; Kangaskhan=0.1; Horsea=0.1; Seadra=0.1;
+      Goldeen=0.1; Seaking=0.1; Starmie=0.1; Jynx=0.1; Electabuzz=0.1; Magmar=0.1; Pinsir=0.1; Tauros=0.1;
+      Porygon=0.1; Omanyte=0.1; Omastar=0.1; Kabuto=0.1; Kabutops=0.1; Aerodactyl=0.1; Dragonair=0.1; Kakuna=0.1;
+      Beedrill=0.1; Togekiss=0.1; Riolu=0.1; Bidoof=0.1; Pachirisu=0.1; Snivy=0.1; Tepig=0.1; Oshawott=0.1;
+      Chespin=0.1; Fennekin=0.1; Froakie=0.1; Litten=0.1; Popplio=0.1; Grookey=0.1; Scorbunny=0.1; Sobble=0.1;
+      Sprigatito=0.1; Fuecoco=0.1; Quaxly=0.1; Zekrom=0.1; Reshiram=0.1; Dialga=0.1; Palkia=0.1; Giratina=0.1;
+      Darkrai=0.1; Deoxys=0.1; Jirachi=0.1; Latias=0.1; Latios=0.1; Suicune=0.1; Entei=0.1; Raikou=0.1; Tyranitar=0.1;
+      Scizor=0.1; Steelix=0.1; Wooper=0.1; Sudowoodo=0.1; Heracross=0.1; Ampharos=0.1; Mareep=0.1; Sceptile=0.1;
+      Swampert=0.1; Absol=0.1; Salamence=0.1; Metagross=0.1; Infernape=0.1; Lopunny=0.1; Zoroark=0.1; Zorua=0.1;
+      Decidueye=0.1; Incineroar=0.1; Zacian=0.1; Wailord=0.1; Corsola=0.1; Munchlax=0.1; Ralts=0.1; Gallade=0.1;
+      Turtwig=0.1; Torterra=0.1; Chimchar=0.1; Shinx=0.1; Luxray=0.1; Gible=0.1; Leafeon=0.1; Glaceon=0.1`,
   },
   {
     slug: "beatles",

@@ -286,19 +286,38 @@ export const zaigranoKategorije: SeedCategory[] = [
     group: "zaigrano",
     title: "Lik iz crtića",
     strip: [],
-    answers: `Mickey Mouse/Miki Maus/Miki=9; Paško Patak/Donald Duck/Donald=5; Duško Dugouško/Bugs Bunny=5; Spužva Bob/SpongeBob=5;
-      Tom=3; Jerry=3; Pink Panter=3; Scooby-Doo/Scooby=3; Homer Simpson/Homer=3; Shrek=3; Fred Kremenko/Fred Flintstone=2;
-      Popaj/Popeye=2; Garfield=2; Bart Simpson/Bart=1.5; Pikachu=1.5; Medo Winnie/Winnie the Pooh/Winnie=1.5;
-      Šiljo/Goofy=1.5; Pčelica Maja=1.5; Peppa Pig/Pepa=1.5; Simba=1.5; Elsa=1.5; Patrik/Patrick=1; Tweety=1;
-      Silvestar/Sylvester=1; Patak Dača/Daffy Duck=1; Pluton/Pluto=1; Minnie/Mini Maus=1; Ptica Trkačica/Road Runner=1;
-      Kojot/Wile E. Coyote=1; Štrumpfeta=1; Gargamel=1; Profesor Baltazar/Baltazar=1; Maša i medvjed/Maša=1; Nemo=1;
-      Olaf=1; Buzz Lightyear/Buzz=1; Asterix/Asteriks=1; Obelix/Obeliks=1; Papa Štrumpf=0.5; Heidi=0.5; Dory=0.5;
-      Ariel=0.5; Woody=0.5; Munja McQueen/Lightning McQueen=0.5; Jagodica Bobica=0.5; Talični Tom/Lucky Luke=0.5;
-      Snoopy=0.5; Medvjed Jogi/Yogi=0.5; Dora istraživačica/Dora=0.5; Peter Griffin=0.5; Johnny Bravo=0.5;
+    answers: `Mickey Mouse/Miki Maus/Miki=9; Paško Patak/Donald Duck/Donald=5; Duško Dugouško/Bugs Bunny=5;
+      Spužva Bob/SpongeBob=5; Tom=3; Jerry=3; Pink Panter=3; Scooby-Doo/Scooby=3; Homer Simpson/Homer=3; Shrek=3;
+      Fred Kremenko/Fred Flintstone=2; Popaj/Popeye=2; Garfield=2; Bart Simpson/Bart=1.5; Pikachu=1.5;
+      Medo Winnie/Winnie the Pooh/Winnie=1.5; Šiljo/Goofy=1.5; Pčelica Maja=1.5; Peppa Pig/Pepa=1.5; Simba=1.5;
+      Elsa=1.5; Patrik/Patrick=1; Tweety=1; Silvestar/Sylvester=1; Patak Dača/Daffy Duck=1; Pluton/Pluto=1;
+      Minnie/Mini Maus=1; Ptica Trkačica/Road Runner=1; Kojot/Wile E. Coyote=1; Štrumpfeta=1; Gargamel=1;
+      Profesor Baltazar/Baltazar=1; Maša i medvjed/Maša=1; Nemo=1; Olaf=1; Buzz Lightyear/Buzz=1; Asterix/Asteriks=1;
+      Obelix/Obeliks=1; Papa Štrumpf=0.5; Heidi=0.5; Dory=0.5; Ariel=0.5; Woody=0.5;
+      Munja McQueen/Lightning McQueen=0.5; Jagodica Bobica=0.5; Talični Tom/Lucky Luke=0.5; Snoopy=0.5;
+      Medvjed Jogi/Yogi=0.5; Dora istraživačica/Dora=0.5; Peter Griffin=0.5; Johnny Bravo=0.5;
       Nindža kornjače/Leonardo=0.5; Kasper/Casper=0.5; Bob Graditelj=0.5; Petar Pan=0.5; Pinokio=0.5;
       Charlie Brown=0.3; Barney=0.3; Ben 10=0.3; Naruto=0.3; Goku=0.3; Sailor Moon=0.3; Rick=0.3; Stewie=0.3;
       Cartman=0.3; Dexter=0.3; Hello Kitty=0.3; Tintin=0.3; Alan Ford=0.3; Kapetan Kuka=0.3; Grinch=0.3;
-      Vatrogasac Sam=0.3; Teletubbiesi=0.3; Calimero=0.3; Dumbo=0.3; Bambi=0.3; Morty=0.2; Mumini=0.2; Pinky i Brain=0.2`,
+      Vatrogasac Sam=0.3; Teletubbiesi=0.3; Calimero=0.3; Dumbo=0.3; Bambi=0.3; Morty=0.2; Mumini=0.2;
+      Pinky i Brain=0.2; Baja Patak/Scrooge McDuck=0.3; Marge Simpson/Marge=0.3; Snjeguljica=0.3; Pepeljuga=0.3;
+      Minion/Minioni=0.3; Lisa Simpson/Lisa=0.2; Squidward/Lignjoslav=0.2; Mr. Krabs/Krabs=0.2; Aladin=0.2; Mulan=0.2;
+      Trnoružica=0.2; Rapunzel/Matovilka=0.2; Stitch/Stič=0.2; Tarzan=0.2; Timon=0.2; Pumba/Pumbaa=0.2;
+      Baloo/Baluo=0.2; Mowgli=0.2; Zvončica/Tinker Bell=0.2; Wall-E=0.2; Magarac/Donkey=0.2; Fiona=0.2;
+      Mačak u čizmama/Puss in Boots=0.2; Po/Kung Fu Panda=0.2; Gru=0.2; Hlapić/Šegrt Hlapić=0.2; Krtica/Krtek=0.2;
+      Pat i Mat=0.2; Bluey=0.2; Ash Ketchum/Ash=0.2; He-Man=0.2; Maggie Simpson/Maggie=0.1; Mr. Burns=0.1;
+      Ned Flanders/Flanders=0.1; Krusty=0.1; Brian Griffin=0.1; Kenny=0.2; Kyle=0.1; Sandy=0.1; Plankton=0.1;
+      Genie/Duh iz svjetiljke=0.1; Pocahontas=0.1; Moana/Vaiana=0.1; Anna=0.1; Lilo=0.1; Herkul/Hercules=0.1;
+      Mufasa=0.1; Scar=0.1; Nala=0.1; Rafiki=0.1; Bagira/Bagheera=0.1; Šir Kan/Shere Khan=0.1; Cruella=0.1;
+      Ursula=0.1; Grdana/Maleficent=0.1; Jafar=0.1; Robin Hood=0.1; Daisy=0.1; Hupko, Dupko i Lupko=0.1;
+      Chip i Dale=0.1; Sulley=0.1; Mike Wazowski=0.1; Remy=0.1; Kralj Julien=0.1; Bezubi/Toothless=0.1; Sid=0.1;
+      Scrat=0.1; Djetlić Woody/Woody Woodpecker=0.1; Porky Pig=0.1; Speedy Gonzales=0.1; Taz/Tasmanijski vrag=0.1;
+      Mačak Feliks/Felix=0.1; Betty Boop=0.1; Droopy=0.1; Barni Kamenko=0.1; Wilma=0.1; Azrael=0.1; Bolek i Lolek=0.1;
+      Čeburaška=0.1; Barbapapa=0.1; Paddington=0.1; Noddy=0.1; Thomas/Tomica=0.1; Poštar Pat=0.1;
+      Wallace i Gromit=0.1; Ovčica Shaun/Shaun=0.1; Bing=0.1; Chase=0.1; Doraemon=0.1; Totoro=0.1; Luffy=0.1;
+      Vegeta=0.1; Hamtaro=0.1; Skeletor=0.1; She-Ra=0.1; Optimus Prime=0.1; Dee Dee=0.1; Gumball=0.1;
+      Phineas i Ferb=0.1; Kim Possible=0.1; Aang=0.1; Caillou=0.1; Franklin=0.1; Babar=0.1; Odie=0.1; Linus=0.1;
+      Woodstock=0.1; Alvin=0.1`,
   },
   {
     slug: "simpsoni",
@@ -376,22 +395,42 @@ export const zaigranoKategorije: SeedCategory[] = [
     group: "zaigrano",
     title: "Strana TV serija",
     strip: [],
-    answers: `Prijatelji/Friends=10; Igra prijestolja/Game of Thrones=8; Breaking Bad=6; Simpsoni=5; Kuća od papira/La Casa de Papel=3;
-      Stranger Things=3; Teorija velikog praska/Big Bang Theory=3; Kako sam upoznao vašu majku/HIMYM=3; Dr. House/House=3;
-      Peaky Blinders=2; Ured/The Office=2; Squid Game=2; Bijeg iz zatvora/Prison Break=2; Mućke/Only Fools and Horses=2;
-      Sopranosi/The Sopranos=1.5; Vikinzi/Vikings=1.5; Narcos=1.5; Dexter=1.5; Izgubljeni/Lost=1.5;
-      Seks i grad/Sex and the City=1.5; Dosjei X/X-Files=1.5; Mr. Bean=1.5; Živi mrtvaci/Walking Dead=1.5; Seinfeld=1;
-      Wednesday/Srijeda=1; Hitna služba/ER=1; Očajne kućanice/Kućanice=1; Uvod u anatomiju/Grey's Anatomy=1;
-      Alo Alo/Allo Allo=1; Black Mirror=1; Sherlock=1; Spasilačka služba/Baywatch=1; MacGyver=1;
-      Komesar Rex/Inspektor Rex=1; Dva i pol muškarca/Two and a Half Men=1; Sulejman Veličanstveni/Sulejman=1;
-      Twin Peaks=0.5; Kruna/The Crown=0.5; Žica/The Wire=0.5; Pravi detektiv/True Detective=0.5; The Boys=0.5;
-      The Last of Us=0.5; Kuća zmaja/House of the Dragon=0.5; Better Call Saul=0.5; Černobil/Chernobyl=0.5;
-      Dallas=0.5; Beverly Hills 90210/Beverly Hills=0.5; Esmeralda=0.5; Columbo=0.5; Vitez u autu/Knight Rider=0.5;
-      A-tim/A-Team=0.5; Alarm za Cobru 11/Kobra 11=0.5; Moderna obitelj/Modern Family=0.5; Family Guy=0.5;
-      South Park=0.5; Rick i Morty=0.5; Suits=0.5; Crna guja/Blackadder=0.3; Mad Men=0.3; Fargo=0.3; Doktor Who=0.3;
-      Westworld=0.3; Mandalorac/The Mandalorian=0.3; Ozark=0.3; Dark=0.3; Nasljeđe/Succession=0.3; Dinastija=0.3;
-      Derrick=0.3; Brooklyn Nine-Nine=0.3; Futurama=0.3; Scrubs=0.3; Lucifer=0.3; Bridgerton=0.3;
-      Emily u Parizu/Emily in Paris=0.3; Kassandra=0.3; Melrose Place=0.2; Kojak=0.2; Elita=0.2`,
+    answers: `Prijatelji/Friends=10; Igra prijestolja/Game of Thrones=8; Breaking Bad=6; Simpsoni=5;
+      Kuća od papira/La Casa de Papel=3; Stranger Things=3; Teorija velikog praska/Big Bang Theory=3;
+      Kako sam upoznao vašu majku/HIMYM=3; Dr. House/House=3; Peaky Blinders=2; Ured/The Office=2; Squid Game=2;
+      Bijeg iz zatvora/Prison Break=2; Mućke/Only Fools and Horses=2; Sopranosi/The Sopranos=1.5; Vikinzi/Vikings=1.5;
+      Narcos=1.5; Dexter=1.5; Izgubljeni/Lost=1.5; Seks i grad/Sex and the City=1.5; Dosjei X/X-Files=1.5;
+      Mr. Bean=1.5; Živi mrtvaci/Walking Dead=1.5; Seinfeld=1; Wednesday/Srijeda=1; Hitna služba/ER=1;
+      Očajne kućanice/Kućanice=1; Uvod u anatomiju/Grey's Anatomy=1; Alo Alo/Allo Allo=1; Black Mirror=1; Sherlock=1;
+      Spasilačka služba/Baywatch=1; MacGyver=1; Komesar Rex/Inspektor Rex=1; Dva i pol muškarca/Two and a Half Men=1;
+      Sulejman Veličanstveni/Sulejman=1; Twin Peaks=0.5; Kruna/The Crown=0.5; Žica/The Wire=0.5;
+      Pravi detektiv/True Detective=0.5; The Boys=0.5; The Last of Us=0.5; Kuća zmaja/House of the Dragon=0.5;
+      Better Call Saul=0.5; Černobil/Chernobyl=0.5; Dallas=0.5; Beverly Hills 90210/Beverly Hills=0.5; Esmeralda=0.5;
+      Columbo=0.5; Vitez u autu/Knight Rider=0.5; A-tim/A-Team=0.5; Alarm za Cobru 11/Kobra 11=0.5;
+      Moderna obitelj/Modern Family=0.5; Family Guy=0.5; South Park=0.5; Rick i Morty=0.5; Suits=0.5;
+      Crna guja/Blackadder=0.3; Mad Men=0.3; Fargo=0.3; Doktor Who=0.3; Westworld=0.3; Mandalorac/The Mandalorian=0.3;
+      Ozark=0.3; Dark=0.3; Nasljeđe/Succession=0.3; Dinastija=0.3; Derrick=0.3; Brooklyn Nine-Nine=0.3; Futurama=0.3;
+      Scrubs=0.3; Lucifer=0.3; Bridgerton=0.3; Emily u Parizu/Emily in Paris=0.3; Kassandra=0.3; Melrose Place=0.2;
+      Kojak=0.2; Elita=0.2; Kuća od karata/House of Cards=0.2; Vještac/The Witcher=0.2;
+      Mladi Sheldon/Young Sheldon=0.2; Tračerica/Gossip Girl=0.2; Vampirski dnevnici/Vampire Diaries=0.2; CSI=0.2;
+      NCIS=0.2; Bračne vode/Married with Children/Bundyjevi=0.2; Princ iz Bel-Aira/Fresh Prince=0.2;
+      Mala kuća u preriji/Little House on the Prairie=0.2; Zvjezdane staze/Star Trek=0.2; Alf=0.2;
+      Svi vole Raymonda/Everybody Loves Raymond=0.1; Kralj Queensa/King of Queens=0.1;
+      Buffy, ubojica vampira/Buffy=0.1; Čarobnice/Charmed=0.1; Glee=0.1;
+      Slatke male lažljivice/Pretty Little Liars=0.1; Riverdale=0.1; 13 razloga/13 Reasons Why=0.1;
+      Euforija/Euphoria=0.1; Sex Education=0.1; Hannah Montana=0.1; Gilmoreice/Gilmore Girls=0.1; Smallville=0.1;
+      Heroji/Heroes=0.1; 24=0.1; Zakon i red/Law & Order=0.1; Mentalist=0.1; Kosti/Bones=0.1; Castle=0.1; Monk=0.1;
+      Ubojstvo, napisala je/Murder, She Wrote=0.1; Dobra žena/The Good Wife=0.1; Ally McBeal=0.1;
+      Zločinački umovi/Criminal Minds=0.1; Dobar doktor/The Good Doctor=0.1; Sinovi anarhije/Sons of Anarchy=0.1;
+      Frasier=0.1; Cosby show=0.1; Puna kuća/Full House=0.1; Čudesne godine/The Wonder Years=0.1; Bonanza=0.1;
+      Sjever i jug/North and South=0.1; Ptice umiru pjevajući=0.1; Muppet show/Muppet Show=0.1; Benny Hill=0.1;
+      Monty Python=0.1; Hotel Fawlty/Fawlty Towers=0.1; Da, ministre/Yes Minister=0.1; Poroci Miamija/Miami Vice=0.1;
+      Magnum=0.1; Ljubav na brodu/Love Boat=0.1; Divlji anđeo=0.1; Rubi=0.1; Marimar=0.1; Tisuću i jedna noć=0.1;
+      Prstenovi moći=0.1; Kraljičin gambit/Queen's Gambit=0.1; Ted Lasso=0.1; Bijeli lotos/White Lotus=0.1;
+      Mindhunter=0.1; Lupin=0.1; Adolescencija/Adolescence=0.1; Severance=0.1; Yellowstone=0.1; Loki=0.1;
+      WandaVision=0.1; Rim/Rome=0.1; Spartak/Spartacus=0.1; Tudori/The Tudors=0.1;
+      Posljednje kraljevstvo/The Last Kingdom=0.1; Downton Abbey=0.1; Sluškinjina priča/Handmaid's Tale=0.1;
+      Velike male laži/Big Little Lies=0.1; Mr. Robot=0.1; Domovina/Homeland=0.1; Shogun/Šogun=0.1`,
   },
   {
     slug: "videoigra",
@@ -589,21 +628,33 @@ export const zaigranoKategorije: SeedCategory[] = [
     title: "Pjevač ili bend iz susjedstva",
     hint: "Iz BiH, Srbije, Crne Gore, Slovenije ili Sjeverne Makedonije",
     strip: ["bend", "grupa"],
-    answers: `Bijelo dugme=10; Lepa Brena/Brena=8; Zdravko Čolić/Čola=6; Dino Merlin/Merlin=6; Ceca/Svetlana Ražnatović=5;
-      Halid Bešlić=4; Riblja čorba/Bora Čorba=4; Đorđe Balašević/Balašević=4; Toše Proeski/Toše=4;
-      Bajaga/Bajaga i instruktori=3; Zabranjeno pušenje=3; Električni orgazam=2; Plavi orkestar=2; Hari Mata Hari=2;
-      Crvena jabuka=2; Željko Joksimović=2; Šaban Šaulić=2; Dragana Mirković=2; Jelena Karleuša/Karleuša=2;
-      Goran Bregović/Bregović=2; Kemal Monteno=1.5; Indexi=1.5; Aca Lukas=1.5; Miroslav Ilić=1; Laibach=1;
-      Rambo Amadeus=1; Ekatarina Velika/EKV=1; Neda Ukraden=1; Marija Šerifović=1; Dubioza kolektiv=1;
-      Edo Maajka=1; Hanka Paldum=0.5; Vesna Zmijanac=0.5; Saša Matić=0.5; Avsenik=0.5; Magnifico=0.5;
-      Joker Out=0.5; Sergej Ćetković=0.5; Idoli=0.5; Van Gogh=0.5; Lepa Lukić=0.5; Silvana Armenulić=0.5;
-      Džej Ramadanovski/Džej=0.5; Mile Kitić=0.5; Sinan Sakić=0.5; Haris Džinović=0.5; Jala Brat=0.5;
-      Buba Corelli=0.5; Breskvica=0.5; Konstrakta=0.5; Seka Aleksić=0.5; Indira Radić=0.5; Yu grupa=0.5; Galija=0.5;
-      Šemsa Suljaković=0.3; Đorđe Marjanović=0.3; Siddharta=0.3; Knez=0.3; No Smoking Orchestra=0.3;
-      Partibrejkers=0.3; Senidah=0.3; Saša Kovačević=0.3; Letu štuke=0.3; Frenkie=0.3; Kaliopi=0.3;
-      Vlatko Stefanovski=0.3; Smak=0.3; Zana=0.3; Ana Bekuta=0.2; Tropico Band=0.2; Korni grupa=0.2;
+    answers: `Bijelo dugme=10; Lepa Brena/Brena=8; Zdravko Čolić/Čola=6; Dino Merlin/Merlin=6;
+      Ceca/Svetlana Ražnatović=5; Halid Bešlić=4; Riblja čorba/Bora Čorba=4; Đorđe Balašević/Balašević=4;
+      Toše Proeski/Toše=4; Bajaga/Bajaga i instruktori=3; Zabranjeno pušenje=3; Električni orgazam=2;
+      Plavi orkestar=2; Hari Mata Hari=2; Crvena jabuka=2; Željko Joksimović=2; Šaban Šaulić=2; Dragana Mirković=2;
+      Jelena Karleuša/Karleuša=2; Goran Bregović/Bregović=2; Kemal Monteno=1.5; Indexi=1.5; Aca Lukas=1.5;
+      Miroslav Ilić=1; Laibach=1; Rambo Amadeus=1; Ekatarina Velika/EKV=1; Neda Ukraden=1; Marija Šerifović=1;
+      Dubioza kolektiv=1; Edo Maajka=1; Hanka Paldum=0.5; Vesna Zmijanac=0.5; Saša Matić=0.5; Avsenik=0.5;
+      Magnifico=0.5; Joker Out=0.5; Sergej Ćetković=0.5; Idoli=0.5; Van Gogh=0.5; Lepa Lukić=0.5;
+      Silvana Armenulić=0.5; Džej Ramadanovski/Džej=0.5; Mile Kitić=0.5; Sinan Sakić=0.5; Haris Džinović=0.5;
+      Jala Brat=0.5; Buba Corelli=0.5; Breskvica=0.5; Konstrakta=0.5; Seka Aleksić=0.5; Indira Radić=0.5;
+      Yu grupa=0.5; Galija=0.5; Šemsa Suljaković=0.3; Đorđe Marjanović=0.3; Siddharta=0.3; Knez=0.3;
+      No Smoking Orchestra=0.3; Partibrejkers=0.3; Senidah=0.3; Saša Kovačević=0.3; Letu štuke=0.3; Frenkie=0.3;
+      Kaliopi=0.3; Vlatko Stefanovski=0.3; Smak=0.3; Zana=0.3; Ana Bekuta=0.2; Tropico Band=0.2; Korni grupa=0.2;
       Pekinška patka=0.2; Šarlo akrobata=0.2; Disciplina kičme=0.2; Jadranka Stojaković=0.2; Bebi Dol=0.2;
-      Oliver Mandić=0.2`,
+      Oliver Mandić=0.2; Nataša Bekvalac/Bekvalac=0.2; Toma Zdravković=0.2; Aleksandra Prijović/Prijović=0.2;
+      Divlje jagode=0.2; Leb i sol=0.2; Karolina Gočeva/Gočeva=0.2; Esma Redžepova=0.2; Daniel Popović=0.2;
+      Teya Dora=0.2; Aleksandra Radović=0.1; Vlado Georgiev=0.1; Aco Pejović=0.1; Cune Gojković=0.1;
+      Predrag Živković Tozovac/Tozovac=0.1; Snežana Đurišić=0.1; Zorica Brunclik=0.1; Stoja=0.1; Ana Nikolić=0.1;
+      Darko Lazić=0.1; Željko Šašić=0.1; Kerber=0.1; Generacija 5=0.1; Kanda, Kodža i Nebojša=0.1; Neverne bebe=0.1;
+      Piloti=0.1; Vatreni poljubac=0.1; Regina=0.1; Davorin Popović=0.1; Elvis J. Kurtović=0.1; Nele Karajlić=0.1;
+      Selma Bajrami=0.1; Halid Muslimović=0.1; Šerif Konjević=0.1; Maya Berović=0.1; Amira Medunjanin=0.1;
+      Safet Isović=0.1; Zaim Imamović=0.1; Himzo Polovina=0.1; Mostar Sevdah Reunion=0.1; Who See=0.1;
+      Miladin Šobić=0.1; Šako Polumenta=0.1; Zoran Predin=0.1; Pankrti=0.1; Vlado Kreslin=0.1; Tinkara Kovač=0.1;
+      Atomik Harmonik=0.1; Modrijani=0.1; Rebeka Dremelj=0.1; Jan Plestenjak=0.1; Tamara Todevska=0.1;
+      Elena Risteska=0.1; Snežana Mišković Viktorija/Viktorija=0.1; Kemal Malovčić=0.1; Šaban Bajramović=0.1;
+      Boban Marković=0.1; Jelena Tomašević=0.1; Zvonko Bogdan=0.1; Nedeljko Bajić Baja=0.1; Mitar Mirić=0.1;
+      Dragan Kojić Keba/Keba=0.1; Nada Topčagić=0.1; Beogradski sindikat=0.1`,
   },
   {
     slug: "glumac",

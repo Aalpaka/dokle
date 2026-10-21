@@ -290,13 +290,29 @@ export const opceKategorije: SeedCategory[] = [
       Lazio=0.5; Sporting=0.5; Celtic=0.5; Zrinjski=0.5; Galatasaray=0.5; Sevilla=0.5; Valencia=0.5;
       Bayer Leverkusen/Leverkusen=0.5; Schalke=0.5; Marseille=0.5; Newcastle=0.5; Fiorentina=0.5;
       Boca Juniors/Boca=0.5; Inter Miami=0.5; Rangers=0.3; Željezničar=0.3; Sarajevo=0.3; Velež=0.3; Olimpija=0.3;
-      Maribor=0.3; Fenerbahçe=0.3; Olympiakos=0.3; RB Leipzig/Leipzig=0.3; Wolfsburg=0.3; Hamburg/HSV=0.3;
-      Monaco=0.3; Lyon=0.3; Aston Villa=0.3; Everton=0.3; West Ham=0.3; Atalanta=0.3; PSV=0.3; Feyenoord=0.3;
-      Salzburg=0.3; River Plate=0.3; Al Nassr=0.3; Beşiktaş=0.2; Panathinaikos=0.2; Villarreal=0.2;
-      Real Sociedad=0.2; Athletic Bilbao=0.2; Eintracht Frankfurt=0.2; Stuttgart=0.2; Leeds=0.2; Torino=0.2;
-      Anderlecht=0.2; Club Brugge=0.2; Rapid Beč/Rapid=0.2; Basel=0.2; Šahtar/Shakhtar=0.2; Dinamo Kijev=0.2;
-      CSKA=0.2; Spartak=0.2; Zenit=0.2; Flamengo=0.2; Santos=0.2; LA Galaxy=0.2; Borac Banja Luka/Borac=0.1;
-      Široki Brijeg=0.1`,
+      Maribor=0.3; Fenerbahçe=0.3; Olympiakos=0.3; RB Leipzig/Leipzig=0.3; Wolfsburg=0.3; Hamburg/HSV=0.3; Monaco=0.3;
+      Lyon=0.3; Aston Villa=0.3; Everton=0.3; West Ham=0.3; Atalanta=0.3; PSV=0.3; Feyenoord=0.3; Salzburg=0.3;
+      River Plate=0.3; Al Nassr=0.3; Beşiktaş=0.2; Panathinaikos=0.2; Villarreal=0.2; Real Sociedad=0.2;
+      Athletic Bilbao=0.2; Eintracht Frankfurt=0.2; Stuttgart=0.2; Leeds=0.2; Torino=0.2; Anderlecht=0.2;
+      Club Brugge=0.2; Rapid Beč/Rapid=0.2; Basel=0.2; Šahtar/Shakhtar=0.2; Dinamo Kijev=0.2; CSKA=0.2; Spartak=0.2;
+      Zenit=0.2; Flamengo=0.2; Santos=0.2; LA Galaxy=0.2; Borac Banja Luka/Borac=0.1; Široki Brijeg=0.1;
+      Leicester=0.2; Southampton=0.1; Crystal Palace=0.1; Brighton=0.1; Wolverhampton/Wolves=0.1;
+      Nottingham Forest=0.1; Fulham=0.1; Brentford=0.1; Bournemouth=0.1; Sunderland=0.1; Middlesbrough=0.1;
+      Blackburn=0.1; Birmingham=0.1; Watford=0.1; Norwich=0.1; Ipswich=0.1; Burnley=0.1; Stoke=0.1; Wrexham=0.1;
+      Aberdeen=0.1; Betis/Real Betis=0.1; Celta Vigo/Celta=0.1; Espanyol=0.1; Deportivo=0.1; Getafe=0.1; Osasuna=0.1;
+      Mallorca=0.1; Girona=0.1; Rayo Vallecano=0.1; Málaga=0.1; Bologna=0.1; Udinese=0.1; Genoa=0.1; Sampdoria=0.1;
+      Parma=0.1; Cagliari=0.1; Hellas Verona/Verona=0.1; Como=0.1; Palermo=0.1; Werder Bremen/Werder=0.1; Köln=0.1;
+      Hertha=0.1; Union Berlin=0.1; Mainz=0.1; Freiburg=0.1; Hoffenheim=0.1; Augsburg=0.1;
+      Borussia Mönchengladbach/Gladbach=0.1; St. Pauli=0.1; Kaiserslautern=0.1; Nürnberg=0.1; Lille=0.1; Nice=0.1;
+      Lens=0.1; Rennes=0.1; Bordeaux=0.1; Nantes=0.1; Saint-Étienne=0.1; AZ Alkmaar=0.1; Twente=0.1; Genk=0.1;
+      Standard Liège=0.1; Gent=0.1; Braga=0.1; Sturm Graz/Sturm=0.1; Austria Beč=0.1; LASK=0.1; Young Boys=0.1;
+      Grasshoppers=0.1; Ferencváros=0.1; Slavia Prag=0.1; Sparta Prag=0.1; Viktoria Plzeň=0.1; Legia=0.1;
+      Lech Poznań=0.1; FCSB/Steaua=0.1; CFR Cluj=0.1; Levski=0.1; Lokomotiv Moskva=0.1; Dinamo Moskva=0.1;
+      Qarabağ/Karabah=0.1; Slovan Bratislava=0.1; Mura=0.1; Celje=0.1; Vojvodina=0.1; Budućnost=0.1; Vardar=0.1;
+      Sloboda=0.1; Čelik=0.1; Posušje=0.1; Trabzonspor=0.1; AEK=0.1; PAOK=0.1; APOEL=0.1; Malmö=0.1;
+      FC København/Kopenhagen=0.1; Brøndby=0.1; Rosenborg=0.1; Bodø Glimt=0.1; Corinthians=0.1; Palmeiras=0.1;
+      São Paulo=0.1; Fluminense=0.1; Grêmio=0.1; Independiente=0.1; Peñarol=0.1; Club América=0.1; Chivas=0.1;
+      Al Hilal=0.1; Al Ittihad=0.1; Al Ahly=0.1`,
   },
   {
     slug: "jezik",
@@ -334,11 +350,25 @@ export const opceKategorije: SeedCategory[] = [
       Automehaničar/Mehaničar=1.5; Pjevač/Pjevačica=1; Ljekarnik/Farmaceut=1; Arhitekt=1; Ekonomist=1; Računovođa=1;
       Vojnik=1; Mornar/Pomorac=1; Ribar=1; Veterinar=1; Bankar=0.5; Krojač=0.5; Postolar=0.5; Dimnjačar=0.5;
       Smetlar=0.5; Čistačica=0.5; Soboslikar/Ličilac=0.5; Vrtlar=0.5; Psiholog=0.5; Sudac=0.5; Svećenik=0.5;
-      Taksist=0.5; Fotograf=0.5; Dizajner=0.5; Slikar=0.5; Glazbenik=0.5; Znanstvenik=0.5; Barmen=0.5;
-      Tesar=0.3; Limar=0.3; Bravar=0.3; Keramičar=0.3; Knjižničar=0.3; Trener=0.3; Astronaut=0.3; Kemičar=0.3;
-      Političar=0.3; Influencer=0.3; Turistički vodič=0.3; Kirurg=0.3; Kozmetičarka=0.3; Kondukter=0.2;
-      Biolog=0.2; Fizičar=0.2; Matematičar=0.2; Recepcioner=0.2; Spasilac=0.2; Primalja=0.2; Model=0.2;
-      Sobarica=0.2; Dadilja=0.2; Notar/Javni bilježnik=0.2; Diplomat=0.1; Kapetan=0.2`,
+      Taksist=0.5; Fotograf=0.5; Dizajner=0.5; Slikar=0.5; Glazbenik=0.5; Znanstvenik=0.5; Barmen=0.5; Tesar=0.3;
+      Limar=0.3; Bravar=0.3; Keramičar=0.3; Knjižničar=0.3; Trener=0.3; Astronaut=0.3; Kemičar=0.3; Političar=0.3;
+      Influencer=0.3; Turistički vodič=0.3; Kirurg=0.3; Kozmetičarka=0.3; Kondukter=0.2; Biolog=0.2; Fizičar=0.2;
+      Matematičar=0.2; Recepcioner=0.2; Spasilac=0.2; Primalja=0.2; Model=0.2; Sobarica=0.2; Dadilja=0.2;
+      Notar/Javni bilježnik=0.2; Diplomat=0.1; Kapetan=0.2; Odgajatelj/Odgajateljica/Teta u vrtiću=0.3; Pedijatar=0.2;
+      Fizioterapeut=0.2; Pravnik=0.2; Detektiv=0.2; Zaštitar=0.2; Kamionist=0.2; Građevinar=0.2; Kovač=0.2; Rudar=0.2;
+      Pastir=0.2; Slastičar=0.2; Dostavljač=0.2; Blagajnik/Blagajnica=0.2; Strojovođa=0.2; Stjuardesa/Stjuard=0.2;
+      Tajnica/Tajnik=0.2; Menadžer=0.2; Direktor=0.2; Prevoditelj=0.2; Pisac/Književnik=0.2; Voditelj=0.2;
+      Redatelj=0.2; Plesač/Plesačica=0.2; Sportaš=0.2; Nogometaš=0.2; Informatičar=0.2; Domar=0.2; Ginekolog=0.1;
+      Kardiolog=0.1; Psihijatar=0.1; Anesteziolog=0.1; Radiolog=0.1; Nutricionist=0.1; Logoped=0.1; Pedagog=0.1;
+      Socijalni radnik=0.1; Tužitelj=0.1; Carinik=0.1; Fasader=0.1; Parketar=0.1; Tapetar=0.1; Staklar=0.1;
+      Zavarivač=0.1; Tokar=0.1; Lončar=0.1; Urar=0.1; Zlatar=0.1; Optičar=0.1; Klesar=0.1; Monter=0.1; Serviser=0.1;
+      Dizaličar/Kranist=0.1; Drvosječa=0.1; Šumar=0.1; Lovac=0.1; Vinar/Vinogradar=0.1; Pčelar=0.1; Stočar=0.1;
+      Somelijer/Sommelier=0.1; Kurir=0.1; Skladištar=0.1; Trgovac=0.1; Strojar=0.1; Kontrolor leta=0.1; Ronilac=0.1;
+      Službenik=0.1; Poduzetnik=0.1; Revizor=0.1; Broker=0.1; Lektor=0.1; Urednik=0.1; Spiker=0.1; Snimatelj=0.1;
+      Producent=0.1; Scenarist=0.1; Kipar=0.1; DJ/Didžej=0.1; Klaun=0.1; Mađioničar=0.1; Arheolog=0.1; Geolog=0.1;
+      Astronom=0.1; Meteorolog=0.1; Povjesničar=0.1; Filozof=0.1; Laborant=0.1; Časna sestra/Redovnica=0.1;
+      Fratar/Redovnik=0.1; Portir=0.1; Grobar=0.1; Švelja=0.1; Manikerka=0.1; Maser=0.1; Tetovažer=0.1; Brijač=0.1;
+      Animator=0.1; Hostesa=0.1; Komunalni redar=0.1; Bolničar=0.1; Njegovatelj=0.1; Jutjuber/YouTuber=0.1`,
   },
   {
     slug: "bolest",
@@ -386,10 +416,20 @@ export const opceKategorije: SeedCategory[] = [
       Trepavice/Trepavica=0.5; Obraz=0.5; Palac=0.5; Gležanj=0.5; Kuk=0.5; Bedro=0.5; Crijeva/Crijevo=0.5;
       Rebra/Rebro=0.5; Lubanja=0.5; Kost=0.5; Mišić=0.5; Krv=0.5; Grlo=0.5; Lisna kost/List=0.3; Zapešće=0.3;
       Pazuh=0.3; Slezena=0.3; Gušterača=0.3; Vena=0.3; Trtica=0.3; Lopatica=0.3; Krajnici/Mandule=0.3;
-      Potkoljenica=0.2; Žučni mjehur/Žuč=0.2; Mokraćni mjehur=0.2; Arterija=0.2; Živac=0.2; Grkljan=0.2;
-      Dušnik=0.2; Jednjak=0.2; Ključna kost=0.2; Zjenica=0.2; Šarenica=0.2; Nosnica=0.2; Desni=0.2;
-      Slijepo crijevo=0.2; Ušna resica=0.1; Nepce=0.1; Prostata=0.1; Maternica=0.1; Jajnik=0.1; Dijafragma/Ošit=0.1;
-      Štitnjača=0.2; Bradavica=0.1; Sljepoočnica=0.1`,
+      Potkoljenica=0.2; Žučni mjehur/Žuč=0.2; Mokraćni mjehur=0.2; Arterija=0.2; Živac=0.2; Grkljan=0.2; Dušnik=0.2;
+      Jednjak=0.2; Ključna kost=0.2; Zjenica=0.2; Šarenica=0.2; Nosnica=0.2; Desni=0.2; Slijepo crijevo=0.2;
+      Ušna resica=0.1; Nepce=0.1; Prostata=0.1; Maternica=0.1; Jajnik=0.1; Dijafragma/Ošit=0.1; Štitnjača=0.2;
+      Bradavica=0.1; Sljepoočnica=0.1; Lice=0.3; Zglob=0.3; Tjeme=0.2; Zatiljak/Potiljak=0.2; Čeljust/Vilica=0.2;
+      Bok=0.2; Struk=0.2; Podlaktica=0.2; Nadlaktica=0.2; Biceps=0.2; Zdjelica=0.2; Taban=0.2; Kažiprst=0.2;
+      Umnjak=0.2; Kapak/Očni kapak=0.2; Adamova jabučica/Jabučica=0.2; Prepone=0.1; Penis=0.1; Vagina=0.1;
+      Testisi/Testis=0.1; Dojka=0.1; Triceps=0.1; Tetiva=0.1; Ahilova tetiva=0.1; Hrskavica=0.1; Meniskus=0.1;
+      Ligament=0.1; Kralježak=0.1; Leđna moždina=0.1; Mali mozak=0.1; Hipofiza=0.1; Nadbubrežna žlijezda=0.1;
+      Limfni čvor=0.1; Krvna žila=0.1; Aorta=0.1; Srčani zalistak=0.1; Bronhi=0.1; Debelo crijevo=0.1;
+      Tanko crijevo=0.1; Dvanaesnik=0.1; Anus/Čmar=0.1; Rožnica=0.1; Mrežnica=0.1; Ušna školjka=0.1; Pužnica=0.1;
+      Glasnice=0.1; Resica=0.1; Kutnjak=0.1; Očnjak=0.1; Sjekutić=0.1; Dlaka=0.1; Brkovi=0.1; Madež=0.1;
+      Prsni koš=0.1; Prsna kost=0.1; Bedrena kost=0.1; Goljenica=0.1; Koljenska čašica/Iver=0.1; Mali prst=0.1;
+      Srednji prst/Srednjak=0.1; Prstenjak=0.1; Zglavak/Članak=0.1; Nadlanica=0.1; Trup=0.1; Koštana srž=0.1;
+      Ždrijelo=0.1`,
   },
   {
     slug: "valuta",

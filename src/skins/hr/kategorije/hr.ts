@@ -19,7 +19,16 @@ export const hrKategorije: SeedCategory[] = [
       Vrbovec=0.2; Duga Resa=0.2; Benkovac=0.2; Trilj=0.2; Vrgorac=0.2; Belišće=0.2; Donji Miholjac=0.2;
       Orahovica=0.2; Kutjevo=0.2; Prelog=0.2; Buje=0.2; Oroslavje=0.15; Klanjec=0.15; Ozalj=0.15; Obrovac=0.15;
       Pleternica=0.15; Hrvatska Kostajnica/Kostajnica=0.15; Vrbovsko=0.1; Čabar=0.1; Korenica/Titova Korenica=0.1;
-      Vrlika=0.1; Opuzen=0.1; Popovača=0.1; Grubišno Polje=0.1; Mursko Središće=0.1`,
+      Vrlika=0.1; Opuzen=0.1; Popovača=0.1; Grubišno Polje=0.1; Mursko Središće=0.1; Marija Bistrica=0.2;
+      Kumrovec=0.2; Hlebine=0.2; Topusko=0.2; Jasenovac=0.2; Sveta Nedelja=0.2; Plitvička Jezera/Plitvice=0.2;
+      Fužine=0.2; Klis=0.2; Kastav=0.1; Vodnjan=0.1; Oprtalj=0.1; Grožnjan=0.1; Hum=0.1; Žminj=0.1; Svetvinčenat=0.1;
+      Otok=0.1; Čepin=0.1; Darda=0.1; Bilje=0.1; Erdut=0.1; Dalj=0.1; Borovo=0.1; Gunja=0.1; Babina Greda=0.1;
+      Tovarnik=0.1; Voćin=0.1; Pitomača=0.1; Okučani=0.1; Stara Gradiška=0.1; Sveti Križ Začretje=0.1;
+      Bedekovčina=0.1; Stubičke Toplice=0.1; Gornja Stubica=0.1; Krapinske Toplice=0.1; Varaždinske Toplice=0.1;
+      Štrigova=0.1; Nedelišće=0.1; Sveti Martin na Muri=0.1; Virje=0.1; Molve=0.1; Legrad=0.1; Kloštar Ivanić=0.1;
+      Križ=0.1; Sunja=0.1; Dvor=0.1; Lekenik=0.1; Krašić=0.1; Rakovica=0.1; Rastoke=0.1; Josipdol=0.1; Vojnić=0.1;
+      Lokve=0.1; Mrkopalj=0.1; Ravna Gora=0.1; Skrad=0.1; Udbina=0.1; Perušić=0.1; Donji Lapac=0.1; Brinje=0.1;
+      Kistanje=0.1; Muć=0.1; Dugopolje=0.1; Čilipi=0.1; Gruda=0.1; Kula Norinska=0.1; Vid=0.1; Viškovo=0.1`,
   },
   {
     slug: "planina",
@@ -70,21 +79,32 @@ export const hrKategorije: SeedCategory[] = [
       Blanka Vlašić/Blanka=4; Sandra Perković/Sandra Elkasević=3; Dražen Petrović=3; Marin Čilić/Čilić=2.5;
       Toni Kukoč/Kukoč=2; Davor Šuker/Šuker=2; Ivan Rakitić/Rakitić=2; Ivan Perišić/Perišić=2;
       Mario Mandžukić/Mandžukić=2; Mirko Filipović/Cro Cop/Crocop=2; Joško Gvardiol/Gvardiol=1.5;
-      Ivica Kostelić/Ivica=1.5; Ivano Balić/Balić=1.5; Domagoj Duvnjak/Duvnjak=1; Valent Sinković/Martin Sinković/Braća Sinković/Sinković=1;
-      Mateo Kovačić/Kovačić=1; Dominik Livaković/Livaković=1; Zvonimir Boban/Boban=1; Ivica Olić/Olić=1;
-      Darijo Srna/Srna=1; Danijel Subašić/Subašić=0.8; Robert Prosinečki/Prosinečki=0.8; Slaven Bilić/Bilić=0.8;
-      Iva Majoli/Majoli=0.8; Sara Kolak=0.8; Filip Hrgović/Hrgović=0.8; Bojan Bogdanović=0.8;
-      Marcelo Brozović/Brozović=0.8; Dino Rađa/Rađa=0.6; Dario Šarić/Šarić=0.6; Donna Vekić/Vekić=0.6;
-      Andrej Kramarić/Kramarić=0.6; Dejan Lovren/Lovren=0.5; Borna Ćorić/Ćorić=0.5; Mate Pavić=0.5;
-      Igor Vori/Vori=0.5; Mate Parlov/Parlov=0.5; Ivica Zubac/Zubac=0.5; Krešimir Ćosić=0.5;
-      Vedran Ćorluka/Ćorluka=0.5; Niko Kovač=0.5; Šime Vrsaljko/Vrsaljko=0.5; Igor Štimac/Štimac=0.5;
-      Alen Bokšić/Bokšić=0.5; Zrinka Ljutić/Ljutić=0.5; Mirjana Lučić=0.4; Nikola Mektić/Mektić=0.4;
-      Ivan Ljubičić/Ljubičić=0.4; Matea Jelić=0.4; Ana Konjuh/Konjuh=0.4; Petra Martić=0.4; Tin Srbić/Srbić=0.4;
-      Filip Zubčić=0.4; Mario Ančić/Ančić=0.3; Mirza Džomba/Džomba=0.3; Duje Draganja=0.3; Damir Martin=0.3;
-      Barbara Matić=0.3; Stojko Vranković=0.3; Ante Rebić/Rebić=0.3; Josip Šimunić/Šimunić=0.3;
-      Robert Jarni=0.3; Dario Šimić=0.3; Robert Kovač=0.3; Josip Pavić=0.3; Sandro Sukno=0.3; Ratko Rudić=0.3;
-      Luka Cindrić=0.2; Giovanni Cernogoraz=0.2; Josip Glasnović=0.2; Lucija Zaninović=0.2; Martina Zubčić=0.2;
-      Filip Ude=0.2; Stipe Žunić=0.2; Natko Zrnčić-Dim=0.2; Aco Petrović=0.2; Leona Popović=0.1`,
+      Ivica Kostelić/Ivica=1.5; Ivano Balić/Balić=1.5; Domagoj Duvnjak/Duvnjak=1;
+      Valent Sinković/Martin Sinković/Braća Sinković/Sinković=1; Mateo Kovačić/Kovačić=1;
+      Dominik Livaković/Livaković=1; Zvonimir Boban/Boban=1; Ivica Olić/Olić=1; Darijo Srna/Srna=1;
+      Danijel Subašić/Subašić=0.8; Robert Prosinečki/Prosinečki=0.8; Slaven Bilić/Bilić=0.8; Iva Majoli/Majoli=0.8;
+      Sara Kolak=0.8; Filip Hrgović/Hrgović=0.8; Bojan Bogdanović=0.8; Marcelo Brozović/Brozović=0.8;
+      Dino Rađa/Rađa=0.6; Dario Šarić/Šarić=0.6; Donna Vekić/Vekić=0.6; Andrej Kramarić/Kramarić=0.6;
+      Dejan Lovren/Lovren=0.5; Borna Ćorić/Ćorić=0.5; Mate Pavić=0.5; Igor Vori/Vori=0.5; Mate Parlov/Parlov=0.5;
+      Ivica Zubac/Zubac=0.5; Krešimir Ćosić=0.5; Vedran Ćorluka/Ćorluka=0.5; Niko Kovač=0.5;
+      Šime Vrsaljko/Vrsaljko=0.5; Igor Štimac/Štimac=0.5; Alen Bokšić/Bokšić=0.5; Zrinka Ljutić/Ljutić=0.5;
+      Mirjana Lučić=0.4; Nikola Mektić/Mektić=0.4; Ivan Ljubičić/Ljubičić=0.4; Matea Jelić=0.4; Ana Konjuh/Konjuh=0.4;
+      Petra Martić=0.4; Tin Srbić/Srbić=0.4; Filip Zubčić=0.4; Mario Ančić/Ančić=0.3; Mirza Džomba/Džomba=0.3;
+      Duje Draganja=0.3; Damir Martin=0.3; Barbara Matić=0.3; Stojko Vranković=0.3; Ante Rebić/Rebić=0.3;
+      Josip Šimunić/Šimunić=0.3; Robert Jarni=0.3; Dario Šimić=0.3; Robert Kovač=0.3; Josip Pavić=0.3;
+      Sandro Sukno=0.3; Ratko Rudić=0.3; Luka Cindrić=0.2; Giovanni Cernogoraz=0.2; Josip Glasnović=0.2;
+      Lucija Zaninović=0.2; Martina Zubčić=0.2; Filip Ude=0.2; Stipe Žunić=0.2; Natko Zrnčić-Dim=0.2;
+      Aco Petrović=0.2; Leona Popović=0.1; Mario Hezonja/Hezonja=0.2; Perica Bukić/Bukić=0.2;
+      Slavko Goluža/Goluža=0.2; Vlado Šola=0.2; Željko Mavrović/Mavrović=0.2; Arijan Komazec=0.1; Zoran Planinić=0.1;
+      Roko Ukić=0.1; Gordan Giriček=0.1; Velimir Perasović=0.1; Žan Tabak=0.1; Nikola Vujčić=0.1;
+      Blaženko Lacković=0.1; Petar Metličić=0.1; Manuel Štrlek=0.1; Zlatko Saračević=0.1; Patrik Ćavar=0.1;
+      Venio Losert=0.1; Iztok Puc=0.1; Igor Karačić=0.1; Dubravko Šimenc=0.1; Frano Vićan=0.1; Maro Joković=0.1;
+      Samir Barać=0.1; Damir Burić=0.1; Filip Mihaljević=0.1; Ana Šimić=0.1; Gordan Kožulj=0.1; Sanja Jovanović=0.1;
+      Toni Kanaet=0.1; Ana Đerek=0.1; Šime Fantela=0.1; Igor Marenić=0.1; Tonči Stipanović=0.1; Snježana Pejčić=0.1;
+      Ana Jelušić=0.1; Ivana Brkljačić=0.1; Ante Budimir=0.1; Lovro Majer=0.1; Mario Pašalić=0.1; Martin Baturina=0.1;
+      Ivan Klasnić=0.1; Niko Kranjčar=0.1; Dado Pršo=0.1; Eduardo da Silva/Eduardo=0.1; Zvonimir Soldo=0.1;
+      Aljoša Asanović=0.1; Stipe Pletikosa/Pletikosa=0.1; Marko Livaja=0.1; Domagoj Vida=0.1;
+      Josip Skoblar/Skoblar=0.1; Bernard Vukas/Vukas=0.1; Ivica Šurjak/Šurjak=0.1; Stjepan Bobek=0.1`,
   },
   {
     slug: "reprezentativac",
@@ -109,9 +129,16 @@ export const hrKategorije: SeedCategory[] = [
       Ognjen Vukojević/Vukojević=0.3; Tin Jedvaj/Jedvaj=0.3; Luka Sučić/Sučić=0.3; Alen Halilović/Halilović=0.3;
       Krunoslav Jurčić/Jurčić=0.3; Kristijan Jakić/Jakić=0.2; Davor Vugrinec/Vugrinec=0.2; Silvio Marić=0.2;
       Anthony Šerić/Šerić=0.2; Boris Živković/Živković=0.2; Jerko Leko/Leko=0.2; Tomislav Butina/Butina=0.2;
-      Ivo Grbić/Grbić=0.2; Igor Bišćan/Bišćan=0.3; Ivan Leko=0.1; Marin Pongračić/Pongračić=0.2;
-      Petar Sučić=0.1; Luka Ivanušec/Ivanušec=0.2; Antonio Mirko Čolak/Čolak=0.1; Josip Brekalo/Brekalo=0.2;
-      Filip Bradarić=0.1; Ivan Santini/Santini=0.1; Marko Rog=0.2`,
+      Ivo Grbić/Grbić=0.2; Igor Bišćan/Bišćan=0.3; Ivan Leko=0.1; Marin Pongračić/Pongračić=0.2; Petar Sučić=0.1;
+      Luka Ivanušec/Ivanušec=0.2; Antonio Mirko Čolak/Čolak=0.1; Josip Brekalo/Brekalo=0.2; Filip Bradarić=0.1;
+      Ivan Santini/Santini=0.1; Marko Rog=0.2; Goran Jurić=0.1; Nikola Jurčević/Jurčević=0.1;
+      Igor Cvitanović/Cvitanović=0.1; Marjan Mrmić/Mrmić=0.1; Tonči Gabrić/Gabrić=0.1; Robert Špehar/Špehar=0.1;
+      Jurica Vranješ/Vranješ=0.1; Stjepan Tomas/Tomas=0.1; Ivica Mornar/Mornar=0.1; Tomo Šokota/Šokota=0.1;
+      Milan Rapaić/Rapaić=0.1; Ivan Bošnjak/Bošnjak=0.1; Mario Tokić/Tokić=0.1; Vedran Runje/Runje=0.1;
+      Nikola Pokrivač/Pokrivač=0.1; Gordon Schildenfeld/Schildenfeld=0.1; Ivo Iličević/Iličević=0.1; Duje Čop/Čop=0.1;
+      Josip Pivarić/Pivarić=0.1; Lovre Kalinić=0.1; Nikola Kalinić=0.1; Matej Mitrović/Mitrović=0.1;
+      Borna Barišić/Barišić=0.1; Domagoj Bradarić=0.1; Martin Erlić/Erlić=0.1; Nenad Bjelica/Bjelica=0.1;
+      Elvis Brajković/Brajković=0.1; Sammir=0.1`,
   },
   {
     slug: "serija",
