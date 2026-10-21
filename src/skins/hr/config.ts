@@ -17,7 +17,7 @@ export const hrConfig: SkinConfig = {
     { name: "Rijeka", genitive: "Rijeke", km: 450, lon: 14.44, lat: 45.33, message: "Napokon more. Kiša, naravno, pada.", labelOffset: [-4, -8] },
     { name: "Pula", genitive: "Pule", km: 530, lon: 13.85, lat: 44.87, message: "Arena je tu, ali gladijator nisi.", labelOffset: [-6, 16], alwaysLabel: true },
     { name: "Gospić", genitive: "Gospića", km: 620, lon: 15.37, lat: 44.55, message: "Tu nemoj pit vodu.", labelOffset: [8, 4] },
-    { name: "Zadar", genitive: "Zadra", km: 710, lon: 15.23, lat: 44.12, message: "Morske orgulje i zalazak sunca.", labelOffset: [-36, 4] },
+    { name: "Zadar", genitive: "Zadra", km: 710, lon: 15.23, lat: 44.12, message: "Kaj ti stara radi Zadar?", labelOffset: [-36, 4] },
     { name: "Šibenik", genitive: "Šibenika", km: 790, lon: 15.89, lat: 43.73, message: "Katedrala sv. Jakova.", labelOffset: [-48, 6] },
     { name: "Split", genitive: "Splita", km: 870, lon: 16.44, lat: 43.51, message: "HŽV", labelOffset: [-6, 16], alwaysLabel: true },
     { name: "Makarska", genitive: "Makarske", km: 960, lon: 17.02, lat: 43.3, message: "Biokovo iznad, more ispod.", labelOffset: [8, -4] },
