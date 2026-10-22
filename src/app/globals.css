@@ -210,6 +210,9 @@ button:disabled { opacity: .5; cursor: default; }
 @media (max-width: 520px) { .allans { padding-left: 0; } }
 .recap .c { font-size: 12px; color: var(--muted); }
 .recap .a { font-weight: 700; overflow-wrap: anywhere; }
+.history > li { display: grid; grid-template-columns: 3em minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 10px 4px; }
+.history .n { font-family: var(--font-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.history .w { display: grid; gap: 2px; }
 .recap .k { font-family: var(--font-mono); font-weight: 700; font-variant-numeric: tabular-nums; }
 /* usporedba s ostalima: stupci igrača nad cestom, igrač na žutoj ploči */
 .compare { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px 12px; display: grid; gap: 8px; }
