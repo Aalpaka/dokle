@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { supabaseBrowser } from "@/lib/supabase/client";
+import { googleClientId, googleIdentity } from "@/lib/google";
 import type { PlayerStats } from "@/lib/stats";
 
 export type Me = {
@@ -32,7 +33,38 @@ export async function signOut() {
   window.location.href = "/";
 }
 
-export function GoogleButton({ label = "Prijavi se s Googleom", className }: { label?: string; className?: string }) {
+/**
+ * Prijava. S NEXT_PUBLIC_GOOGLE_CLIENT_ID je to Googleov gumb na našoj stranici (Google piše ime aplikacije);
+ * bez njega, ili ako se Googleova skripta ne učita, stari gumb koji vodi preko Supabaseove adrese.
+ */
+export function GoogleButton({ label = "Prijavi se s Googleom", className, compact }: { label?: string; className?: string; compact?: boolean }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [fallback, setFallback] = useState(!googleClientId);
+  useEffect(() => {
+    if (!googleClientId) return;
+    let live = true;
+    googleIdentity().then(
+      (gsi) => {
+        if (live && ref.current)
+          gsi.renderButton(ref.current, {
+            theme: "filled_black",
+            shape: "pill",
+            locale: "hr",
+            size: compact ? "medium" : "large",
+            text: compact ? "signin" : "signin_with",
+          });
+      },
+      () => live && setFallback(true),
+    );
+    return () => {
+      live = false;
+    };
+  }, [compact]);
+  if (!fallback) return <div ref={ref} className="gsi-btn" />;
+  return <RedirectButton label={label} className={className} />;
+}
+
+function RedirectButton({ label, className }: { label: string; className?: string }) {
   const [busy, setBusy] = useState(false);
   return (
     <button
@@ -69,7 +101,7 @@ export function AccountLink({ me }: { me: Me | null }) {
         </a>
       </nav>
     );
-  return <GoogleButton label="Prijava" className="ghost small-btn" />;
+  return <GoogleButton label="Prijava" className="ghost small-btn" compact />;
 }
 
 /** Okvir za stranice izvan igre (profil, lige): isto zaglavlje i ista širina kao glavna stranica. */
