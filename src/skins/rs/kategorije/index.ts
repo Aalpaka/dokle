@@ -7,11 +7,13 @@ import { rsDomace3 } from "./domace3";
 import { rsDomace4 } from "./domace4";
 import { rsDomace5 } from "./domace5";
 import { rsZamjene } from "./zamjene";
+import { dodaci } from "./dodaci";
+import { withDodaci } from "../../regional";
 
 export const rsContent: Country = {
   lang: "srpski",
-  domestic: [...rsDomace1, ...rsDomace2, ...rsDomace3, ...rsDomace4, ...rsDomace5],
-  replace: rsZamjene,
+  domestic: withDodaci([...rsDomace1, ...rsDomace2, ...rsDomace3, ...rsDomace4, ...rsDomace5], dodaci),
+  replace: withDodaci(rsZamjene, dodaci),
   abroad: {
     "svjetska-planina": {
       title: "Planina ili vrh van Srbije",

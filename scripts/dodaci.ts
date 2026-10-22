@@ -1,12 +1,16 @@
-// Generira src/skins/hr/kategorije/dodaci.ts iz popisa <slug>.txt ("# udio" pa "A/alias; B; ..."), preskače odgovore koji već postoje.
-// Pokretanje: DODACI_DIR=<mapa> npx tsx scripts/dodaci.ts <slug>...
+// Generira src/skins/<skin>/kategorije/dodaci.ts iz popisa <slug>.txt ("# udio" pa "A/alias; B; ..."), preskače odgovore koji već postoje.
+// Pokretanje: DODACI_DIR=<mapa> [SKIN=ba|rs] npx tsx scripts/dodaci.ts <slug>...
 import { readFileSync, writeFileSync, existsSync } from "fs";
 import { hrCategories } from "../src/skins/hr/categories";
+import { baContent } from "../src/skins/ba/kategorije";
+import { rsContent } from "../src/skins/rs/kategorije";
 import { fold, parseSeedAnswers } from "../src/lib/matcher";
 const key = (s: string) => fold(s).replace(/ /g, "");
+const skin = process.env.SKIN ?? "hr";
+const source = skin === "hr" ? hrCategories : [...(skin === "ba" ? baContent : rsContent).domestic, ...(skin === "ba" ? baContent : rsContent).replace];
 const out: Record<string, string> = {};
 for (const slug of process.argv.slice(2)) {
-  const c = hrCategories.find((x) => x.slug === slug)!;
+  const c = source.find((x) => x.slug === slug)!;
   const seen = new Set(parseSeedAnswers(c.answers).flatMap((a) => [a.canonical, ...a.variants]).map(key));
   let share = 0.1; const add: string[] = []; let skipped: string[] = [];
   for (const line of readFileSync(process.env.DODACI_DIR + "/" + slug + ".txt", "utf8").split("\n")) {
@@ -31,7 +35,7 @@ for (const slug of process.argv.slice(2)) {
   console.error(slug, "+", add.length, "preskočeno:", skipped.join(", "));
   out[slug] = add.join("; ");
 }
-const f = "src/skins/hr/kategorije/dodaci.ts";
+const f = `src/skins/${skin}/kategorije/dodaci.ts`;
 const prev: Record<string, string> = existsSync(f) ? (await import("../" + f)).dodaci : {};
 const all = { ...prev, ...out };
 writeFileSync(f, "// Dodatni odgovori za postojeća pitanja (seed dodaje odgovore koji još nisu u bazi).\nexport const dodaci: Record<string, string> = {\n" +
