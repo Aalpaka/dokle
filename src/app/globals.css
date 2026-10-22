@@ -189,6 +189,8 @@ button:disabled { opacity: .5; cursor: default; }
 .arrive { background: var(--sign); color: var(--sign-ink); border-radius: 12px; padding: 18px; box-shadow: inset 0 0 0 3px var(--sign), inset 0 0 0 5px var(--sign-ink); display: grid; gap: 4px; }
 .arrive .town { font-size: 34px; font-weight: 900; line-height: 1.05; }
 .arrive .kmt { font-family: var(--font-mono); font-size: 15px; opacity: .9; }
+.end-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 4px 12px; }
+.next-route { font-family: var(--font-mono); font-size: 13px; font-weight: 700; color: var(--signal); font-variant-numeric: tabular-nums; }
 .recap { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
 .recap > li { border-bottom: 1px solid var(--line); }
 .recap-row {

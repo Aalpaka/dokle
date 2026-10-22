@@ -405,7 +405,10 @@ function End({ state, me }: { state: GameState; me: Me | null }) {
   };
   return (
     <div className="stack">
-      <span className="eyebrow">Kraj puta za danas</span>
+      <div className="end-head">
+        <span className="eyebrow">Kraj puta za danas</span>
+        <Countdown timezone={state.skin.timezone} className="next-route" />
+      </div>
       <div className="arrive">
         <span className="kmt">{first.name} → {km} km</span>
         <span className="town">{st.name}</span>
@@ -436,7 +439,6 @@ function End({ state, me }: { state: GameState; me: Me | null }) {
           🔥 Streak: <b>{me.stats.currentStreak}</b> {me.stats.currentStreak === 1 ? "dan" : "dana"} · <a href="/profil">tvoja povijest</a>
         </p>
       )}
-      <Countdown timezone={state.skin.timezone} />
     </div>
   );
 }
@@ -596,7 +598,7 @@ function AllAnswers({ position, cfg }: { position: number; cfg: SkinConfig }) {
   );
 }
 
-function Countdown({ timezone }: { timezone: string }) {
+function Countdown({ timezone, className = "small" }: { timezone: string; className?: string }) {
   const [text, setText] = useState("");
   useEffect(() => {
     const tick = () => {
@@ -605,11 +607,11 @@ function Countdown({ timezone }: { timezone: string }) {
       const h = +parts.find((p) => p.type === "hour")!.value;
       const m = +parts.find((p) => p.type === "minute")!.value;
       const leftMin = 24 * 60 - (h * 60 + m);
-      setText(`Nova ruta za ${Math.floor(leftMin / 60)} h ${String(leftMin % 60).padStart(2, "0")} min.`);
+      setText(`Nova ruta za ${Math.floor(leftMin / 60)} h ${String(leftMin % 60).padStart(2, "0")} min`);
     };
     tick();
     const t = setInterval(tick, 30000);
     return () => clearInterval(t);
   }, [timezone]);
-  return <p className="small">{text}</p>;
+  return <span className={className}>{text}</span>;
 }
