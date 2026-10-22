@@ -17,7 +17,8 @@ const out={key, image:{x:+x0.toFixed(2), y:+y0.toFixed(2), width:Math.round(x1-x
 const n=(f)=>f.properties.name;
 out.border=path(topo.mesh(t,t.objects.countries,(a,b)=>a!==b && mine.has(n(a))!==mine.has(n(b)) && !dashed.has(n(a)) && !dashed.has(n(b))));
 // isprekidana granica (sporni teritorij), bez natpisa
-out.dashed=dashed.size?path(topo.mesh(t,t.objects.countries,(a,b)=>a!==b && mine.has(n(a))!==mine.has(n(b)) && (dashed.has(n(a))||dashed.has(n(b))))):null;
+// cijela granica tog teritorija, ne samo prema zemlji skina
+out.dashed=dashed.size?path(topo.mesh(t,t.objects.countries,(a,b)=>a!==b && (dashed.has(n(a))||dashed.has(n(b))))):null;
 const rivers=JSON.parse(fs.readFileSync('rivers.geojson'));
 const want=new Map((rv||'').split(',').filter(Boolean).map(p=>p.split(':')));
 out.rivers=rivers.features.filter(f=>want.has(f.properties.name)).map(f=>({name:want.get(f.properties.name),d:path(f)})).filter(r=>r.d);
