@@ -1,4 +1,5 @@
-# python3 relief3.py <key> <out.jpg> [lighter_rings]  — sjenčani reljef za obuhvat iz vec_<key>.json, maska iz rings_<key>.json
+# python3 relief_skin.py <key> <out.jpg> [rings_extra.json udio]  — sjenčani reljef za obuhvat iz vec_<key>.json, maska iz rings_<key>.json;
+# dodatna maska se oboji djelomično (npr. Kosovo na karti Srbije, udio 0.6)
 import json, sys, numpy as np
 from PIL import Image, ImageDraw, ImageFilter
 key,outp=sys.argv[1],sys.argv[2]
@@ -27,6 +28,7 @@ def mask(rings):
     m=Image.fromarray(np.bitwise_xor(np.asarray(m),np.asarray(t)))
   return np.asarray(m.filter(ImageFilter.GaussianBlur(1.2)),np.float64)/255
 hr=mask(json.load(open(f'rings_{key}.json')))
+if len(sys.argv)>4: hr=np.maximum(hr,mask(json.load(open(sys.argv[3])))*float(sys.argv[4]))
 def ramp(v,stops):
   xs=[s[0] for s in stops]; out=np.zeros(v.shape+(3,))
   for i in range(3): out[...,i]=np.interp(v,xs,[s[1][i] for s in stops])

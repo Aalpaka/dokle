@@ -29,5 +29,6 @@ Skripte su parametrizirane (pokreću se iz mape s pločicama i `node_modules` ka
 2. `node vec_skin.mjs ba 13.3 45.75 21.6 42.2 "Bosnia and Herz." "Sava:Sava,Drina:Drina,Danube:Dunav,Drau:Drava"`
    i `node vec_skin.mjs rs 16.2 46.5 25.6 41.6 "Serbia" "Sava:Sava,Drina:Drina,Danube:Dunav,Tisa:Tisa,Morava:Morava" "Kosovo"`
    (zadnji argument: granica koja se crta isprekidano). Daje `vec_<skin>.json` (obuhvat slike, granica, rijeke) i `rings_<skin>.json`.
-3. `python3 relief_skin.py ba ba-reljef.jpg` i isto za `rs`.
+3. `python3 relief_skin.py ba ba-reljef.jpg`; za Srbiju se Kosovo boja djelomično:
+   `node vec_skin.mjs ks 16.2 46.5 25.6 41.6 "Kosovo" ""` pa `python3 relief_skin.py rs rs-reljef.jpg rings_ks.json 0.6`.
 4. Granicu i rijeke prepisati u `src/skins/<skin>/mapGeo.ts`, a obuhvat slike u `image` u `src/skins/<skin>/map.ts`.
