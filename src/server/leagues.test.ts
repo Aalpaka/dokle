@@ -11,6 +11,7 @@ import {
   leagueView,
   leaveAllLeagues,
   leaveLeague,
+  memberDay,
   myLeagues,
   removeMember,
 } from "./leagues";
@@ -73,6 +74,19 @@ describe.skipIf(!process.env.DATABASE_URL)("lige", () => {
     const vb = await leagueView(skin, league, bruno, "day");
     expect(vb.answers).toBeNull();
     expect(vb.isOwner).toBe(false);
+
+    // dan jednog člana: Ana vidi svoj dan, Bruno tek kad sam odigra; tko nije u ligi ne vidi ništa
+    const { localDate } = await import("@/lib/day");
+    const today = localDate(skin.timezone);
+    const anaId = v.standings![0].memberId;
+    const day = await memberDay(skin, league, ana, anaId, today);
+    expect(day).toMatchObject({ nickname: "Ana", date: today });
+    expect(day.rounds.length).toBe(8);
+    await expect(memberDay(skin, league, bruno, anaId, today)).rejects.toThrow(/Odigraj/);
+    await expect(memberDay(skin, league, cvita, anaId, today)).rejects.toThrow(/Nisi u ovoj ligi/);
+    await expect(memberDay(skin, league, ana, anaId, "2000-01-01")).rejects.toThrow(/nema završene/);
+    await playToday(bruno, "nešto");
+    expect((await memberDay(skin, league, bruno, anaId, today)).nickname).toBe("Ana");
 
     const mine = await myLeagues(skin, bruno);
     expect(mine).toEqual([expect.objectContaining({ code: league.code, members: 2, isOwner: false })]);

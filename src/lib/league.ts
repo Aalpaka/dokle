@@ -51,6 +51,7 @@ export type StandingRow = {
   played: number; // odigrani dani u razdoblju
   avgKm: number;
   bestKm: number;
+  bestDate: string | null; // dan najboljeg rezultata u razdoblju (kod jednakih km, raniji)
   wins: number; // dani u razdoblju na kojima je imao najviše km u ligi (dijeljeno prvo mjesto se računa svima)
   streak: number; // trenutni streak, neovisno o razdoblju
 };
@@ -65,6 +66,7 @@ export function computeStandings(members: Member[], games: MemberGame[], from: s
     const all = games.filter((g) => g.playerId === m.playerId);
     const mine = inPeriod.filter((g) => g.playerId === m.playerId);
     const km = mine.reduce((a, g) => a + g.km, 0);
+    const top = mine.reduce<MemberGame | null>((b, g) => (!b || g.km > b.km || (g.km === b.km && g.date < b.date) ? g : b), null);
     return {
       memberId: m.memberId,
       nickname: m.nickname,
@@ -72,7 +74,8 @@ export function computeStandings(members: Member[], games: MemberGame[], from: s
       km,
       played: mine.length,
       avgKm: mine.length ? Math.round(km / mine.length) : 0,
-      bestKm: mine.length ? Math.max(...mine.map((g) => g.km)) : 0,
+      bestKm: top?.km ?? 0,
+      bestDate: top?.date ?? null,
       wins: mine.filter((g) => g.km > 0 && g.km === best.get(g.date)).length,
       streak: computeStats(all, today).currentStreak,
     };

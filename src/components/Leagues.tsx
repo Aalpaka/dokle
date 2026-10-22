@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { GoogleButton, PageShell, useMe } from "./account";
 import { PERIODS, PERIOD_LABEL, type Period, type StandingRow } from "@/lib/league";
-import type { LeagueSummary, LeagueView } from "@/server/leagues";
+import type { LeagueSummary, LeagueView, MemberDay } from "@/server/leagues";
+import Modal from "./Modal";
 
 async function post<T>(url: string, body: unknown): Promise<T> {
   const r = await fetch(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
@@ -183,6 +184,7 @@ export function LeaguePage({ code }: { code: string }) {
   const [view, setView] = useState<LeagueView | null>(null);
   const [error, setError] = useState("");
   const [reload, setReload] = useState(0);
+  const [day, setDay] = useState<{ memberId: number; date: string } | null>(null);
 
   useEffect(() => {
     fetch(`/api/lige/${code}?period=${period}`, { cache: "no-store" })
@@ -267,7 +269,7 @@ export function LeaguePage({ code }: { code: string }) {
               </nav>
               <span className="small">{period === "day" ? fmtDate(view.from!) : `od ${fmtDate(view.from!)}`}</span>
             </div>
-            <Standings rows={view.standings!} me={view.meMemberId} period={period} />
+            <Standings rows={view.standings!} me={view.meMemberId} period={period} onDay={(r) => setDay({ memberId: r.memberId, date: r.bestDate! })} />
           </section>
           <section className="card stack">
             <span className="eyebrow">Danas</span>
@@ -280,7 +282,50 @@ export function LeaguePage({ code }: { code: string }) {
           <Settings view={view} act={act} />
         </div>
       </div>
+      {day && <DayModal code={view.code} {...day} onClose={() => setDay(null)} />}
     </PageShell>
+  );
+}
+
+/** Jedan dan jednog člana: pitanja, odgovori i km po kategoriji. */
+function DayModal({ code, memberId, date, onClose }: { code: string; memberId: number; date: string; onClose: () => void }) {
+  const [data, setData] = useState<MemberDay | null>(null);
+  const [error, setError] = useState("");
+  useEffect(() => {
+    fetch(`/api/lige/${code}/dan?clan=${memberId}&datum=${date}`, { cache: "no-store" })
+      .then(async (r) => {
+        const b = await r.json();
+        if (!r.ok) throw new Error(b.error);
+        setData(b);
+      })
+      .catch((e) => setError(e.message));
+  }, [code, memberId, date]);
+  return (
+    <Modal title={data ? `${data.nickname} · ${data.km} km` : "Najbolji dan"} onClose={onClose} className="narrow">
+      {error ? (
+        <p>{error}</p>
+      ) : !data ? (
+        <p className="loading">Učitavam…</p>
+      ) : (
+        <>
+          <p className="small">
+            Dokle? #{data.number} · {fmtDate(data.date)} · stigao do <b className="ink">{data.station}</b>
+          </p>
+          <ul className="day-rounds">
+            {data.rounds.map((r, i) => (
+              <li key={i}>
+                <span className="em">{r.emoji}</span>
+                <span className="q">
+                  <span className="c">{r.title}</span>
+                  <b>{r.answer ?? "—"}</b>
+                </span>
+                <span className="km">+{r.km}</span>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+    </Modal>
   );
 }
 
@@ -301,7 +346,7 @@ function Invite({ code, name }: { code: string; name: string }) {
   );
 }
 
-function Standings({ rows, me, period }: { rows: StandingRow[]; me: number | null; period: Period }) {
+function Standings({ rows, me, period, onDay }: { rows: StandingRow[]; me: number | null; period: Period; onDay: (r: StandingRow) => void }) {
   const full = period !== "day";
   return (
     <div className="table-scroll">
@@ -311,9 +356,9 @@ function Standings({ rows, me, period }: { rows: StandingRow[]; me: number | nul
             <th className="rk">#</th>
             <th className="name">Igrač</th>
             <th>km</th>
-            {full && <th title="odigranih dana">dana</th>}
+            {full && <th className="opt" title="odigranih dana">dana</th>}
             {full && <th className="opt" title="prosjek km po danu">prosjek</th>}
-            {full && <th className="opt" title="najviše km u jednom danu">najbolje</th>}
+            {full && <th title="najviše km u jednom danu; klikni za taj dan">najbolje</th>}
             {full && <th title="dani na kojima je stigao najdalje u ligi">🏆</th>}
             <th title="trenutni streak">🔥</th>
           </tr>
@@ -324,16 +369,24 @@ function Standings({ rows, me, period }: { rows: StandingRow[]; me: number | nul
               <td className="rk">{r.km > 0 ? medal(r.rank) : `${r.rank}.`}</td>
               <td className="name">{r.nickname}</td>
               <td><b>{r.km}</b></td>
-              {full && <td>{r.played}</td>}
+              {full && <td className="opt">{r.played}</td>}
               {full && <td className="opt">{r.avgKm}</td>}
-              {full && <td className="opt">{r.bestKm}</td>}
+              {full && (
+                <td>
+                  {r.bestDate ? (
+                    <button className="best-btn" onClick={() => onDay(r)} title={`${r.nickname}, ${fmtDate(r.bestDate)}`}>{r.bestKm}</button>
+                  ) : (
+                    r.bestKm
+                  )}
+                </td>
+              )}
               {full && <td>{r.wins}</td>}
               <td>{r.streak}</td>
             </tr>
           ))}
         </tbody>
       </table>
-      {full && <p className="small legend">dana = odigrani dani · 🏆 = dani kad je stigao najdalje u ligi · 🔥 = streak</p>}
+      {full && <p className="small legend">dana = odigrani dani · najbolje = klikni za pitanja i odgovore tog dana · 🏆 = dani kad je stigao najdalje u ligi · 🔥 = streak</p>}
     </div>
   );
 }

@@ -38,7 +38,8 @@ describe("computeStandings", () => {
       ["Bruno", 2, 900, 2, 2],
       ["Cvita", 3, 0, 0, 0],
     ]);
-    expect(t[0]).toMatchObject({ avgKm: 350, bestKm: 400, streak: 3 });
+    expect(t[0]).toMatchObject({ avgKm: 350, bestKm: 400, bestDate: "2026-10-21", streak: 3 });
+    expect(t[2].bestDate).toBeNull();
     expect(t[1].streak).toBe(2); // zadnji put igrao jučer, streak živi
   });
 
