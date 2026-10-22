@@ -557,3 +557,6 @@ details.answers[open] > summary { margin-bottom: 14px; }
 .day-rounds .km { font-family: var(--font-mono); font-weight: 700; }
 .ink { color: var(--ink); }
 .landing-main .unranked { max-width: 520px; font-size: 13px; color: var(--muted); text-align: center; margin: 4px 0 0; }
+/* Googleov gumb (iframe); visina rezervirana da se ništa ne pomiče dok se učita */
+.gsi-btn { min-height: 40px; display: inline-flex; align-items: center; color-scheme: normal; }
+.top .gsi-btn { min-height: 32px; }
