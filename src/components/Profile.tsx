@@ -60,13 +60,13 @@ function LoggedIn({ me, onChange }: { me: NonNullable<ReturnType<typeof useMe>>;
 
       <span className="eyebrow">Povijest</span>
       {me.history.length ? (
-        <ul className="recap">
+        <ul className="recap history">
           {me.history.map((h) => {
             const [y, m, d] = h.date.split("-");
             return (
               <li key={h.date}>
-                <span className="small">#{h.number}</span>
-                <span><span className="c">{+d}. {+m}. {y}.</span><br /><span className="a">{h.station}</span></span>
+                <span className="n">#{h.number}</span>
+                <span className="w"><span className="a">{h.station}</span><span className="c">{+d}. {+m}. {y}.</span></span>
                 <span className="k">{h.km} km</span>
               </li>
             );
