@@ -3,8 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { AnswerList, GameState, RoundView } from "@/server/game";
 import type { DayCompare } from "@/lib/compare";
-import type { SkinConfig } from "@/skins/types";
-import { formatShare, stationAt } from "@/lib/scoring";
+import type { SkinConfig, Station } from "@/skins/types";
+import { formatShare, landingAt, stationAt } from "@/lib/scoring";
 import { maps, withVisuals } from "@/skins/maps";
 import { setMuted, sfx, useMuted } from "@/lib/sound";
 import MapStage from "./MapStage";
@@ -337,10 +337,10 @@ function Ready({ n, cfg, position, perDay }: { n: number; cfg: SkinConfig; posit
 }
 
 function Reveal({ state, onNext }: { state: GameState; onNext: () => void }) {
-  const cfg = state.skin.config;
+  const cfg = withVisuals(state.skin.id, state.skin.config);
   const r = state.rounds[state.rounds.length - 1];
-  const before = stationAt(cfg, state.totalKm - r.km);
-  const after = stationAt(cfg, state.totalKm);
+  const before = landingAt(cfg, state.totalKm - r.km);
+  const after = landingAt(cfg, state.totalKm);
   const last = state.rounds.length >= state.perDay;
   return (
     <div className="stack">
@@ -358,7 +358,9 @@ function Reveal({ state, onNext }: { state: GameState; onNext: () => void }) {
           </div>
           <span className="km">+{r.km}</span>
         </div>
-        {after !== before && <p className="small">Prošao si: <b>{after.name}</b></p>}
+        {after !== before && (
+          <p className="small">{after === cfg.overshoot?.station ? `Preletio si ${cfg.stations[cfg.stations.length - 1].name} i završio u` : "Prošao si"}: <b>{after.name}</b></p>
+        )}
       </div>
       <div className="row">
         <button autoFocus onClick={onNext}>{last ? "Vidi dokle si stigao" : "Dalje"}</button>
@@ -386,9 +388,9 @@ function what(r: RoundView) {
 }
 
 function End({ state, me }: { state: GameState; me: Me | null }) {
-  const cfg = state.skin.config;
+  const cfg = withVisuals(state.skin.id, state.skin.config);
   const km = state.totalKm;
-  const st = stationAt(cfg, km);
+  const st = landingAt(cfg, km);
   const next = cfg.stations.find((s) => s.km > km);
   const first = cfg.stations[0];
   const [copied, setCopied] = useState("");
@@ -396,7 +398,7 @@ function End({ state, me }: { state: GameState; me: Me | null }) {
   useEffect(() => {
     api<Compare | null>("/api/game/compare").then(setCmp, () => setCmp(null));
   }, []);
-  const share = shareText(state, st.name, cmp?.ahead ?? null);
+  const share = shareText(state, st, cmp?.ahead ?? null);
   const onShare = () => {
     const copy = () =>
       navigator.clipboard.writeText(share).then(() => setCopied("Kopirano, zalijepi gdje želiš."), () => setCopied("Kopiraj ručno."));
@@ -446,14 +448,15 @@ function End({ state, me }: { state: GameState; me: Me | null }) {
 }
 
 /** Tekst za dijeljenje: naslov i km, ruta, usporedba, pa prijevoz po kategorijama u dva reda (bez oznaka brzine). */
-function shareText(state: GameState, town: string, ahead: number | null) {
+function shareText(state: GameState, town: Station, ahead: number | null) {
   const cfg = state.skin.config;
+  const flag = town.km > cfg.maxKm ? " 🙃" : state.totalKm >= cfg.maxKm ? " 🏁" : "";
   const km = state.totalKm;
   const half = Math.ceil(state.rounds.length / 2);
   const icons = state.rounds.map((r) => r.emoji);
   return [
     `Dokle? #${state.number} · ${km} km`,
-    `📍 ${cfg.stations[0].name} → ${town}${km >= cfg.maxKm ? " 🏁" : ""}`,
+    `📍 ${cfg.stations[0].name} → ${town.name}${flag}`,
     ...(ahead != null ? [`🏆 Dalje od ${ahead} % igrača`] : []),
     "",
     icons.slice(0, half).join(" "),

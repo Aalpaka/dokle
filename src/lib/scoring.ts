@@ -112,6 +112,23 @@ export function stationAt(cfg: SkinConfig, km: number): Station {
   return s;
 }
 
+/** Gdje je igrač završio, s easter eggom: preko overshoot.overKm to nije cilj nego postaja produžetka. */
+export function landingAt(cfg: SkinConfig, km: number): Station {
+  const o = cfg.overshoot;
+  return o && km > o.overKm ? o.station : stationAt(cfg, km);
+}
+
+/** Stanice rute na karti, s postajom produžetka na kraju. */
+export function routeStations(cfg: SkinConfig): Station[] {
+  return cfg.overshoot ? [...cfg.stations, cfg.overshoot.station] : cfg.stations;
+}
+
+/** Km na karti: do overKm najdalje cilj (višak se ne vidi), preko toga ravno do postaje produžetka. */
+export function routeKm(cfg: SkinConfig, km: number): number {
+  const o = cfg.overshoot;
+  return o && km > o.overKm ? o.station.km : Math.min(km, cfg.maxKm);
+}
+
 export function formatShare(s: number): string {
   if (s < 0.1) return "< 0,1 %";
   return (s >= 1 ? String(Math.round(s)) : s.toFixed(1).replace(".", ",")) + " %";

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { Route, project } from "./route";
 import { hrConfig } from "@/skins/hr/config";
 import { hrMap } from "@/skins/hr/map";
+import { routeStations } from "./scoring";
 
 describe("ruta na karti", () => {
   const route = new Route(hrConfig.stations, hrMap.via);
@@ -19,6 +20,14 @@ describe("ruta na karti", () => {
       const p = route.at(s.km), [x, y] = project(s.lon, s.lat);
       expect(Math.hypot(p.x - x, p.y - y)).toBeLessThan(0.5);
     }
+  });
+  it("produžetak u Crnu Goru završava u Budvi", () => {
+    const full = new Route(routeStations(hrConfig), [...hrMap.via, hrMap.overshootVia ?? []]);
+    const o = hrConfig.overshoot!.station, [x, y] = project(o.lon, o.lat);
+    const p = full.at(o.km), d = full.at(hrConfig.maxKm), [dx, dy] = project(18.09, 42.65);
+    expect(Math.hypot(p.x - x, p.y - y)).toBeLessThan(0.5);
+    expect(Math.hypot(d.x - dx, d.y - dy)).toBeLessThan(0.5);
+    expect(y).toBeLessThan(hrMap.image.y + hrMap.image.height);
   });
   it("km izvan rute se drže krajeva", () => {
     expect(route.at(-50)).toEqual(route.at(0));

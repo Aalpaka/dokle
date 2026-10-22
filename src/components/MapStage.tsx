@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { RoundView } from "@/server/game";
 import type { SkinConfig, SkinMap, Tier, Vehicle } from "@/skins/types";
-import { formatShare, stationAt } from "@/lib/scoring";
+import { formatShare, landingAt, routeKm, routeStations } from "@/lib/scoring";
 import { Route, project, type Pt } from "@/lib/route";
 import { sfx } from "@/lib/sound";
 import { MISS_COLOR, crashSign, vehicleIcons } from "./vehicleIcons";
@@ -44,9 +44,11 @@ function badgeHtml(t: Tier | null): { html: string; logo: boolean } {
 
 /** Karta s vozilom. S `ended` na kraju igre automatski jednom pusti replay cijelog puta. */
 export default function MapStage({ cfg, map, rounds, perDay, ended = false, inset = 0 }: { cfg: SkinConfig; map: SkinMap; rounds: RoundView[]; perDay: number; ended?: boolean; inset?: number }) {
-  const route = useMemo(() => new Route(cfg.stations, map.via), [cfg.stations, map.via]);
-  const stations = useMemo(() => cfg.stations.map((s) => project(s.lon, s.lat)), [cfg.stations]);
-  const fullRoad = useMemo(() => route.path(0, route.maxKm), [route]);
+  // ruta ide i do postaje produžetka (easter egg), ali cesta se do nje ne crta dok je netko ne prijeđe
+  const allStations = useMemo(() => routeStations(cfg), [cfg]);
+  const route = useMemo(() => new Route(allStations, [...map.via, map.overshootVia ?? []]), [allStations, map.via, map.overshootVia]);
+  const stations = useMemo(() => allStations.map((s) => project(s.lon, s.lat)), [allStations]);
+  const fullRoad = useMemo(() => route.path(0, cfg.maxKm), [route, cfg.maxKm]);
   // mjesta uz cestu sa znakom sudara: kopnena vozila tu se zabiju u prolazu
   const crashes = useMemo(() => map.landmarks.map((l) => ({ ...l, km: route.kmNear(l.lon, l.lat) })), [map.landmarks, route]);
 
@@ -69,7 +71,7 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
   insetRef.current = inset;
   const [hudKm, setHudKm] = useState(() => rounds.reduce((a, r) => a + r.km, 0));
   const [toast, setToast] = useState<Toast | null>(null);
-  const [arrival, setArrival] = useState<{ name: string; km: number; message: string; id: number } | null>(null);
+  const [arrival, setArrival] = useState<{ name: string; km: number; message: string; egg: boolean; id: number } | null>(null);
   const [replaying, setReplaying] = useState(false);
 
   // stanje simulacije; mijenja se u petlji animacije, ne kroz React
@@ -127,14 +129,14 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
   }
 
   function arrive(i: number, quiet: boolean) {
-    const s = cfg.stations[i], el = stationEls.current[i];
+    const s = allStations[i], el = stationEls.current[i];
     if (el) {
       el.classList.remove("pop");
       void el.offsetWidth;
       el.classList.add("pop");
     }
     if (quiet) return;
-    setArrival({ name: s.name, km: s.km, message: s.message, id: performance.now() });
+    setArrival({ name: s.name, km: s.km, message: s.message, egg: s === cfg.overshoot?.station, id: performance.now() });
     sfx.station();
   }
 
@@ -222,7 +224,7 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
       default:
         S.flip = 1;
     }
-    cfg.stations.forEach((s, i) => {
+    allStations.forEach((s, i) => {
       if (s.km > prev && s.km <= k) arrive(i, a.quiet);
     });
     if (a.tier.vehicle !== "plane" && a.tier.vehicle !== "heli")
@@ -246,10 +248,10 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
       let km = 0;
       for (const r of rounds) {
         const t = tierOf(cfg, r);
-        if (t) S.segments.push({ a: km, b: km + r.km, tier: t });
+        if (t) S.segments.push({ a: routeKm(cfg, km), b: routeKm(cfg, km + r.km), tier: t });
         km += r.km;
       }
-      S.km = Math.min(km, route.maxKm);
+      S.km = routeKm(cfg, km);
       const p = route.at(S.km);
       S.pos = p;
       S.cam = { x: p.x, y: p.y, w: 760 };
@@ -285,8 +287,8 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
     const b = badgeHtml(tier);
     const sp = r.speed ? ` · ${r.speed.emoji} ${r.speed.name} ×${String(r.speed.multiplier).replace(".", ",")}` : "";
     setToast({ color: tier.color, icon: b.html, logo: b.logo, title: `${r.canonical} · ${tier.name}`, sub: `${formatShare(r.share ?? 0)} igrača${sp}`, km: `+${r.km} km`, id });
-    const to = Math.min(route.maxKm, before + r.km);
-    const t = setTimeout(() => driveVia(tier, Math.min(before, route.maxKm), to, () => (to >= route.maxKm || isLast) && sfx.finish()), 350);
+    const to = routeKm(cfg, before + r.km);
+    const t = setTimeout(() => driveVia(tier, routeKm(cfg, before), to, () => (to >= cfg.maxKm || isLast) && sfx.finish()), 350);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rounds.length]);
@@ -324,7 +326,7 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
         setTimeout(next, 900);
         return;
       }
-      driveVia(t, Math.min(from, route.maxKm), Math.min(km, route.maxKm), () => setTimeout(next, 250), true);
+      driveVia(t, routeKm(cfg, from), routeKm(cfg, km), () => setTimeout(next, 250), true);
     };
     setTimeout(next, 700);
   }
@@ -422,7 +424,9 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
     if (el && !pins.current.some((x) => x.el === el)) pins.current.push({ el, p, ...opts });
   };
 
-  const cur = stationAt(cfg, hudKm);
+  const cur = landingAt(cfg, hudKm);
+  // na putu u Crnu Goru km na karti nisu stvarni km, pa se pokaže ukupno
+  const egg = cur === cfg.overshoot?.station;
   const ahead = cfg.stations.filter((s) => s.km > hudKm).slice(0, 3);
   const last = cfg.stations[cfg.stations.length - 1];
 
@@ -458,10 +462,10 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
             <span className="name">{l.name}</span>
           </div>
         ))}
-        {cfg.stations.map((s, i) => (
+        {allStations.map((s, i) => (
           <div
             key={s.name}
-            className={"stn" + (hudKm >= s.km ? " reached" : "") + (s === ahead[0] ? " next" : "")}
+            className={"stn" + (hudKm >= s.km ? " reached" : "") + (s === ahead[0] ? " next" : "") + (s === cfg.overshoot?.station ? " egg" : "")}
             ref={(el) => {
               if (el) stationEls.current[i] = el;
               pin(stations[i])(el);
@@ -479,12 +483,14 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
       <div className="hud tl">
         <div className="now">
           {cur.name}
-          <small>{hudKm} km od {cfg.stations[0].genitive ?? cfg.stations[0].name}</small>
+          <small>{hudKm > cfg.maxKm ? rounds.reduce((a, r) => a + r.km, 0) : hudKm} km od {cfg.stations[0].genitive ?? cfg.stations[0].name}</small>
         </div>
       </div>
       <div className="hud tr">
         <div className="signboard">
-          {ahead.length ? (
+          {egg ? (
+            <div><span>Cilj! <s>{last.name}</s></span><span>🙃</span></div>
+          ) : ahead.length ? (
             ahead.map((s) => (
               <div key={s.name}><span>{s.name}</span><span>{s.km - hudKm} km</span></div>
             ))
@@ -513,7 +519,7 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
       </div>
       {arrival && (
         <div className="stationmsg" key={arrival.id}>
-          <small>Stigao si · {arrival.km} km</small>
+          <small>{arrival.egg ? `Preletio si ${last.name}` : `Stigao si · ${arrival.km} km`}</small>
           <b>{arrival.name}</b>
           <p>{arrival.message}</p>
         </div>

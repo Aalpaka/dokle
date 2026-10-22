@@ -33,6 +33,8 @@ export type SkinMap = {
   // središte i širina pogleda "Cijela ruta" u koordinatama karte
   overview: { x: number; y: number; width: number; height: number };
   credit: string;
+  // cesta od cilja do postaje produžetka (overshoot), crta se tek kad se vozi
+  overshootVia?: [number, number][];
 };
 
 export type SkinConfig = {
@@ -43,6 +45,8 @@ export type SkinConfig = {
   groups: Record<string, string>; // id grupe -> naziv za prikaz
   maxKm: number;
   stations: Station[];
+  // easter egg: tko skupi više od overKm, ne stane na cilju nego produži do ove postaje (izvan rute i usporedbe)
+  overshoot?: { overKm: number; station: Station };
   tiers: Tier[]; // sortirano od najčešćeg prema najrjeđem
   speed: SpeedStep[]; // sortirano po maxSeconds, zadnji bez granice
   miss: { km: number; emoji: string; name: string };

@@ -134,6 +134,8 @@ button:disabled { opacity: .5; cursor: default; }
 .stn.next i { transform: scale(1.35); box-shadow: 0 0 0 2.5px var(--sign), 0 0 0 7px #0a6a3b40; }
 .stn.next span { color: var(--sign); font-size: 15px; }
 .stn.pop i { animation: pop .7s ease-out; }
+/* postaja produžetka (easter egg) vidi se tek kad netko do nje stigne */
+.stn.egg:not(.reached) { display: none; }
 @keyframes pop { 0% { transform: scale(1); } 35% { transform: scale(2.2); } 100% { transform: scale(1); } }
 .veh { width: 0; height: 0; }
 .veh .badge {
