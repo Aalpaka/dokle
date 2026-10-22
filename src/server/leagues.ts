@@ -142,7 +142,15 @@ async function finishedGames(skin: Skin, playerIds: string[], from?: string) {
     );
 }
 
-export type LeagueSummary = { code: string; name: string; members: number; rank: number; isOwner: boolean };
+export type LeagueSummary = {
+  code: string;
+  name: string;
+  members: number;
+  rank: number; // moje mjesto ovaj tjedan
+  myKm: number;
+  leader: { nickname: string; km: number } | null; // prvi ovaj tjedan, ako je itko igrao
+  isOwner: boolean;
+};
 
 /** Lige igrača s njegovim mjestom u tekućem tjednu. */
 export async function myLeagues(skin: Skin, playerId: string): Promise<LeagueSummary[]> {
@@ -159,11 +167,14 @@ export async function myLeagues(skin: Skin, playerId: string): Promise<LeagueSum
     const from = periodStart("week", today, today);
     const table = computeStandings(members, await finishedGames(skin, members.map((m) => m.playerId), from), from, today);
     const meId = members.find((m) => m.playerId === playerId)?.memberId;
+    const myRow = table.find((r) => r.memberId === meId);
     out.push({
       code: l.code,
       name: l.name,
       members: members.length,
-      rank: table.find((r) => r.memberId === meId)?.rank ?? 0,
+      rank: myRow?.rank ?? 0,
+      myKm: myRow?.km ?? 0,
+      leader: table[0]?.km ? { nickname: table[0].nickname, km: table[0].km } : null,
       isOwner: l.ownerId === playerId,
     });
   }

@@ -170,7 +170,7 @@ function Landing({ state, cfg, me, onStart }: { state: GameState; cfg: SkinConfi
     <div className="landing">
       <div className="landing-bg" aria-hidden="true" />
       <header className="landing-top">
-        <span className="meta"><b>#{state.number}</b> · {+d}. {+m}. {y}.</span>
+        <span className="meta"><b>#{state.number}</b> · {+d}. {+m}.<span className="wide"> {y}.</span></span>
         <div className="spacer" />
         <MuteButton />
         <AccountLink me={me} />
@@ -203,7 +203,6 @@ function Landing({ state, cfg, me, onStart }: { state: GameState; cfg: SkinConfi
             <li><span className="k">📅</span><span>kategorije su svaki dan iste za sve, nova ruta u ponoć</span></li>
           </ul>
         </details>
-        {me?.user && <a className="landing-leagues" href="/lige">🏆 Lige: tvoje mjesto ovaj tjedan</a>}
       </main>
     </div>
   );
