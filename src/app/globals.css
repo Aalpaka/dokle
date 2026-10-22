@@ -107,8 +107,8 @@ button:disabled { opacity: .5; cursor: default; }
 .stage svg.map { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .map .river { fill: none; stroke: #5d9fc6; stroke-width: 1.4; vector-effect: non-scaling-stroke; opacity: .75; }
 .map .border { fill: none; stroke: #5e5141; stroke-width: 1.2; stroke-dasharray: 5 3; vector-effect: non-scaling-stroke; opacity: .55; }
-/* sporna granica (Srbija–Kosovo): sitne točkice umjesto crtica */
-.map .border.dashed { stroke-width: 1.6; stroke-dasharray: 1 4; stroke-linecap: round; }
+/* sporna granica (Srbija–Kosovo): jača, crvena i isprekidana, da se vidi i preko obojanog Kosova */
+.map .border.dashed { stroke: #c0392b; stroke-width: 2.4; stroke-dasharray: 7 5; stroke-linecap: round; opacity: .9; }
 .map .road-casing { fill: none; stroke: #fff; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; opacity: .85; }
 .map .road { fill: none; stroke: #6f7a7d; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 2 6; vector-effect: non-scaling-stroke; }
 .map .ferry { fill: none; stroke: #fff; stroke-width: 3; stroke-dasharray: 3 5; stroke-linecap: round; vector-effect: non-scaling-stroke; }
