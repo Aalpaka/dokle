@@ -8,6 +8,7 @@ import { hrKategorije } from "./kategorije/hr";
 import { kvizKategorije } from "./kategorije/kviz";
 import { opceKategorije } from "./kategorije/opce";
 import { prosirenja } from "./kategorije/prosirenja";
+import { wikipedija } from "./kategorije/wikipedija";
 import { zaigranoKategorije } from "./kategorije/zaigrano";
 
 export type SeedCategory = { slug: string; group: string; title: string; hint?: string; strip: string[]; answers: string };
@@ -41,7 +42,19 @@ export const hrCategories: SeedCategory[] = [
   ...opceKategorije,
   ...zaigranoKategorije,
   ...kvizKategorije,
-].map(withRare);
+].map(withWiki).map(withRare);
+
+function format(list: ReturnType<typeof parseSeedAnswers>) {
+  return list.map((a) => `${[a.canonical, ...a.variants].join("/")}=${a.share}${a.rare ? "!" : ""}`).join(";");
+}
+
+/** Udjeli dorađeni Wikipedia pregledima (wikipedija.ts) zamjenjuju ručne procjene. */
+function withWiki(c: SeedCategory): SeedCategory {
+  const shares = wikipedija[c.slug];
+  if (!shares) return c;
+  const list = parseSeedAnswers(c.answers).map((a) => (shares[a.canonical] ? { ...a, share: shares[a.canonical] } : a));
+  return { ...c, answers: format(list) };
+}
 
 /** Označi najrjeđe odgovore iz helikopter.ts ("!" iza udjela); kojih još nema, dodaju se. */
 function withRare(c: SeedCategory): SeedCategory {
@@ -54,5 +67,5 @@ function withRare(c: SeedCategory): SeedCategory {
     if (a) Object.assign(a, { share: Math.min(a.share, RARE_MAX), rare: true });
     else list.push({ canonical, variants, share: RARE_PRIOR, rare: true });
   }
-  return { ...c, answers: list.map((a) => `${[a.canonical, ...a.variants].join("/")}=${a.share}${a.rare ? "!" : ""}`).join(";") };
+  return { ...c, answers: format(list) };
 }

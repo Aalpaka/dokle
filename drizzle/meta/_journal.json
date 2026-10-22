@@ -29,6 +29,13 @@
       "when": 1792593111796,
       "tag": "0003_rare_answers",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792654097459,
+      "tag": "0004_wiki_priors",
+      "breakpoints": true
     }
   ]
 }
