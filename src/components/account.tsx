@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { supabaseBrowser } from "@/lib/supabase/client";
 import type { PlayerStats } from "@/lib/stats";
 
@@ -47,15 +48,35 @@ export function GoogleButton({ label = "Prijavi se s Googleom", className }: { l
   );
 }
 
-/** Desni kut zaglavlja: nadimak s linkom na profil ili gumb za prijavu. */
+/** Desni kut zaglavlja: za prijavljene lige i nadimak (link na profil), inače gumb za prijavu. */
 export function AccountLink({ me }: { me: Me | null }) {
+  const path = usePathname();
   if (!me?.authEnabled) return null;
   if (me.user)
     return (
-      <a className="acct" href="/profil">
-        {me.user.nickname ?? "Profil"}
-        {me.stats && me.stats.currentStreak > 0 && <span> · 🔥 {me.stats.currentStreak}</span>}
-      </a>
+      <nav className="acct-nav" aria-label="Račun">
+        <a className="acct" href="/lige" aria-current={path.startsWith("/lig") ? "page" : undefined} title="Lige">
+          <span>🏆</span><span className="wide">Lige</span>
+        </a>
+        <a className="acct" href="/profil" aria-current={path === "/profil" ? "page" : undefined}>
+          <span className="nm">{me.user.nickname ?? "Profil"}</span>
+          {me.stats && me.stats.currentStreak > 0 && <span className="wide">· 🔥 {me.stats.currentStreak}</span>}
+        </a>
+      </nav>
     );
   return <GoogleButton label="Prijava" className="ghost small-btn" />;
+}
+
+/** Okvir za stranice izvan igre (profil, lige): isto zaglavlje i ista širina kao glavna stranica. */
+export function PageShell({ me, children }: { me: Me | null; children: React.ReactNode }) {
+  return (
+    <div className="wrap">
+      <header className="top">
+        <a href="/" className="plate" style={{ textDecoration: "none" }}>Dokle?</a>
+        <div className="spacer" />
+        <AccountLink me={me} />
+      </header>
+      {children}
+    </div>
+  );
 }
