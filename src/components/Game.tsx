@@ -197,7 +197,7 @@ function Landing({ state, cfg, me, onStart }: { state: GameState; cfg: SkinConfi
           <ul className="rules">
             <li><span className="k">{cfg.secondsPerCategory}s</span><span>po kategoriji, vrijeme kreće odmah, Enter šalje odgovor</span></li>
             <li><span className="k">1×</span><span>jedan odgovor; ako ga nemamo na popisu, probaj opet dok traje vrijeme</span></li>
-            <li><span className="k">⚡</span><span>{cfg.speed.filter((s) => s.emoji).map((s) => `${s.emoji} ${speedRange(cfg.speed, cfg.speed.indexOf(s))} ×${String(s.multiplier).replace(".", ",")}`).join(" · ")}</span></li>
+            <li><span className="k">⚡</span><span>što brže odgovoriš, to više km; ako se predugo misliš, dobiješ malo manje</span></li>
             <li><span className="k">{cfg.miss.emoji}</span><span>bez odgovora: {cfg.miss.name.toLowerCase()}, 0 km</span></li>
             <li><span className="k">📅</span><span>kategorije su svaki dan iste za sve, nova ruta u ponoć</span></li>
           </ul>
@@ -378,12 +378,6 @@ function iconFor(cfg: SkinConfig, r: RoundView) {
   return t?.badge ?? t?.icon ?? r.icon;
 }
 
-function speedRange(steps: SkinConfig["speed"], i: number) {
-  const max = steps[i].maxSeconds, prev = steps[i - 1]?.maxSeconds;
-  if (max === undefined) return `sporije od ${prev} s`;
-  return prev === undefined ? `do ${max} s` : `${prev}–${max} s`;
-}
-
 function what(r: RoundView) {
   if (r.canonical) return <><b>{r.canonical}</b> · {formatShare(r.share ?? 0)} igrača</>;
   if (r.raw) return <>„{r.raw}” nije na našem popisu.</>;
@@ -401,10 +395,14 @@ function End({ state, me }: { state: GameState; me: Me | null }) {
   useEffect(() => {
     api<Compare | null>("/api/game/compare").then(setCmp, () => setCmp(null));
   }, []);
-  const share =
-    `Dokle? #${state.number}\n${state.rounds.map((r) => r.emoji + (r.speed?.emoji ?? "")).join(" ")}\n${first.name} → ${st.name} · ${km} km` +
-    (cmp?.ahead != null ? `\nDalje od ${cmp.ahead} % igrača` : "") +
-    (km >= cfg.maxKm ? `\nStigao sam u ${st.name}! 🏝️` : "");
+  const share = shareText(state, st.name, cmp?.ahead ?? null);
+  const onShare = () => {
+    const copy = () =>
+      navigator.clipboard.writeText(share).then(() => setCopied("Kopirano, zalijepi gdje želiš."), () => setCopied("Kopiraj ručno."));
+    // na mobitelu otvori izbornik za dijeljenje, na računalu samo kopiraj
+    if (navigator.share && matchMedia("(pointer: coarse)").matches) navigator.share({ text: share }).catch((e) => { if (e?.name !== "AbortError") copy(); });
+    else copy();
+  };
   return (
     <div className="stack">
       <span className="eyebrow">Kraj puta za danas</span>
@@ -423,13 +421,7 @@ function End({ state, me }: { state: GameState; me: Me | null }) {
       </ul>
       <pre className="share">{share}</pre>
       <div className="row">
-        <button
-          onClick={() =>
-            navigator.clipboard.writeText(share).then(() => setCopied("Kopirano."), () => setCopied("Kopiraj ručno."))
-          }
-        >
-          Kopiraj rezultat
-        </button>
+        <button onClick={onShare}>Podijeli rezultat</button>
         <span className="small">{copied}</span>
       </div>
       {me?.authEnabled && !me.user && (
@@ -447,6 +439,24 @@ function End({ state, me }: { state: GameState; me: Me | null }) {
       <Countdown timezone={state.skin.timezone} />
     </div>
   );
+}
+
+/** Tekst za dijeljenje: naslov i km, ruta, usporedba, pa prijevoz po kategorijama u dva reda (bez oznaka brzine). */
+function shareText(state: GameState, town: string, ahead: number | null) {
+  const cfg = state.skin.config;
+  const km = state.totalKm;
+  const half = Math.ceil(state.rounds.length / 2);
+  const icons = state.rounds.map((r) => r.emoji);
+  return [
+    `Dokle? #${state.number} · ${km} km`,
+    `📍 ${cfg.stations[0].name} → ${town}${km >= cfg.maxKm ? " 🏁" : ""}`,
+    ...(ahead != null ? [`🏆 Dalje od ${ahead} % igrača`] : []),
+    "",
+    icons.slice(0, half).join(" "),
+    icons.slice(half).join(" "),
+    "",
+    location.origin,
+  ].join("\n");
 }
 
 type Compare = DayCompare & { mine: number };
