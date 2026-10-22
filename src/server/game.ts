@@ -400,12 +400,14 @@ export async function answerList(skin: Skin, playerId: string, position: number)
   const game = await findGame(playerId, puzzle.id);
   if (categoryId === undefined || !game?.finishedAt) return null;
   const [mine] = await db
-    .select({ canonical: answers.canonical })
+    .select({ answerId: rounds.answerId, canonical: answers.canonical, tier: rounds.tier, share: rounds.share })
     .from(rounds)
     .innerJoin(answers, eq(answers.id, rounds.answerId))
     .where(and(eq(rounds.gameId, game.id), eq(rounds.position, position)));
   const cat = await getCategory(categoryId);
-  const all = await categoryShares(skin, puzzle.id, categoryId);
+  // svoj odgovor igrač vidi s prijevozom koji je dobio, i kad je odgovor od tada promijenio prijevoz
+  const got = mine?.tier ? baseTier(skin.config, mine.tier, mine.share) : null;
+  const all = (await categoryShares(skin, puzzle.id, categoryId)).map((a) => (got && a.id === mine.answerId ? { ...a, tier: got } : a));
   return {
     position,
     title: cat.title,

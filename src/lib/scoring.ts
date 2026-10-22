@@ -3,19 +3,35 @@ import type { SkinConfig, SpeedStep, Station, Tier } from "@/skins/types";
 /**
  * Udio igrača (%) za odgovor: procjena pomiješana sa stvarnim brojevima.
  * priorWeight (k) = koliko igrača procjena "vrijedi"; s više stvarnih igrača prevladavaju stvarni podaci.
+ * Uz k = 500 nekoliko ranih igrača odgovor pomakne najviše za prijevoz-dva, a ne iz aviona u Bajs.
  */
 export function blendedShare(prior: number, count: number, total: number, k: number): number {
   return (k * prior + 100 * count) / (k + total);
 }
 
-/** Koliko najčešćih odgovora kategorije uvijek ide prvim tierom (pješice): 2, 3 ili 4 po veličini kategorije. */
-export function commonCount(answers: number): number {
-  return answers >= 80 ? 4 : answers >= 40 ? 3 : 2;
+/**
+ * Koliko odgovora pitanja ide u svaki obični prijevoz po rangu (od najčešćeg); zadnji obični (avion) dobiva ostatak.
+ * Pješice 5 %, Bajs 7 % i HŽ 11 % (najviše 6, 8 i 11), a Pješice i Bajs zajedno bar 10 (u pitanjima ispod 50 odgovora
+ * razmjerno manje); Čazmatrans 11 % i Rimac 18 %. Npr. 60 odgovora: 3/7/7/7/11, 100: 5/7/11/11/18, 150: 6/8/11/17/27.
+ */
+const RANK_TIERS: { part: number; min: number; max?: number }[] = [
+  { part: 0.05, min: 2, max: 6 },
+  { part: 0.07, min: 1, max: 8 },
+  { part: 0.11, min: 3, max: 11 },
+  { part: 0.11, min: 3 },
+  { part: 0.18, min: 3 },
+];
+const COMMON_MIN = 10;
+
+export function tierSizes(answers: number): number[] {
+  const out = RANK_TIERS.map((t) => Math.min(Math.max(Math.round(t.part * answers), t.min), t.max ?? Infinity));
+  out[1] = Math.max(out[1], Math.round(COMMON_MIN * Math.min(1, answers / 50)) - out[0]);
+  return out;
 }
 
 /**
- * Tier po udjelu. `common` = odgovor je među najčešćima kategorije (commonCount) i uvijek dobiva prvi tier;
- * odgovor označen kao najrjeđi (`rare`) umjesto najrjeđeg običnog tiera dobiva poseban tier.
+ * Tier po udjelu (za stare partije i procjene u adminu; u igri tier ide po rangu, vidi assignTiers).
+ * `common` = uvijek prvi tier; odgovor označen kao najrjeđi (`rare`) umjesto najrjeđeg običnog tiera dobiva poseban tier.
  */
 type TierLike = Pick<Tier, "minShare" | "rare">;
 
@@ -52,18 +68,17 @@ export const RARE_LOSE = { minPlayers: 10, minShare: 2 };
 
 /**
  * Tierovi za sve odgovore kategorije (sortirane od najčešćeg; `n` = koliko ih je taj dan dalo).
- * - Najčešći idu pješice (commonCount).
  * - Helikopter: označeni najrjeđi odgovori, osim ako ga je taj dan dalo puno igrača (RARE_LOSE). Uvijek ih je
  *   bar rareCount; što fali, popune najrjeđi ostali odgovori.
- * - Ostali po udjelu, a nijedan obični tier ne ostaje prazan: u prazan se podigne najčešći iz rjeđih
- *   (ili, kad rjeđih nema, spusti najrjeđi iz češćeg).
+ * - Ostali po rangu: prvih nekoliko pješice, pa Bajs, HŽ... koliko kojih, kaže tierSizes; avion dobiva ostatak.
  */
 export function assignTiers<T extends TierLike>(cfg: { tiers: T[] }, answers: { share: number; rare?: boolean; n?: number }[]): T[] {
   const normal = cfg.tiers.filter((t) => !t.rare);
   const heli = cfg.tiers.find((t) => t.rare);
-  const top = commonCount(answers.length);
-  const out = answers.map((a, i) => tierFor(cfg, a.share, false, i < top));
+  const sizes = tierSizes(answers.length);
+  const out: (T | undefined)[] = answers.map(() => undefined);
   if (heli) {
+    const top = sizes[0];
     const lost = (a: { share: number; n?: number }) => (a.n ?? 0) >= RARE_LOSE.minPlayers && a.share >= RARE_LOSE.minShare;
     answers.forEach((a, i) => {
       if (a.rare && i >= top && !lost(a)) out[i] = heli;
@@ -71,20 +86,13 @@ export function assignTiers<T extends TierLike>(cfg: { tiers: T[] }, answers: { 
     for (let i = answers.length - 1; i >= top && out.filter((t) => t === heli).length < rareCount(answers.length); i--)
       if (out[i] !== heli && !lost(answers[i])) out[i] = heli;
   }
-  const level = (t: T) => (t.rare ? -1 : normal.indexOf(t));
-  const count = (k: number) => out.filter((t) => level(t) === k).length;
-  for (let k = 1; k < normal.length; k++) {
-    if (count(k)) continue;
-    const i = out.findIndex((t) => level(t) > k);
-    if (i >= 0) out[i] = normal[k];
-  }
-  // ako ni nakon toga nema rjeđih (npr. sve članice EU-a su česte), najrjeđi iz češćeg tiera ide dolje
-  for (let k = normal.length - 1; k > 0; k--) {
-    if (count(k)) continue;
-    const i = out.findLastIndex((t) => level(t) > 0 && level(t) < k && count(level(t)) > 1);
-    if (i >= 0) out[i] = normal[k];
-  }
-  return out;
+  let k = 0, used = 0;
+  return out.map((t) => {
+    if (t) return t;
+    while (k < normal.length - 1 && used >= sizes[k]) [k, used] = [k + 1, 0];
+    used++;
+    return normal[k];
+  });
 }
 
 /** Km za tier: km tiera puta množitelj brzine, zaokruženo. */

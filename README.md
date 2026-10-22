@@ -32,7 +32,9 @@ Promjena sheme: uredi `src/db/schema.ts`, pa `npm run db:generate` (nova migraci
   25 s (+2,5 s tolerancije) boduje se kao isteklo vrijeme.
 - **Svaki upis se sprema** u `attempts`, i odbijeni, za statistike i admin pregled.
 - **Rijetkost**: procjena iz seeda pomiješana sa stvarnim odgovorima tog dana,
-  `udio = (k * procjena + 100 * broj) / (k + ukupno)`, k = 50 (`src/lib/scoring.ts`).
+  `udio = (k * procjena + 100 * broj) / (k + ukupno)`, k = 500 (`src/lib/scoring.ts`). Prijevoz ide po rangu
+  odgovora u pitanju (`tierSizes`): Pješice 5 %, Bajs 7 %, HŽ 11 % (Pješice i Bajs zajedno bar 10), Čazmatrans 11 %,
+  Rimac 18 %, ostalo Croatia Airlines; najrjeđi označeni odgovori su helikopter.
 - **Dnevna zagonetka** se slaže sama pri prvom zahtjevu dana (najdulje nekorištene kategorije po
   rasporedu grupa iz skina). Dan počinje u ponoć po zagrebačkom vremenu.
 - **Igrači**: igra radi bez prijave (kolačić `dokle_pid`). Google prijava ide preko Supabase Autha

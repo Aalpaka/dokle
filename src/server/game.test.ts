@@ -1,7 +1,7 @@
 import { afterAll, describe, expect, it } from "vitest";
 import { and, desc, eq, inArray } from "drizzle-orm";
 import { db, sql } from "@/db";
-import { answers, categories, games, players } from "@/db/schema";
+import { answers, categories, games, players, rounds } from "@/db/schema";
 import { answerList, ensurePlayer, getSkin, startNext, submitAnswer } from "./game";
 
 // Integracijski test nad lokalnom bazom (npm run db:migrate && npm run db:seed).
@@ -72,5 +72,37 @@ describe.skipIf(!process.env.DATABASE_URL)("svi odgovori nakon igre", () => {
     const round = r.state.rounds[0];
     expect(round.tier).toBe("Milanovićev helikopter");
     expect(round.km).toBeGreaterThanOrEqual(150 * 0.9);
+  });
+
+  it("u popisu svoj odgovor ima prijevoz koji je dobio, i kad se od tada promijenio", async () => {
+    const skin = await getSkin("hr");
+    const id = crypto.randomUUID();
+    ids.push(id);
+    await ensurePlayer(id);
+    let state = await startNext(skin, id);
+    const [top] = await db
+      .select({ canonical: answers.canonical })
+      .from(answers)
+      .innerJoin(categories, eq(categories.id, answers.categoryId))
+      .where(and(eq(categories.skinId, "hr"), eq(categories.title, state.current!.category.title)))
+      .orderBy(desc(answers.priorShare))
+      .limit(1);
+    let first = true;
+    while (state.phase !== "end") {
+      const r = await submitAnswer(skin, id, first ? top.canonical : "zzqx nema", true);
+      if (r.status !== "scored") throw new Error(r.status);
+      first = false;
+      state = r.state.phase === "end" ? r.state : await startNext(skin, id);
+    }
+
+    // kao da je odgovor u međuvremenu promijenio prijevoz: igrač je dobio drugi od onoga koji sad vrijedi
+    const now = (await answerList(skin, id, 0))!.answers.find((a) => a.canonical === top.canonical)!.tier;
+    const got = skin.config.tiers.find((t) => !t.rare && t.name !== now)!;
+    const [game] = await db.select({ id: games.id }).from(games).where(eq(games.playerId, id));
+    await db.update(rounds).set({ tier: got.name }).where(and(eq(rounds.gameId, game.id), eq(rounds.position, 0)));
+
+    const list = (await answerList(skin, id, 0))!;
+    expect(list.mine).toBe(top.canonical);
+    expect(list.answers.find((a) => a.canonical === top.canonical)).toMatchObject({ tier: got.name, km: got.km });
   });
 });
