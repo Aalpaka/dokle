@@ -5,6 +5,7 @@ import { baContent } from "./ba/kategorije";
 import { rsContent } from "./rs/kategorije";
 import { parseSeedAnswers } from "@/lib/matcher";
 import { codeConfigs, maps } from "./maps";
+import { baBorder } from "./ba/mapGeo";
 import { SKIN_IDS, switchPath } from "./meta";
 import { Route } from "@/lib/route";
 import { dictionaries, translate } from "@/i18n";
@@ -36,6 +37,23 @@ describe("skinovi", () => {
     expect(cfg.overshoot).toBeUndefined();
     expect(maps[id].heliClip).toBeFalsy();
     expect(maps[id].landmarks.some((l) => l.kind === "crash")).toBe(false);
+  });
+
+  it("ruta BiH ne izlazi iz granica države", () => {
+    const polys = baBorder.split("M").filter(Boolean).map((d) => d.replace(/Z/g, "").split("L").map((p) => p.split(",").map(Number)));
+    const inside = (x: number, y: number) => {
+      let c = false;
+      for (const poly of polys)
+        for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+          const [xi, yi] = poly[i], [xj, yj] = poly[j];
+          if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) c = !c;
+        }
+      return c;
+    };
+    const r = new Route(codeConfigs.ba.stations, maps.ba.via);
+    const out = [];
+    for (let k = 0; k <= codeConfigs.ba.maxKm; k += 2) if (!inside(r.at(k).x, r.at(k).y)) out.push(k);
+    expect(out).toEqual([]);
   });
 
   it("Srbija prolazi kroz Kosovo bez stajanja, s natpisom", () => {
