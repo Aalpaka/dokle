@@ -3,6 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { assignTiers, priorForTier, tierFor } from "@/lib/scoring";
 import Modal from "./Modal";
+import { AccountLink, useMe } from "./account";
 
 async function api<T>(path: string, method = "GET", body?: unknown): Promise<T> {
   const res = await fetch(path, {
@@ -119,11 +120,14 @@ export default function Admin() {
 }
 
 function AdminShell({ children }: { children: React.ReactNode }) {
+  const me = useMe();
   return (
     <div className="wrap">
       <header className="top">
         <a href="/" className="plate" style={{ textDecoration: "none" }}>Dokle?</a>
         <span className="eyebrow">Admin</span>
+        <div className="spacer" />
+        <AccountLink me={me} />
       </header>
       {children}
     </div>
