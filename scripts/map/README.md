@@ -32,3 +32,9 @@ Skripte su parametrizirane (pokreću se iz mape s pločicama i `node_modules` ka
 3. `python3 relief_skin.py ba ba-reljef.jpg`; za Srbiju se Kosovo boja djelomično:
    `node vec_skin.mjs ks 16.2 46.5 25.6 41.6 "Kosovo" ""` pa `python3 relief_skin.py rs rs-reljef.jpg rings_ks.json 0.6`.
 4. Granicu i rijeke prepisati u `src/skins/<skin>/mapGeo.ts`, a obuhvat slike u `image` u `src/skins/<skin>/map.ts`.
+
+## Okolica (`*-okolica.jpg`)
+Šira karta manje rezolucije ispod glavne (`backdrop` u `map.ts`), da se kod "cijele rute" ne vide prazni rubovi.
+Pločice za lon 8,5–30 i lat 39,8–48,6, pa npr. `node vec_skin.mjs baw 11.5 47.6 23.5 40.3 "Bosnia and Herz." ""` i
+`SCALE=0.4 python3 relief_skin.py baw ba-okolica.jpg` (Srbija s `"Kosovo"` kao gore, Hrvatska `hrw 8.6 48.5 25 40.0 "Croatia"`).
+

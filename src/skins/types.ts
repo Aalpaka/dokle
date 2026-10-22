@@ -22,6 +22,8 @@ export type SpeedStep = { maxSeconds?: number; multiplier: number; emoji: string
 // Karta skina; živi u klijentskom kodu (src/skins/maps.ts), ne šalje se u stanju igre
 export type SkinMap = {
   image: { href: string; x: number; y: number; width: number; height: number };
+  // šira karta manje rezolucije ispod glavne, da se kod "cijele rute" vidi i okolica umjesto praznih rubova
+  backdrop?: { href: string; x: number; y: number; width: number; height: number };
   // međutočke rute [lon, lat] za svaku dionicu između dviju stanica
   via: [number, number][][];
   ferries: { name: string; from: [number, number]; to: [number, number] }[];
