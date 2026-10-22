@@ -514,8 +514,8 @@ function CompareChart({ c, cfg }: { c: Compare; cfg: SkinConfig }) {
         </div>
       </div>
       <p className="cmp-key">
-        <span><i className="behind" />{c.behind} iza tebe</span>
-        <span><i className="front" />{c.players - 1 - c.behind} ispred tebe</span>
+        <span><i className="behind" />iza tebe</span>
+        <span><i className="front" />ispred tebe</span>
       </p>
       <p className="small">
         Završenih partija danas: <b>{c.players}</b> · prosjek {c.avgKm} km ({avgAt.name}) · najdalje {c.bestKm} km ({c.bestTown})
