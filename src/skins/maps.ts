@@ -15,6 +15,7 @@ export function withVisuals(skinId: string, cfg: SkinConfig): SkinConfig {
   const code = codeConfigs[skinId] ?? hrConfig;
   return {
     ...cfg,
+    overshoot: cfg.overshoot ?? code.overshoot,
     tiers: cfg.tiers.map((t, i) => {
       const c = code.tiers.find((x) => x.name === t.name) ?? code.tiers[Math.min(i, code.tiers.length - 1)];
       return { ...t, vehicle: t.vehicle ?? c.vehicle, color: t.color ?? c.color, badge: t.badge ?? c.badge, icon: t.icon ?? c.icon };

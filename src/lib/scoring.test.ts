@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { assignTiers, blendedShare, priorForTier, scoreKm, speedFor, stationAt, tierFor, tierSizes } from "./scoring";
+import { assignTiers, blendedShare, priorForTier, scoreKm, speedFor, stationAt, tierFor, tierSizes, landingAt, routeKm } from "./scoring";
 import { dayNumber, localDate } from "./day";
 import { hrConfig } from "@/skins/hr/config";
 
@@ -74,6 +74,18 @@ describe("scoring", () => {
     expect(stationAt(hrConfig, 540).name).toBe("Pula");
     expect(stationAt(hrConfig, 1200).name).toBe("Dubrovnik");
     expect(stationAt(hrConfig, 1290).name).toBe("Dubrovnik");
+  });
+  it("preko Dubrovnika u Crnu Goru (easter egg)", () => {
+    const allPlanes = 8 * scoreKm(hrConfig, 0, 0).km;
+    expect(landingAt(hrConfig, hrConfig.maxKm).name).toBe("Dubrovnik");
+    expect(landingAt(hrConfig, allPlanes).name).toBe("Dubrovnik");
+    expect(landingAt(hrConfig, 7 * scoreKm(hrConfig, 0, 0).km + scoreKm(hrConfig, 0, 0, true).km).name).toBe("Dubrovnik");
+    expect(landingAt(hrConfig, 1350).name).toBe("Dubrovnik");
+    expect(landingAt(hrConfig, 1351).name).toBe("Budva");
+    expect(stationAt(hrConfig, 1400).name).toBe("Dubrovnik");
+    expect(routeKm(hrConfig, 1250)).toBe(hrConfig.maxKm);
+    expect(routeKm(hrConfig, 1400)).toBe(hrConfig.overshoot!.station.km);
+    expect(routeKm(hrConfig, 600)).toBe(600);
   });
   it("brzina", () => {
     expect(speedFor(hrConfig, 3000).multiplier).toBe(1.3);

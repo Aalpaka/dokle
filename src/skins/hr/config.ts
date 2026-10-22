@@ -24,6 +24,12 @@ export const hrConfig: SkinConfig = {
     { name: "Ston", genitive: "Stona", km: 1070, lon: 17.7, lat: 42.84, message: "Kamenice i zidine, Dubrovnik se već vidi.", labelOffset: [-28, 16] },
     { name: "Dubrovnik", genitive: "Dubrovnika", dative: "Dubrovniku", km: 1200, lon: 18.09, lat: 42.65, message: "Stradun! Stigao si do kraja puta.", labelOffset: [-58, 14], alwaysLabel: true },
   ],
+  // svi avioni munjevito = 8 × 163 = 1304 km i to je još Dubrovnik, a i s jednim helikopterom (najviše 1336);
+  // preko 1350 treba bar dva munjevita helikoptera, pa te otfura u Crnu Goru
+  overshoot: {
+    overKm: 1350,
+    station: { name: "Budva", genitive: "Budve", km: 1351, lon: 18.84, lat: 42.29, message: "Vjerojatno si varalica pa ne zaslužuješ u Dubrovnik.", labelOffset: [8, 4] },
+  },
   // prijevoz u igri ide po rangu odgovora u pitanju (tierSizes); minShare služi za procjene u adminu i stare partije
   tiers: [
     { minShare: 20, km: 10, emoji: "🚶", name: "Pješice", vehicle: "walk", color: "#8a6d52" },
