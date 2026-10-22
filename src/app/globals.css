@@ -537,3 +537,6 @@ details.answers[open] > summary { margin-bottom: 14px; }
 .day-rounds b { overflow-wrap: anywhere; }
 .day-rounds .km { font-family: var(--font-mono); font-weight: 700; }
 .ink { color: var(--ink); }
+/* Googleov gumb (iframe); visina rezervirana da se ništa ne pomiče dok se učita */
+.gsi-btn { min-height: 40px; display: inline-flex; align-items: center; color-scheme: normal; }
+.top .gsi-btn { min-height: 32px; }
