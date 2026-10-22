@@ -468,7 +468,7 @@ function shareText(state: GameState, town: Station, ahead: number | null) {
 
 type Compare = DayCompare & { mine: number };
 
-/** Gdje su danas stali ostali: stupci po 100 km uz rutu (iza igrača zeleno, ispred sivo), igrač je žuta crta s pločom TI. */
+/** Gdje su danas stali ostali: stupci po 100 km uz rutu (iza igrača zeleno, ispred sivo), igračev stupac žut s pločom TI. */
 function CompareChart({ c, cfg }: { c: Compare; cfg: SkinConfig }) {
   if (c.ahead === null)
     return (
@@ -478,7 +478,7 @@ function CompareChart({ c, cfg }: { c: Compare; cfg: SkinConfig }) {
     );
   const end = c.hist.length * BUCKET_KM;
   const pct = (km: number) => `${(100 * Math.min(km, end)) / end}%`;
-  const top = Math.max(1, ...c.hist.map((h) => h.behind + h.front));
+  const top = Math.max(1, ...c.hist);
   const avgAt = stationAt(cfg, c.avgKm);
   // glavne stanice osim starta (na mobitelu se sudara sa Zagrebom); Budva je preblizu Dubrovniku, piše u retku ispod
   const labels = cfg.stations.filter((s) => s.alwaysLabel && s.km > 0);
@@ -490,23 +490,16 @@ function CompareChart({ c, cfg }: { c: Compare; cfg: SkinConfig }) {
       <span className="cmp-sub">Gdje su danas stali igrači</span>
       <div className="cmp-chart" role="img" aria-label={`Gdje su danas stali igrači. Ti si na ${c.mine} km.`}>
         <div className="cmp-bars">
-          {c.hist.map((h, i) => {
-            const n = h.behind + h.front;
-            return (
-              <div key={i} className="cmp-col" style={{ animationDelay: `${i * 40}ms` }}>
-                {n > 0 && <span className="cmp-n">{n}</span>}
-                {n > 0 && (
-                  <span className="cmp-stack" style={{ height: `${(100 * n) / top}%` }}>
-                    <span className="front" style={{ flex: h.front }} />
-                    <span className="behind" style={{ flex: h.behind }} />
-                  </span>
-                )}
-              </div>
-            );
-          })}
-          <span className="cmp-me" style={{ left: pct(c.mine) }}>
-            <span>TI</span>
-          </span>
+          {c.hist.map((n, i) => (
+            <div
+              key={i}
+              className={"cmp-col" + (i === c.mineBin ? " mine" : i > c.mineBin ? " front" : "")}
+              style={{ animationDelay: `${i * 40}ms` }}
+            >
+              {i === c.mineBin ? <span className="cmp-ti">TI</span> : n > 0 && <span className="cmp-n">{n}</span>}
+              {n > 0 && <span className="cmp-bar" style={{ height: `${(100 * n) / top}%` }} />}
+            </div>
+          ))}
         </div>
         <div className="cmp-axis">
           {labels.map((s) => {
