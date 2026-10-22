@@ -23,7 +23,7 @@ describe("compareDay", () => {
     expect(c.hist[7]).toBe(3); // igrač, izjednačeni i 750
     expect(c.mineBin).toBe(7);
     expect(c.hist[14]).toBe(1);
-    expect(c).toMatchObject({ bestKm: 1423, bestTown: "Budva" });
+    expect(c).toMatchObject({ behind: 2, bestKm: 1423, bestTown: "Budva" });
     expect(compareDay(hr, [700], 700).hist.length).toBe(13); // do maxKm 1200 (zadnji stupac 1200–1299)
   });
 });

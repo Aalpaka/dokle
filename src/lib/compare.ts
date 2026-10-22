@@ -6,6 +6,7 @@ export const BUCKET_KM = 100;
 export type DayCompare = {
   players: number; // završene partije danas, s igračem
   ahead: number | null; // % ostalih igrača s manje km; null dok je igrač sam
+  behind: number; // broj ostalih s manje km
   avgKm: number;
   bestKm: number;
   bestTown: string; // gdje je završio najdalji (s easter eggom, npr. Budva)
@@ -25,6 +26,7 @@ export function compareDay(cfg: SkinConfig, kms: number[], mine: number): DayCom
   return {
     players: kms.length,
     ahead: others.length > 0 ? Math.round((100 * below) / others.length) : null,
+    behind: below,
     avgKm: kms.length ? Math.round(kms.reduce((a, b) => a + b, 0) / kms.length) : 0,
     bestKm,
     bestTown: landingAt(cfg, bestKm).name,

@@ -468,7 +468,7 @@ function shareText(state: GameState, town: Station, ahead: number | null) {
 
 type Compare = DayCompare & { mine: number };
 
-/** Gdje su danas stali ostali: stupci po 100 km uz rutu (iza igrača zeleno, ispred sivo), igračev stupac žut s pločom TI. */
+/** Gdje su danas stali ostali: stupci po 100 km uz rutu bez brojeva (iza igrača zeleno, ispred sivo), igračev stupac žut s pločom TI. */
 function CompareChart({ c, cfg }: { c: Compare; cfg: SkinConfig }) {
   if (c.ahead === null)
     return (
@@ -496,7 +496,7 @@ function CompareChart({ c, cfg }: { c: Compare; cfg: SkinConfig }) {
               className={"cmp-col" + (i === c.mineBin ? " mine" : i > c.mineBin ? " front" : "")}
               style={{ animationDelay: `${i * 40}ms` }}
             >
-              {i === c.mineBin ? <span className="cmp-ti">TI</span> : n > 0 && <span className="cmp-n">{n}</span>}
+              {i === c.mineBin && <span className="cmp-ti">TI</span>}
               {n > 0 && <span className="cmp-bar" style={{ height: `${(100 * n) / top}%` }} />}
             </div>
           ))}
@@ -514,8 +514,8 @@ function CompareChart({ c, cfg }: { c: Compare; cfg: SkinConfig }) {
         </div>
       </div>
       <p className="cmp-key">
-        <span><i className="behind" />iza tebe</span>
-        <span><i className="front" />ispred tebe</span>
+        <span><i className="behind" />{c.behind} iza tebe</span>
+        <span><i className="front" />{c.players - 1 - c.behind} ispred tebe</span>
       </p>
       <p className="small">
         Završenih partija danas: <b>{c.players}</b> · prosjek {c.avgKm} km ({avgAt.name}) · najdalje {c.bestKm} km ({c.bestTown})
