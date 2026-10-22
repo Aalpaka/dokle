@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { assignTiers, priorForTier, tierFor } from "@/lib/scoring";
+import Modal from "./Modal";
 
 async function api<T>(path: string, method = "GET", body?: unknown): Promise<T> {
   const res = await fetch(path, {
@@ -37,26 +38,6 @@ const pct = (n: number) => String(n).replace(".", ",");
 
 // kanonski odgovori počinju velikim slovom (server to i sam osigura)
 const upperFirst = (v: string) => v.charAt(0).toLocaleUpperCase("hr") + v.slice(1);
-
-/** Prozor preko stranice (native dialog: Esc i klik izvan zatvaraju). */
-function Modal({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
-  const ref = useRef<HTMLDialogElement>(null);
-  useEffect(() => {
-    const d = ref.current;
-    if (d && !d.open) d.showModal();
-  }, []);
-  return (
-    <dialog ref={ref} className="modal" onClose={onClose} onClick={(e) => e.target === ref.current && onClose()} aria-label={title}>
-      <div className="stack">
-        <div className="row" style={{ justifyContent: "space-between" }}>
-          <h2>{title}</h2>
-          <button className="ghost small-btn" onClick={onClose} aria-label="Zatvori">✕</button>
-        </div>
-        {children}
-      </div>
-    </dialog>
-  );
-}
 
 /** Oznaka prijevoza; `tier` kad je već izračunat za cijelu kategoriju (assignTiers), inače po udjelu. */
 function TierLabel({ share, rare, tier }: { share: number; rare?: boolean; tier?: TierInfo }) {
