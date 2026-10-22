@@ -48,13 +48,18 @@ export function GoogleButton({ label = "Prijavi se s Googleom", className }: { l
   );
 }
 
-/** Desni kut zaglavlja: za prijavljene lige i nadimak (link na profil), inače gumb za prijavu. */
+/** Desni kut zaglavlja: za prijavljene (admin), lige i nadimak (link na profil), inače gumb za prijavu. */
 export function AccountLink({ me }: { me: Me | null }) {
   const path = usePathname();
   if (!me?.authEnabled) return null;
   if (me.user)
     return (
       <nav className="acct-nav" aria-label="Račun">
+        {me.user.isAdmin && (
+          <a className="acct" href="/admin" aria-current={path.startsWith("/admin") ? "page" : undefined} title="Admin">
+            <span>⚙️</span><span className="wide">Admin</span>
+          </a>
+        )}
         <a className="acct" href="/lige" aria-current={path.startsWith("/lig") ? "page" : undefined} title="Lige">
           <span>🏆</span><span className="wide">Lige</span>
         </a>
