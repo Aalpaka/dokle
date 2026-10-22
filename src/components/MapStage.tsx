@@ -519,7 +519,7 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
       </div>
       {arrival && (
         <div className="stationmsg" key={arrival.id}>
-          <small>{arrival.egg ? `Preletio si ${last.genitive ?? last.name}` : `Stigao si · ${arrival.km} km`}</small>
+          <small>{arrival.egg ? `Preletio si ${last.name}` : `Stigao si · ${arrival.km} km`}</small>
           <b>{arrival.name}</b>
           <p>{arrival.message}</p>
         </div>

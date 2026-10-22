@@ -360,7 +360,7 @@ function Reveal({ state, onNext }: { state: GameState; onNext: () => void }) {
           <span className="km">+{r.km}</span>
         </div>
         {after !== before && (
-          <p className="small">{after === cfg.overshoot?.station ? `Preletio si ${cfg.stations[cfg.stations.length - 1].genitive} i završio u` : "Prošao si"}: <b>{after.name}</b></p>
+          <p className="small">{after === cfg.overshoot?.station ? `Preletio si ${cfg.stations[cfg.stations.length - 1].name} i završio u` : "Prošao si"}: <b>{after.name}</b></p>
         )}
       </div>
       <div className="row">
