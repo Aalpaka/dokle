@@ -412,9 +412,10 @@ function End({ state, me }: { state: GameState; me: Me | null }) {
   const { href } = useSkin();
   const [copied, setCopied] = useState("");
   const [cmp, setCmp] = useState<Compare | null>(null);
+  // partija izvan konkurencije (druga država istog dana) nema usporedbu s ostalim igračima
   useEffect(() => {
-    api<Compare | null>("/api/game/compare").then(setCmp, () => setCmp(null));
-  }, []);
+    if (state.ranked) api<Compare | null>("/api/game/compare").then(setCmp, () => setCmp(null));
+  }, [state.ranked]);
   const share = shareText(state, st, cmp?.ahead ?? null, t);
   const onShare = () => {
     const copy = () =>
