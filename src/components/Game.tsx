@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { AnswerList, GameState, RoundView } from "@/server/game";
-import type { DayCompare } from "@/lib/compare";
+import { BUCKET_KM, type DayCompare } from "@/lib/compare";
 import type { SkinConfig, Station } from "@/skins/types";
 import { formatShare, landingAt, stationAt } from "@/lib/scoring";
 import { maps, withVisuals } from "@/skins/maps";
@@ -468,77 +468,65 @@ function shareText(state: GameState, town: Station, ahead: number | null) {
 
 type Compare = DayCompare & { mine: number };
 
-/** Gdje su danas stali ostali: stupci nad cestom od prve do zadnje stanice, igračev stupac žut. */
+/** Gdje su danas stali ostali: stupci po 100 km uz rutu bez brojeva (iza igrača zeleno, ispred sivo), igračev stupac žut s pločom TI. */
 function CompareChart({ c, cfg }: { c: Compare; cfg: SkinConfig }) {
-  const W = 520, L = 14, R = 14, road = 118, H = 84;
-  const end = Math.max(cfg.maxKm, cfg.stations[cfg.stations.length - 1].km + 60);
-  const x = (km: number) => L + (Math.min(km, end) / end) * (W - L - R);
-  const top = Math.max(1, ...c.bins);
-  const mineAt = stationAt(cfg, c.mine);
-  const mineIdx = cfg.stations.indexOf(mineAt);
+  if (c.ahead === null)
+    return (
+      <div className="compare">
+        <p className="cmp-head">Prvi si danas završio partiju. Navrati kasnije i vidi gdje su stali ostali.</p>
+      </div>
+    );
+  const end = c.hist.length * BUCKET_KM;
+  const pct = (km: number) => `${(100 * Math.min(km, end)) / end}%`;
+  const top = Math.max(1, ...c.hist);
   const avgAt = stationAt(cfg, c.avgKm);
-  // nazivi samo glavnih stanica i igračeve; glavna stanica preblizu igračevoj se preskače
-  const labels = cfg.stations.filter(
-    (s) => s === mineAt || (s.alwaysLabel && Math.abs(x(s.km) - x(mineAt.km)) > 44),
-  );
+  // glavne stanice od starta do cilja, plus Budva (easter egg) ako je netko stigao do nje
+  const o = cfg.overshoot;
+  const labels = [...cfg.stations.filter((s) => s.alwaysLabel), ...(o && c.bestKm > o.overKm ? [o.station] : [])];
   return (
     <div className="compare">
-      {c.ahead === null ? (
-        <p className="cmp-head">Prvi si danas završio partiju. Navrati kasnije i vidi gdje su stali ostali.</p>
-      ) : (
-        <p className="cmp-head">
-          Stigao si dalje od <span className="cmp-pct">{c.ahead} %</span> igrača
-        </p>
-      )}
-      <svg viewBox={`0 0 ${W} 156`} role="img" aria-label={`Gdje su danas stali igrači. Ti si na ${c.mine} km.`}>
-        {cfg.stations.map((s, i) => {
-          const x0 = x(s.km) + 1;
-          const x1 = (i + 1 < cfg.stations.length ? x(cfg.stations[i + 1].km) : x(end)) - 1;
-          const h = c.bins[i] ? Math.max(4, (c.bins[i] / top) * H) : 0;
-          const mine = i === mineIdx;
-          return (
-            <g key={s.name} className={"cmp-bin" + (mine ? " mine" : "")} style={{ animationDelay: `${i * 45}ms` }}>
-              {h > 0 && <rect x={x0} y={road - h} width={Math.max(2, x1 - x0)} height={h} rx="2" />}
-              {h > 0 && !mine && (
-                <text x={(x0 + x1) / 2} y={road - h - 4} textAnchor="middle" className="cmp-n">{c.bins[i]}</text>
-              )}
-            </g>
-          );
-        })}
-        {/* cesta s isprekidanom crtom */}
-        <rect x={L - 6} y={road} width={W - L - R + 12} height="12" rx="3" className="cmp-road" />
-        <line x1={L} x2={W - R} y1={road + 6} y2={road + 6} className="cmp-lane" />
-        {cfg.stations.map((s) => (
-          <line key={s.name} x1={x(s.km)} x2={x(s.km)} y1={road + 12} y2={road + 17} className="cmp-post" />
-        ))}
-        {labels.map((s) => (
-          <text
-            key={s.name}
-            x={x(s.km)}
-            y={road + 30}
-            textAnchor={s.km === 0 ? "start" : s === cfg.stations[cfg.stations.length - 1] ? "end" : "middle"}
-            className={"cmp-label" + (s === mineAt ? " mine" : "")}
-          >
-            {s.name}
-          </text>
-        ))}
-        {/* igrač: žuta ploča "TI" iznad svog stupca */}
-        <g className="cmp-pin" style={{ animationDelay: `${cfg.stations.length * 45 + 150}ms` }}>
-          {(() => {
-            const h = c.bins[mineIdx] ? Math.max(4, (c.bins[mineIdx] / top) * H) : 0;
-            const px = Math.min(Math.max(x(c.mine), L + 16), W - R - 16);
-            const py = road - h - 8;
-            return (
-              <>
-                <rect x={px - 15} y={py - 16} width="30" height="16" rx="2" />
-                <text x={px} y={py - 4} textAnchor="middle">TI</text>
-              </>
-            );
-          })()}
-        </g>
-      </svg>
+      <p className="cmp-head">
+        Stigao si dalje od <span className="cmp-pct">{c.ahead} %</span> igrača
+      </p>
+      <span className="cmp-sub">Gdje su danas stali igrači</span>
+      <div className="cmp-chart" role="img" aria-label={`Gdje su danas stali igrači. Ti si na ${c.mine} km.`}>
+        <div className="cmp-bars">
+          {c.hist.map((n, i) => (
+            <div
+              key={i}
+              className={"cmp-col" + (i === c.mineBin ? " mine" : i > c.mineBin ? " front" : "")}
+              style={{ animationDelay: `${i * 40}ms` }}
+            >
+              {i === c.mineBin && <span className="cmp-ti">TI</span>}
+              {n > 0 && <span className="cmp-bar" style={{ height: `${(100 * n) / top}%` }} />}
+            </div>
+          ))}
+        </div>
+        <div className="cmp-ticks">
+          {c.hist.map((_, i) => (
+            <span key={i} className={"cmp-tick" + (i % 2 ? " odd" : "")} style={{ left: pct(i * BUCKET_KM) }}>
+              {i * BUCKET_KM}
+            </span>
+          ))}
+        </div>
+        <div className="cmp-axis">
+          {labels.map((s, i) => (
+            <span
+              key={s.name}
+              className={"cmp-city" + (s.km === 0 ? " first" : s.km / end > 0.9 ? " last" : "") + (i % 2 ? " low" : "")}
+              style={{ left: pct(s.km) }}
+            >
+              {s.name}
+            </span>
+          ))}
+        </div>
+      </div>
+      <p className="cmp-key">
+        <span><i className="behind" />{c.behind} iza tebe</span>
+        <span><i className="front" />{c.players - 1 - c.behind} ispred tebe</span>
+      </p>
       <p className="small">
-        Završenih partija danas: <b>{c.players}</b> · prosjek {c.avgKm} km ({avgAt.name}) · najdalje {c.bestKm} km
+        Završenih partija danas: <b>{c.players}</b> · prosjek {c.avgKm} km ({avgAt.name}) · najdalje {c.bestKm} km ({c.bestTown})
       </p>
     </div>
   );

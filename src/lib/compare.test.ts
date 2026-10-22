@@ -16,13 +16,14 @@ describe("compareDay", () => {
   it("izjednačeni nisu iza", () => {
     expect(compareDay(hr, [300, 300, 300], 300).ahead).toBe(0);
   });
-  it("dionice po stanicama", () => {
-    const c = compareDay(hr, [0, 59, 60, 1199, 1200, 1300], 60);
-    expect(c.bins.length).toBe(hr.stations.length);
-    expect(c.bins[0]).toBe(2); // Vukovar
-    expect(c.bins[1]).toBe(1); // Osijek
-    expect(c.bins[c.bins.length - 2]).toBe(1); // Ston
-    expect(c.bins[c.bins.length - 1]).toBe(2); // Dubrovnik i dalje
-    expect(c.bins.reduce((a, b) => a + b, 0)).toBe(6);
+  it("stupci po 100 km s igračem, najdalji grad", () => {
+    const c = compareDay(hr, [100, 150, 700, 700, 750, 1423], 700);
+    expect(c.hist.length).toBe(15); // 0–1499
+    expect(c.hist[1]).toBe(2);
+    expect(c.hist[7]).toBe(3); // igrač, izjednačeni i 750
+    expect(c.mineBin).toBe(7);
+    expect(c.hist[14]).toBe(1);
+    expect(c).toMatchObject({ behind: 2, bestKm: 1423, bestTown: "Budva" });
+    expect(compareDay(hr, [700], 700).hist.length).toBe(13); // do maxKm 1200 (zadnji stupac 1200–1299)
   });
 });
