@@ -60,8 +60,8 @@ describe("skinovi", () => {
       expect(hrGroup.has(c.slug)).toBe(true);
     }
     for (const c of content.replace) expect(hrCategories.find((h) => h.slug === c.slug)?.group).toBe(c.group);
-    // BiH nema dovoljno olimpijaca za kategoriju, pa taj dan uzima drugu kviz kategoriju
-    for (const s of HR_SPECIFIC) if (!(id === "ba" && s === "hr-olimpijac")) expect(slugs).toContain(s);
+    // svaka hrvatska kategorija ima par s istim slugom, pa sve tri države isti dan igraju "istu" kategoriju
+    for (const h of hrCategories) expect(slugs, h.slug).toContain(h.slug);
     for (const g of ["opce", "kviz", "zaigrano", id]) expect(cats.filter((c) => c.group === g).length).toBeGreaterThanOrEqual(50);
     expect(cats.find((c) => c.slug === "drzava-b-m")!.hint).toBe(`${content.lang === "srpski" ? "Srpski" : "Bosanski"} naziv`);
     // "izvan" verzija nema domaći odgovor, a ima hrvatski

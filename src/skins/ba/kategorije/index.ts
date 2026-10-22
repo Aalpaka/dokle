@@ -6,11 +6,12 @@ import { baDomace2 } from "./domace2";
 import { baDomace3 } from "./domace3";
 import { baDomace4 } from "./domace4";
 import { baDomace5 } from "./domace5";
+import { baDomace6 } from "./domace6";
 import { baZamjene } from "./zamjene";
 
 export const baContent: Country = {
   lang: "bosanski",
-  domestic: [...baDomace1, ...baDomace2, ...baDomace3, ...baDomace4, ...baDomace5],
+  domestic: [...baDomace1, ...baDomace2, ...baDomace3, ...baDomace4, ...baDomace5, ...baDomace6],
   replace: baZamjene,
   abroad: {
     "svjetska-planina": {

@@ -121,10 +121,7 @@ describe.skipIf(!process.env.DATABASE_URL)("svi odgovori nakon igre", () => {
       const want = await slugsOf(hr.categoryIds);
       for (const id of ["ba", "rs"]) {
         const got = await slugsOf((await getOrCreatePuzzle(await getSkin(id), date)).categoryIds);
-        // svaka kategorija koja u toj državi postoji (i nije već igrana) je ista; ostale su iz iste grupe i ne otkrivaju budući dan
-        const same = got.filter((s, i) => s === want[i]).length;
-        expect(same).toBeGreaterThanOrEqual(want.length - 2);
-        expect(new Set(got).size).toBe(got.length);
+        expect(got).toEqual(want);
       }
     } finally {
       await db.delete(dailyPuzzles).where(eq(dailyPuzzles.date, date));

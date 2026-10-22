@@ -18,6 +18,7 @@ import { assignTiers, blendedShare, kmFor, speedFor, tierFor } from "@/lib/scori
 import { dayNumber, localDate } from "@/lib/day";
 import { compareDay, type DayCompare } from "@/lib/compare";
 import type { SkinConfig } from "@/skins/types";
+import { codeConfigs } from "@/skins/maps";
 
 // Odgovor stigne s malim kašnjenjem mreže; toliko tolerancije na serveru.
 const GRACE_MS = 2500;
@@ -69,7 +70,7 @@ export async function getOrCreatePuzzle(skin: Skin, date: string) {
 
   const pattern = skin.config.dailyPattern;
   // skin koji prati drugi (BiH, Srbija prate Hrvatsku) uzima iste slugove istim redom, da partija u jednoj državi
-  // ne otkrije kategorije koje druga tek dobiva; što nema svoj par (ili je par već igran), bira se kao inače
+  // ne otkrije kategorije koje druga tek dobiva
   const wanted: (string | null)[] = pattern.map(() => null);
   if (skin.config.mirror) {
     const source = await getOrCreatePuzzle(await getSkin(skin.config.mirror), date);
@@ -82,17 +83,21 @@ export async function getOrCreatePuzzle(skin: Skin, date: string) {
     .innerJoin(dailyPuzzles, eq(dailyPuzzles.id, puzzleCategories.puzzleId))
     .groupBy(puzzleCategories.categoryId)
     .as("last_used");
-  const pool = await db
-    .select({ id: categories.id, group: categories.group, slug: categories.slug, last: lastUsed.last })
+  let pool = await db
+    .select({ id: categories.id, group: categories.group, slug: categories.slug })
     .from(categories)
     .leftJoin(lastUsed, eq(lastUsed.categoryId, categories.id))
     .where(and(eq(categories.skinId, skin.id), eq(categories.active, true)))
     .orderBy(sql`${lastUsed.last} asc nulls first`, sql`random()`);
+  // skin koji drugi prate bira samo kategorije koje imaju aktivan par u svakom od njih
+  const ready = await pairedSlugs(skin.id);
+  if (ready) pool = pool.filter((p) => ready.has(p.slug));
 
   const picked: number[] = [];
   for (const [i, group] of pattern.entries()) {
+    // bez para (ne bi se smjelo dogoditi) bira se iz iste grupe nešto što taj dan nije ni u jednoj državi
     const c =
-      pool.find((p) => p.slug === wanted[i] && !p.last && !picked.includes(p.id)) ?? pool.find((p) => p.group === group && !picked.includes(p.id) && !wanted.includes(p.slug));
+      pool.find((p) => p.slug === wanted[i] && !picked.includes(p.id)) ?? pool.find((p) => p.group === group && !picked.includes(p.id) && !wanted.includes(p.slug));
     if (!c) throw new Error(`Nema dovoljno aktivnih kategorija u grupi ${group}`);
     picked.push(c.id);
   }
@@ -125,6 +130,23 @@ async function loadPuzzle(skinId: string, date: string) {
 }
 
 type Puzzle = NonNullable<Awaited<ReturnType<typeof loadPuzzle>>>;
+
+/** Skinovi koji prate ovaj skin (BiH i Srbija prate Hrvatsku). */
+export function followersOf(skinId: string): string[] {
+  return Object.entries(codeConfigs).filter(([, c]) => c.mirror === skinId).map(([id]) => id);
+}
+
+/** Slugovi aktivni u ovom skinu i u svakom koji ga prati; null ako ga nitko ne prati. */
+export async function pairedSlugs(skinId: string): Promise<Set<string> | null> {
+  const followers = followersOf(skinId);
+  if (!followers.length) return null;
+  const rows = await db
+    .select({ slug: categories.slug, n: sql<number>`count(distinct ${categories.skinId})::int` })
+    .from(categories)
+    .where(and(inArray(categories.skinId, [skinId, ...followers]), eq(categories.active, true)))
+    .groupBy(categories.slug);
+  return new Set(rows.filter((r) => r.n === followers.length + 1).map((r) => r.slug));
+}
 
 export async function ensurePlayer(id: string) {
   await db

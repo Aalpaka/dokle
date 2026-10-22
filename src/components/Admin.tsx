@@ -32,7 +32,7 @@ function useLoad<T>(path: string | null) {
 }
 
 type TierInfo = { name: string; emoji: string; minShare: number; rare?: boolean };
-type Meta = { skin: { id: string; groups: Record<string, string>; perDay: number; today: string; tiers: TierInfo[] } };
+type Meta = { skin: { id: string; mirror: string | null; groups: Record<string, string>; perDay: number; today: string; tiers: TierInfo[] } };
 
 // tierovi skina, sortirani od najčešćeg prema najrjeđem (kao u configu)
 const Tiers = createContext<TierInfo[]>([]);
@@ -121,8 +121,8 @@ function AdminSkin() {
         {tab === "Dan" && <Day today={m.today} />}
         {tab === "Za pregled" && <Review />}
         {tab === "Igrači" && <Players />}
-        {tab === "Sadržaj" && <Content groups={m.groups} />}
-        {tab === "Raspored" && <Schedule perDay={m.perDay} />}
+        {tab === "Sadržaj" && <Content groups={m.groups} mirror={m.mirror} />}
+        {tab === "Raspored" && <Schedule perDay={m.perDay} mirror={m.mirror} />}
         {tab === "Odgovori" && <Attempts today={m.today} />}
       </section>
       </Tiers.Provider>
@@ -424,10 +424,14 @@ const fmtDate = (d: string) => {
 
 // ---------- Sadržaj ----------
 
-type CatRow = { id: number; title: string; hint: string | null; group: string; active: boolean; answers: number; lastUsed: string | null };
+type CatRow = { id: number; title: string; hint: string | null; group: string; active: boolean; answers: number; lastUsed: string | null; missing: SkinId[] };
+type Unpaired = { slug: string; title: string; group: string };
+const skinShort = (ids: SkinId[]) => ids.map((id) => SKIN_META[id]?.short ?? id).join(", ");
 
-function Content({ groups }: { groups: Record<string, string> }) {
+function Content({ groups, mirror }: { groups: Record<string, string>; mirror: string | null }) {
   const { data, error, reload } = useLoad<CatRow[]>("/api/admin/categories");
+  const open = useLoad<Unpaired[]>(mirror ? "/api/admin/categories?unpaired" : null);
+  const lone = (data ?? []).filter((c) => c.active && c.missing.length).length;
   const [openId, setOpenId] = useState<number | null>(null);
   const [adding, setAdding] = useState(false);
   return (
@@ -436,10 +440,17 @@ function Content({ groups }: { groups: Record<string, string> }) {
         <h2>Kategorije</h2>
         <button className="small-btn" onClick={() => setAdding(!adding)}>{adding ? "Zatvori" : "Nova kategorija"}</button>
       </div>
-      {adding && <NewCategory groups={groups} onDone={() => { setAdding(false); reload(); }} />}
+      <p className="small">
+        {mirror
+          ? "Raspored prati Hrvatsku: svaka kategorija ovdje je par hrvatske i dolazi isti dan. Nova kategorija se dodaje kao par postojeće hrvatske."
+          : "BiH i Srbija svaki dan dobiju par istih kategorija. Hrvatska kategorija ulazi u raspored tek kad ima aktivan par u obje države."}
+        {mirror && !!open.data?.length && <> Bez para ovdje: <b>{open.data.length}</b> hrvatskih kategorija (Hrvatska ih zato ne bira).</>}
+        {!mirror && lone > 0 && <> Čeka par: <b>{lone}</b>.</>}
+      </p>
+      {adding && <NewCategory groups={groups} unpaired={mirror ? open.data ?? [] : null} onDone={() => { setAdding(false); reload(); open.reload(); }} />}
       <Err msg={error} />
       <table className="tbl">
-        <thead><tr><th>Kategorija</th><th>Grupa</th><th>Odgovora</th><th>Zadnje korištena</th><th>Aktivna</th><th></th></tr></thead>
+        <thead><tr><th>Kategorija</th><th>Grupa</th><th>Odgovora</th><th>Zadnje korištena</th><th>Par</th><th>Aktivna</th><th></th></tr></thead>
         <tbody>
           {data?.map((c) => (
             <tr key={c.id} className={c.active ? "" : "off"}>
@@ -447,6 +458,7 @@ function Content({ groups }: { groups: Record<string, string> }) {
               <td>{groups[c.group] ?? c.group}</td>
               <td>{c.answers}</td>
               <td>{c.lastUsed ? fmtDate(c.lastUsed) : "—"}</td>
+              <td>{c.missing.length ? <span className="chip">nema: {skinShort(c.missing)}</span> : "✓"}</td>
               <td>
                 <input
                   type="checkbox"
@@ -465,15 +477,30 @@ function Content({ groups }: { groups: Record<string, string> }) {
   );
 }
 
-function NewCategory({ groups, onDone }: { groups: Record<string, string>; onDone: () => void }) {
+function NewCategory({ groups, unpaired, onDone }: { groups: Record<string, string>; unpaired: Unpaired[] | null; onDone: () => void }) {
   const [title, setTitle] = useState("");
   const [group, setGroup] = useState(Object.keys(groups)[0]);
+  const [pairOf, setPairOf] = useState("");
   const [hint, setHint] = useState("");
   const [strip, setStrip] = useState("");
   const [answers, setAnswers] = useState("");
   const [err, setErr] = useState("");
   return (
     <div className="decide stack" style={{ gap: 8 }}>
+      {unpaired && (
+        <select
+          className="field"
+          value={pairOf}
+          onChange={(e) => {
+            setPairOf(e.target.value);
+            const c = unpaired.find((x) => x.slug === e.target.value);
+            if (c && groups[c.group]) setGroup(c.group);
+          }}
+        >
+          <option value="">Par za hrvatsku kategoriju…</option>
+          {unpaired.map((c) => <option key={c.slug} value={c.slug}>{c.title}</option>)}
+        </select>
+      )}
       <input className="field" placeholder="Naslov, npr. Hrvatski planinski vrh" value={title} onChange={(e) => setTitle(e.target.value)} />
       <div className="row">
         <select className="field" value={group} onChange={(e) => setGroup(e.target.value)}>
@@ -500,6 +527,7 @@ function NewCategory({ groups, onDone }: { groups: Record<string, string>; onDon
               hint,
               strip: strip.split(",").map((s) => s.trim().toLowerCase()).filter(Boolean),
               answers: answers.split(/[;\n]/).map((s) => s.trim()).filter(Boolean).join(";"),
+              pairOf: pairOf || undefined,
             }).then(onDone, (e: Error) => setErr(e.message))
           }
         >
@@ -556,7 +584,7 @@ function CategoryAnswers({ id, onChange, onClose }: { id: number; onChange: () =
 
 type ScheduleDay = { date: string; number: number; games: number; categories: { position: number; categoryId: number; title: string }[] | null };
 
-function Schedule({ perDay }: { perDay: number }) {
+function Schedule({ perDay, mirror }: { perDay: number; mirror: string | null }) {
   const { data, error, setData } = useLoad<ScheduleDay[]>("/api/admin/schedule");
   const cats = useLoad<CatRow[]>("/api/admin/categories");
   const [edit, setEdit] = useState<{ date: string; ids: number[] } | null>(null);
@@ -566,11 +594,15 @@ function Schedule({ perDay }: { perDay: number }) {
       (d) => { setData(d); setEdit(null); setErr(""); },
       (e: Error) => setErr(e.message),
     );
-  const active = (cats.data ?? []).filter((c) => c.active);
+  const active = (cats.data ?? []).filter((c) => c.active && !c.missing.length);
   return (
     <div className="stack">
       <h2>Raspored za sljedećih 14 dana</h2>
-      <p className="small">Dan bez rasporeda složi se sam pri prvom igraču (najdulje nekorištene kategorije). Dan koji je netko već igrao ne može se mijenjati.</p>
+      <p className="small">
+        {mirror
+          ? "Raspored prati Hrvatsku: isti dan dolaze parovi istih kategorija. Mijenja se u hrvatskom adminu."
+          : "Dan bez rasporeda složi se sam pri prvom igraču (najdulje nekorištene kategorije s parom u BiH i Srbiji). Promjena dana vrijedi za sve tri države. Dan koji je netko već igrao ne može se mijenjati."}
+      </p>
       <Err msg={error || err} />
       {data?.map((d) => (
         <div key={d.date} className="review">
@@ -578,7 +610,7 @@ function Schedule({ perDay }: { perDay: number }) {
             <b>#{d.number} · {fmtDate(d.date)}</b>
             <div className="row">
               {d.games > 0 && <span className="chip">{d.games} igrača</span>}
-              {d.games === 0 && (
+              {d.games === 0 && !mirror && (
                 <>
                   <button className="ghost small-btn" onClick={() => setEdit({ date: d.date, ids: d.categories?.map((c) => c.categoryId) ?? Array(perDay).fill(0) })}>Uredi</button>
                   <button className="ghost small-btn" onClick={() => save(d.date, null)}>{d.categories ? "Složi ponovno" : "Složi automatski"}</button>

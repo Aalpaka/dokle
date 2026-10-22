@@ -29,4 +29,14 @@ export const baZamjene: SeedCategory[] = [
       Ferhad-paša Sokolović=1; Benjamin Kállay/Kallay=1; Matej Ninoslav/Ninoslav=0.8; Stjepan I. Kotromanić=0.5; Jelena Gruba=0.5;
       Vlatko Vuković=0.5; Prijezda=0.2!; Pavle Radenović=0.2!`,
   },
+  {
+    slug: "hr-olimpijac",
+    group: "kviz",
+    title: "Olimpijski ili paraolimpijski medaljaš iz BiH",
+    hint: "Vrijede i medalje sportaša iz BiH za Jugoslaviju, i sjedeća odbojka",
+    strip: [],
+    answers: `Mirza Delibašić/Kinđe=12; Dražen Dalipagić/Praja=8; Anton Josipović=6; Ermin Jusufović=4; Sabahudin Delalić=3;
+      Safet Alibašić=3; Mirzet Duran=2; Žarko Varajić=3; Abaz Arslanagić=3; Milan Galić=2; Razija Mujanović=2;
+      Sabit Hadžić=0.3!`,
+  },
 ];
