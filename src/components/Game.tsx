@@ -203,6 +203,7 @@ function Landing({ state, cfg, me, onStart }: { state: GameState; cfg: SkinConfi
           ))}
         </ul>
         <p className="rarity-hint"><span>{t("češći odgovor")}</span><span>{t("rjeđi odgovor")}</span></p>
+        {!state.ranked && <p className="unranked">{t("Danas si već odigrao drugu državu, pa je ova partija za gušt: ne ulazi u lige, streak ni postotke odgovora.")}</p>}
         <button className="start" autoFocus onClick={onStart}>{t("Kreni iz {mjesta}", { mjesta: first.genitive ?? first.name })}</button>
         <details className="howto">
           <summary>{t("Pravila")}</summary>
@@ -433,6 +434,7 @@ function End({ state, me }: { state: GameState; me: Me | null }) {
         <span className="town">{st.name}</span>
         <span>{st.message}</span>
       </div>
+      {!state.ranked && <p className="small">{t("Izvan konkurencije: danas se broji samo prva država koju si odigrao.")}</p>}
       {next && <p className="small">{t("Do {mjesta} ti je falilo još {n} km.", { mjesta: next.genitive ?? next.name, n: next.km - km })}</p>}
       {cmp && <CompareChart c={cmp} cfg={cfg} />}
       <span className="small">{t("Klikni kategoriju za sve moguće odgovore i koliko je koji vrijedio.")}</span>

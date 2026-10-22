@@ -556,3 +556,4 @@ details.answers[open] > summary { margin-bottom: 14px; }
 .day-rounds b { overflow-wrap: anywhere; }
 .day-rounds .km { font-family: var(--font-mono); font-weight: 700; }
 .ink { color: var(--ink); }
+.landing-main .unranked { max-width: 520px; font-size: 13px; color: var(--muted); text-align: center; margin: 4px 0 0; }

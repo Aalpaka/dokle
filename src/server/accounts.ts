@@ -68,7 +68,7 @@ export async function profileFor(skin: Skin, playerId: string) {
     .select({ date: dailyPuzzles.date, number: dailyPuzzles.number, km: games.totalKm })
     .from(games)
     .innerJoin(dailyPuzzles, eq(dailyPuzzles.id, games.puzzleId))
-    .where(and(eq(games.playerId, playerId), eq(dailyPuzzles.skinId, skin.id), isNotNull(games.finishedAt)))
+    .where(and(eq(games.playerId, playerId), eq(dailyPuzzles.skinId, skin.id), eq(games.ranked, true), isNotNull(games.finishedAt)))
     .orderBy(desc(dailyPuzzles.date));
   const stats = computeStats(rows, localDate(skin.timezone));
   const history = rows.map((r) => ({ ...r, station: stationAt(skin.config, r.km).name }));

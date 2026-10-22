@@ -1,8 +1,8 @@
 import { afterAll, describe, expect, it } from "vitest";
 import { and, desc, eq, inArray } from "drizzle-orm";
 import { db, sql } from "@/db";
-import { answers, categories, games, players, rounds } from "@/db/schema";
-import { answerList, ensurePlayer, getSkin, startNext, submitAnswer } from "./game";
+import { answers, categories, dailyPuzzles, games, players, rounds } from "@/db/schema";
+import { answerList, ensurePlayer, getOrCreatePuzzle, getSkin, getState, startNext, submitAnswer } from "./game";
 
 // Integracijski test nad lokalnom bazom (npm run db:migrate && npm run db:seed).
 const ids: string[] = [];
@@ -108,5 +108,35 @@ describe.skipIf(!process.env.DATABASE_URL)("svi odgovori nakon igre", () => {
     const normal = list.answers.filter((a) => !skin.config.tiers.find((t) => t.name === a.tier)?.rare);
     expect(normal.findIndex((a) => a.canonical === top.canonical)).toBeGreaterThan(0);
     expect(normal.map((a) => a.share)).toEqual([...normal.map((a) => a.share)].sort((a, b) => b - a));
+  });
+
+  it("BiH i Srbija dobiju iste kategorije kao Hrvatska, a broji se samo prva država dana", async () => {
+    const date = "2099-01-01";
+    try {
+      const hr = await getOrCreatePuzzle(await getSkin("hr"), date);
+      const slugsOf = async (catIds: number[]) => {
+        const rows = await db.select({ id: categories.id, slug: categories.slug }).from(categories).where(inArray(categories.id, catIds));
+        return catIds.map((id) => rows.find((r) => r.id === id)!.slug);
+      };
+      const want = await slugsOf(hr.categoryIds);
+      for (const id of ["ba", "rs"]) {
+        const got = await slugsOf((await getOrCreatePuzzle(await getSkin(id), date)).categoryIds);
+        // svaka kategorija koja u toj državi postoji (i nije već igrana) je ista; ostale su iz iste grupe i ne otkrivaju budući dan
+        const same = got.filter((s, i) => s === want[i]).length;
+        expect(same).toBeGreaterThanOrEqual(want.length - 2);
+        expect(new Set(got).size).toBe(got.length);
+      }
+    } finally {
+      await db.delete(dailyPuzzles).where(eq(dailyPuzzles.date, date));
+    }
+
+    const id = crypto.randomUUID();
+    ids.push(id);
+    const [hr, rs] = [await getSkin("hr"), await getSkin("rs")];
+    expect((await getState(rs, id)).ranked).toBe(true);
+    expect((await startNext(hr, id)).ranked).toBe(true);
+    expect((await getState(rs, id)).ranked).toBe(false);
+    expect((await startNext(rs, id)).ranked).toBe(false);
+    expect((await getState(hr, id)).ranked).toBe(true);
   });
 });

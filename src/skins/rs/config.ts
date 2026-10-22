@@ -4,9 +4,9 @@ import type { SkinConfig } from "../types";
 // Subotica → Vranje: Vojvodina, Beograd, zapadna i centralna Srbija, istok i jug.
 // Zadnja dionica ide obilaznicom preko Kosova (vidi map.ts). km igre su stvarni km ceste skalirani na 1200.
 export const rsConfig: SkinConfig = {
-  ...regionalBase,
+  ...regionalBase("rs"),
   title: "Докле, бре?",
-  groups: { opce: "Opšte", zaigrano: "Zaigrano", kviz: "Kviz" },
+  groups: { rs: "Srbija", opce: "Opšte", zaigrano: "Zaigrano", kviz: "Kviz" },
   stations: [
     { name: "Subotica", genitive: "Subotice", km: 0, lon: 19.665, lat: 46.1, message: "Još gledaš Gradsku kuću, nisi ni krenuo.", labelOffset: [8, -6], alwaysLabel: true },
     { name: "Sombor", genitive: "Sombora", km: 55, lon: 19.112, lat: 45.774, message: "Zeleni grad, fijakeri i salaši.", labelOffset: [-58, 4] },

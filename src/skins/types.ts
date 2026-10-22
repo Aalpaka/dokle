@@ -49,6 +49,8 @@ export type SkinConfig = {
   // redoslijed grupa kategorija u danu, npr. ["hr","opce","zaigrano",...]
   dailyPattern: string[];
   groups: Record<string, string>; // id grupe -> naziv za prikaz
+  // dnevne kategorije prate ovaj skin: isti slugovi isti dan (domaća grupa ima svoju verziju istog sluga)
+  mirror?: string;
   maxKm: number;
   stations: Station[];
   // easter egg: tko skupi više od overKm, ne stane na cilju nego produži do ove postaje (izvan rute i usporedbe)

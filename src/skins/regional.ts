@@ -1,5 +1,6 @@
 // Zajedničko za skinove izvan Hrvatske (BiH, Srbija): obična prijevozna sredstva bez lokalnih memeova,
 // iste km kao u Hrvatskoj, i kategorije bez onih koje su vezane uz Hrvatsku.
+import { fold, parseSeedAnswers } from "../lib/matcher";
 import type { SeedCategory } from "./hr/categories";
 import { hrConfig } from "./hr/config";
 import type { SkinConfig, Tier } from "./types";
@@ -9,15 +10,16 @@ export function plainTiers(names: string[]): Tier[] {
   return hrConfig.tiers.map((t, i) => ({ minShare: t.minShare, km: t.km, emoji: t.emoji, name: names[i], vehicle: t.vehicle, color: t.color, ...(t.rare ? { rare: true } : {}) }));
 }
 
-// 3 + 3 + 2, nikad ista grupa zaredom (grupa "Hrvatska" ne postoji)
-export const regionalPattern = ["opce", "kviz", "zaigrano", "opce", "kviz", "opce", "zaigrano", "kviz"];
-
-export const regionalBase = {
-  secondsPerCategory: hrConfig.secondsPerCategory,
-  dailyPattern: regionalPattern,
-  maxKm: hrConfig.maxKm,
-  priorWeight: hrConfig.priorWeight,
-} satisfies Partial<SkinConfig>;
+/** Isti raspored kao Hrvatska, s domaćom grupom države umjesto "hr"; kategorije dana prate hrvatske (mirror). */
+export function regionalBase(home: string) {
+  return {
+    secondsPerCategory: hrConfig.secondsPerCategory,
+    dailyPattern: hrConfig.dailyPattern.map((g) => (g === "hr" ? home : g)),
+    mirror: "hr",
+    maxKm: hrConfig.maxKm,
+    priorWeight: hrConfig.priorWeight,
+  } satisfies Partial<SkinConfig>;
+}
 
 // Kategorije iz općih grupa koje su vezane uz Hrvatsku: naslov ih definira kao "izvan Hrvatske"
 // (pa bi igraču iz BiH ili Srbije hrvatski odgovori bili odbijeni), ili su o Hrvatskoj ili hrvatskom jeziku.
@@ -45,9 +47,50 @@ const HINTS: Record<string, (lang: string) => string> = {
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
-/** Kategorije za skin izvan Hrvatske; `lang` je pridjev jezika za upute ("bosanski", "srpski"). */
-export function regionalCategories(all: SeedCategory[], lang: string): SeedCategory[] {
-  return all
+// hrvatski sportaši za "svjetski sportaš" izvan Hrvatske (bez nogometa i tenisa)
+export const svijetSport = `Janica Kostelić=1.5; Blanka Vlašić=1; Ivica Kostelić=1; Dražen Petrović=1; Sandra Perković=0.8;
+  Mirko Filipović/Cro Cop=0.8; Toni Kukoč=0.5; Ivano Balić=0.5; Dino Rađa=0.3; Mate Parlov=0.3; Martin Sinković=0.3;
+  Valent Sinković=0.3; Sara Kolak=0.3; Filip Hrgović=0.3; Matea Jelić=0.3; Domagoj Duvnjak=0.3; Duje Draganja=0.2;
+  Damir Martin=0.2; Giovanni Cernogoraz=0.1`;
+
+/**
+ * Verzija hrvatske "izvan Hrvatske" kategorije za drugu državu: isti slug, iz popisa se miču domaći odgovori
+ * (remove, po kanonskom imenu), a dodaju hrvatski iz domaće hrvatske kategorije (addFrom) s upola manjim udjelom.
+ */
+export type Abroad = { title: string; hint?: string; remove?: string[]; addFrom?: string; add?: string };
+
+/** Sadržaj države: domaće kategorije (isti slugovi kao hrvatska grupa), "izvan" verzije i zamjene ostalih hrvatskih. */
+export type Country = { lang: string; domestic: SeedCategory[]; abroad: Record<string, Abroad>; replace: SeedCategory[] };
+
+/** Kategorije za skin izvan Hrvatske: zajedničke, "izvan" verzije, zamjene i domaće; `lang` je pridjev jezika za upute. */
+export function regionalCategories(all: SeedCategory[], country: Country): SeedCategory[] {
+  const shared = all
     .filter((c) => c.group !== "hr" && !HR_SPECIFIC.has(c.slug))
-    .map((c) => (HINTS[c.slug] ? { ...c, hint: HINTS[c.slug](lang) } : c));
+    .map((c) => (HINTS[c.slug] ? { ...c, hint: HINTS[c.slug](country.lang) } : c));
+  const abroad = Object.entries(country.abroad).map(([slug, a]) => abroadVersion(all, slug, a));
+  return [...shared, ...abroad, ...country.replace, ...country.domestic];
+}
+
+export function abroadVersion(all: SeedCategory[], slug: string, a: Abroad): SeedCategory {
+  const base = all.find((c) => c.slug === slug);
+  if (!base) throw new Error(`Nema kategorije ${slug}`);
+  const list = parseSeedAnswers(base.answers);
+  for (const r of a.remove ?? []) {
+    const i = list.findIndex((x) => x.canonical === r);
+    if (i < 0) throw new Error(`${slug}: nema odgovora ${r}`);
+    list.splice(i, 1);
+  }
+  const seen = new Set(list.flatMap((x) => [x.canonical, ...x.variants].map(fold)));
+  const extra = [
+    ...(a.addFrom ? parseSeedAnswers(all.find((c) => c.slug === a.addFrom)!.answers).map((x) => ({ ...x, share: x.share / 2, rare: false })) : []),
+    ...(a.add ? parseSeedAnswers(a.add) : []),
+  ];
+  for (const x of extra) {
+    const names = [x.canonical, ...x.variants].map(fold);
+    if (names.some((n) => seen.has(n))) continue;
+    names.forEach((n) => seen.add(n));
+    list.push(x);
+  }
+  const answers = list.map((x) => `${[x.canonical, ...x.variants].join("/")}=${x.share}${x.rare ? "!" : ""}`).join(";");
+  return { ...base, title: a.title, hint: a.hint ?? base.hint, answers };
 }

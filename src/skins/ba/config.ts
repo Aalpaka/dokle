@@ -4,9 +4,9 @@ import type { SkinConfig } from "../types";
 // Bijeljina → Neum: sjeveroistok, Posavina, Krajina, srednja Bosna, Sarajevo, Hercegovina i na kraju more.
 // km igre su stvarni km ceste skalirani na 1200.
 export const baConfig: SkinConfig = {
-  ...regionalBase,
+  ...regionalBase("ba"),
   title: "Dokle, bolan?",
-  groups: { opce: "Općenito", zaigrano: "Zaigrano", kviz: "Kviz" },
+  groups: { ba: "BiH", opce: "Općenito", zaigrano: "Zaigrano", kviz: "Kviz" },
   stations: [
     { name: "Bijeljina", genitive: "Bijeljine", km: 0, lon: 19.214, lat: 44.757, message: "Još si u Semberiji, ni krenuo nisi.", labelOffset: [8, -6], alwaysLabel: true },
     { name: "Tuzla", genitive: "Tuzle", km: 90, lon: 18.676, lat: 44.538, message: "Grad soli i Panonskih jezera.", labelOffset: [8, 12] },

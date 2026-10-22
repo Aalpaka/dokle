@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { hrCategories } from "./hr/categories";
 import { HR_SPECIFIC, regionalCategories } from "./regional";
+import { baContent } from "./ba/kategorije";
+import { rsContent } from "./rs/kategorije";
+import { parseSeedAnswers } from "@/lib/matcher";
 import { codeConfigs, maps } from "./maps";
 import { SKIN_IDS, switchPath } from "./meta";
 import { Route } from "@/lib/route";
@@ -45,15 +48,31 @@ describe("skinovi", () => {
     expect(km).toBeLessThan(1200);
   });
 
-  it("kategorije izvan Hrvatske: bez grupe Hrvatska i bez hrvatskih tema, dovoljno za raspored", () => {
-    const cats = regionalCategories(hrCategories, "srpski");
+  it.each([["ba", baContent], ["rs", rsContent]] as const)("%s: hrvatske teme imaju domaći par s istim slugom", (id, content) => {
+    const cats = regionalCategories(hrCategories, content);
+    const slugs = cats.map((c) => c.slug);
+    expect(new Set(slugs).size).toBe(slugs.length);
     expect(cats.some((c) => c.group === "hr")).toBe(false);
-    expect(cats.some((c) => HR_SPECIFIC.has(c.slug))).toBe(false);
-    // svaki izbačeni slug postoji (zaštita od tipfelera)
-    for (const s of HR_SPECIFIC) expect(hrCategories.some((c) => c.slug === s)).toBe(true);
-    for (const g of ["opce", "kviz", "zaigrano"]) expect(cats.filter((c) => c.group === g).length).toBeGreaterThanOrEqual(40);
-    expect(cats.find((c) => c.slug === "drzava-b-m")!.hint).toBe("Srpski naziv");
-    for (const id of ["ba", "rs"]) expect(new Set(codeConfigs[id].dailyPattern)).toEqual(new Set(["opce", "kviz", "zaigrano"]));
+    // domaće kategorije su parovi hrvatske grupe, zamjene i "izvan" verzije pokrivaju sve hrvatske teme iz općih grupa
+    const hrGroup = new Set(hrCategories.filter((c) => c.group === "hr").map((c) => c.slug));
+    for (const c of content.domestic) {
+      expect(c.group).toBe(id);
+      expect(hrGroup.has(c.slug)).toBe(true);
+    }
+    for (const c of content.replace) expect(hrCategories.find((h) => h.slug === c.slug)?.group).toBe(c.group);
+    // BiH nema dovoljno olimpijaca za kategoriju, pa taj dan uzima drugu kviz kategoriju
+    for (const s of HR_SPECIFIC) if (!(id === "ba" && s === "hr-olimpijac")) expect(slugs).toContain(s);
+    for (const g of ["opce", "kviz", "zaigrano", id]) expect(cats.filter((c) => c.group === g).length).toBeGreaterThanOrEqual(50);
+    expect(cats.find((c) => c.slug === "drzava-b-m")!.hint).toBe(`${content.lang === "srpski" ? "Srpski" : "Bosanski"} naziv`);
+    // "izvan" verzija nema domaći odgovor, a ima hrvatski
+    const planina = parseSeedAnswers(cats.find((c) => c.slug === "svjetska-planina")!.answers).map((a) => a.canonical);
+    expect(planina).toContain("Triglav");
+    expect(planina).not.toContain(id === "ba" ? "Jahorina" : "Kopaonik");
+    expect(planina).toContain("Velebit");
+    for (const c of cats) expect(parseSeedAnswers(c.answers).every((a) => a.share > 0 && !a.canonical.includes("/"))).toBe(true);
+    expect(new Set(codeConfigs[id].dailyPattern)).toEqual(new Set(["opce", "kviz", "zaigrano", id]));
+    expect(codeConfigs[id].dailyPattern).toEqual(codeConfigs.hr.dailyPattern.map((g) => (g === "hr" ? id : g)));
+    expect(codeConfigs[id].mirror).toBe("hr");
   });
 
   it("prelazak u drugu zemlju zadržava stranicu", () => {

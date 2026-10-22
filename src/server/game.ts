@@ -1,5 +1,5 @@
 import "server-only";
-import { and, asc, eq, isNotNull, isNull, sql } from "drizzle-orm";
+import { and, asc, eq, inArray, isNotNull, isNull, ne, sql } from "drizzle-orm";
 import { db } from "@/db";
 import {
   answerAliases,
@@ -68,6 +68,14 @@ export async function getOrCreatePuzzle(skin: Skin, date: string) {
   if (existing) return existing;
 
   const pattern = skin.config.dailyPattern;
+  // skin koji prati drugi (BiH, Srbija prate Hrvatsku) uzima iste slugove istim redom, da partija u jednoj državi
+  // ne otkrije kategorije koje druga tek dobiva; što nema svoj par (ili je par već igran), bira se kao inače
+  const wanted: (string | null)[] = pattern.map(() => null);
+  if (skin.config.mirror) {
+    const source = await getOrCreatePuzzle(await getSkin(skin.config.mirror), date);
+    const rows = await db.select({ id: categories.id, slug: categories.slug }).from(categories).where(inArray(categories.id, source.categoryIds));
+    source.categoryIds.forEach((id, i) => (wanted[i] = rows.find((r) => r.id === id)?.slug ?? null));
+  }
   const lastUsed = db
     .select({ categoryId: puzzleCategories.categoryId, last: sql<string>`max(${dailyPuzzles.date})`.as("last") })
     .from(puzzleCategories)
@@ -75,15 +83,16 @@ export async function getOrCreatePuzzle(skin: Skin, date: string) {
     .groupBy(puzzleCategories.categoryId)
     .as("last_used");
   const pool = await db
-    .select({ id: categories.id, group: categories.group })
+    .select({ id: categories.id, group: categories.group, slug: categories.slug, last: lastUsed.last })
     .from(categories)
     .leftJoin(lastUsed, eq(lastUsed.categoryId, categories.id))
     .where(and(eq(categories.skinId, skin.id), eq(categories.active, true)))
     .orderBy(sql`${lastUsed.last} asc nulls first`, sql`random()`);
 
   const picked: number[] = [];
-  for (const group of pattern) {
-    const c = pool.find((p) => p.group === group && !picked.includes(p.id));
+  for (const [i, group] of pattern.entries()) {
+    const c =
+      pool.find((p) => p.slug === wanted[i] && !p.last && !picked.includes(p.id)) ?? pool.find((p) => p.group === group && !picked.includes(p.id) && !wanted.includes(p.slug));
     if (!c) throw new Error(`Nema dovoljno aktivnih kategorija u grupi ${group}`);
     picked.push(c.id);
   }
@@ -124,6 +133,17 @@ export async function ensurePlayer(id: string) {
     .onConflictDoUpdate({ target: players.id, set: { lastSeenAt: new Date() } });
 }
 
+/** Je li igrač taj dan već igrao neku drugu državu; onda se ova partija ne natječe (prva partija dana se broji). */
+async function playedElsewhere(skin: Skin, playerId: string, date: string) {
+  const [g] = await db
+    .select({ id: games.id })
+    .from(games)
+    .innerJoin(dailyPuzzles, eq(dailyPuzzles.id, games.puzzleId))
+    .where(and(eq(games.playerId, playerId), eq(dailyPuzzles.date, date), ne(dailyPuzzles.skinId, skin.id)))
+    .limit(1);
+  return !!g;
+}
+
 async function findGame(playerId: string, puzzleId: number) {
   const [g] = await db
     .select()
@@ -152,6 +172,7 @@ export type GameState = {
   date: string;
   number: number;
   perDay: number;
+  ranked: boolean; // false = danas je već igrao drugu državu, partija je izvan konkurencije
   phase: "intro" | "play" | "reveal" | "end";
   totalKm: number;
   rounds: RoundView[];
@@ -169,14 +190,15 @@ function baseTier(cfg: SkinConfig, tier: string, share: number | null) {
 export async function getState(skin: Skin, playerId: string | null): Promise<GameState> {
   const date = localDate(skin.timezone);
   const puzzle = await getOrCreatePuzzle(skin, date);
-  const base = {
+  const head = {
     skin: { id: skin.id, timezone: skin.timezone, config: skin.config },
     date,
     number: puzzle.number,
     perDay: puzzle.categoryIds.length,
   };
   const game = playerId ? await findGame(playerId, puzzle.id) : null;
-  if (!game) return { ...base, phase: "intro", totalKm: 0, rounds: [] };
+  if (!game) return { ...head, ranked: !playerId || !(await playedElsewhere(skin, playerId, date)), phase: "intro", totalKm: 0, rounds: [] };
+  const base = { ...head, ranked: game.ranked };
 
   await expireOpenRound(skin, puzzle, game.id);
   const rows = await db
@@ -224,8 +246,10 @@ export async function getState(skin: Skin, playerId: string | null): Promise<Gam
 /** Počinje sljedeću kategoriju (ili vraća već otvorenu). Server pamti vrijeme početka. */
 export async function startNext(skin: Skin, playerId: string): Promise<GameState> {
   await ensurePlayer(playerId);
-  const puzzle = await getOrCreatePuzzle(skin, localDate(skin.timezone));
-  await db.insert(games).values({ playerId, puzzleId: puzzle.id }).onConflictDoNothing();
+  const date = localDate(skin.timezone);
+  const puzzle = await getOrCreatePuzzle(skin, date);
+  if (!(await findGame(playerId, puzzle.id)))
+    await db.insert(games).values({ playerId, puzzleId: puzzle.id, ranked: !(await playedElsewhere(skin, playerId, date)) }).onConflictDoNothing();
   const game = (await findGame(playerId, puzzle.id))!;
   await expireOpenRound(skin, puzzle, game.id);
 
@@ -360,7 +384,7 @@ export async function categoryShares(skin: Skin, puzzleId: number, categoryId: n
     .select({ answerId: rounds.answerId, n: sql<number>`count(*)::int` })
     .from(rounds)
     .innerJoin(games, eq(games.id, rounds.gameId))
-    .where(and(eq(games.puzzleId, puzzleId), eq(rounds.categoryId, categoryId), isNotNull(rounds.answerId)))
+    .where(and(eq(games.puzzleId, puzzleId), eq(games.ranked, true), eq(rounds.categoryId, categoryId), isNotNull(rounds.answerId)))
     .groupBy(rounds.answerId);
   const byId = new Map(counts.map((c) => [c.answerId!, c.n]));
   const total = counts.reduce((a, c) => a + c.n, 0);
@@ -429,7 +453,7 @@ export async function dayCompare(skin: Skin, playerId: string): Promise<(DayComp
   const rows = await db
     .select({ km: games.totalKm })
     .from(games)
-    .where(and(eq(games.puzzleId, puzzle.id), isNotNull(games.finishedAt)));
+    .where(and(eq(games.puzzleId, puzzle.id), eq(games.ranked, true), isNotNull(games.finishedAt)));
   return { ...compareDay(skin.config, rows.map((r) => r.km), game.totalKm), mine: game.totalKm };
 }
 

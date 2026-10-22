@@ -10,12 +10,14 @@ import { hrCategories } from "../src/skins/hr/categories";
 import { baSkin } from "../src/skins/ba/config";
 import { rsSkin } from "../src/skins/rs/config";
 import { regionalCategories } from "../src/skins/regional";
+import { baContent } from "../src/skins/ba/kategorije";
+import { rsContent } from "../src/skins/rs/kategorije";
 
-// BiH i Srbija imaju svoje kopije općih kategorija (svoja statistika odgovora), bez onih vezanih uz Hrvatsku
+// BiH i Srbija imaju svoje kopije općih kategorija (svoja statistika odgovora), s domaćim parovima hrvatskih tema
 const SKINS = [
   { skin: hrSkin, categories: hrCategories },
-  { skin: baSkin, categories: regionalCategories(hrCategories, "bosanski") },
-  { skin: rsSkin, categories: regionalCategories(hrCategories, "srpski") },
+  { skin: baSkin, categories: regionalCategories(hrCategories, baContent) },
+  { skin: rsSkin, categories: regionalCategories(hrCategories, rsContent) },
 ];
 
 for (const { skin, categories: cats } of SKINS) {

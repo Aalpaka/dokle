@@ -77,6 +77,8 @@ export const sr: Record<string, string> = {
   "Cijela ruta, prebaci na praćenje": "Cela ruta, prebaci na praćenje",
   "Prolaziš · {n} km": "Prolaziš · {n} km",
   "Stigao si · {n} km": "Stigao si · {n} km",
+  "Danas si već odigrao drugu državu, pa je ova partija za gušt: ne ulazi u lige, streak ni postotke odgovora.": "Danas si već odigrao drugu državu, pa je ova partija iz zezanja: ne ulazi u lige, streak ni procente odgovora.",
+  "Izvan konkurencije: danas se broji samo prva država koju si odigrao.": "Van konkurencije: danas se broji samo prva država koju si odigrao.",
   // zaglavlje, račun
   "Zemlja": "Zemlja",
   "Prijavi se s Googleom": "Prijavi se preko Googlea",
