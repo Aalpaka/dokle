@@ -480,8 +480,9 @@ function CompareChart({ c, cfg }: { c: Compare; cfg: SkinConfig }) {
   const pct = (km: number) => `${(100 * Math.min(km, end)) / end}%`;
   const top = Math.max(1, ...c.hist);
   const avgAt = stationAt(cfg, c.avgKm);
-  // glavne stanice osim starta (na mobitelu se sudara sa Zagrebom); Budva je preblizu Dubrovniku, piše u retku ispod
-  const labels = cfg.stations.filter((s) => s.alwaysLabel && s.km > 0);
+  // glavne stanice od starta do cilja, plus Budva (easter egg) ako je netko stigao do nje
+  const o = cfg.overshoot;
+  const labels = [...cfg.stations.filter((s) => s.alwaysLabel), ...(o && c.bestKm > o.overKm ? [o.station] : [])];
   return (
     <div className="compare">
       <p className="cmp-head">
@@ -509,8 +510,12 @@ function CompareChart({ c, cfg }: { c: Compare; cfg: SkinConfig }) {
           ))}
         </div>
         <div className="cmp-axis">
-          {labels.map((s) => (
-            <span key={s.name} className={"cmp-city" + (s.km / end > 0.9 ? " last" : "")} style={{ left: pct(s.km) }}>
+          {labels.map((s, i) => (
+            <span
+              key={s.name}
+              className={"cmp-city" + (s.km === 0 ? " first" : s.km / end > 0.9 ? " last" : "") + (i % 2 ? " low" : "")}
+              style={{ left: pct(s.km) }}
+            >
               {s.name}
             </span>
           ))}
