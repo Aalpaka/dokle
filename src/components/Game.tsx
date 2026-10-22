@@ -501,16 +501,19 @@ function CompareChart({ c, cfg }: { c: Compare; cfg: SkinConfig }) {
             </div>
           ))}
         </div>
+        <div className="cmp-ticks">
+          {c.hist.map((_, i) => (
+            <span key={i} className={"cmp-tick" + (i % 2 ? " odd" : "")} style={{ left: pct(i * BUCKET_KM) }}>
+              {i * BUCKET_KM}
+            </span>
+          ))}
+        </div>
         <div className="cmp-axis">
-          {labels.map((s) => {
-            const edge = s.km / end > 0.9 ? " last" : "";
-            return (
-              <span key={s.name} className={"cmp-city" + edge} style={{ left: pct(s.km) }}>
-                {s.name}
-                <small>{s.km} km</small>
-              </span>
-            );
-          })}
+          {labels.map((s) => (
+            <span key={s.name} className={"cmp-city" + (s.km / end > 0.9 ? " last" : "")} style={{ left: pct(s.km) }}>
+              {s.name}
+            </span>
+          ))}
         </div>
       </div>
       <p className="cmp-key">
