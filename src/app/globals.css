@@ -33,9 +33,9 @@ header.top { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .iconbtn[aria-pressed="true"] { color: var(--muted); }
 /* logo: žuta ploča za ulaz u naselje (crni tanki rub uvučen od ruba, crna DIN slova) */
 .plate {
-  display: inline-block; background: var(--town-sign); color: #111; border-radius: 4px; padding: 6px 26px 5px;
+  display: inline-block; background: var(--town-sign); color: #111; border-radius: 4px; padding: calc(6px + 0.1em) 26px calc(6px + 0.17em);
   box-shadow: inset 0 0 0 4px var(--town-sign), inset 0 0 0 6px #111, 0 4px 12px -4px #0009;
-  font-family: var(--font-town); font-weight: 600; font-size: 32px; letter-spacing: 0.03em; line-height: 1.1;
+  font-family: var(--font-town); font-weight: 600; font-size: 32px; letter-spacing: 0.03em; line-height: 1;
 }
 @media (max-width: 520px) { .meta { display: none; } .plate { font-size: 26px; padding-inline: 16px; } }
 .meta { font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
@@ -362,13 +362,15 @@ textarea.field { width: 100%; font-family: var(--font-mono); }
   text-align: center; gap: 18px; padding: 16px 16px 40px;
 }
 .plate.big {
-  margin: 0; font-size: clamp(60px, 12vw, 128px); padding: 14px 48px 8px; border-radius: 8px;
+  margin: 0; font-size: clamp(60px, 12vw, 128px); line-height: 1; border-radius: 8px;
+  /* unutar crnog ruba (14px): malo više mjesta dolje, za descendere (Д, р, zarez), tako da su velika slova po sredini */
+  padding: calc(14px + 0.05em) calc(14px + 0.25em) calc(14px + 0.11em);
   box-shadow: inset 0 0 0 9px var(--town-sign), inset 0 0 0 14px #111, 0 24px 60px -24px #000;
 }
-@media (max-width: 520px) { .plate.big { font-size: 60px; padding: 10px 30px 6px; } }
+@media (max-width: 520px) { .plate.big { font-size: 60px; } }
 /* duži naslovi (Dokle, bolan? / Докле, бре?) ostaju u jednom retku */
 .plate.big.long { white-space: nowrap; }
-@media (max-width: 520px) { .plate.big.long { font-size: min(60px, 10.5vw); padding-inline: 18px; } }
+@media (max-width: 520px) { .plate.big.long { font-size: min(60px, 9.5vw); padding-inline: calc(14px + 0.18em); } }
 .route-line { font-family: var(--font-mono); font-weight: 700; color: var(--signal); letter-spacing: .04em; }
 .lead { max-width: 46ch; font-size: 18px; text-wrap: balance; }
 /* jednako široki stupci, da su kružići na istim razmacima i kad su nazivi različito dugi */
@@ -427,7 +429,7 @@ textarea.field { width: 100%; font-family: var(--font-mono); }
     padding: max(10px, env(safe-area-inset-top)) 12px 18px; background: linear-gradient(#161d1fd9, #161d1f00);
   }
   .wrap.fit header.top > * { pointer-events: auto; }
-  .wrap.fit .plate { font-size: 20px; padding: 3px 12px 2px; box-shadow: inset 0 0 0 3px var(--town-sign), inset 0 0 0 4.5px #111, 0 3px 8px -3px #0009; }
+  .wrap.fit .plate { font-size: 20px; padding: calc(4.5px + 0.08em) 12px calc(4.5px + 0.15em); box-shadow: inset 0 0 0 3px var(--town-sign), inset 0 0 0 4.5px #111, 0 3px 8px -3px #0009; }
   .wrap.fit .iconbtn { width: 36px; height: 36px; }
   .wrap.fit .stage { position: absolute; inset: 0; border-radius: 0; box-shadow: none; min-height: 0; }
   .wrap.fit .hud.tl, .wrap.fit .hud.tr { top: calc(max(10px, env(safe-area-inset-top)) + 46px); }

@@ -371,8 +371,9 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
   // petlja kamere i animacije
   useEffect(() => {
     let raf = 0, last = performance.now();
-    const { image, overview } = map;
-    const xmin = image.x, xmax = image.x + image.width, ymin = image.y, ymax = image.y + image.height;
+    const { overview } = map;
+    const bounds = map.backdrop ?? map.image;
+    const xmin = bounds.x, xmax = bounds.x + bounds.width, ymin = bounds.y, ymax = bounds.y + bounds.height;
     const frame = (now: number) => {
       raf = requestAnimationFrame(frame);
       const S = sim.current, stage = stageRef.current, svg = svgRef.current;
@@ -443,7 +444,19 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
   return (
     <div className="stage" ref={stageRef} style={{ "--inset": `${inset}px` } as React.CSSProperties}>
       <svg className="map" ref={svgRef} viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-        <image href={map.image.href} x={map.image.x} y={map.image.y} width={map.image.width} height={map.image.height} preserveAspectRatio="none" />
+        {map.backdrop && (
+          <image href={map.backdrop.href} x={map.backdrop.x} y={map.backdrop.y} width={map.backdrop.width} height={map.backdrop.height} preserveAspectRatio="none" />
+        )}
+        {map.backdrop && (
+          <defs>
+            {/* rub detaljne karte se pretapa u okolicu */}
+            <filter id="map-feather" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="18" /></filter>
+            <mask id="map-fade" maskUnits="userSpaceOnUse" x={map.image.x} y={map.image.y} width={map.image.width} height={map.image.height}>
+              <rect x={map.image.x + 40} y={map.image.y + 40} width={map.image.width - 80} height={map.image.height - 80} fill="#fff" filter="url(#map-feather)" />
+            </mask>
+          </defs>
+        )}
+        <image mask={map.backdrop ? "url(#map-fade)" : undefined} href={map.image.href} x={map.image.x} y={map.image.y} width={map.image.width} height={map.image.height} preserveAspectRatio="none" />
         {map.rivers.map((r) => <path key={r.name} className="river" d={r.d} />)}
         <path className="border" d={map.border} />
         {map.dashedBorder && <path className="border dashed" d={map.dashedBorder} />}

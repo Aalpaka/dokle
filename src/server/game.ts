@@ -467,11 +467,11 @@ export async function answerList(skin: Skin, playerId: string, position: number)
   };
 }
 
-/** Usporedba s ostalim igračima dana; tek kad je igrač završio partiju. */
+/** Usporedba s ostalim igračima dana; tek kad je igrač završio partiju, i samo za partiju koja se broji. */
 export async function dayCompare(skin: Skin, playerId: string): Promise<(DayCompare & { mine: number }) | null> {
   const puzzle = await getOrCreatePuzzle(skin, localDate(skin.timezone));
   const game = await findGame(playerId, puzzle.id);
-  if (!game?.finishedAt) return null;
+  if (!game?.finishedAt || !game.ranked) return null;
   const rows = await db
     .select({ km: games.totalKm })
     .from(games)

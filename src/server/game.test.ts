@@ -2,7 +2,7 @@ import { afterAll, describe, expect, it } from "vitest";
 import { and, desc, eq, inArray } from "drizzle-orm";
 import { db, sql } from "@/db";
 import { answers, categories, dailyPuzzles, games, players, rounds } from "@/db/schema";
-import { answerList, ensurePlayer, getOrCreatePuzzle, getSkin, getState, startNext, submitAnswer } from "./game";
+import { answerList, dayCompare, ensurePlayer, getOrCreatePuzzle, getSkin, getState, startNext, submitAnswer } from "./game";
 
 // Integracijski test nad lokalnom bazom (npm run db:migrate && npm run db:seed).
 const ids: string[] = [];
@@ -135,5 +135,13 @@ describe.skipIf(!process.env.DATABASE_URL)("svi odgovori nakon igre", () => {
     expect((await getState(rs, id)).ranked).toBe(false);
     expect((await startNext(rs, id)).ranked).toBe(false);
     expect((await getState(hr, id)).ranked).toBe(true);
+    // završena partija izvan konkurencije nema usporedbu s ostalima
+    let st = await getState(rs, id);
+    while (st.phase !== "end") {
+      const r = await submitAnswer(rs, id, "zzqx nema", true);
+      if (r.status !== "scored") throw new Error(r.status);
+      st = r.state.phase === "end" ? r.state : await startNext(rs, id);
+    }
+    expect(await dayCompare(rs, id)).toBeNull();
   });
 });

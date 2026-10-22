@@ -3,6 +3,7 @@ import { hrBorder, hrRivers } from "./mapGeo";
 
 export const hrMap: SkinMap = {
   image: { href: "/map/hr-reljef.jpg", x: -375.76, y: 0, width: 2352, height: 1563 },
+  backdrop: { href: "/map/hr-okolica.jpg", x: -1103.03, y: -629.54, width: 3976, height: 2884 },
   // približno stvarne ceste; Istra je krug (do Pule preko Pazina, natrag preko Labina, Cresa i Krka)
   via: [
     [[18.88, 45.45]],
