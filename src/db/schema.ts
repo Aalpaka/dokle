@@ -106,6 +106,8 @@ export const games = pgTable(
     startedAt: timestamp("started_at", { withTimezone: true }).notNull().defaultNow(),
     finishedAt: timestamp("finished_at", { withTimezone: true }),
     totalKm: integer("total_km").notNull().default(0),
+    // false = igrač je taj dan već igrao drugu državu; partija ne ulazi u udjele, usporedbu, lige ni streak
+    ranked: boolean("ranked").notNull().default(true),
   },
   (t) => [uniqueIndex("games_player_puzzle").on(t.playerId, t.puzzleId), index("games_puzzle").on(t.puzzleId)],
 );

@@ -19,7 +19,7 @@ import { computeStats } from "@/lib/stats";
 import { dayNumber, localDate } from "@/lib/day";
 import { isAdminEmail } from "./accounts";
 import { resolveIdentity } from "./player";
-import { categoryShares, clearCategoryCache, getOrCreatePuzzle, rescoreMisses, type Skin } from "./game";
+import { categoryShares, clearCategoryCache, followersOf, getOrCreatePuzzle, pairedSlugs, rescoreMisses, type Skin } from "./game";
 
 /** Id admina ili null. Lokalno se može uključiti ADMIN_DEV_BYPASS=1 (nikad u produkciji). */
 export async function requireAdmin(): Promise<{ playerId: string | null } | null> {
@@ -227,8 +227,16 @@ export async function playersOverview(skin: Skin) {
 
 // ---------- Sadržaj ----------
 
+/** Kategorije skina; `missing` su države (hr, ba, rs) u kojima ta kategorija nema aktivan par s istim slugom. */
 export async function listCategories(skin: Skin) {
-  return db
+  const related = skin.config.mirror ? [skin.config.mirror] : followersOf(skin.id);
+  const others = related.length
+    ? await db
+        .select({ skinId: categories.skinId, slug: categories.slug })
+        .from(categories)
+        .where(and(inArray(categories.skinId, related), eq(categories.active, true)))
+    : [];
+  const rows = await db
     .select({
       id: categories.id,
       slug: categories.slug,
@@ -242,6 +250,22 @@ export async function listCategories(skin: Skin) {
     .from(categories)
     .where(eq(categories.skinId, skin.id))
     .orderBy(asc(categories.group), asc(categories.title));
+  return rows.map((r) => ({ ...r, missing: related.filter((id) => !others.some((o) => o.skinId === id && o.slug === r.slug)) }));
+}
+
+/** Za BiH i Srbiju: hrvatske kategorije koje ovdje još nemaju par (bez njih Hrvatska tu kategoriju ne bira). */
+export async function unpaired(skin: Skin) {
+  if (!skin.config.mirror) return [];
+  const mine = await db.select({ slug: categories.slug }).from(categories).where(eq(categories.skinId, skin.id));
+  const have = new Set(mine.map((m) => m.slug));
+  const source = await db
+    .select({ slug: categories.slug, title: categories.title, group: categories.group })
+    .from(categories)
+    .where(and(eq(categories.skinId, skin.config.mirror), eq(categories.active, true)))
+    .orderBy(asc(categories.title));
+  // domaća grupa izvora (hr) ovdje je domaća grupa ovog skina
+  const home = (g: string) => (g === skin.config.mirror ? skin.id : g);
+  return source.filter((c) => !have.has(c.slug)).map((c) => ({ ...c, group: home(c.group) }));
 }
 
 export async function categoryDetail(id: number) {
@@ -265,8 +289,16 @@ export async function categoryDetail(id: number) {
 const slugify = (s: string) => fold(s).replace(/ /g, "-").slice(0, 40) || "kategorija";
 
 /** Nova kategorija; odgovori u formatu seeda: "Kanonski/varijanta=udio; ..." */
-export async function createCategory(skin: Skin, input: { title: string; group: string; hint?: string; strip?: string[]; answers: string }) {
+export async function createCategory(skin: Skin, input: { title: string; group: string; hint?: string; strip?: string[]; answers: string; pairOf?: string }) {
   if (!skin.config.groups[input.group]) throw new Error("Nepoznata grupa");
+  // BiH i Srbija: svaka kategorija je par hrvatske, s istim slugom, da dođe isti dan
+  let slug = `${slugify(input.title)}-${Date.now().toString(36)}`;
+  if (skin.config.mirror) {
+    const open = await unpaired(skin);
+    const pair = open.find((c) => c.slug === input.pairOf);
+    if (!pair) throw new Error("Odaberi hrvatsku kategoriju kojoj je ovo par");
+    slug = pair.slug;
+  }
   const parsed = parseSeedAnswers(input.answers)
     .filter((a) => a.canonical && Number.isFinite(a.share))
     .map((a) => ({ ...a, canonical: capitalize(a.canonical) }));
@@ -276,7 +308,7 @@ export async function createCategory(skin: Skin, input: { title: string; group: 
       .insert(categories)
       .values({
         skinId: skin.id,
-        slug: `${slugify(input.title)}-${Date.now().toString(36)}`,
+        slug,
         title: input.title.trim(),
         hint: input.hint?.trim() || null,
         group: input.group,
@@ -354,15 +386,24 @@ export async function schedule(skin: Skin, days = 14) {
 
 /** Postavlja kategorije za dan; dozvoljeno samo dok taj dan nitko nije igrao. */
 export async function setSchedule(skin: Skin, date: string, categoryIds: number[] | null) {
-  const [p] = await db.select().from(dailyPuzzles).where(and(eq(dailyPuzzles.skinId, skin.id), eq(dailyPuzzles.date, date)));
-  if (p) {
-    const [g] = await db.select({ n: sql<number>`count(*)::int` }).from(games).where(eq(games.puzzleId, p.id));
-    if (g.n > 0) throw new Error("Taj dan su igrači već igrali");
-    await db.delete(dailyPuzzles).where(eq(dailyPuzzles.id, p.id));
+  if (skin.config.mirror) throw new Error("Raspored ove države prati Hrvatsku; mijenja se u hrvatskom adminu");
+  // dan se mijenja u svim državama odjednom (BiH i Srbija se ponovno slože po Hrvatskoj)
+  const ids = [skin.id, ...followersOf(skin.id)];
+  const ps = await db.select().from(dailyPuzzles).where(and(inArray(dailyPuzzles.skinId, ids), eq(dailyPuzzles.date, date)));
+  if (ps.length) {
+    const played = await db.select({ puzzleId: games.puzzleId }).from(games).where(inArray(games.puzzleId, ps.map((p) => p.id))).limit(1);
+    if (played.length) throw new Error("Taj dan su igrači već igrali");
   }
+  if (categoryIds) {
+    if (categoryIds.length !== skin.config.dailyPattern.length || new Set(categoryIds).size !== categoryIds.length)
+      throw new Error(`Treba ${skin.config.dailyPattern.length} različitih kategorija`);
+    const ready = await pairedSlugs(skin.id);
+    const chosen = await db.select({ slug: categories.slug, title: categories.title }).from(categories).where(inArray(categories.id, categoryIds));
+    const lone = ready ? chosen.filter((c) => !ready.has(c.slug)) : [];
+    if (lone.length) throw new Error(`Nema para u BiH ili Srbiji: ${lone.map((c) => c.title).join(", ")}`);
+  }
+  if (ps.length) await db.delete(dailyPuzzles).where(inArray(dailyPuzzles.id, ps.map((p) => p.id)));
   if (!categoryIds) return getOrCreatePuzzle(skin, date); // automatski odabir
-  if (categoryIds.length !== skin.config.dailyPattern.length || new Set(categoryIds).size !== categoryIds.length)
-    throw new Error(`Treba ${skin.config.dailyPattern.length} različitih kategorija`);
   await db.transaction(async (tx) => {
     const [np] = await tx.insert(dailyPuzzles).values({ skinId: skin.id, date, number: dayNumber(skin.launchDate, date) }).returning();
     await tx.insert(puzzleCategories).values(categoryIds.map((categoryId, position) => ({ puzzleId: np.id, position, categoryId })));

@@ -16,7 +16,7 @@ npm install
 cp .env.example .env
 docker compose up -d        # lokalni Postgres
 npm run db:migrate          # tablice
-npm run db:seed             # skin HR + početne kategorije
+npm run db:seed             # skinovi HR, BiH, Srbija + kategorije
 npm run dev                 # http://localhost:3000
 ```
 
@@ -53,8 +53,11 @@ Supabasea i Google OAutha su u dokumentu projekta.
 ## Skinovi
 
 Sve vezano uz zemlju je u skinu (`src/skins/<id>/`): ruta, postaje, poruke, tierovi, karta i kategorije.
-Seed ih upisuje u bazu (`skins.config`), a aplikacija ih čita iz baze. Novi skin (BiH, Srbija) =
-nova mapa u `src/skins/` + unos u `scripts/seed.ts`. Koji skin se servira bira `DEFAULT_SKIN`.
+Seed ih upisuje u bazu (`skins.config`), a aplikacija ih čita iz baze. Skinovi: Hrvatska na `/`, BiH na `/ba`,
+Srbija na `/rs` (popis u `src/skins/meta.ts`, izbornik zemlje u zaglavlju). Stranica šalje skin API-ju u zaglavlju
+`x-skin` (`skinFetch`), a server ga čita u `currentSkin()`. BiH i Srbija imaju svoje kopije općih kategorija bez onih
+vezanih uz Hrvatsku (`src/skins/regional.ts`), pa i svoju statistiku, raspored, lige i streakove. Tekstovi sučelja
+pišu se na hrvatskom i prevode u `src/i18n/` (ključ je hrvatski tekst). Admin bira zemlju s `/admin?skin=ba`.
 
 ## Produkcija (Vercel)
 

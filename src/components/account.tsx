@@ -5,6 +5,9 @@ import { usePathname } from "next/navigation";
 import { supabaseBrowser } from "@/lib/supabase/client";
 import { googleClientId, googleIdentity } from "@/lib/google";
 import type { PlayerStats } from "@/lib/stats";
+import { codeConfigs } from "@/skins/maps";
+import { SkinPicker } from "./SkinPicker";
+import { skinFetch, useSkin, useT } from "./skin";
 
 export type Me = {
   authEnabled: boolean;
@@ -16,7 +19,7 @@ export type Me = {
 export function useMe(reloadKey: unknown = 0) {
   const [me, setMe] = useState<Me | null>(null);
   useEffect(() => {
-    fetch("/api/me", { cache: "no-store" })
+    skinFetch("/api/me", { cache: "no-store" })
       .then((r) => r.json())
       .then(setMe, () => {});
   }, [reloadKey]);
@@ -28,16 +31,17 @@ export function signInWithGoogle(next = window.location.pathname) {
   return supabaseBrowser().auth.signInWithOAuth({ provider: "google", options: { redirectTo } });
 }
 
-export async function signOut() {
+export async function signOut(home = "/") {
   await fetch("/api/auth/logout", { method: "POST" });
-  window.location.href = "/";
+  window.location.href = home;
 }
 
 /**
  * Prijava. S NEXT_PUBLIC_GOOGLE_CLIENT_ID je to Googleov gumb na našoj stranici (Google piše ime aplikacije);
  * bez njega, ili ako se Googleova skripta ne učita, stari gumb koji vodi preko Supabaseove adrese.
  */
-export function GoogleButton({ label = "Prijavi se s Googleom", className, compact }: { label?: string; className?: string; compact?: boolean }) {
+export function GoogleButton({ label, className, compact }: { label?: string; className?: string; compact?: boolean }) {
+  const { htmlLang } = useSkin();
   const ref = useRef<HTMLDivElement>(null);
   const [fallback, setFallback] = useState(!googleClientId);
   useEffect(() => {
@@ -49,7 +53,7 @@ export function GoogleButton({ label = "Prijavi se s Googleom", className, compa
           gsi.renderButton(ref.current, {
             theme: "filled_black",
             shape: "pill",
-            locale: "hr",
+            locale: htmlLang,
             size: compact ? "medium" : "large",
             text: compact ? "signin" : "signin_with",
           });
@@ -59,13 +63,14 @@ export function GoogleButton({ label = "Prijavi se s Googleom", className, compa
     return () => {
       live = false;
     };
-  }, [compact]);
+  }, [compact, htmlLang]);
   if (!fallback) return <div ref={ref} className="gsi-btn" />;
   return <RedirectButton label={label} className={className} />;
 }
 
-function RedirectButton({ label, className }: { label: string; className?: string }) {
+function RedirectButton({ label, className }: { label?: string; className?: string }) {
   const [busy, setBusy] = useState(false);
+  const t = useT();
   return (
     <button
       className={className}
@@ -75,7 +80,7 @@ function RedirectButton({ label, className }: { label: string; className?: strin
         signInWithGoogle().then(({ error }) => error && setBusy(false));
       }}
     >
-      {label}
+      {label ?? t("Prijavi se s Googleom")}
     </button>
   );
 }
@@ -83,7 +88,10 @@ function RedirectButton({ label, className }: { label: string; className?: strin
 /** Desni kut zaglavlja: za prijavljene (admin), lige i nadimak (link na profil), inače gumb za prijavu. */
 export function AccountLink({ me }: { me: Me | null }) {
   const path = usePathname();
+  const { href, base } = useSkin();
+  const t = useT();
   if (!me?.authEnabled) return null;
+  const at = (p: string) => path === href(p) || path.startsWith(base + p + "/");
   if (me.user)
     return (
       <nav className="acct-nav" aria-label="Račun">
@@ -92,25 +100,27 @@ export function AccountLink({ me }: { me: Me | null }) {
             <span>⚙️</span><span className="wide">Admin</span>
           </a>
         )}
-        <a className="acct" href="/lige" aria-current={path.startsWith("/lig") ? "page" : undefined} title="Lige">
-          <span>🏆</span><span className="wide">Lige</span>
+        <a className="acct" href={href("/lige")} aria-current={at("/lige") || path.startsWith(base + "/liga/") ? "page" : undefined} title={t("Lige")}>
+          <span>🏆</span><span className="wide">{t("Lige")}</span>
         </a>
-        <a className="acct" href="/profil" aria-current={path === "/profil" ? "page" : undefined}>
-          <span className="nm">{me.user.nickname ?? "Profil"}</span>
+        <a className="acct" href={href("/profil")} aria-current={at("/profil") ? "page" : undefined}>
+          <span className="nm">{me.user.nickname ?? t("Profil")}</span>
           {me.stats && me.stats.currentStreak > 0 && <span className="wide">· 🔥 {me.stats.currentStreak}</span>}
         </a>
       </nav>
     );
-  return <GoogleButton label="Prijava" className="ghost small-btn" compact />;
+  return <GoogleButton label={t("Prijava")} className="ghost small-btn" compact />;
 }
 
 /** Okvir za stranice izvan igre (profil, lige): isto zaglavlje i ista širina kao glavna stranica. */
 export function PageShell({ me, children }: { me: Me | null; children: React.ReactNode }) {
+  const { id, href } = useSkin();
   return (
     <div className="wrap">
       <header className="top">
-        <a href="/" className="plate" style={{ textDecoration: "none" }}>Dokle?</a>
+        <a href={href("/")} className="plate" style={{ textDecoration: "none" }}>{codeConfigs[id].title}</a>
         <div className="spacer" />
+        <SkinPicker />
         <AccountLink me={me} />
       </header>
       {children}

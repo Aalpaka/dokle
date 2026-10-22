@@ -32,6 +32,12 @@ describe("match", () => {
     expect(match(jelo, "Štruklji")?.canonical).toBe("Štrukli");
   });
 
+  it("ćirilica", () => {
+    expect(match(jelo, "Ћевапи")?.canonical).toBe("Ćevapi");
+    expect(match(rijeka, "Сава")?.canonical).toBe("Sava");
+    expect(match(jelo, "Сарма")?.canonical).toBe("Sarma");
+  });
+
   it("prazan unos", () => {
     expect(match(otok, "   ")).toBeNull();
   });

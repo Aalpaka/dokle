@@ -1,9 +1,16 @@
-// Prepoznavanje odgovora: dijakritici, dj→đ, ekavica→ijekavica, padežni nastavci, 1 tipfeler za 6+ slova.
+// Prepoznavanje odgovora: ćirilica, dijakritici, dj→đ, ekavica→ijekavica, padežni nastavci, 1 tipfeler za 6+ slova.
 // Čista logika bez baze, koristi je server (provjera i "Šalje se:" pregled).
+
+// srpska ćirilica u latinicu (odgovori su na latinici, a igrač u Srbiji može pisati i ćirilicom)
+const CYR: Record<string, string> = {
+  а: "a", б: "b", в: "v", г: "g", д: "d", ђ: "đ", е: "e", ж: "ž", з: "z", и: "i", ј: "j", к: "k", л: "l", љ: "lj", м: "m",
+  н: "n", њ: "nj", о: "o", п: "p", р: "r", с: "s", т: "t", ћ: "ć", у: "u", ф: "f", х: "h", ц: "c", ч: "č", џ: "dž", ш: "š",
+};
 
 export function fold(s: string): string {
   return s
     .toLowerCase()
+    .replace(/[\u0400-\u04ff]/g, (c) => CYR[c] ?? c)
     .replace(/[čć]/g, "c")
     .replace(/š/g, "s")
     .replace(/ž/g, "z")

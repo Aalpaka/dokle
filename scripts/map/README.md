@@ -18,3 +18,17 @@ Redoslijed (pokreće se iz ove mape):
 
 Izvori i licence: AWS Terrain Tiles (SRTM, GMTED2010, ETOPO1 i drugi otvoreni izvori, uz navođenje),
 Natural Earth (javno vlasništvo). Navod je u podnožju igre.
+
+## BiH i Srbija (`ba-reljef.jpg`, `rs-reljef.jpg`)
+
+Ista projekcija i iste koordinate karte kao Hrvatska, samo drugi obuhvat slike i druga maska zemlje.
+Skripte su parametrizirane (pokreću se iz mape s pločicama i `node_modules` kao gore, plus
+`rivers.geojson` = Natural Earth `ne_10m_rivers_lake_centerlines`):
+
+1. `python3 fetch_tiles_skin.py` (pločice za cijelu regiju, lon 12,9–25,9).
+2. `node vec_skin.mjs ba 13.3 45.75 21.6 42.2 "Bosnia and Herz." "Sava:Sava,Drina:Drina,Danube:Dunav,Drau:Drava"`
+   i `node vec_skin.mjs rs 16.2 46.5 25.6 41.6 "Serbia" "Sava:Sava,Drina:Drina,Danube:Dunav,Tisa:Tisa,Morava:Morava" "Kosovo"`
+   (zadnji argument: granica koja se crta isprekidano). Daje `vec_<skin>.json` (obuhvat slike, granica, rijeke) i `rings_<skin>.json`.
+3. `python3 relief_skin.py ba ba-reljef.jpg`; za Srbiju se Kosovo boja djelomično:
+   `node vec_skin.mjs ks 16.2 46.5 25.6 41.6 "Kosovo" ""` pa `python3 relief_skin.py rs rs-reljef.jpg rings_ks.json 0.6`.
+4. Granicu i rijeke prepisati u `src/skins/<skin>/mapGeo.ts`, a obuhvat slike u `image` u `src/skins/<skin>/map.ts`.

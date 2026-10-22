@@ -137,6 +137,7 @@ async function finishedGames(skin: Skin, playerIds: string[], from?: string) {
       and(
         inArray(games.playerId, playerIds),
         eq(dailyPuzzles.skinId, skin.id),
+        eq(games.ranked, true),
         isNotNull(games.finishedAt),
         from ? gte(dailyPuzzles.date, from) : undefined,
       ),
@@ -233,7 +234,7 @@ export async function leagueView(skin: Skin, league: League, playerId: string | 
     ? await db
         .select({ id: games.id, playerId: games.playerId, finishedAt: games.finishedAt, km: games.totalKm })
         .from(games)
-        .where(and(eq(games.puzzleId, puzzle.id), inArray(games.playerId, ids)))
+        .where(and(eq(games.puzzleId, puzzle.id), eq(games.ranked, true), inArray(games.playerId, ids)))
     : [];
   const byPlayer = new Map(todays.map((g) => [g.playerId, g]));
   const todayStatus: TodayStatus[] = members
