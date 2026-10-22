@@ -10,6 +10,7 @@ import { setMuted, sfx, useMuted } from "@/lib/sound";
 import MapStage from "./MapStage";
 import { vehicleIcons } from "./vehicleIcons";
 import { AccountLink, GoogleButton, useMe, type Me } from "./account";
+import { LeaguesBox } from "./Leagues";
 
 async function api<T>(path: string, body?: unknown): Promise<T> {
   const res = await fetch(path, {
@@ -434,9 +435,10 @@ function End({ state, me }: { state: GameState; me: Me | null }) {
           <div className="row"><GoogleButton /></div>
         </div>
       )}
+      {me?.user && <LeaguesBox />}
       {me?.user && me.stats && (
         <p className="small">
-          🔥 Streak: <b>{me.stats.currentStreak}</b> {me.stats.currentStreak === 1 ? "dan" : "dana"} · <a href="/profil">tvoja povijest</a> · <a href="/lige">lige</a>
+          🔥 Streak: <b>{me.stats.currentStreak}</b> {me.stats.currentStreak === 1 ? "dan" : "dana"} · <a href="/profil">tvoja povijest</a>
         </p>
       )}
     </div>

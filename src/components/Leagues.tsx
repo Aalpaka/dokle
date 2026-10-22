@@ -97,6 +97,37 @@ export function MyLeagues() {
   );
 }
 
+/** Okvir na kraju partije: mjesto u svakoj ligi ovaj tjedan ili poziv da napravi ligu. */
+export function LeaguesBox() {
+  const [list, setList] = useState<LeagueSummary[] | null>(null);
+  useEffect(() => {
+    fetch("/api/lige", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((b) => setList(b.leagues), () => setList([]));
+  }, []);
+  if (!list) return null;
+  return (
+    <div className="savebox">
+      <b>🏆 Lige</b>
+      {list.length ? (
+        <ul className="recap leagues">
+          {list.map((l) => (
+            <li key={l.code}>
+              <a href={`/liga/${l.code}`}>
+                <span className="a">{l.name}</span>
+                <span className="k">{l.rank ? `${l.rank}. ovaj tjedan` : ""}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <span className="small">Napravi ligu s ekipom i pratite tko svaki dan stigne najdalje.</span>
+      )}
+      <a className="small" href="/lige">{list.length ? "Sve lige i nova liga" : "Napravi ligu"} →</a>
+    </div>
+  );
+}
+
 // ---------- /liga/KOD ----------
 
 export function LeaguePage({ code }: { code: string }) {
