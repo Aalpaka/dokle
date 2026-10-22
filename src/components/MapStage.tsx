@@ -377,7 +377,8 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
       const cover = Math.min(insetRef.current, ch * 0.7), visible = (ch - cover) / cw;
       let tx: number, ty: number, tw: number;
       if (modeRef.current === "whole") {
-        tw = Math.min(image.width, Math.max(overview.width, overview.height / visible));
+        // cijela država mora stati i po visini, pa i na širokom ekranu karta smije biti uža od pogleda
+        tw = Math.max(overview.width, overview.height / visible);
         tx = overview.x;
         ty = overview.y;
       } else {

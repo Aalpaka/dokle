@@ -52,7 +52,7 @@ export const hrMap: SkinMap = {
   ],
   border: hrBorder,
   rivers: hrRivers,
-  overview: { x: 800, y: 775, width: 1520, height: 1480 },
+  overview: { x: 805, y: 796, width: 1620, height: 1540 },
   // Dubrovnik → Cavtat → Debeli Brijeg → Herceg Novi → trajekt Kamenari → Tivat → Budva
   overshootVia: [[18.22, 42.58], [18.4, 42.5], [18.54, 42.45], [18.68, 42.46], [18.7, 42.43], [18.78, 42.33]],
   credit: "Reljef: AWS Terrain Tiles (SRTM, GMTED2010, ETOPO1). Granice i rijeke: Natural Earth.",
