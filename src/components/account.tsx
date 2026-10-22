@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { supabaseBrowser } from "@/lib/supabase/client";
 import type { PlayerStats } from "@/lib/stats";
+import { codeConfigs } from "@/skins/maps";
+import { SkinPicker } from "./SkinPicker";
+import { skinFetch, useSkin, useT } from "./skin";
 
 export type Me = {
   authEnabled: boolean;
@@ -15,7 +18,7 @@ export type Me = {
 export function useMe(reloadKey: unknown = 0) {
   const [me, setMe] = useState<Me | null>(null);
   useEffect(() => {
-    fetch("/api/me", { cache: "no-store" })
+    skinFetch("/api/me", { cache: "no-store" })
       .then((r) => r.json())
       .then(setMe, () => {});
   }, [reloadKey]);
@@ -27,13 +30,14 @@ export function signInWithGoogle(next = window.location.pathname) {
   return supabaseBrowser().auth.signInWithOAuth({ provider: "google", options: { redirectTo } });
 }
 
-export async function signOut() {
+export async function signOut(home = "/") {
   await fetch("/api/auth/logout", { method: "POST" });
-  window.location.href = "/";
+  window.location.href = home;
 }
 
-export function GoogleButton({ label = "Prijavi se s Googleom", className }: { label?: string; className?: string }) {
+export function GoogleButton({ label, className }: { label?: string; className?: string }) {
   const [busy, setBusy] = useState(false);
+  const t = useT();
   return (
     <button
       className={className}
@@ -43,7 +47,7 @@ export function GoogleButton({ label = "Prijavi se s Googleom", className }: { l
         signInWithGoogle().then(({ error }) => error && setBusy(false));
       }}
     >
-      {label}
+      {label ?? t("Prijavi se s Googleom")}
     </button>
   );
 }
@@ -51,7 +55,10 @@ export function GoogleButton({ label = "Prijavi se s Googleom", className }: { l
 /** Desni kut zaglavlja: za prijavljene (admin), lige i nadimak (link na profil), inače gumb za prijavu. */
 export function AccountLink({ me }: { me: Me | null }) {
   const path = usePathname();
+  const { href, base } = useSkin();
+  const t = useT();
   if (!me?.authEnabled) return null;
+  const at = (p: string) => path === href(p) || path.startsWith(base + p + "/");
   if (me.user)
     return (
       <nav className="acct-nav" aria-label="Račun">
@@ -60,25 +67,27 @@ export function AccountLink({ me }: { me: Me | null }) {
             <span>⚙️</span><span className="wide">Admin</span>
           </a>
         )}
-        <a className="acct" href="/lige" aria-current={path.startsWith("/lig") ? "page" : undefined} title="Lige">
-          <span>🏆</span><span className="wide">Lige</span>
+        <a className="acct" href={href("/lige")} aria-current={at("/lige") || path.startsWith(base + "/liga/") ? "page" : undefined} title={t("Lige")}>
+          <span>🏆</span><span className="wide">{t("Lige")}</span>
         </a>
-        <a className="acct" href="/profil" aria-current={path === "/profil" ? "page" : undefined}>
-          <span className="nm">{me.user.nickname ?? "Profil"}</span>
+        <a className="acct" href={href("/profil")} aria-current={at("/profil") ? "page" : undefined}>
+          <span className="nm">{me.user.nickname ?? t("Profil")}</span>
           {me.stats && me.stats.currentStreak > 0 && <span className="wide">· 🔥 {me.stats.currentStreak}</span>}
         </a>
       </nav>
     );
-  return <GoogleButton label="Prijava" className="ghost small-btn" />;
+  return <GoogleButton label={t("Prijava")} className="ghost small-btn" />;
 }
 
 /** Okvir za stranice izvan igre (profil, lige): isto zaglavlje i ista širina kao glavna stranica. */
 export function PageShell({ me, children }: { me: Me | null; children: React.ReactNode }) {
+  const { id, href } = useSkin();
   return (
     <div className="wrap">
       <header className="top">
-        <a href="/" className="plate" style={{ textDecoration: "none" }}>Dokle?</a>
+        <a href={href("/")} className="plate" style={{ textDecoration: "none" }}>{codeConfigs[id].title}</a>
         <div className="spacer" />
+        <SkinPicker />
         <AccountLink me={me} />
       </header>
       {children}

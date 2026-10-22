@@ -206,7 +206,7 @@ export const sfx = {
     if (!c) return;
     [523, 659, 784, 1047, 784, 1047].forEach((f, i) => tone(c, "triangle", f, c.currentTime + i * 0.13, 0.01, 0.22, i > 3 ? 0.6 : 0.18));
   },
-  vehicle(v: Vehicle, dur: number) {
+  vehicle(v: Vehicle, dur: number, heliClip = true) {
     const c = ready();
     if (!c) return;
     const t = c.currentTime;
@@ -257,7 +257,7 @@ export const sfx = {
       tone(c, "sine", 220, t, 0.3, 0.05, dur, 440);
     } else if (v === "heli") {
       // "Vežite se, polijećemo!" pa elisa, koja ubrzava pri uzlijetanju
-      const clip = samples.heli;
+      const clip = heliClip ? samples.heli : undefined;
       if (clip) {
         const src = c.createBufferSource(), g = c.createGain();
         src.buffer = clip;

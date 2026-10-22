@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { CODE_RE } from "@/lib/league";
 import { LeagueError, leagueByCode, memberDay } from "@/server/leagues";
 import { resolveIdentity } from "@/server/player";
-import { currentSkin } from "@/server/skin";
+import { getSkin } from "@/server/game";
 
 export const dynamic = "force-dynamic";
 
@@ -18,7 +18,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ code: string }>
   const date = q.get("datum") ?? "";
   if (!Number.isInteger(memberId) || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return NextResponse.json({ error: "Neispravan upit." }, { status: 400 });
   try {
-    return NextResponse.json(await memberDay(await currentSkin(), league, playerId, memberId, date));
+    return NextResponse.json(await memberDay(await getSkin(league.skinId), league, playerId, memberId, date));
   } catch (e) {
     if (e instanceof LeagueError) return NextResponse.json({ error: e.message }, { status: 400 });
     throw e;

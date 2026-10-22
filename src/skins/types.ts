@@ -26,13 +26,19 @@ export type SkinMap = {
   via: [number, number][][];
   ferries: { name: string; from: [number, number]; to: [number, number] }[];
   towns: [string, number, number][]; // mjesta koja se samo prikazuju
-  landmarks: { name: string; lon: number; lat: number; kind: "crash" }[];
+  // "crash": kopnena vozila tu stanu i zabiju se (zvuk `clip`); "pass": samo natpis `message` u prolazu
+  landmarks: { name: string; lon: number; lat: number; kind: "crash" | "pass"; message?: string; clip?: string }[];
   countries: [string, number, number][];
   border: string; // SVG path u koordinatama karte
+  dashedBorder?: string; // sporna granica, crta se isprekidano
   rivers: { name: string; d: string }[];
   // središte i širina pogleda "Cijela ruta" u koordinatama karte
   overview: { x: number; y: number; width: number; height: number };
   credit: string;
+  // znak na tabli kad se stigne na cilj (zadano ⛵, cilj je na moru)
+  finishEmoji?: string;
+  // snimka uz uzlijetanje helikoptera (samo Hrvatska)
+  heliClip?: boolean;
   // cesta od cilja do postaje produžetka (overshoot), crta se tek kad se vozi
   overshootVia?: [number, number][];
 };

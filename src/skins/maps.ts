@@ -1,11 +1,15 @@
 import type { SkinConfig, SkinMap } from "./types";
 import { hrMap } from "./hr/map";
 import { hrConfig } from "./hr/config";
+import { baMap } from "./ba/map";
+import { baConfig } from "./ba/config";
+import { rsMap } from "./rs/map";
+import { rsConfig } from "./rs/config";
 
 // karte po skinu; drže se na klijentu jer su veće od ostatka konfiguracije
-export const maps: Record<string, SkinMap> = { hr: hrMap };
+export const maps: Record<string, SkinMap> = { hr: hrMap, ba: baMap, rs: rsMap };
 
-const codeConfigs: Record<string, SkinConfig> = { hr: hrConfig };
+export const codeConfigs: Record<string, SkinConfig> = { hr: hrConfig, ba: baConfig, rs: rsConfig };
 
 /**
  * Konfiguracija iz baze s izgledom tierova (vozilo, boja, sličica) iz koda. Baza se osvježava tek

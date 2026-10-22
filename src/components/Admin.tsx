@@ -4,9 +4,11 @@ import { createContext, useCallback, useContext, useEffect, useRef, useState } f
 import { assignTiers, priorForTier, tierFor } from "@/lib/scoring";
 import Modal from "./Modal";
 import { AccountLink, useMe } from "./account";
+import { SkinProvider, skinFetch, useSkin } from "./skin";
+import { SKIN_IDS, SKIN_META, type SkinId } from "@/skins/meta";
 
 async function api<T>(path: string, method = "GET", body?: unknown): Promise<T> {
-  const res = await fetch(path, {
+  const res = await skinFetch(path, {
     method,
     headers: body === undefined ? undefined : { "content-type": "application/json" },
     body: body === undefined ? undefined : JSON.stringify(body),
@@ -79,7 +81,16 @@ function useTierPrior() {
 const TABS = ["Dan", "Za pregled", "Igrači", "Sadržaj", "Raspored", "Odgovori"] as const;
 type Tab = (typeof TABS)[number];
 
-export default function Admin() {
+/** Admin za jednu zemlju (?skin=ba); svaka zemlja ima svoje kategorije, raspored i igrače. */
+export default function Admin({ skin }: { skin: SkinId }) {
+  return (
+    <SkinProvider skin={skin}>
+      <AdminSkin />
+    </SkinProvider>
+  );
+}
+
+function AdminSkin() {
   const meta = useLoad<Meta>("/api/admin/me");
   const [tab, setTab] = useState<Tab>("Dan");
 
@@ -121,11 +132,19 @@ export default function Admin() {
 
 function AdminShell({ children }: { children: React.ReactNode }) {
   const me = useMe();
+  const { id } = useSkin();
   return (
     <div className="wrap">
       <header className="top">
         <a href="/" className="plate" style={{ textDecoration: "none" }}>Dokle?</a>
         <span className="eyebrow">Admin</span>
+        <nav className="tabs" aria-label="Zemlja">
+          {SKIN_IDS.map((s) => (
+            <a key={s} href={s === "hr" ? "/admin" : `/admin?skin=${s}`} className={"acct" + (s === id ? "" : " ghost")} aria-current={s === id ? "page" : undefined}>
+              {SKIN_META[s].flag} {SKIN_META[s].short}
+            </a>
+          ))}
+        </nav>
         <div className="spacer" />
         <AccountLink me={me} />
       </header>

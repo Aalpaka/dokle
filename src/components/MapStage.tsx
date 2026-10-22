@@ -7,6 +7,7 @@ import { formatShare, landingAt, routeKm, routeStations } from "@/lib/scoring";
 import { Route, project, type Pt } from "@/lib/route";
 import { sfx } from "@/lib/sound";
 import { MISS_COLOR, crashSign, vehicleIcons } from "./vehicleIcons";
+import { useT } from "./skin";
 
 // trajanje vožnje po vozilu (s); pješak je najsporiji, a prijeđe i najmanje km
 const DURATION: Record<Vehicle, number> = { walk: 3.4, bike: 3.0, train: 2.9, bus: 2.9, car: 2.6, plane: 2.8, heli: 3.2 };
@@ -50,7 +51,9 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
   const stations = useMemo(() => allStations.map((s) => project(s.lon, s.lat)), [allStations]);
   const fullRoad = useMemo(() => route.path(0, cfg.maxKm), [route, cfg.maxKm]);
   // mjesta uz cestu sa znakom sudara: kopnena vozila tu se zabiju u prolazu
-  const crashes = useMemo(() => map.landmarks.map((l) => ({ ...l, km: route.kmNear(l.lon, l.lat) })), [map.landmarks, route]);
+  const landmarks = useMemo(() => map.landmarks.map((l) => ({ ...l, km: route.kmNear(l.lon, l.lat) })), [map.landmarks, route]);
+  const crashes = landmarks.filter((l) => l.kind === "crash");
+  const t = useT();
 
   const stageRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
@@ -71,7 +74,7 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
   insetRef.current = inset;
   const [hudKm, setHudKm] = useState(() => rounds.reduce((a, r) => a + r.km, 0));
   const [toast, setToast] = useState<Toast | null>(null);
-  const [arrival, setArrival] = useState<{ name: string; km: number; message: string; egg: boolean; id: number } | null>(null);
+  const [arrival, setArrival] = useState<{ name: string; km: number; message: string; egg: boolean; pass?: boolean; id: number } | null>(null);
   const [replaying, setReplaying] = useState(false);
 
   // stanje simulacije; mijenja se u petlji animacije, ne kroz React
@@ -140,14 +143,20 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
     sfx.station();
   }
 
-  function crash(quiet: boolean) {
+  function crash(c: (typeof landmarks)[number], quiet: boolean) {
     badgeRef.current?.animate(
       [{ translate: "0 0" }, { translate: "-6px 3px" }, { translate: "5px -4px" }, { translate: "-3px -2px" }, { translate: "0 0" }],
       { duration: 380, iterations: 2 },
     );
     if (quiet) return;
     sfx.crash();
-    sfx.clip("/sounds/gornje-jesenje.mp3", 0.5);
+    if (c.clip) sfx.clip(c.clip, 0.5);
+  }
+
+  // mjesto kroz koje se samo prolazi: natpis kao na postaji, bez stajanja
+  function pass(l: (typeof landmarks)[number], quiet: boolean) {
+    if (quiet) return;
+    setArrival({ name: l.name, km: Math.round(l.km), message: l.message ?? "", egg: false, pass: true, id: performance.now() });
   }
 
   // kopneno vozilo koje prolazi pored znaka sudara stane tamo, odstoji i nastavi
@@ -167,7 +176,7 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
     const dur = (reduce ? 0.6 : DURATION[tier.vehicle] * (quiet ? 0.5 : 1)) * 1000;
     const a = route.at(from), b = route.at(to);
     S.anim = { tier, from, to, start: performance.now(), dur, seg, p0: [a.x, a.y], p1: [b.x, b.y], quiet, onDone };
-    if (!quiet) sfx.vehicle(tier.vehicle, dur / 1000);
+    if (!quiet) sfx.vehicle(tier.vehicle, dur / 1000, !!map.heliClip);
   }
 
   function step(now: number) {
@@ -228,7 +237,7 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
       if (s.km > prev && s.km <= k) arrive(i, a.quiet);
     });
     if (a.tier.vehicle !== "plane" && a.tier.vehicle !== "heli")
-      for (const c of crashes) if (c.km > prev && c.km <= k) crash(a.quiet);
+      for (const l of landmarks) if (l.km > prev && l.km <= k) (l.kind === "crash" ? crash(l, a.quiet) : pass(l, a.quiet));
     drawSegments();
     setHudKm(Math.round(k));
     if (raw >= 1) {
@@ -279,17 +288,17 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
     if (!tier) {
       sfx.miss();
       setVehicle(null);
-      setToast({ color: MISS_COLOR, icon: vehicleIcons.miss, logo: false, title: cfg.miss.name, sub: r.raw ? `„${r.raw}” nije na popisu` : "Vrijeme je isteklo", km: "+0 km", id });
+      setToast({ color: MISS_COLOR, icon: vehicleIcons.miss, logo: false, title: cfg.miss.name, sub: r.raw ? t("„{x}” nije na popisu", { x: r.raw }) : t("Vrijeme je isteklo"), km: "+0 km", id });
       badgeRef.current?.animate([{ translate: "0" }, { translate: "-5px" }, { translate: "5px" }, { translate: "0" }], { duration: 300, iterations: 2 });
       return;
     }
     sfx.correct();
     const b = badgeHtml(tier);
     const sp = r.speed ? ` · ${r.speed.emoji} ${r.speed.name} ×${String(r.speed.multiplier).replace(".", ",")}` : "";
-    setToast({ color: tier.color, icon: b.html, logo: b.logo, title: `${r.canonical} · ${tier.name}`, sub: `${formatShare(r.share ?? 0)} igrača${sp}`, km: `+${r.km} km`, id });
+    setToast({ color: tier.color, icon: b.html, logo: b.logo, title: `${r.canonical} · ${tier.name}`, sub: `${formatShare(r.share ?? 0)} ${t("igrača")}${sp}`, km: `+${r.km} km`, id });
     const to = routeKm(cfg, before + r.km);
-    const t = setTimeout(() => driveVia(tier, routeKm(cfg, before), to, () => (to >= cfg.maxKm || isLast) && sfx.finish()), 350);
-    return () => clearTimeout(t);
+    const timer = setTimeout(() => driveVia(tier, routeKm(cfg, before), to, () => (to >= cfg.maxKm || isLast) && sfx.finish()), 350);
+    return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rounds.length]);
 
@@ -363,7 +372,7 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
   useEffect(() => {
     let raf = 0, last = performance.now();
     const { image, overview } = map;
-    const xmin = image.x, xmax = image.x + image.width, ymax = image.y + image.height;
+    const xmin = image.x, xmax = image.x + image.width, ymin = image.y, ymax = image.y + image.height;
     const frame = (now: number) => {
       raf = requestAnimationFrame(frame);
       const S = sim.current, stage = stageRef.current, svg = svgRef.current;
@@ -399,7 +408,7 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
       x0 = vw <= xmax - xmin ? Math.max(xmin, Math.min(xmax - vw, x0)) : (xmin + xmax - vw) / 2;
       // ispod ploče smije viriti more, da i jug karte može doći u vidljivi dio
       const below = (cover / 2) * (vw / cw);
-      y0 = vh <= ymax ? Math.max(0, Math.min(ymax - vh + 2 * below, y0)) : (ymax - vh) / 2 + below;
+      y0 = vh <= ymax - ymin ? Math.max(ymin, Math.min(ymax - vh + 2 * below, y0)) : (ymin + ymax - vh) / 2 + below;
       svg.setAttribute("viewBox", `${x0.toFixed(2)} ${y0.toFixed(2)} ${vw.toFixed(2)} ${vh.toFixed(2)}`);
       const sc = cw / vw, near = vw < 1150;
       for (const pin of pins.current) {
@@ -437,6 +446,7 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
         <image href={map.image.href} x={map.image.x} y={map.image.y} width={map.image.width} height={map.image.height} preserveAspectRatio="none" />
         {map.rivers.map((r) => <path key={r.name} className="river" d={r.d} />)}
         <path className="border" d={map.border} />
+        {map.dashedBorder && <path className="border dashed" d={map.dashedBorder} />}
         <path className="road-casing" d={fullRoad} />
         <path className="road" d={fullRoad} />
         {map.ferries.map((f) => {
@@ -458,8 +468,8 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
           return <div key={f.name} className="ferrytag" ref={pin([(a[0] + b[0]) / 2, (a[1] + b[1]) / 2], { fade: true })}><span>⛴ {f.name}</span></div>;
         })}
         {map.landmarks.map((l) => (
-          <div key={l.name} className="crash" title={l.name} ref={pin(project(l.lon, l.lat), { fade: true })}>
-            <span className="sign" dangerouslySetInnerHTML={{ __html: crashSign }} />
+          <div key={l.name} className={l.kind === "crash" ? "crash" : "crash pass"} title={l.name} ref={pin(project(l.lon, l.lat), { fade: true })}>
+            {l.kind === "crash" && <span className="sign" dangerouslySetInnerHTML={{ __html: crashSign }} />}
             <span className="name">{l.name}</span>
           </div>
         ))}
@@ -484,7 +494,7 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
       <div className="hud tl">
         <div className="now">
           {cur.name}
-          <small>{hudKm > cfg.maxKm ? rounds.reduce((a, r) => a + r.km, 0) : hudKm} km od {cfg.stations[0].genitive ?? cfg.stations[0].name}</small>
+          <small>{t("{n} km od {mjesta}", { n: hudKm > cfg.maxKm ? rounds.reduce((a, r) => a + r.km, 0) : hudKm, mjesta: cfg.stations[0].genitive ?? cfg.stations[0].name })}</small>
         </div>
       </div>
       <div className="hud tr">
@@ -496,31 +506,31 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
               <div key={s.name}><span>{s.name}</span><span>{s.km - hudKm} km</span></div>
             ))
           ) : (
-            <div><span>Cilj! {last.name}</span><span>⛵</span></div>
+            <div><span>{t("Cilj!")} {last.name}</span><span>{map.finishEmoji ?? "⛵"}</span></div>
           )}
         </div>
       </div>
       {ended && (
         <div className="hud bl">
-          <button type="button" className="mapbtn solo" disabled={replaying} onClick={replay}>{replaying ? "Replay…" : "↻ Ponovi put"}</button>
+          <button type="button" className="mapbtn solo" disabled={replaying} onClick={replay}>{replaying ? "Replay…" : `↻ ${t("Ponovi put")}`}</button>
         </div>
       )}
       <div className="hud br">
-        <div className="camseg" role="radiogroup" aria-label="Kamera">
-          <button type="button" className="mapbtn" role="radio" aria-checked={mode === "follow"} onClick={() => setMode("follow")}>Kamera prati</button>
-          <button type="button" className="mapbtn" role="radio" aria-checked={mode === "whole"} onClick={() => setMode("whole")}>Cijela ruta</button>
+        <div className="camseg" role="radiogroup" aria-label={t("Kamera")}>
+          <button type="button" className="mapbtn" role="radio" aria-checked={mode === "follow"} onClick={() => setMode("follow")}>{t("Kamera prati")}</button>
+          <button type="button" className="mapbtn" role="radio" aria-checked={mode === "whole"} onClick={() => setMode("whole")}>{t("Cijela ruta")}</button>
         </div>
         <button
           type="button"
           className="camtoggle"
-          aria-label={mode === "follow" ? "Kamera prati, prebaci na cijelu rutu" : "Cijela ruta, prebaci na praćenje"}
+          aria-label={mode === "follow" ? t("Kamera prati, prebaci na cijelu rutu") : t("Cijela ruta, prebaci na praćenje")}
           onClick={() => setMode(mode === "follow" ? "whole" : "follow")}
           dangerouslySetInnerHTML={{ __html: mode === "follow" ? WHOLE_ICON : FOLLOW_ICON }}
         />
       </div>
       {arrival && (
         <div className="stationmsg" key={arrival.id}>
-          <small>{arrival.egg ? `Preletio si ${last.name}` : `Stigao si · ${arrival.km} km`}</small>
+          <small>{arrival.egg ? `Preletio si ${last.name}` : arrival.pass ? t("Prolaziš · {n} km", { n: arrival.km }) : t("Stigao si · {n} km", { n: arrival.km })}</small>
           <b>{arrival.name}</b>
           <p>{arrival.message}</p>
         </div>

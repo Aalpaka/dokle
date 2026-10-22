@@ -14,7 +14,8 @@
   --sea: #6aa8cc;
   --map-ink: #1d2628;     /* tekst na karti */
   --font-sign: "Overpass", "Helvetica Neue", Arial, sans-serif;
-  --font-town: "Barlow Semi Condensed", "DIN Alternate", "Arial Narrow", sans-serif;
+  /* Barlow nema ćirilicu; ćirilična slova (Докле, бре?) uzima Roboto Condensed */
+  --font-town: "Barlow Semi Condensed", "Roboto Condensed", "DIN Alternate", "Arial Narrow", sans-serif;
   --font-mono: "Overpass Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   color-scheme: dark;
 }
@@ -106,6 +107,8 @@ button:disabled { opacity: .5; cursor: default; }
 .stage svg.map { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .map .river { fill: none; stroke: #5d9fc6; stroke-width: 1.4; vector-effect: non-scaling-stroke; opacity: .75; }
 .map .border { fill: none; stroke: #5e5141; stroke-width: 1.2; stroke-dasharray: 5 3; vector-effect: non-scaling-stroke; opacity: .55; }
+/* sporna granica (Srbija–Kosovo): sitne točkice umjesto crtica */
+.map .border.dashed { stroke-width: 1.6; stroke-dasharray: 1 4; stroke-linecap: round; }
 .map .road-casing { fill: none; stroke: #fff; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; opacity: .85; }
 .map .road { fill: none; stroke: #6f7a7d; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 2 6; vector-effect: non-scaling-stroke; }
 .map .ferry { fill: none; stroke: #fff; stroke-width: 3; stroke-dasharray: 3 5; stroke-linecap: round; vector-effect: non-scaling-stroke; }
@@ -126,6 +129,7 @@ button:disabled { opacity: .5; cursor: default; }
 .crash .sign { display: block; width: 34px; height: 30px; margin-top: -30px; filter: drop-shadow(0 3px 4px #0006); animation: wob 2.4s ease-in-out infinite; transform-origin: 50% 100%; }
 .crash .sign svg { width: 100%; height: 100%; display: block; }
 .crash .name { font-weight: 800; font-size: 12px; color: #b3261e; white-space: nowrap; text-shadow: 0 0 3px #fff, 0 0 3px #fff, 0 0 6px #fff; transition: opacity .4s; }
+.crash.pass .name { color: #6b5d4c; font-style: italic; letter-spacing: .08em; translate: 0 -50%; }
 @keyframes wob { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } }
 .stn { display: flex; align-items: center; gap: 6px; }
 .stn i { width: 12px; height: 12px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 2.5px #404b4e; margin: -6px 0 0 -6px; flex: none; transition: background .3s, box-shadow .3s, transform .3s; }
@@ -281,6 +285,18 @@ a { color: #5fd39a; font-weight: 700; }
   header.top, .landing-top { gap: 8px; }
 }
 button.small-btn { padding: 8px 14px; font-size: 14px; }
+/* izbornik zemlje: zastava (i kratica na širem ekranu), padajući popis ispod */
+.skinpick { position: relative; flex-shrink: 0; }
+.skinpick summary { list-style: none; cursor: pointer; height: 42px; padding: 0 12px; border-radius: 10px; display: inline-flex; align-items: center; gap: .4em; font-size: 14px; font-weight: 700; background: var(--card); box-shadow: inset 0 0 0 1px var(--line); }
+.skinpick summary::-webkit-details-marker { display: none; }
+.skinpick summary::after { content: "▾"; color: var(--muted); font-size: 12px; }
+.skinpick[open] summary { box-shadow: inset 0 0 0 1.5px var(--signal); }
+.skinpick .flag { font-size: 20px; line-height: 1; }
+.skinpick ul { position: absolute; right: 0; top: calc(100% + 6px); z-index: 50; margin: 0; padding: 6px; list-style: none; min-width: 230px; border-radius: 12px; background: var(--card); box-shadow: inset 0 0 0 1px var(--line), 0 12px 30px -8px #000c; }
+.skinpick li a { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; color: var(--ink); text-decoration: none; font-weight: 600; font-size: 15px; }
+.skinpick li a:hover { background: var(--line); }
+.skinpick li a[aria-current] { box-shadow: inset 0 0 0 1.5px var(--signal); }
+.wrap.fit .skinpick summary { height: 36px; padding: 0 9px; }
 .savebox { border-radius: 12px; padding: 14px 16px; box-shadow: inset 0 0 0 2px var(--sign); display: grid; gap: 8px; }
 .stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
 .stat { background: var(--card); border-radius: 12px; padding: 12px 14px; display: grid; gap: 2px; }
@@ -334,7 +350,7 @@ textarea.field { width: 100%; font-family: var(--font-mono); }
 }
 .landing-bg {
   position: absolute; inset: 0;
-  background: linear-gradient(180deg, #161d1fd9 0%, #161d1fa6 45%, #161d1ff5 100%), url(/map/hr-reljef.jpg) center 35% / cover;
+  background: linear-gradient(180deg, #161d1fd9 0%, #161d1fa6 45%, #161d1ff5 100%), var(--landing-map, url(/map/hr-reljef.jpg)) center 35% / cover;
   /* karta se rubovima postupno stapa s pozadinom stranice, bez okvira */
   -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 55%, transparent 100%);
   mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 55%, transparent 100%);
@@ -350,6 +366,9 @@ textarea.field { width: 100%; font-family: var(--font-mono); }
   box-shadow: inset 0 0 0 9px var(--town-sign), inset 0 0 0 14px #111, 0 24px 60px -24px #000;
 }
 @media (max-width: 520px) { .plate.big { font-size: 60px; padding: 10px 30px 6px; } }
+/* duži naslovi (Dokle, bolan? / Докле, бре?) ostaju u jednom retku */
+.plate.big.long { white-space: nowrap; }
+@media (max-width: 520px) { .plate.big.long { font-size: min(60px, 10.5vw); padding-inline: 18px; } }
 .route-line { font-family: var(--font-mono); font-weight: 700; color: var(--signal); letter-spacing: .04em; }
 .lead { max-width: 46ch; font-size: 18px; text-wrap: balance; }
 /* jednako široki stupci, da su kružići na istim razmacima i kad su nazivi različito dugi */

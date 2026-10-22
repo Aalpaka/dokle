@@ -4,15 +4,26 @@ import { and, eq } from "drizzle-orm";
 import { db, sql } from "../src/db";
 import { answerAliases, answers, categories, skins } from "../src/db/schema";
 import { parseSeedAnswers } from "../src/lib/matcher";
+import { localDate } from "../src/lib/day";
 import { hrSkin } from "../src/skins/hr/config";
 import { hrCategories } from "../src/skins/hr/categories";
+import { baSkin } from "../src/skins/ba/config";
+import { rsSkin } from "../src/skins/rs/config";
+import { regionalCategories } from "../src/skins/regional";
 
-const SKINS = [{ skin: hrSkin, categories: hrCategories }];
+// BiH i Srbija imaju svoje kopije općih kategorija (svoja statistika odgovora), bez onih vezanih uz Hrvatsku
+const SKINS = [
+  { skin: hrSkin, categories: hrCategories },
+  { skin: baSkin, categories: regionalCategories(hrCategories, "bosanski") },
+  { skin: rsSkin, categories: regionalCategories(hrCategories, "srpski") },
+];
 
 for (const { skin, categories: cats } of SKINS) {
+  // dan lansiranja se upisuje samo kod prvog dodavanja skina; novi skinovi kreću s #1 na dan deploya
+  const launchDate = (skin as { launchDate?: string }).launchDate ?? localDate(skin.timezone);
   await db
     .insert(skins)
-    .values(skin)
+    .values({ ...skin, launchDate })
     .onConflictDoUpdate({ target: skins.id, set: { name: skin.name, timezone: skin.timezone, config: skin.config } });
 
   let added = 0, marked = 0;

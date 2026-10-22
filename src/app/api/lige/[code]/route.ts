@@ -11,7 +11,7 @@ import {
   renameLeague,
 } from "@/server/leagues";
 import { resolveIdentity } from "@/server/player";
-import { currentSkin } from "@/server/skin";
+import { getSkin } from "@/server/game";
 
 export const dynamic = "force-dynamic";
 
@@ -30,7 +30,9 @@ export async function GET(req: Request, ctx: Ctx) {
   const { playerId, user } = await resolveIdentity();
   const p = new URL(req.url).searchParams.get("period");
   const period: Period = PERIODS.includes(p as Period) ? (p as Period) : "week";
-  return NextResponse.json(await leagueView(await currentSkin(), league, user ? playerId : null, period));
+  // liga pripada skinu u kojem je napravljena, bez obzira na stranicu s koje je otvorena (klijent tad preusmjeri)
+  const view = await leagueView(await getSkin(league.skinId), league, user ? playerId : null, period);
+  return NextResponse.json({ ...view, skinId: league.skinId });
 }
 
 type Action = { action?: string; name?: unknown; memberId?: unknown };

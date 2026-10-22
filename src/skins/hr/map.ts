@@ -45,7 +45,7 @@ export const hrMap: SkinMap = {
     ["Vis", 16.19, 43.06], ["Vela Luka", 16.72, 42.96], ["Korčula", 17.13, 42.96], ["Orebić", 17.18, 42.97], ["Lastovo", 16.9, 42.77],
     ["Ploče", 17.43, 43.05], ["Metković", 17.65, 43.05], ["Cavtat", 18.22, 42.58],
   ],
-  landmarks: [{ name: "Gornje Jesenje", lon: 15.96, lat: 46.17, kind: "crash" }],
+  landmarks: [{ name: "Gornje Jesenje", lon: 15.96, lat: 46.17, kind: "crash", clip: "/sounds/gornje-jesenje.mp3" }],
   countries: [
     ["SLOVENIJA", 14.55, 46.15], ["MAĐARSKA", 17.6, 46.4], ["BOSNA I HERCEGOVINA", 17.6, 44.35], ["SRBIJA", 19.45, 44.7],
     ["ITALIJA", 13.0, 43.6], ["JADRANSKO MORE", 15.0, 43.4], ["CRNA GORA", 19.05, 42.75],
@@ -55,5 +55,6 @@ export const hrMap: SkinMap = {
   overview: { x: 805, y: 796, width: 1620, height: 1540 },
   // Dubrovnik → Cavtat → Debeli Brijeg → Herceg Novi → trajekt Kamenari → Tivat → Budva
   overshootVia: [[18.22, 42.58], [18.4, 42.5], [18.54, 42.45], [18.68, 42.46], [18.7, 42.43], [18.78, 42.33]],
+  heliClip: true,
   credit: "Reljef: AWS Terrain Tiles (SRTM, GMTED2010, ETOPO1). Granice i rijeke: Natural Earth.",
 };
