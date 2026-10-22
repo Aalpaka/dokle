@@ -162,3 +162,28 @@ export const reviewDecisions = pgTable(
   },
   (t) => [uniqueIndex("review_decisions_category_normalized").on(t.categoryId, t.normalized)],
 );
+
+// Privatne lige prijavljenih igrača; ulazi se preko koda iz linka (/liga/KOD).
+export const leagues = pgTable(
+  "leagues",
+  {
+    id: serial("id").primaryKey(),
+    skinId: text("skin_id").notNull().references(() => skins.id),
+    code: text("code").notNull(),
+    name: text("name").notNull(),
+    ownerId: uuid("owner_id").notNull().references(() => players.id),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("leagues_code").on(t.code)],
+);
+
+export const leagueMembers = pgTable(
+  "league_members",
+  {
+    id: serial("id").primaryKey(), // javni id člana (id igrača se ne šalje drugima)
+    leagueId: integer("league_id").notNull().references(() => leagues.id, { onDelete: "cascade" }),
+    playerId: uuid("player_id").notNull().references(() => players.id),
+    joinedAt: timestamp("joined_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("league_members_league_player").on(t.leagueId, t.playerId), index("league_members_player").on(t.playerId)],
+);

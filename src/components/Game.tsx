@@ -436,7 +436,7 @@ function End({ state, me }: { state: GameState; me: Me | null }) {
       )}
       {me?.user && me.stats && (
         <p className="small">
-          🔥 Streak: <b>{me.stats.currentStreak}</b> {me.stats.currentStreak === 1 ? "dan" : "dana"} · <a href="/profil">tvoja povijest</a>
+          🔥 Streak: <b>{me.stats.currentStreak}</b> {me.stats.currentStreak === 1 ? "dan" : "dana"} · <a href="/profil">tvoja povijest</a> · <a href="/lige">lige</a>
         </p>
       )}
     </div>
