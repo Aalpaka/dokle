@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { authEnabled } from "@/lib/supabase/config";
 import { deleteAuthUser, supabaseServer } from "@/lib/supabase/server";
 import { anonymize, getPlayer, isAdminEmail, profileFor, setNickname } from "@/server/accounts";
+import { leaveAllLeagues } from "@/server/leagues";
 import { clearPlayerCookie, resolveIdentity } from "@/server/player";
 import { currentSkin } from "@/server/skin";
 
@@ -34,6 +35,7 @@ export async function PATCH(req: Request) {
 export async function DELETE() {
   const { playerId, user } = await resolveIdentity();
   if (!user || !playerId) return NextResponse.json({ error: "Nisi prijavljen." }, { status: 401 });
+  await leaveAllLeagues(playerId);
   await anonymize(playerId);
   await (await supabaseServer()).auth.signOut();
   await deleteAuthUser(user.id);

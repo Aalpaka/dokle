@@ -337,6 +337,7 @@ textarea.field { width: 100%; font-family: var(--font-mono); }
 .howto { width: min(560px, 100%); text-align: left; }
 .howto summary { cursor: pointer; text-align: center; color: var(--muted); font-size: 14px; }
 .howto .rules { margin-top: 12px; font-size: 14px; }
+.landing-leagues { color: var(--ink); font-size: 14px; font-weight: 700; text-decoration: none; padding: 8px 14px; border-radius: 10px; box-shadow: inset 0 0 0 1.5px var(--line); }
 
 /* odbrojavanje prije kategorije */
 .countdown { display: grid; justify-items: center; gap: 6px; padding: 18px 0 22px; text-align: center; overflow: clip; }
@@ -408,3 +409,22 @@ textarea.field { width: 100%; font-family: var(--font-mono); }
   }
   .camtoggle svg { width: 22px; height: 22px; }
 }
+
+/* Lige */
+.leagues > li > a, .leagues > li > div {
+  display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 4px; color: var(--ink); text-decoration: none;
+}
+.leagues > li > a:hover { background: var(--card); }
+.leagues .w { display: grid; gap: 2px; min-width: 0; }
+.leagues li.me .a, table.league tr.me td { color: var(--signal); }
+.table-scroll { overflow-x: auto; }
+table.league { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+table.league th { font-size: 12px; font-weight: 800; color: var(--muted); text-align: right; padding: 6px 6px; white-space: nowrap; }
+table.league td { font-family: var(--font-mono); text-align: right; padding: 8px 6px; border-top: 1px solid var(--line); white-space: nowrap; }
+table.league .name { text-align: left; font-family: var(--font-sign); font-weight: 700; white-space: normal; overflow-wrap: break-word; width: 100%; min-width: 7em; }
+@media (max-width: 520px) { table.league .opt { display: none; } }
+details.answers > summary { cursor: pointer; font-weight: 700; padding: 6px 0; }
+details.answers[open] > summary { margin-bottom: 10px; }
+details.answers ul.small { margin: 0; padding-left: 18px; }
+details.answers .ink { color: var(--ink); font-weight: 600; }
+.mono { font-family: var(--font-mono); color: var(--ink); }

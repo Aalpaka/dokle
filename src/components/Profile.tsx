@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { GoogleButton, signOut, useMe } from "./account";
+import { MyLeagues } from "./Leagues";
 
 export default function Profile() {
   const [reload, setReload] = useState(0);
@@ -57,6 +58,9 @@ function LoggedIn({ me, onChange }: { me: NonNullable<ReturnType<typeof useMe>>;
         <Stat value={s.avgKm} label="prosjek km" />
         <Stat value={s.bestKm} label="najdalje km" />
       </div>
+
+      <span className="eyebrow">Lige</span>
+      <MyLeagues />
 
       <span className="eyebrow">Povijest</span>
       {me.history.length ? (
