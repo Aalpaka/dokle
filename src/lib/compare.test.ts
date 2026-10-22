@@ -16,13 +16,8 @@ describe("compareDay", () => {
   it("izjednačeni nisu iza", () => {
     expect(compareDay(hr, [300, 300, 300], 300).ahead).toBe(0);
   });
-  it("dionice po stanicama", () => {
-    const c = compareDay(hr, [0, 59, 60, 1199, 1200, 1300], 60);
-    expect(c.bins.length).toBe(hr.stations.length);
-    expect(c.bins[0]).toBe(2); // Vukovar
-    expect(c.bins[1]).toBe(1); // Osijek
-    expect(c.bins[c.bins.length - 2]).toBe(1); // Ston
-    expect(c.bins[c.bins.length - 1]).toBe(2); // Dubrovnik i dalje
-    expect(c.bins.reduce((a, b) => a + b, 0)).toBe(6);
+  it("mjesto i najdalji grad", () => {
+    expect(compareDay(hr, [100, 700, 700, 900], 700)).toMatchObject({ rank: 2, players: 4, bestKm: 900, bestTown: "Split" });
+    expect(compareDay(hr, [700, 1423], 1423)).toMatchObject({ rank: 1, bestTown: "Budva" });
   });
 });
