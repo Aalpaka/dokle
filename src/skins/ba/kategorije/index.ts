@@ -8,11 +8,13 @@ import { baDomace4 } from "./domace4";
 import { baDomace5 } from "./domace5";
 import { baDomace6 } from "./domace6";
 import { baZamjene } from "./zamjene";
+import { dodaci } from "./dodaci";
+import { withDodaci } from "../../regional";
 
 export const baContent: Country = {
   lang: "bosanski",
-  domestic: [...baDomace1, ...baDomace2, ...baDomace3, ...baDomace4, ...baDomace5, ...baDomace6],
-  replace: baZamjene,
+  domestic: withDodaci([...baDomace1, ...baDomace2, ...baDomace3, ...baDomace4, ...baDomace5, ...baDomace6], dodaci),
+  replace: withDodaci(baZamjene, dodaci),
   abroad: {
     "svjetska-planina": {
       title: "Planina ili vrh izvan BiH",

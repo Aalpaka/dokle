@@ -62,6 +62,11 @@ export type Abroad = { title: string; hint?: string; remove?: string[]; addFrom?
 /** Sadržaj države: domaće kategorije (isti slugovi kao hrvatska grupa), "izvan" verzije i zamjene ostalih hrvatskih. */
 export type Country = { lang: string; domestic: SeedCategory[]; abroad: Record<string, Abroad>; replace: SeedCategory[] };
 
+/** Dodatni odgovori (dodaci.ts) na kraj popisa kategorija. */
+export function withDodaci(cats: SeedCategory[], dodaci: Record<string, string>): SeedCategory[] {
+  return cats.map((c) => (dodaci[c.slug] ? { ...c, answers: `${c.answers};${dodaci[c.slug]}` } : c));
+}
+
 /** Kategorije za skin izvan Hrvatske: zajedničke, "izvan" verzije, zamjene i domaće; `lang` je pridjev jezika za upute. */
 export function regionalCategories(all: SeedCategory[], country: Country): SeedCategory[] {
   const shared = all
