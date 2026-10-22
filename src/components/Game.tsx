@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { AnswerList, GameState, RoundView } from "@/server/game";
-import type { DayCompare } from "@/lib/compare";
+import { BUCKET_KM, type DayCompare } from "@/lib/compare";
 import type { SkinConfig, Station } from "@/skins/types";
 import { formatShare, landingAt, stationAt } from "@/lib/scoring";
 import { maps, withVisuals } from "@/skins/maps";
@@ -468,25 +468,64 @@ function shareText(state: GameState, town: Station, ahead: number | null) {
 
 type Compare = DayCompare & { mine: number };
 
-/** Usporedba s ostalima: postotak na žutoj ploči, ispod mjesto, prosjek i najdalje, bez grafa. */
+/** Gdje su danas stali ostali: stupci po 100 km uz rutu (iza igrača zeleno, ispred sivo), igrač je žuta crta s pločom TI. */
 function CompareChart({ c, cfg }: { c: Compare; cfg: SkinConfig }) {
-  const avgAt = stationAt(cfg, c.avgKm);
   if (c.ahead === null)
     return (
       <div className="compare">
         <p className="cmp-head">Prvi si danas završio partiju. Navrati kasnije i vidi gdje su stali ostali.</p>
       </div>
     );
+  const end = c.hist.length * BUCKET_KM;
+  const pct = (km: number) => `${(100 * Math.min(km, end)) / end}%`;
+  const top = Math.max(1, ...c.hist.map((h) => h.behind + h.front));
+  const avgAt = stationAt(cfg, c.avgKm);
+  // glavne stanice osim starta (na mobitelu se sudara sa Zagrebom); Budva je preblizu Dubrovniku, piše u retku ispod
+  const labels = cfg.stations.filter((s) => s.alwaysLabel && s.km > 0);
   return (
     <div className="compare">
       <p className="cmp-head">
         Stigao si dalje od <span className="cmp-pct">{c.ahead} %</span> igrača
       </p>
-      <p>
-        Danas si <b>{c.rank}.</b> od <b>{c.players}</b> igrača.
+      <span className="cmp-sub">Gdje su danas stali igrači</span>
+      <div className="cmp-chart" role="img" aria-label={`Gdje su danas stali igrači. Ti si na ${c.mine} km.`}>
+        <div className="cmp-bars">
+          {c.hist.map((h, i) => {
+            const n = h.behind + h.front;
+            return (
+              <div key={i} className="cmp-col" style={{ animationDelay: `${i * 40}ms` }}>
+                {n > 0 && <span className="cmp-n">{n}</span>}
+                {n > 0 && (
+                  <span className="cmp-stack" style={{ height: `${(100 * n) / top}%` }}>
+                    <span className="front" style={{ flex: h.front }} />
+                    <span className="behind" style={{ flex: h.behind }} />
+                  </span>
+                )}
+              </div>
+            );
+          })}
+          <span className="cmp-me" style={{ left: pct(c.mine) }}>
+            <span>TI</span>
+          </span>
+        </div>
+        <div className="cmp-axis">
+          {labels.map((s) => {
+            const edge = s.km / end > 0.9 ? " last" : "";
+            return (
+              <span key={s.name} className={"cmp-city" + edge} style={{ left: pct(s.km) }}>
+                {s.name}
+                <small>{s.km} km</small>
+              </span>
+            );
+          })}
+        </div>
+      </div>
+      <p className="cmp-key">
+        <span><i className="behind" />{c.behind} iza tebe</span>
+        <span><i className="front" />{c.players - 1 - c.behind} ispred tebe</span>
       </p>
       <p className="small">
-        Prosjek {c.avgKm} km ({avgAt.name}) · najdalje {c.bestKm} km ({c.bestTown})
+        Završenih partija danas: <b>{c.players}</b> · prosjek {c.avgKm} km ({avgAt.name}) · najdalje {c.bestKm} km ({c.bestTown})
       </p>
     </div>
   );
