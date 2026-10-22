@@ -3,6 +3,7 @@
 // Seed samo dodaje nove kategorije i odgovore, pa se stare kategorije proširuju kroz prosirenja.ts.
 import { parseSeedAnswers } from "../../lib/matcher";
 import { RARE_PRIOR } from "../../lib/scoring";
+import { dodaci } from "./kategorije/dodaci";
 import { helikopter } from "./kategorije/helikopter";
 import { hrKategorije } from "./kategorije/hr";
 import { kvizKategorije } from "./kategorije/kviz";
@@ -42,10 +43,15 @@ export const hrCategories: SeedCategory[] = [
   ...opceKategorije,
   ...zaigranoKategorije,
   ...kvizKategorije,
-].map(withWiki).map(withRare);
+].map(withDodaci).map(withWiki).map(withRare);
 
 function format(list: ReturnType<typeof parseSeedAnswers>) {
   return list.map((a) => `${[a.canonical, ...a.variants].join("/")}=${a.share}${a.rare ? "!" : ""}`).join(";");
+}
+
+/** Dodatni odgovori iz dodaci.ts na kraj popisa. */
+function withDodaci(c: SeedCategory): SeedCategory {
+  return dodaci[c.slug] ? { ...c, answers: `${c.answers};${dodaci[c.slug]}` } : c;
 }
 
 /** Udjeli dorađeni Wikipedia pregledima (wikipedija.ts) zamjenjuju ručne procjene. */
