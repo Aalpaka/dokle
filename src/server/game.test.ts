@@ -99,10 +99,14 @@ describe.skipIf(!process.env.DATABASE_URL)("svi odgovori nakon igre", () => {
     const now = (await answerList(skin, id, 0))!.answers.find((a) => a.canonical === top.canonical)!.tier;
     const got = skin.config.tiers.find((t) => !t.rare && t.name !== now)!;
     const [game] = await db.select({ id: games.id }).from(games).where(eq(games.playerId, id));
-    await db.update(rounds).set({ tier: got.name }).where(and(eq(rounds.gameId, game.id), eq(rounds.position, 0)));
+    await db.update(rounds).set({ tier: got.name, share: 0.001 }).where(and(eq(rounds.gameId, game.id), eq(rounds.position, 0)));
 
     const list = (await answerList(skin, id, 0))!;
     expect(list.mine).toBe(top.canonical);
-    expect(list.answers.find((a) => a.canonical === top.canonical)).toMatchObject({ tier: got.name, km: got.km });
+    expect(list.answers.find((a) => a.canonical === top.canonical)).toMatchObject({ tier: got.name, km: got.km, share: 0.001 });
+    // i mjesto na listi je ono iz trenutka odgovora
+    const normal = list.answers.filter((a) => !skin.config.tiers.find((t) => t.name === a.tier)?.rare);
+    expect(normal.findIndex((a) => a.canonical === top.canonical)).toBeGreaterThan(0);
+    expect(normal.map((a) => a.share)).toEqual([...normal.map((a) => a.share)].sort((a, b) => b - a));
   });
 });

@@ -405,9 +405,11 @@ export async function answerList(skin: Skin, playerId: string, position: number)
     .innerJoin(answers, eq(answers.id, rounds.answerId))
     .where(and(eq(rounds.gameId, game.id), eq(rounds.position, position)));
   const cat = await getCategory(categoryId);
-  // svoj odgovor igrač vidi s prijevozom koji je dobio, i kad je odgovor od tada promijenio prijevoz
+  // svoj odgovor igrač vidi s udjelom, mjestom i prijevozom kakve je imao kad ga je odigrao, i kad se od tada promijenio
   const got = mine?.tier ? baseTier(skin.config, mine.tier, mine.share) : null;
-  const all = (await categoryShares(skin, puzzle.id, categoryId)).map((a) => (got && a.id === mine.answerId ? { ...a, tier: got } : a));
+  const all = (await categoryShares(skin, puzzle.id, categoryId))
+    .map((a) => (got && a.id === mine.answerId ? { ...a, tier: got, share: mine.share ?? a.share } : a))
+    .sort((a, b) => b.share - a.share);
   return {
     position,
     title: cat.title,
