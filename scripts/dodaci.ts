@@ -18,6 +18,16 @@ for (const slug of process.argv.slice(2)) {
       add.push(`${names.join("/")}=${share}`);
     }
   }
+  // zbroj udjela pitanja mora ostati ispod 130 (test), pa se novi po potrebi razmjerno smanje
+  const room = 128 - parseSeedAnswers(c.answers).reduce((t, a) => t + a.share, 0);
+  const total = add.reduce((t, e) => t + parseFloat(e.split("=")[1]), 0);
+  if (total > room) {
+    const k = room / total;
+    for (let i = 0; i < add.length; i++) {
+      const [n, v] = add[i].split("=");
+      add[i] = `${n}=${Math.max(0.002, +(parseFloat(v) * k).toPrecision(2))}`;
+    }
+  }
   console.error(slug, "+", add.length, "preskočeno:", skipped.join(", "));
   out[slug] = add.join("; ");
 }
