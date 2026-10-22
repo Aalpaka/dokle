@@ -203,6 +203,7 @@ function Landing({ state, cfg, me, onStart }: { state: GameState; cfg: SkinConfi
             <li><span className="k">📅</span><span>kategorije su svaki dan iste za sve, nova ruta u ponoć</span></li>
           </ul>
         </details>
+        {me?.user && <a className="landing-leagues" href="/lige">🏆 Lige: tvoje mjesto ovaj tjedan</a>}
       </main>
     </div>
   );
