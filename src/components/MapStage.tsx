@@ -141,6 +141,8 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
     if (quiet) return;
     setArrival({ name: s.name, km: s.km, message: s.message, egg: s === cfg.overshoot?.station, id: performance.now() });
     sfx.station();
+    const clip = map.stationClips?.[s.name];
+    if (clip) sfx.clip(clip, 0.2);
   }
 
   function crash(c: (typeof landmarks)[number], quiet: boolean) {

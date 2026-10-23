@@ -30,6 +30,8 @@ export type SkinMap = {
   towns: [string, number, number][]; // mjesta koja se samo prikazuju
   // "crash": kopnena vozila tu stanu i zabiju se (zvuk `clip`); "pass": samo natpis `message` u prolazu
   landmarks: { name: string; lon: number; lat: number; kind: "crash" | "pass"; message?: string; clip?: string }[];
+  // snimka koja se pusti kad vozilo stigne ili prođe kroz postaju, po imenu postaje
+  stationClips?: Record<string, string>;
   countries: [string, number, number][];
   border: string; // SVG path u koordinatama karte
   dashedBorder?: string; // sporna granica, crta se isprekidano

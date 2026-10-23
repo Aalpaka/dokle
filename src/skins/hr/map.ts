@@ -47,6 +47,7 @@ export const hrMap: SkinMap = {
     ["Ploče", 17.43, 43.05], ["Metković", 17.65, 43.05], ["Cavtat", 18.22, 42.58],
   ],
   landmarks: [{ name: "Gornje Jesenje", lon: 15.96, lat: 46.17, kind: "crash", clip: "/sounds/gornje-jesenje.mp3" }],
+  stationClips: { Zagreb: "/sounds/savski-most.mp3", Šibenik: "/sounds/sibenik.mp3" },
   countries: [
     ["SLOVENIJA", 14.55, 46.15], ["MAĐARSKA", 17.6, 46.4], ["BOSNA I HERCEGOVINA", 17.6, 44.35], ["SRBIJA", 19.45, 44.7],
     ["ITALIJA", 13.0, 43.6], ["JADRANSKO MORE", 15.0, 43.4], ["CRNA GORA", 19.05, 42.75],
