@@ -162,7 +162,7 @@ function Err({ msg }: { msg: string }) {
 type DayData = {
   date: string;
   puzzle: { number: number } | null;
-  totals?: { started: number; finished: number; registered: number; avgKm: number };
+  totals?: { started: number; finished: number; registered: number; avgKm: number; unranked: number };
   stations?: { name: string; n: number }[];
   categories?: {
     position: number;
@@ -223,6 +223,7 @@ function Day({ today }: { today: string }) {
             <Stat v={data.totals.finished} l="završilo" />
             <Stat v={data.totals.registered} l="prijavljenih" />
             <Stat v={data.totals.avgKm} l="prosjek km" />
+            <Stat v={data.totals.unranked} l="za gušt (ne broji se)" />
           </div>
           {!!data.stations?.length && (
             <div className="stack" style={{ gap: 4 }}>
