@@ -19,11 +19,15 @@ export async function supabaseServer() {
 
 export type AuthUser = { id: string; email: string | null };
 
-/** Prijavljeni korisnik ili null; provjera ide preko Supabasea, ne vjeruje kolačiću naslijepo. */
+/**
+ * Prijavljeni korisnik ili null; provjera ide preko Supabasea, ne vjeruje kolačiću naslijepo.
+ * Email samo ako je potvrđen (Google ga uvijek potvrdi), da nepotvrđena adresa ne otvori /admin.
+ */
 export async function currentAuthUser(): Promise<AuthUser | null> {
   if (!authEnabled) return null;
   const { data } = await (await supabaseServer()).auth.getUser();
-  return data.user ? { id: data.user.id, email: data.user.email ?? null } : null;
+  if (!data.user) return null;
+  return { id: data.user.id, email: data.user.email_confirmed_at ? (data.user.email ?? null) : null };
 }
 
 /** Briše korisnika iz Supabase Autha (email ostaje samo ako service_role ključ nije postavljen). */
