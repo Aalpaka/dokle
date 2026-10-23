@@ -22,6 +22,8 @@ import { codeConfigs } from "@/skins/maps";
 
 // Odgovor stigne s malim kašnjenjem mreže; toliko tolerancije na serveru.
 const GRACE_MS = 2500;
+// Novo pitanje se vidi odmah, a vrijeme kreće tek nakon ovoliko (odbrojavanje 3, 2, 1 nad pitanjem).
+export const READ_MS = 3000;
 const CACHE_MS = 60_000;
 
 export type Skin = { id: string; name: string; timezone: string; launchDate: string; config: SkinConfig };
@@ -198,7 +200,7 @@ export type GameState = {
   phase: "intro" | "play" | "reveal" | "end";
   totalKm: number;
   rounds: RoundView[];
-  current?: { position: number; category: { title: string; hint: string | null; group: string }; remainingMs: number };
+  current?: { position: number; category: { title: string; hint: string | null; group: string }; remainingMs: number; waitMs: number };
   reveal?: Reveal;
 };
 
@@ -251,8 +253,10 @@ export async function getState(skin: Skin, playerId: string | null): Promise<Gam
         speed: base && r.km !== base.km && step.multiplier !== 1 ? { multiplier: step.multiplier, emoji: step.emoji, name: step.name } : null,
       });
     } else {
-      const remainingMs = skin.config.secondsPerCategory * 1000 - (Date.now() - r.startedAt.getTime());
-      current = { position: r.position, category, remainingMs: Math.max(0, remainingMs) };
+      // startedAt je trenutak kad kreće vrijeme, može biti malo u budućnosti dok igrač čita pitanje
+      const total = skin.config.secondsPerCategory * 1000;
+      const elapsed = Date.now() - r.startedAt.getTime();
+      current = { position: r.position, category, remainingMs: Math.min(total, Math.max(0, total - elapsed)), waitMs: Math.max(0, -elapsed) };
     }
   }
   const totalKm = views.reduce((a, v) => a + v.km, 0);
@@ -265,8 +269,11 @@ export async function getState(skin: Skin, playerId: string | null): Promise<Gam
 
 // ---------- Akcije ----------
 
-/** Počinje sljedeću kategoriju (ili vraća već otvorenu). Server pamti vrijeme početka. */
-export async function startNext(skin: Skin, playerId: string): Promise<GameState> {
+/**
+ * Počinje sljedeću kategoriju (ili vraća već otvorenu). Server pamti vrijeme početka: pitanje se vidi odmah,
+ * a vrijeme kreće nakon readMs.
+ */
+export async function startNext(skin: Skin, playerId: string, readMs = READ_MS): Promise<GameState> {
   await ensurePlayer(playerId);
   const date = localDate(skin.timezone);
   const puzzle = await getOrCreatePuzzle(skin, date);
@@ -281,7 +288,7 @@ export async function startNext(skin: Skin, playerId: string): Promise<GameState
     const position = existing.length;
     await db
       .insert(rounds)
-      .values({ gameId: game.id, position, categoryId: puzzle.categoryIds[position] })
+      .values({ gameId: game.id, position, categoryId: puzzle.categoryIds[position], startedAt: new Date(Date.now() + readMs) })
       .onConflictDoNothing();
   }
   return getState(skin, playerId);
@@ -306,9 +313,11 @@ export async function submitAnswer(skin: Skin, playerId: string, raw: string, fi
     .where(and(eq(rounds.gameId, game.id), isNull(rounds.answeredAt)));
   if (!open) return { status: "no-round" };
 
+  const elapsedMs = Date.now() - open.startedAt.getTime();
+  // dok igrač čita pitanje odgovor se ne prima (klijent ga ni ne šalje)
+  if (elapsedMs < 0) return { status: "rejected", normalized: "" };
   const input = raw.trim().slice(0, 200);
   const cat = await getCategory(open.categoryId);
-  const elapsedMs = Date.now() - open.startedAt.getTime();
   const timedOut = elapsedMs > skin.config.secondsPerCategory * 1000 + GRACE_MS;
   const hit = input && !timedOut ? match(cat.index, input) : null;
 

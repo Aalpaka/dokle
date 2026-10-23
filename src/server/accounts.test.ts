@@ -20,11 +20,11 @@ const newPlayer = async () => {
 
 async function playToday(playerId: string, skinId = "hr") {
   const skin = await getSkin(skinId);
-  let state = await startNext(skin, playerId);
+  let state = await startNext(skin, playerId, 0);
   while (state.phase !== "end") {
     const r = await submitAnswer(skin, playerId, "nešto", true);
     if (r.status !== "scored") throw new Error(r.status);
-    state = r.state.phase === "end" ? r.state : await startNext(skin, playerId);
+    state = r.state.phase === "end" ? r.state : await startNext(skin, playerId, 0);
   }
   return state;
 }

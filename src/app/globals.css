@@ -75,6 +75,12 @@ button:disabled { opacity: .5; cursor: default; }
 .timer i { display: block; height: 100%; width: 100%; background: var(--signal); transform-origin: left; }
 .timer.low i { background: var(--stop); }
 .trow { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
+/* pitanje se čita prije nego krene vrijeme */
+.timer.wait i { animation: wait-pulse 1s ease-in-out infinite; }
+@keyframes wait-pulse { 50% { opacity: 0.45; } }
+.trow.wait { color: var(--ink); }
+.waitnum { display: inline-block; min-width: 1ch; color: var(--signal); font-size: 15px; animation: cd-pop 1s cubic-bezier(.2, .9, .3, 1.2) both; }
+@media (prefers-reduced-motion: reduce) { .timer.wait i, .waitnum { animation: none; } }
 .answer { display: flex; gap: 8px; }
 .answer input {
   flex: 1; min-width: 0; font: inherit; font-size: 22px; font-weight: 700; padding: 14px 16px; border-radius: 12px;

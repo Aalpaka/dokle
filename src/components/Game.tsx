@@ -32,8 +32,8 @@ export default function Game() {
   const [state, setState] = useState<GameState | null>(null);
   const [showEnd, setShowEnd] = useState(false);
   const [error, setError] = useState(false);
-  // odbrojavanje prije kategorije: 3, 2, 1, 0 = "Kreni!" dok server ne pokrene rundu
-  const [count, setCount] = useState<number | null>(null);
+  // server otvara iduću kategoriju; odbrojavanje 3, 2, 1 je onda već nad pitanjem (vidi Play)
+  const [starting, setStarting] = useState(false);
   // profil (streak) se osvježava kad partija završi
   const me = useMe(state?.phase === "end" || showEnd);
   // na mobitelu je panel donja ploča preko karte; karta zna koliko joj je dna pokriveno
@@ -58,21 +58,15 @@ export default function Game() {
   }, [showEnd]);
 
   useEffect(() => {
-    if (count === null) return;
-    sfx.count(count === 0);
-    if (count === 0) {
-      api<GameState>("/api/game/start", {}).then(
-        (s) => {
-          setState(s);
-          setCount(null);
-        },
-        () => setError(true),
-      );
-      return;
-    }
-    const t = setTimeout(() => setCount(count - 1), 750);
-    return () => clearTimeout(t);
-  }, [count]);
+    if (!starting) return;
+    api<GameState>("/api/game/start", {}).then(
+      (s) => {
+        setState(s);
+        setStarting(false);
+      },
+      () => setError(true),
+    );
+  }, [starting]);
 
   if (error) return <Shell><div className="stage empty" /><section className="panel">{t("Nešto je pošlo krivo. Osvježi stranicu.")}</section></Shell>;
   if (!state) return <Shell><div className="stage empty" /><section className="panel loading">{t("Učitavam…")}</section></Shell>;
@@ -80,22 +74,22 @@ export default function Game() {
   const cfg = withVisuals(state.skin.id, state.skin.config);
   // djeca čitaju state.skin.config, pa im se predaje konfiguracija s logima iz koda
   const vstate: GameState = { ...state, skin: { ...state.skin, config: cfg } };
-  const start = () => setCount(3);
+  const start = () => setStarting(true);
   const phase = state.phase === "reveal" && showEnd ? "end" : state.phase;
 
   const map = maps[state.skin.id] ?? maps.hr;
-  if (phase === "intro" && count === null) return <Landing state={state} cfg={cfg} me={me} onStart={start} />;
+  if (phase === "intro" && !starting) return <Landing state={state} cfg={cfg} me={me} onStart={start} />;
 
   // igra stane na jedan ekran (karta + pitanje), kraj je obična stranica koja se skrola
   return (
     <Shell state={state} me={me} fit={phase !== "end"}>
       <MapStage cfg={cfg} map={map} rounds={state.rounds} perDay={state.perDay} ended={phase === "end"} inset={phase === "end" ? 0 : sheet} />
       <section className="panel" aria-live="polite" ref={panelRef}>
-        {count !== null && <Ready n={count} cfg={cfg} position={state.rounds.length} perDay={state.perDay} />}
-        {count === null && phase === "play" && state.current && (
+        {starting && <Ready cfg={cfg} position={state.rounds.length} perDay={state.perDay} />}
+        {!starting && phase === "play" && state.current && (
           <Play key={state.current.position} state={vstate} onScored={setState} onLost={load} />
         )}
-        {count === null && phase === "reveal" && (
+        {!starting && phase === "reveal" && (
           <Reveal
             state={vstate}
             onNext={() => (state.rounds.length >= state.perDay ? setShowEnd(true) : start())}
@@ -208,7 +202,7 @@ function Landing({ state, cfg, me, onStart }: { state: GameState; cfg: SkinConfi
         <details className="howto">
           <summary>{t("Pravila")}</summary>
           <ul className="rules">
-            <li><span className="k">{cfg.secondsPerCategory}s</span><span>{t("po kategoriji, vrijeme kreće odmah, Enter šalje odgovor")}</span></li>
+            <li><span className="k">{cfg.secondsPerCategory}s</span><span>{t("po kategoriji, vrijeme kreće 3 sekunde nakon što vidiš pitanje, Enter šalje odgovor")}</span></li>
             <li><span className="k">1×</span><span>{t("jedan odgovor; ako ga nemamo na popisu, probaj opet dok traje vrijeme")}</span></li>
             <li><span className="k">⚡</span><span>{t("što brže odgovoriš, to više km; ako se predugo misliš, dobiješ malo manje")}</span></li>
             <li><span className="k">{cfg.miss.emoji}</span><span>{t("bez odgovora: {x}, 0 km", { x: cfg.miss.name.toLowerCase() })}</span></li>
@@ -228,6 +222,10 @@ function Play({ state, onScored, onLost }: { state: GameState; onScored: (s: Gam
   const [value, setValue] = useState("");
   // sekunde se iscrtavaju kroz React samo kad se promijene, a traka izravno u svakom okviru
   const [left, setLeft] = useState(Math.ceil(cur.remainingMs / 1000));
+  // sekunde do početka vremena: pitanje se već vidi, ali odgovor se još ne može upisati
+  const [wait, setWait] = useState(Math.ceil(cur.waitMs / 1000));
+  const waiting = wait > 0;
+  const inputRef = useRef<HTMLInputElement>(null);
   const barRef = useRef<HTMLElement>(null);
   const [sending, setSending] = useState<{ kind: "idle" | "preview" | "nope"; canonical?: string | null }>({ kind: "idle" });
   const busy = useRef(false);
@@ -255,9 +253,27 @@ function Play({ state, onScored, onLost }: { state: GameState; onScored: (s: Gam
 
   // tajmer; server je mjerodavan, ovo je samo prikaz
   useEffect(() => {
-    const deadline = performance.now() + cur.remainingMs;
-    let raf = 0, lastBeep = Math.ceil(cur.remainingMs / 1000);
+    const begin = performance.now() + cur.waitMs;
+    const deadline = begin + cur.remainingMs;
+    let raf = 0, lastBeep = Math.ceil(cur.remainingMs / 1000), lastCount = Infinity;
     const tick = () => {
+      const w = Math.ceil((begin - performance.now()) / 1000);
+      if (w > 0) {
+        // odbrojavanje nad pitanjem: 3, 2, 1, pa viši ton kad vrijeme krene
+        if (w < lastCount) {
+          lastCount = w;
+          setWait(w);
+          sfx.count(false);
+        }
+        raf = requestAnimationFrame(tick);
+        return;
+      }
+      if (lastCount !== 0 && cur.waitMs > 0) {
+        lastCount = 0;
+        setWait(0);
+        sfx.count(true);
+        inputRef.current?.focus();
+      }
       const l = Math.max(0, (deadline - performance.now()) / 1000);
       setLeft(Math.ceil(l));
       barRef.current?.style.setProperty("transform", `scaleX(${l / seconds})`);
@@ -275,7 +291,7 @@ function Play({ state, onScored, onLost }: { state: GameState; onScored: (s: Gam
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [cur.remainingMs, send]);
+  }, [cur.remainingMs, cur.waitMs, send]);
 
   // "Šalje se:" pregled sa servera
   useEffect(() => {
@@ -301,53 +317,61 @@ function Play({ state, onScored, onLost }: { state: GameState; onScored: (s: Gam
       </div>
       <div className="cat">{cur.category.title}</div>
       {cur.category.hint && <p className="hint">{cur.category.hint}</p>}
-      <div className={"timer" + (left <= 5 ? " low" : "")}>
+      <div className={"timer" + (left <= 5 ? " low" : "") + (waiting ? " wait" : "")}>
         <i ref={barRef} style={{ transform: `scaleX(${cur.remainingMs / 1000 / seconds})` }} />
       </div>
-      <div className="trow"><span>{left} s</span><span>{t("Rjeđi odgovor = brže prijevozno sredstvo")}</span></div>
+      {waiting ? (
+        <div className="trow wait"><span>{t("Vrijeme kreće za")} <b className="waitnum" key={wait}>{wait}</b></span><span>{t("Rjeđi odgovor = brže prijevozno sredstvo")}</span></div>
+      ) : (
+        <div className="trow"><span>{left} s</span><span>{t("Rjeđi odgovor = brže prijevozno sredstvo")}</span></div>
+      )}
       <form
         className="answer"
         autoComplete="off"
         onSubmit={(e) => {
           e.preventDefault();
-          if (value.trim()) send(value, false);
+          if (value.trim() && !waiting) send(value, false);
         }}
       >
         <input
+          ref={inputRef}
           autoFocus
           type="text"
           enterKeyHint="send"
           autoCapitalize="sentences"
           spellCheck={false}
           aria-label={t("Tvoj odgovor")}
-          placeholder={t("Tvoj odgovor")}
+          placeholder={waiting ? t("Pročitaj pitanje…") : t("Tvoj odgovor")}
           value={value}
           onChange={(e) => {
+            // dok vrijeme ne krene ne može se upisivati (tipkovnica može ostati otvorena)
+            if (waiting) return;
             // prvo slovo uvijek veliko, kao u kanonskim odgovorima
             const v = e.target.value;
             setValue(v.charAt(0).toLocaleUpperCase("hr") + v.slice(1));
             sfx.type();
           }}
         />
-        <button type="submit">{t("Pošalji")}</button>
+        <button type="submit" disabled={waiting}>{t("Pošalji")}</button>
       </form>
       {sending.kind === "nope" ? (
         <div className="sending nope">{t("Nema tog odgovora na popisu. Probaj nešto drugo.")}</div>
       ) : sending.kind === "preview" ? (
         <div className={"sending" + (changed ? " changed" : "")}>{t("Šalje se:")} <b>{shown}</b></div>
       ) : (
-        <div className="sending">{t("Upiši odgovor i stisni Enter.")}</div>
+        <div className="sending">{waiting ? t("Pročitaj pitanje, upisivanje kreće za koju sekundu.") : t("Upiši odgovor i stisni Enter.")}</div>
       )}
     </div>
   );
 }
 
-function Ready({ n, cfg, position, perDay }: { n: number; cfg: SkinConfig; position: number; perDay: number }) {
+/** Kratko dok server otvara iduću kategoriju. */
+function Ready({ cfg, position, perDay }: { cfg: SkinConfig; position: number; perDay: number }) {
   const t = useT();
   return (
     <div className="countdown">
       <span className="eyebrow">{t("Kategorija")} {position + 1} / {perDay}</span>
-      <div className="num" key={n}>{n > 0 ? n : t("Kreni!")}</div>
+      <div className="num">…</div>
       <span className="small">{t("Imaš {n} sekundi za jedan odgovor.", { n: cfg.secondsPerCategory })}</span>
     </div>
   );
