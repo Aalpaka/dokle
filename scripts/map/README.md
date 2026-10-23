@@ -38,3 +38,9 @@ Skripte su parametrizirane (pokreću se iz mape s pločicama i `node_modules` ka
 Pločice za lon 8,5–30 i lat 39,8–48,6, pa npr. `node vec_skin.mjs baw 11.5 47.6 23.5 40.3 "Bosnia and Herz." ""` i
 `SCALE=0.4 python3 relief_skin.py baw ba-okolica.jpg` (Srbija s `"Kosovo"` kao gore, Hrvatska `hrw 8.6 48.5 25 40.0 "Croatia"`).
 
+
+## Meki rub (`*-reljef.webp`)
+Igra koristi `*-reljef.webp`, ne jpg: `python3 scripts/map/feather.py` (iz korijena repoa) uzme svježe
+iscrtani `public/map/<skin>-reljef.jpg` i upeče meki rub prema okolici u alfa kanal. Prije je to radila SVG
+maska s Gaussovim zamućenjem, koja se na mobitelu računala u svakom okviru animacije i rušila igru.
+Jpg se nakon toga briše, ne commita se.

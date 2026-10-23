@@ -102,33 +102,35 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
     v.style.setProperty("--vc", t ? t.color : MISS_COLOR);
   }
 
-  function drawSegments() {
-    const g = segsRef.current;
-    if (!g) return;
-    let h = "";
-    for (const s of sim.current.segments) {
-      if (s.b - s.a < 0.1) continue;
-      const d = route.path(s.a, s.b), c = s.tier.color;
-      switch (s.tier.vehicle) {
-        case "walk":
-          h += `<path class="seg" d="${d}" stroke="${c}" stroke-width="4" stroke-dasharray="0.1 7"/>`;
-          break;
-        case "train":
-          h += `<path class="seg" d="${d}" stroke="${c}" stroke-width="9" stroke-dasharray="1.5 4" stroke-linecap="butt"/><path class="seg" d="${d}" stroke="${c}" stroke-width="3"/>`;
-          break;
-        case "plane":
-          h += `<path class="seg" d="${d}" stroke="${c}" stroke-width="3.5" stroke-dasharray="9 6"/>`;
-          break;
-        case "heli":
-          h += `<path class="seg" d="${d}" stroke="#fff" stroke-width="7" stroke-dasharray="2 6"/><path class="seg" d="${d}" stroke="${c}" stroke-width="4" stroke-dasharray="2 6"/>`;
-          break;
-        default: {
-          const w = s.tier.vehicle === "bike" ? 3.5 : 5.5;
-          h += `<path class="seg" d="${d}" stroke="#fff" stroke-width="${w + 2.5}"/><path class="seg" d="${d}" stroke="${c}" stroke-width="${w}"/>`;
-        }
+  function segHtml(s: Segment) {
+    if (s.b - s.a < 0.1) return "";
+    const d = route.path(s.a, s.b), c = s.tier.color;
+    switch (s.tier.vehicle) {
+      case "walk":
+        return `<path class="seg" d="${d}" stroke="${c}" stroke-width="4" stroke-dasharray="0.1 7"/>`;
+      case "train":
+        return `<path class="seg" d="${d}" stroke="${c}" stroke-width="9" stroke-dasharray="1.5 4" stroke-linecap="butt"/><path class="seg" d="${d}" stroke="${c}" stroke-width="3"/>`;
+      case "plane":
+        return `<path class="seg" d="${d}" stroke="${c}" stroke-width="3.5" stroke-dasharray="9 6"/>`;
+      case "heli":
+        return `<path class="seg" d="${d}" stroke="#fff" stroke-width="7" stroke-dasharray="2 6"/><path class="seg" d="${d}" stroke="${c}" stroke-width="4" stroke-dasharray="2 6"/>`;
+      default: {
+        const w = s.tier.vehicle === "bike" ? 3.5 : 5.5;
+        return `<path class="seg" d="${d}" stroke="#fff" stroke-width="${w + 2.5}"/><path class="seg" d="${d}" stroke="${c}" stroke-width="${w}"/>`;
       }
     }
-    g.innerHTML = h;
+  }
+
+  // svaka dionica u svojoj grupi; tijekom vožnje se mijenja samo zadnja, ne cijeli put
+  function drawSegments(onlyLast = false) {
+    const g = segsRef.current;
+    if (!g) return;
+    const segs = sim.current.segments;
+    if (onlyLast && g.childElementCount === segs.length && segs.length) {
+      g.lastElementChild!.innerHTML = segHtml(segs[segs.length - 1]);
+      return;
+    }
+    g.innerHTML = segs.map((s) => `<g>${segHtml(s)}</g>`).join("");
   }
 
   function arrive(i: number, quiet: boolean) {
@@ -240,7 +242,7 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
     });
     if (a.tier.vehicle !== "plane" && a.tier.vehicle !== "heli")
       for (const l of landmarks) if (l.km > prev && l.km <= k) (l.kind === "crash" ? crash(l, a.quiet) : pass(l, a.quiet));
-    drawSegments();
+    drawSegments(true);
     setHudKm(Math.round(k));
     if (raw >= 1) {
       S.anim = null;
@@ -372,7 +374,7 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
 
   // petlja kamere i animacije
   useEffect(() => {
-    let raf = 0, last = performance.now();
+    let raf = 0, last = performance.now(), lastBox = "", lastVeh = "";
     const { overview } = map;
     const bounds = map.backdrop ?? map.image;
     const xmin = bounds.x, xmax = bounds.x + bounds.width, ymin = bounds.y, ymax = bounds.y + bounds.height;
@@ -406,21 +408,30 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
       S.cam.w += (tw - S.cam.w) * k;
       S.cam.x += (tx - S.cam.x) * k;
       S.cam.y += (ty - S.cam.y) * k;
+      // blizu cilja kamera sjedne, da se mirna karta prestane iscrtavati
+      if (Math.abs(tw - S.cam.w) < 0.05 && Math.abs(tx - S.cam.x) < 0.05 && Math.abs(ty - S.cam.y) < 0.05) S.cam = { x: tx, y: ty, w: tw };
       const vw = S.cam.w, vh = vw * aspect;
       let x0 = S.cam.x - vw / 2, y0 = S.cam.y - vh / 2;
       x0 = vw <= xmax - xmin ? Math.max(xmin, Math.min(xmax - vw, x0)) : (xmin + xmax - vw) / 2;
       // ispod ploče smije viriti more, da i jug karte može doći u vidljivi dio
       const below = (cover / 2) * (vw / cw);
       y0 = vh <= ymax - ymin ? Math.max(ymin, Math.min(ymax - vh + 2 * below, y0)) : (ymin + ymax - vh) / 2 + below;
-      svg.setAttribute("viewBox", `${x0.toFixed(2)} ${y0.toFixed(2)} ${vw.toFixed(2)} ${vh.toFixed(2)}`);
+      // kad kamera miruje, ništa se ne dira: svaka promjena viewBoxa ponovno iscrta cijelu kartu
+      const box = `${x0.toFixed(1)} ${y0.toFixed(1)} ${vw.toFixed(1)} ${vh.toFixed(1)} ${cw} ${ch} ${pins.current.length}`;
       const sc = cw / vw, near = vw < 1150;
-      for (const pin of pins.current) {
-        const x = (pin.p[0] - x0) * sc, y = (pin.p[1] - y0) * sc;
-        pin.el.style.transform = `translate(${x.toFixed(1)}px,${y.toFixed(1)}px)${pin.center ? " translate(-50%,-50%)" : ""}`;
-        if (pin.fade) pin.el.classList.toggle("far", !near);
+      if (box !== lastBox) {
+        lastBox = box;
+        svg.setAttribute("viewBox", `${x0.toFixed(2)} ${y0.toFixed(2)} ${vw.toFixed(2)} ${vh.toFixed(2)}`);
+        for (const pin of pins.current) {
+          const x = (pin.p[0] - x0) * sc, y = (pin.p[1] - y0) * sc;
+          pin.el.style.transform = `translate(${x.toFixed(1)}px,${y.toFixed(1)}px)${pin.center ? " translate(-50%,-50%)" : ""}`;
+          if (pin.fade) pin.el.classList.toggle("far", !near);
+        }
       }
       const v = vehRef.current, b = badgeRef.current, sh = shadowRef.current;
-      if (v && b && sh) {
+      const veh = `${box} ${S.pos.x} ${S.pos.y} ${S.lift} ${S.bob} ${S.rot} ${S.flip} ${b?.classList.contains("logo")}`;
+      if (v && b && sh && veh !== lastVeh) {
+        lastVeh = veh;
         v.style.transform = `translate(${((S.pos.x - x0) * sc).toFixed(1)}px,${((S.pos.y - y0) * sc).toFixed(1)}px)`;
         // ikona vozila gleda u smjer vožnje, logo (Bajs, HŽ) se nikad ne zrcali
         const flip = b.classList.contains("logo") ? 1 : S.flip;
@@ -437,41 +448,10 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
     if (el && !pins.current.some((x) => x.el === el)) pins.current.push({ el, p, ...opts });
   };
 
-  const cur = landingAt(cfg, hudKm);
-  // na putu u Crnu Goru km na karti nisu stvarni km, pa se pokaže ukupno
-  const egg = cur === cfg.overshoot?.station;
-  const ahead = cfg.stations.filter((s) => s.km > hudKm).slice(0, 3);
-  const last = cfg.stations[cfg.stations.length - 1];
-
-  return (
-    <div className="stage" ref={stageRef} style={{ "--inset": `${inset}px` } as React.CSSProperties}>
-      <svg className="map" ref={svgRef} viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-        {map.backdrop && (
-          <image href={map.backdrop.href} x={map.backdrop.x} y={map.backdrop.y} width={map.backdrop.width} height={map.backdrop.height} preserveAspectRatio="none" />
-        )}
-        {map.backdrop && (
-          <defs>
-            {/* rub detaljne karte se pretapa u okolicu */}
-            <filter id="map-feather" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="18" /></filter>
-            <mask id="map-fade" maskUnits="userSpaceOnUse" x={map.image.x} y={map.image.y} width={map.image.width} height={map.image.height}>
-              <rect x={map.image.x + 40} y={map.image.y + 40} width={map.image.width - 80} height={map.image.height - 80} fill="#fff" filter="url(#map-feather)" />
-            </mask>
-          </defs>
-        )}
-        <image mask={map.backdrop ? "url(#map-fade)" : undefined} href={map.image.href} x={map.image.x} y={map.image.y} width={map.image.width} height={map.image.height} preserveAspectRatio="none" />
-        {map.rivers.map((r) => <path key={r.name} className="river" d={r.d} />)}
-        <path className="border" d={map.border} />
-        {map.dashedBorder && <path className="border dashed" d={map.dashedBorder} />}
-        <path className="road-casing" d={fullRoad} />
-        <path className="road" d={fullRoad} />
-        {map.ferries.map((f) => {
-          const a = project(...f.from), b = project(...f.to);
-          return <path key={f.name} className="ferry" d={`M${a[0]},${a[1]}L${b[0]},${b[1]}`} />;
-        })}
-        <g ref={segsRef} />
-        <path className="contrail" ref={trailRef} />
-      </svg>
-      <div className="overlay">
+  // nepomični natpisi na karti ne ovise o km, pa se ne iscrtavaju ponovno u svakom okviru vožnje
+  const decor = useMemo(
+    () => (
+      <>
         {map.countries.map(([n, lo, la]) => (
           <div key={n} className="cname" ref={pin(project(lo, la), { center: true })}>{n}</div>
         ))}
@@ -488,6 +468,41 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
             <span className="name">{l.name}</span>
           </div>
         ))}
+      </>
+    ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [map],
+  );
+
+  const cur = landingAt(cfg, hudKm);
+  // na putu u Crnu Goru km na karti nisu stvarni km, pa se pokaže ukupno
+  const egg = cur === cfg.overshoot?.station;
+  const ahead = cfg.stations.filter((s) => s.km > hudKm).slice(0, 3);
+  const last = cfg.stations[cfg.stations.length - 1];
+
+  return (
+    <div className="stage" ref={stageRef} style={{ "--inset": `${inset}px` } as React.CSSProperties}>
+      <svg className="map" ref={svgRef} viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        {map.backdrop && (
+          <image href={map.backdrop.href} x={map.backdrop.x} y={map.backdrop.y} width={map.backdrop.width} height={map.backdrop.height} preserveAspectRatio="none" />
+        )}
+        {/* rub prema okolici je upečen u alfa kanal slike (scripts/map/feather.py); SVG maska sa zamućenjem
+            se računala u svakom okviru i na mobitelu rušila igru */}
+        <image href={map.image.href} x={map.image.x} y={map.image.y} width={map.image.width} height={map.image.height} preserveAspectRatio="none" />
+        {map.rivers.map((r) => <path key={r.name} className="river" d={r.d} />)}
+        <path className="border" d={map.border} />
+        {map.dashedBorder && <path className="border dashed" d={map.dashedBorder} />}
+        <path className="road-casing" d={fullRoad} />
+        <path className="road" d={fullRoad} />
+        {map.ferries.map((f) => {
+          const a = project(...f.from), b = project(...f.to);
+          return <path key={f.name} className="ferry" d={`M${a[0]},${a[1]}L${b[0]},${b[1]}`} />;
+        })}
+        <g ref={segsRef} />
+        <path className="contrail" ref={trailRef} />
+      </svg>
+      <div className="overlay">
+        {decor}
         {allStations.map((s, i) => (
           <div
             key={s.name}
