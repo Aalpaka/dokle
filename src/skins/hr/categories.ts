@@ -11,6 +11,7 @@ import { kvizKategorije } from "./kategorije/kviz";
 import { opceKategorije } from "./kategorije/opce";
 import { prosirenja } from "./kategorije/prosirenja";
 import { wikipedija } from "./kategorije/wikipedija";
+import { wikipedijaDodaci } from "./kategorije/wikipedija-dodaci";
 import { zaigranoKategorije } from "./kategorije/zaigrano";
 
 export type SeedCategory = { slug: string; group: string; title: string; hint?: string; strip: string[]; answers: string };
@@ -63,10 +64,10 @@ function withAliasi(c: SeedCategory): SeedCategory {
   return { ...c, answers: format(list) };
 }
 
-/** Udjeli dorađeni Wikipedia pregledima (wikipedija.ts) zamjenjuju ručne procjene. */
+/** Udjeli dorađeni Wikipedia pregledima (wikipedija.ts, wikipedija-dodaci.ts) zamjenjuju ručne procjene. */
 function withWiki(c: SeedCategory): SeedCategory {
-  const shares = wikipedija[c.slug];
-  if (!shares) return c;
+  const shares = { ...wikipedija[c.slug], ...wikipedijaDodaci[c.slug] };
+  if (!Object.keys(shares).length) return c;
   const list = parseSeedAnswers(c.answers).map((a) => (shares[a.canonical] ? { ...a, share: shares[a.canonical] } : a));
   return { ...c, answers: format(list) };
 }
