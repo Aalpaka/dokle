@@ -208,6 +208,7 @@ function Landing({ state, cfg, me, onStart }: { state: GameState; cfg: SkinConfi
             <li><span className="k">📅</span><span>{t("kategorije su svaki dan iste za sve, nova ruta u ponoć")}</span></li>
           </ul>
         </details>
+        <p className="legal small"><a href="/privatnost">{t("Privatnost")}</a>{" · "}<a href="/uvjeti">{t("Uvjeti korištenja")}</a></p>
       </main>
     </div>
   );
