@@ -89,4 +89,6 @@ export const aliasi: Record<string, Record<string, string>> = {
   "bolest": { "Cistitis": "Upala mjehura/Upala mokraćnog mjehura", "Sinusitis": "Upala sinusa", "Uši": "Pedikuloza", "Upala uha": "Otitis/Upala srednjeg uha" },
   "zanimanje": { "Primalja": "Babica", "Krojač": "Šnajder/Krojačica", "Prevoditelj": "Prevodilac", "Knjižničar": "Bibliotekar" },
   "lotr": { "Aragorn": "Strider/Lutalica/Elessar", "Morgoth": "Melkor" },
+  "koktel": { "Bambus": "Kalimotxo", "Kuhano vino": "Glühwein/Grijano vino", "Gemišt": "Špricer" },
+  "na-glavi": { "Kapa Djeda Mraza": "Kapa Djeda Božićnjaka/Božićna kapa" },
 };
