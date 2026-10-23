@@ -97,4 +97,9 @@ export const aliasi: Record<string, Record<string, string>> = {
   "alat": { "Lemilica": "Lemilo", "Metar": "Mjerna traka/Metar traka" },
   "dijalekt": { "Pomidor": "Pomidora", "Gušterna": "Gustirna", "Purger": "Purgerica" },
   "pizza": { "Srdele": "Sardine", "Ementaler": "Emmental/Emmentaler", "Češnjak": "Bijeli luk", "Luk": "Crveni luk", "Pršut": "Prosciutto" },
+  "superheroj": { "Flash": "Barry Allen/Wally West", "Green Lantern": "Hal Jordan", "Batman": "Bruce Wayne", "Superman": "Clark Kent", "Spider-Man": "Peter Parker", "Iron Man": "Tony Stark" },
+  "kupaonica": { "Kontaktne leće": "Leće" },
+  "harry-potter": { "Ludooki Moody": "Alastor Moody", "Gotovo Bezglavi Nick": "Mrtvi Nick/Nick", "Tonks": "Nymphadora Tonks", "Bellatrix": "Bellatrix Lestrange", "Grindelwald": "Gellert Grindelwald", "Binns": "Profesor Binns" },
+  "lik-stripa": { "Luffy": "Monkey D. Luffy" },
+  "lik-videoigre": { "Geralt": "Geralt od Rivije", "Ezio": "Ezio Auditore", "Freddy Fazbear": "Freddy" },
 };
