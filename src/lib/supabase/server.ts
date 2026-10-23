@@ -20,14 +20,22 @@ export async function supabaseServer() {
 export type AuthUser = { id: string; email: string | null };
 
 /**
- * Prijavljeni korisnik ili null; provjera ide preko Supabasea, ne vjeruje kolačiću naslijepo.
- * Email samo ako je potvrđen (Google ga uvijek potvrdi), da nepotvrđena adresa ne otvori /admin.
+ * Prijavljeni korisnik ili null; ne vjeruje kolačiću naslijepo. Obično se potpis tokena provjerava lokalno
+ * (getClaims, javni ključ projekta se pamti), bez poziva Supabaseu za svaki zahtjev; email je tada samo za prikaz.
+ * strict=true pita Supabase Auth (admin, spajanje računa): vidi i sesiju odjavljenu na drugom uređaju, a email
+ * vraća samo ako je potvrđen (Google ga uvijek potvrdi), da nepotvrđena adresa ne otvori /admin.
  */
-export async function currentAuthUser(): Promise<AuthUser | null> {
+export async function currentAuthUser(strict = false): Promise<AuthUser | null> {
   if (!authEnabled) return null;
-  const { data } = await (await supabaseServer()).auth.getUser();
-  if (!data.user) return null;
-  return { id: data.user.id, email: data.user.email_confirmed_at ? (data.user.email ?? null) : null };
+  const auth = (await supabaseServer()).auth;
+  if (strict) {
+    const { data } = await auth.getUser();
+    if (!data.user) return null;
+    return { id: data.user.id, email: data.user.email_confirmed_at ? (data.user.email ?? null) : null };
+  }
+  const { data } = await auth.getClaims();
+  const c = data?.claims;
+  return c?.sub ? { id: c.sub, email: typeof c.email === "string" && c.email ? c.email : null } : null;
 }
 
 /** Briše korisnika iz Supabase Autha (email ostaje samo ako service_role ključ nije postavljen). */

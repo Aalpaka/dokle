@@ -25,13 +25,16 @@ const GRACE_MS = 2500;
 // Novo pitanje se vidi odmah, a vrijeme kreće tek nakon ovoliko (odbrojavanje 3, 2, 1 nad pitanjem).
 export const READ_MS = 3000;
 const CACHE_MS = 60_000;
+// skin i odgovori kategorije mijenjaju se samo deployem ili u adminu (koji briše cache svoje instance); dulje
+// pamćenje štedi promet iz baze, a novi odgovor iz admina druge instance vide najkasnije za toliko
+const LONG_CACHE_MS = 10 * 60_000;
 
 export type Skin = { id: string; name: string; timezone: string; launchDate: string; config: SkinConfig };
 
 const skinCache = new Map<string, { at: number; skin: Skin }>();
 export async function getSkin(id: string): Promise<Skin> {
   const hit = skinCache.get(id);
-  if (hit && Date.now() - hit.at < CACHE_MS) return hit.skin;
+  if (hit && Date.now() - hit.at < LONG_CACHE_MS) return hit.skin;
   const [skin] = await db.select().from(skins).where(eq(skins.id, id));
   if (!skin) throw new Error(`Nepoznat skin: ${id}`);
   skinCache.set(id, { at: Date.now(), skin });
@@ -43,7 +46,7 @@ const categoryCache = new Map<number, { at: number; data: CategoryData }>();
 
 async function getCategory(id: number): Promise<CategoryData> {
   const hit = categoryCache.get(id);
-  if (hit && Date.now() - hit.at < CACHE_MS) return hit.data;
+  if (hit && Date.now() - hit.at < LONG_CACHE_MS) return hit.data;
   const [cat] = await db.select().from(categories).where(eq(categories.id, id));
   const rows = await db
     .select({ id: answers.id, canonical: answers.canonical, prior: answers.priorShare, rare: answers.rare, alias: answerAliases.alias })
@@ -116,7 +119,23 @@ export async function getOrCreatePuzzle(skin: Skin, date: string) {
   return (await loadPuzzle(skin.id, date))!;
 }
 
+// zagonetka dana se ne mijenja (admin mijenja samo buduće dane), a čita je svaki zahtjev
+const puzzleCache = new Map<string, { at: number; puzzle: Puzzle }>();
+
+export function clearPuzzleCache() {
+  puzzleCache.clear();
+}
+
 async function loadPuzzle(skinId: string, date: string) {
+  const key = `${skinId}|${date}`;
+  const hit = puzzleCache.get(key);
+  if (hit && Date.now() - hit.at < CACHE_MS) return hit.puzzle;
+  const puzzle = await queryPuzzle(skinId, date);
+  if (puzzle) puzzleCache.set(key, { at: Date.now(), puzzle });
+  return puzzle;
+}
+
+async function queryPuzzle(skinId: string, date: string) {
   const [p] = await db
     .select()
     .from(dailyPuzzles)
@@ -131,7 +150,7 @@ async function loadPuzzle(skinId: string, date: string) {
   return { ...p, categoryIds: cats.map((c) => c.categoryId) };
 }
 
-type Puzzle = NonNullable<Awaited<ReturnType<typeof loadPuzzle>>>;
+type Puzzle = NonNullable<Awaited<ReturnType<typeof queryPuzzle>>>;
 
 /** Skinovi koji prate ovaj skin (BiH i Srbija prate Hrvatsku). */
 export function followersOf(skinId: string): string[] {
@@ -166,6 +185,17 @@ async function playedElsewhere(skin: Skin, playerId: string, date: string) {
     .where(and(eq(games.playerId, playerId), eq(dailyPuzzles.date, date), ne(dailyPuzzles.skinId, skin.id)))
     .limit(1);
   return !!g;
+}
+
+/** Igračeva partija i njegova otvorena kategorija (ako je ima) u jednom upitu. */
+async function findOpenRound(playerId: string, puzzleId: number) {
+  const [row] = await db
+    .select({ gameId: games.id, round: rounds })
+    .from(games)
+    .leftJoin(rounds, and(eq(rounds.gameId, games.id), isNull(rounds.answeredAt)))
+    .where(and(eq(games.playerId, playerId), eq(games.puzzleId, puzzleId)))
+    .limit(1);
+  return row ?? null;
 }
 
 async function findGame(playerId: string, puzzleId: number) {
@@ -274,12 +304,14 @@ export async function getState(skin: Skin, playerId: string | null): Promise<Gam
  * a vrijeme kreće nakon readMs.
  */
 export async function startNext(skin: Skin, playerId: string, readMs = READ_MS): Promise<GameState> {
-  await ensurePlayer(playerId);
   const date = localDate(skin.timezone);
   const puzzle = await getOrCreatePuzzle(skin, date);
-  if (!(await findGame(playerId, puzzle.id)))
+  let game = await findGame(playerId, puzzle.id);
+  if (!game) {
+    await ensurePlayer(playerId);
     await db.insert(games).values({ playerId, puzzleId: puzzle.id, ranked: !(await playedElsewhere(skin, playerId, date)) }).onConflictDoNothing();
-  const game = (await findGame(playerId, puzzle.id))!;
+    game = (await findGame(playerId, puzzle.id))!;
+  }
   await expireOpenRound(skin, puzzle, game.id);
 
   const existing = await db.select().from(rounds).where(eq(rounds.gameId, game.id));
@@ -305,13 +337,10 @@ export type AnswerResult =
  */
 export async function submitAnswer(skin: Skin, playerId: string, raw: string, final: boolean): Promise<AnswerResult> {
   const puzzle = await getOrCreatePuzzle(skin, localDate(skin.timezone));
-  const game = await findGame(playerId, puzzle.id);
-  if (!game) return { status: "no-round" };
-  const [open] = await db
-    .select()
-    .from(rounds)
-    .where(and(eq(rounds.gameId, game.id), isNull(rounds.answeredAt)));
-  if (!open) return { status: "no-round" };
+  const found = await findOpenRound(playerId, puzzle.id);
+  const open = found?.round;
+  if (!found || !open) return { status: "no-round" };
+  const game = { id: found.gameId };
 
   const elapsedMs = Date.now() - open.startedAt.getTime();
   // dok igrač čita pitanje odgovor se ne prima (klijent ga ni ne šalje)
@@ -344,12 +373,7 @@ export async function submitAnswer(skin: Skin, playerId: string, raw: string, fi
 /** "Šalje se:" pregled; radi samo za kategoriju koja je igraču trenutno otvorena. */
 export async function previewAnswer(skin: Skin, playerId: string, raw: string): Promise<{ canonical: string | null }> {
   const puzzle = await getOrCreatePuzzle(skin, localDate(skin.timezone));
-  const game = await findGame(playerId, puzzle.id);
-  if (!game) return { canonical: null };
-  const [open] = await db
-    .select()
-    .from(rounds)
-    .where(and(eq(rounds.gameId, game.id), isNull(rounds.answeredAt)));
+  const open = (await findOpenRound(playerId, puzzle.id))?.round;
   if (!open) return { canonical: null };
   const cat = await getCategory(open.categoryId);
   return { canonical: match(cat.index, raw.slice(0, 200))?.canonical ?? null };
@@ -404,19 +428,33 @@ async function scoreRound(
   });
 }
 
-/** Koliko je igrača tog dana u kategoriji dalo ovaj odgovor, od svih s prihvaćenim odgovorom. */
-/**
- * Svi odgovori kategorije s udjelom za taj dan, od najčešćeg prema najrjeđem. `n` = koliko ih je taj dan dalo,
- * `tier` = prijevoz koji odgovor taj dan vrijedi (vidi assignTiers).
- */
-export async function categoryShares(skin: Skin, puzzleId: number, categoryId: number) {
-  const cat = await getCategory(categoryId);
+// Brojanje odgovora dana: kod navale svaki odgovor i svako otkrivanje bi brojali iznova. Par sekundi starine
+// ne mijenja prijevoz (udio je ionako pomiješan s procjenom za ~500 igrača), a bazu rastereti.
+const COUNTS_MS = 3000;
+const countsCache = new Map<string, { at: number; counts: { answerId: number | null; n: number }[] }>();
+
+async function answerCounts(puzzleId: number, categoryId: number, fresh: boolean) {
+  const key = `${puzzleId}|${categoryId}`;
+  const hit = countsCache.get(key);
+  if (!fresh && hit && Date.now() - hit.at < COUNTS_MS) return hit.counts;
   const counts = await db
     .select({ answerId: rounds.answerId, n: sql<number>`count(*)::int` })
     .from(rounds)
     .innerJoin(games, eq(games.id, rounds.gameId))
     .where(and(eq(games.puzzleId, puzzleId), eq(games.ranked, true), eq(rounds.categoryId, categoryId), isNotNull(rounds.answerId)))
     .groupBy(rounds.answerId);
+  if (countsCache.size > 500) countsCache.clear();
+  countsCache.set(key, { at: Date.now(), counts });
+  return counts;
+}
+
+/**
+ * Svi odgovori kategorije s udjelom za taj dan, od najčešćeg prema najrjeđem. `n` = koliko ih je taj dan dalo,
+ * `tier` = prijevoz koji odgovor taj dan vrijedi (vidi assignTiers). fresh=true broji iznova (admin, naknadno bodovanje).
+ */
+export async function categoryShares(skin: Skin, puzzleId: number, categoryId: number, fresh = false) {
+  const cat = await getCategory(categoryId);
+  const counts = await answerCounts(puzzleId, categoryId, fresh);
   const byId = new Map(counts.map((c) => [c.answerId!, c.n]));
   const total = counts.reduce((a, c) => a + c.n, 0);
   const list = cat.index.answers
@@ -427,8 +465,8 @@ export async function categoryShares(skin: Skin, puzzleId: number, categoryId: n
 }
 
 /** Udio i prijevoz odgovora za taj dan. */
-async function answerStanding(skin: Skin, puzzleId: number, categoryId: number, answerId: number) {
-  const a = (await categoryShares(skin, puzzleId, categoryId)).find((x) => x.id === answerId);
+async function answerStanding(skin: Skin, puzzleId: number, categoryId: number, answerId: number, fresh = false) {
+  const a = (await categoryShares(skin, puzzleId, categoryId, fresh)).find((x) => x.id === answerId);
   const cfg = skin.config;
   return { share: a?.share ?? 0, tier: a?.tier ?? cfg.tiers.filter((t) => !t.rare).at(-1)! };
 }
@@ -490,11 +528,14 @@ export async function dayCompare(skin: Skin, playerId: string): Promise<(DayComp
   const puzzle = await getOrCreatePuzzle(skin, localDate(skin.timezone));
   const game = await findGame(playerId, puzzle.id);
   if (!game?.finishedAt || !game.ranked) return null;
+  // po km, ne po partiji: iz baze stiže par stotina redaka i kad dan odigraju tisuće
   const rows = await db
-    .select({ km: games.totalKm })
+    .select({ km: games.totalKm, n: sql<number>`count(*)::int` })
     .from(games)
-    .where(and(eq(games.puzzleId, puzzle.id), eq(games.ranked, true), isNotNull(games.finishedAt)));
-  return { ...compareDay(skin.config, rows.map((r) => r.km), game.totalKm), mine: game.totalKm };
+    .where(and(eq(games.puzzleId, puzzle.id), eq(games.ranked, true), isNotNull(games.finishedAt)))
+    .groupBy(games.totalKm);
+  const kms = rows.flatMap((r) => Array<number>(r.n).fill(r.km));
+  return { ...compareDay(skin.config, kms, game.totalKm), mine: game.totalKm };
 }
 
 export function clearCategoryCache(id?: number) {
@@ -530,7 +571,7 @@ export async function rescoreMisses(skin: Skin, categoryId: number, normalized: 
       for (const h of list)
         await tx.update(rounds).set({ answerId }).where(and(eq(rounds.gameId, h.gameId), eq(rounds.position, h.position)));
     });
-    const { share, tier } = await answerStanding(skin, puzzleId, categoryId, answerId);
+    const { share, tier } = await answerStanding(skin, puzzleId, categoryId, answerId, true);
     await db.transaction(async (tx) => {
       for (const h of list) {
         const t = kmFor(skin.config, tier, h.answeredAt!.getTime() - h.startedAt.getTime());

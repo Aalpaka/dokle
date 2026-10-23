@@ -19,12 +19,12 @@ import { computeStats } from "@/lib/stats";
 import { dayNumber, localDate } from "@/lib/day";
 import { isAdminEmail } from "./accounts";
 import { resolveIdentity } from "./player";
-import { categoryShares, clearCategoryCache, followersOf, getOrCreatePuzzle, pairedSlugs, rescoreMisses, type Skin } from "./game";
+import { categoryShares, clearCategoryCache, clearPuzzleCache, followersOf, getOrCreatePuzzle, pairedSlugs, rescoreMisses, type Skin } from "./game";
 
 /** Id admina ili null. Lokalno se može uključiti ADMIN_DEV_BYPASS=1 (nikad u produkciji). */
 export async function requireAdmin(): Promise<{ playerId: string | null } | null> {
   if (process.env.NODE_ENV !== "production" && process.env.ADMIN_DEV_BYPASS === "1") return { playerId: null };
-  const { playerId, user } = await resolveIdentity();
+  const { playerId, user } = await resolveIdentity(false, true);
   return user && isAdminEmail(user.email) ? { playerId } : null;
 }
 
@@ -100,7 +100,7 @@ export async function dayOverview(skin: Skin, date: string) {
   for (const c of cats)
     shares.set(
       c.id,
-      (await categoryShares(skin, puzzle.id, c.id)).map((a) => ({
+      (await categoryShares(skin, puzzle.id, c.id, true)).map((a) => ({
         canonical: a.canonical,
         n: a.n,
         share: a.share,
@@ -408,11 +408,13 @@ export async function setSchedule(skin: Skin, date: string, categoryIds: number[
     if (lone.length) throw new Error(`Nema para u BiH ili Srbiji: ${lone.map((c) => c.title).join(", ")}`);
   }
   if (ps.length) await db.delete(dailyPuzzles).where(inArray(dailyPuzzles.id, ps.map((p) => p.id)));
+  clearPuzzleCache();
   if (!categoryIds) return getOrCreatePuzzle(skin, date); // automatski odabir
   await db.transaction(async (tx) => {
     const [np] = await tx.insert(dailyPuzzles).values({ skinId: skin.id, date, number: dayNumber(skin.launchDate, date) }).returning();
     await tx.insert(puzzleCategories).values(categoryIds.map((categoryId, position) => ({ puzzleId: np.id, position, categoryId })));
   });
+  clearPuzzleCache();
 }
 
 // ---------- Svi odgovori ----------

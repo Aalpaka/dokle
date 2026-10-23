@@ -144,7 +144,7 @@ describe.skipIf(!process.env.DATABASE_URL)("svi odgovori nakon igre", () => {
     expect((await getState(hr, id)).ranked).toBe(true);
     // odgovori iz partije izvan konkurencije ne mijenjaju udjele ni poredak odgovora
     const puzzle = await getOrCreatePuzzle(rs, localDate(rs.timezone));
-    const before = await categoryShares(rs, puzzle.id, puzzle.categoryIds[0]);
+    const before = await categoryShares(rs, puzzle.id, puzzle.categoryIds[0], true);
     // završena partija izvan konkurencije nema usporedbu s ostalima
     let st = await getState(rs, id);
     let first = true;
@@ -155,6 +155,6 @@ describe.skipIf(!process.env.DATABASE_URL)("svi odgovori nakon igre", () => {
       st = r.state.phase === "end" ? r.state : await startNext(rs, id, 0);
     }
     expect(await dayCompare(rs, id)).toBeNull();
-    expect(await categoryShares(rs, puzzle.id, puzzle.categoryIds[0])).toEqual(before);
+    expect(await categoryShares(rs, puzzle.id, puzzle.categoryIds[0], true)).toEqual(before);
   });
 });
