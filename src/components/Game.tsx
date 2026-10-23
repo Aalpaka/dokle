@@ -32,7 +32,7 @@ export default function Game() {
   const [state, setState] = useState<GameState | null>(null);
   const [showEnd, setShowEnd] = useState(false);
   const [error, setError] = useState(false);
-  // server otvara iduću kategoriju; odbrojavanje 3, 2, 1 je onda već nad pitanjem (vidi Play)
+  // server otvara iduću kategoriju; dok ne odgovori ostaje prethodni ekran, a odbrojavanje 3, 2, 1 je nad pitanjem (vidi Play)
   const [starting, setStarting] = useState(false);
   // profil (streak) se osvježava kad partija završi
   const me = useMe(state?.phase === "end" || showEnd);
@@ -78,18 +78,17 @@ export default function Game() {
   const phase = state.phase === "reveal" && showEnd ? "end" : state.phase;
 
   const map = maps[state.skin.id] ?? maps.hr;
-  if (phase === "intro" && !starting) return <Landing state={state} cfg={cfg} me={me} onStart={start} />;
+  if (phase === "intro") return <Landing state={state} cfg={cfg} me={me} onStart={start} />;
 
   // igra stane na jedan ekran (karta + pitanje), kraj je obična stranica koja se skrola
   return (
     <Shell state={state} me={me} fit={phase !== "end"}>
       <MapStage cfg={cfg} map={map} rounds={state.rounds} perDay={state.perDay} ended={phase === "end"} inset={phase === "end" ? 0 : sheet} />
       <section className="panel" aria-live="polite" ref={panelRef}>
-        {starting && <Ready cfg={cfg} position={state.rounds.length} perDay={state.perDay} />}
-        {!starting && phase === "play" && state.current && (
+        {phase === "play" && state.current && (
           <Play key={state.current.position} state={vstate} onScored={setState} onLost={load} />
         )}
-        {!starting && phase === "reveal" && (
+        {phase === "reveal" && (
           <Reveal
             state={vstate}
             onNext={() => (state.rounds.length >= state.perDay ? setShowEnd(true) : start())}
@@ -361,18 +360,6 @@ function Play({ state, onScored, onLost }: { state: GameState; onScored: (s: Gam
       ) : (
         <div className="sending">{waiting ? t("Pročitaj pitanje, upisivanje kreće za koju sekundu.") : t("Upiši odgovor i stisni Enter.")}</div>
       )}
-    </div>
-  );
-}
-
-/** Kratko dok server otvara iduću kategoriju. */
-function Ready({ cfg, position, perDay }: { cfg: SkinConfig; position: number; perDay: number }) {
-  const t = useT();
-  return (
-    <div className="countdown">
-      <span className="eyebrow">{t("Kategorija")} {position + 1} / {perDay}</span>
-      <div className="num">…</div>
-      <span className="small">{t("Imaš {n} sekundi za jedan odgovor.", { n: cfg.secondsPerCategory })}</span>
     </div>
   );
 }
