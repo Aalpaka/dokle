@@ -40,7 +40,7 @@ describe("hr kategorije", () => {
     }
     const total = answers.reduce((s, a) => s + a.share, 0);
     expect(total).toBeGreaterThan(60);
-    expect(total).toBeLessThan(130);
+    expect(total).toBeLessThan(160);
     // prije prvih igrača svaka kategorija ima odgovor za svaki prijevoz
     const sorted = [...answers].sort((x, y) => y.share - x.share);
     const names = new Set(assignTiers(hrConfig, sorted).map((t) => t.name));

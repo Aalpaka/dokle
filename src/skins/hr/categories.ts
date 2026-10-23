@@ -3,6 +3,7 @@
 // Seed samo dodaje nove kategorije i odgovore, pa se stare kategorije proširuju kroz prosirenja.ts.
 import { parseSeedAnswers } from "../../lib/matcher";
 import { RARE_PRIOR } from "../../lib/scoring";
+import { aliasi } from "./kategorije/aliasi";
 import { dodaci } from "./kategorije/dodaci";
 import { helikopter } from "./kategorije/helikopter";
 import { hrKategorije } from "./kategorije/hr";
@@ -10,6 +11,7 @@ import { kvizKategorije } from "./kategorije/kviz";
 import { opceKategorije } from "./kategorije/opce";
 import { prosirenja } from "./kategorije/prosirenja";
 import { wikipedija } from "./kategorije/wikipedija";
+import { wikipedijaDodaci } from "./kategorije/wikipedija-dodaci";
 import { zaigranoKategorije } from "./kategorije/zaigrano";
 
 export type SeedCategory = { slug: string; group: string; title: string; hint?: string; strip: string[]; answers: string };
@@ -43,7 +45,7 @@ export const hrCategories: SeedCategory[] = [
   ...opceKategorije,
   ...zaigranoKategorije,
   ...kvizKategorije,
-].map(withDodaci).map(withWiki).map(withRare);
+].map(withDodaci).map(withAliasi).map(withWiki).map(withRare);
 
 function format(list: ReturnType<typeof parseSeedAnswers>) {
   return list.map((a) => `${[a.canonical, ...a.variants].join("/")}=${a.share}${a.rare ? "!" : ""}`).join(";");
@@ -54,10 +56,18 @@ function withDodaci(c: SeedCategory): SeedCategory {
   return dodaci[c.slug] ? { ...c, answers: `${c.answers};${dodaci[c.slug]}` } : c;
 }
 
-/** Udjeli dorađeni Wikipedia pregledima (wikipedija.ts) zamjenjuju ručne procjene. */
+/** Dodatni aliasi iz aliasi.ts za postojeće odgovore. */
+function withAliasi(c: SeedCategory): SeedCategory {
+  const m = aliasi[c.slug];
+  if (!m) return c;
+  const list = parseSeedAnswers(c.answers).map((a) => (m[a.canonical] ? { ...a, variants: [...a.variants, ...m[a.canonical].split("/")] } : a));
+  return { ...c, answers: format(list) };
+}
+
+/** Udjeli dorađeni Wikipedia pregledima (wikipedija.ts, wikipedija-dodaci.ts) zamjenjuju ručne procjene. */
 function withWiki(c: SeedCategory): SeedCategory {
-  const shares = wikipedija[c.slug];
-  if (!shares) return c;
+  const shares = { ...wikipedija[c.slug], ...wikipedijaDodaci[c.slug] };
+  if (!Object.keys(shares).length) return c;
   const list = parseSeedAnswers(c.answers).map((a) => (shares[a.canonical] ? { ...a, share: shares[a.canonical] } : a));
   return { ...c, answers: format(list) };
 }
