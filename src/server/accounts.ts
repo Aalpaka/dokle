@@ -1,5 +1,5 @@
 import "server-only";
-import { and, desc, eq, isNotNull, notInArray } from "drizzle-orm";
+import { and, desc, eq, isNotNull, notInArray, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { dailyPuzzles, games, players } from "@/db/schema";
 import { computeStats } from "@/lib/stats";
@@ -33,6 +33,15 @@ export async function linkAccount(cookiePid: string | null, authUserId: string, 
           .update(games)
           .set({ playerId: account.id })
           .where(and(eq(games.playerId, anon.id), notInArray(games.puzzleId, taken)));
+        // nakon spajanja se taj dan broji samo prva započeta partija, ostale države su "za gušt"
+        await tx.execute(sql`
+          update games g set ranked = false
+          from daily_puzzles p
+          where g.puzzle_id = p.id and g.player_id = ${account.id} and g.ranked
+            and exists (
+              select 1 from games o join daily_puzzles op on op.id = o.puzzle_id
+              where o.player_id = g.player_id and op.date = p.date and op.skin_id <> p.skin_id
+                and (o.started_at, o.id) < (g.started_at, g.id))`);
       }
       return account.id;
     }

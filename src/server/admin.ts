@@ -46,12 +46,17 @@ export async function dayOverview(skin: Skin, date: string) {
     })
     .from(games)
     .innerJoin(players, eq(players.id, games.playerId))
-    .where(eq(games.puzzleId, puzzle.id));
+    .where(and(eq(games.puzzleId, puzzle.id), eq(games.ranked, true)));
+  // partije "za gušt" (taj dan već igrana druga država) ne ulaze u statistiku dana, samo se prebroje
+  const [{ unranked }] = await db
+    .select({ unranked: sql<number>`count(*)::int` })
+    .from(games)
+    .where(and(eq(games.puzzleId, puzzle.id), eq(games.ranked, false)));
 
   const kms = await db
     .select({ km: games.totalKm })
     .from(games)
-    .where(and(eq(games.puzzleId, puzzle.id), isNotNull(games.finishedAt)));
+    .where(and(eq(games.puzzleId, puzzle.id), eq(games.ranked, true), isNotNull(games.finishedAt)));
   const stations = new Map<string, number>();
   for (const { km } of kms) {
     const s = stationAt(skin.config, km).name;
@@ -70,7 +75,7 @@ export async function dayOverview(skin: Skin, date: string) {
     .from(rounds)
     .innerJoin(games, eq(games.id, rounds.gameId))
     .innerJoin(answers, eq(answers.id, rounds.answerId))
-    .where(eq(games.puzzleId, puzzle.id))
+    .where(and(eq(games.puzzleId, puzzle.id), eq(games.ranked, true)))
     .groupBy(rounds.categoryId, answers.canonical)
     .orderBy(desc(sql`count(*)`));
   const att = await db
@@ -81,13 +86,13 @@ export async function dayOverview(skin: Skin, date: string) {
     })
     .from(attempts)
     .innerJoin(games, eq(games.id, attempts.gameId))
-    .where(eq(games.puzzleId, puzzle.id))
+    .where(and(eq(games.puzzleId, puzzle.id), eq(games.ranked, true)))
     .groupBy(attempts.categoryId);
   const misses = await db
     .select({ categoryId: rounds.categoryId, n: sql<number>`count(*)::int` })
     .from(rounds)
     .innerJoin(games, eq(games.id, rounds.gameId))
-    .where(and(eq(games.puzzleId, puzzle.id), isNull(rounds.answerId), isNotNull(rounds.answeredAt)))
+    .where(and(eq(games.puzzleId, puzzle.id), eq(games.ranked, true), isNull(rounds.answerId), isNotNull(rounds.answeredAt)))
     .groupBy(rounds.categoryId);
 
   // svi odgovori današnjih kategorija s udjelom i prijevozom koji taj dan vrijede
@@ -106,7 +111,7 @@ export async function dayOverview(skin: Skin, date: string) {
   return {
     date,
     puzzle: { number: puzzle.number },
-    totals,
+    totals: { ...totals, unranked },
     stations: skin.config.stations.map((s) => ({ name: s.name, n: stations.get(s.name) ?? 0 })).filter((s) => s.n > 0),
     categories: cats.map((c) => {
       const a = att.find((x) => x.categoryId === c.id);

@@ -1,8 +1,9 @@
 import { afterAll, describe, expect, it } from "vitest";
 import { and, desc, eq, inArray } from "drizzle-orm";
 import { db, sql } from "@/db";
+import { localDate } from "@/lib/day";
 import { answers, categories, dailyPuzzles, games, players, rounds } from "@/db/schema";
-import { answerList, dayCompare, ensurePlayer, getOrCreatePuzzle, getSkin, getState, startNext, submitAnswer } from "./game";
+import { answerList, categoryShares, dayCompare, ensurePlayer, getOrCreatePuzzle, getSkin, getState, startNext, submitAnswer } from "./game";
 
 // Integracijski test nad lokalnom bazom (npm run db:migrate && npm run db:seed).
 const ids: string[] = [];
@@ -32,8 +33,12 @@ describe.skipIf(!process.env.DATABASE_URL)("svi odgovori nakon igre", () => {
     expect(list).not.toBeNull();
     expect(list!.mine).toBeNull();
     expect(list!.answers.length).toBeGreaterThanOrEqual(20);
-    const shares = list!.answers.map((a) => a.share);
-    expect(shares).toEqual([...shares].sort((a, b) => b - a));
+    // poredano po udjelu, a odgovori posebnog tiera (helikopter) su uvijek na dnu
+    const rare = new Set(skin.config.tiers.filter((t) => t.rare).map((t) => t.name));
+    for (const part of [list!.answers.filter((a) => !rare.has(a.tier)), list!.answers.filter((a) => rare.has(a.tier))]) {
+      const shares = part.map((a) => a.share);
+      expect(shares).toEqual([...shares].sort((a, b) => b - a));
+    }
     expect(list!.answers.every((a) => skin.config.tiers.some((t) => t.name === a.tier && t.km === a.km))).toBe(true);
     expect(await answerList(skin, id, state.perDay)).toBeNull();
   });
@@ -135,13 +140,19 @@ describe.skipIf(!process.env.DATABASE_URL)("svi odgovori nakon igre", () => {
     expect((await getState(rs, id)).ranked).toBe(false);
     expect((await startNext(rs, id)).ranked).toBe(false);
     expect((await getState(hr, id)).ranked).toBe(true);
+    // odgovori iz partije izvan konkurencije ne mijenjaju udjele ni poredak odgovora
+    const puzzle = await getOrCreatePuzzle(rs, localDate(rs.timezone));
+    const before = await categoryShares(rs, puzzle.id, puzzle.categoryIds[0]);
     // završena partija izvan konkurencije nema usporedbu s ostalima
     let st = await getState(rs, id);
+    let first = true;
     while (st.phase !== "end") {
-      const r = await submitAnswer(rs, id, "zzqx nema", true);
+      const r = await submitAnswer(rs, id, first ? before.at(-1)!.canonical : "zzqx nema", true);
+      first = false;
       if (r.status !== "scored") throw new Error(r.status);
       st = r.state.phase === "end" ? r.state : await startNext(rs, id);
     }
     expect(await dayCompare(rs, id)).toBeNull();
+    expect(await categoryShares(rs, puzzle.id, puzzle.categoryIds[0])).toEqual(before);
   });
 });

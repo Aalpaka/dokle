@@ -18,8 +18,8 @@ const newPlayer = async () => {
   return id;
 };
 
-async function playToday(playerId: string) {
-  const skin = await getSkin("hr");
+async function playToday(playerId: string, skinId = "hr") {
+  const skin = await getSkin(skinId);
   let state = await startNext(skin, playerId);
   while (state.phase !== "end") {
     const r = await submitAnswer(skin, playerId, "nešto", true);
@@ -51,6 +51,20 @@ describe.skipIf(!process.env.DATABASE_URL)("računi", () => {
     expect(stats.played).toBe(1);
     expect(stats.currentStreak).toBe(1);
     expect(history).toHaveLength(1);
+  });
+
+  it("anonimna partija druge države nakon prijave ide izvan konkurencije ako je račun taj dan već igrao", async () => {
+    const auth = crypto.randomUUID();
+    const phone = newId();
+    await playToday(phone); // Hrvatska na računu
+    const accountId = await linkAccount(phone, auth, "treci@example.com");
+    const laptop = newId();
+    await playToday(laptop, "rs"); // Srbija anonimno, kasnije istog dana
+    await linkAccount(laptop, auth, "treci@example.com");
+    const mine = await db.select().from(games).where(eq(games.playerId, accountId));
+    expect(mine).toHaveLength(2);
+    expect(mine.filter((g) => g.ranked)).toHaveLength(1);
+    expect(mine.find((g) => g.ranked)!.startedAt <= mine.find((g) => !g.ranked)!.startedAt).toBe(true);
   });
 
   it("prijava na drugom uređaju prebacuje anonimne partije, ali ne duplira dan", async () => {
