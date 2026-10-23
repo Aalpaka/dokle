@@ -439,6 +439,15 @@ export type AnswerList = {
   answers: { canonical: string; share: number; tier: string; km: number }[];
 };
 
+/** Umeće igračev odgovor među odgovore istog prijevoza (po udjelu); ako ih nema, na granicu prema rjeđem prijevozu. */
+export function placeMine<T extends { share: number; tier: { name: string } }>(cfg: SkinConfig, others: T[], mine: T): T[] {
+  const rank = (t: { name: string }) => cfg.tiers.findIndex((x) => x.name === t.name);
+  const r = rank(mine.tier);
+  let at = others.findIndex((a) => rank(a.tier) > r || (rank(a.tier) === r && a.share < mine.share));
+  if (at < 0) at = others.length;
+  return [...others.slice(0, at), mine, ...others.slice(at)];
+}
+
 /** Svi mogući odgovori jedne današnje kategorije s km koje vrijede; tek kad je igrač završio partiju. */
 export async function answerList(skin: Skin, playerId: string, position: number): Promise<AnswerList | null> {
   const puzzle = await getOrCreatePuzzle(skin, localDate(skin.timezone));
@@ -451,19 +460,19 @@ export async function answerList(skin: Skin, playerId: string, position: number)
     .innerJoin(answers, eq(answers.id, rounds.answerId))
     .where(and(eq(rounds.gameId, game.id), eq(rounds.position, position)));
   const cat = await getCategory(categoryId);
-  // svoj odgovor igrač vidi s udjelom, mjestom i prijevozom kakve je imao kad ga je odigrao, i kad se od tada promijenio
+  const all = (await categoryShares(skin, puzzle.id, categoryId)).sort((a, b) => b.share - a.share);
+  // odgovori posebnog tiera (helikopter) uvijek na dnu, da se ne miješaju s najrjeđim običnima
+  const ordered = [...all.filter((a) => !a.tier.rare), ...all.filter((a) => a.tier.rare)];
+  // svoj odgovor igrač uvijek vidi s prijevozom, km i udjelom koje je stvarno dobio, i to među odgovorima
+  // tog prijevoza, makar se od tada pomaknuo među druge
   const got = mine?.tier ? baseTier(skin.config, mine.tier, mine.share) : null;
-  const all = (await categoryShares(skin, puzzle.id, categoryId))
-    .map((a) => (got && a.id === mine.answerId ? { ...a, tier: got, share: mine.share ?? a.share } : a))
-    .sort((a, b) => b.share - a.share);
+  const now = mine && ordered.find((a) => a.id === mine.answerId);
+  const rows = got && now ? placeMine(skin.config, ordered.filter((a) => a !== now), { ...now, tier: got, share: mine.share ?? now.share }) : ordered;
   return {
     position,
     title: cat.title,
     mine: mine?.canonical ?? null,
-    // odgovori posebnog tiera (helikopter) uvijek na dnu, da se ne miješaju s najrjeđim običnima
-    answers: [...all.filter((a) => !a.tier.rare), ...all.filter((a) => a.tier.rare)].map((a) => {
-      return { canonical: a.canonical, share: a.share, tier: a.tier.name, km: a.tier.km };
-    }),
+    answers: rows.map((a) => ({ canonical: a.canonical, share: a.share, tier: a.tier.name, km: a.tier.km })),
   };
 }
 
