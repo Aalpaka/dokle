@@ -2,7 +2,7 @@ import type { SkinMap } from "../types";
 import { rsBorder, rsDashed, rsRivers } from "./mapGeo";
 
 export const rsMap: SkinMap = {
-  image: { href: "/map/rs-reljef.jpg", x: 739.39, y: 88.25, width: 2279, height: 1654 },
+  image: { href: "/map/rs-reljef.webp", x: 739.39, y: 88.25, width: 2279, height: 1654 },
   backdrop: { href: "/map/rs-okolica.jpg", x: -36.36, y: -629.54, width: 4000, height: 2821 },
   // približno stvarne ceste
   via: [

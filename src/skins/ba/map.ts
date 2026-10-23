@@ -2,7 +2,7 @@ import type { SkinMap } from "../types";
 import { baBorder, baRivers } from "./mapGeo";
 
 export const baMap: SkinMap = {
-  image: { href: "/map/ba-reljef.jpg", x: 36.36, y: 350.58, width: 2012, height: 1196 },
+  image: { href: "/map/ba-reljef.webp", x: 36.36, y: 350.58, width: 2012, height: 1196 },
   backdrop: { href: "/map/ba-okolica.jpg", x: -400, y: -303.15, width: 2909, height: 2463 },
   // približno stvarne ceste
   via: [

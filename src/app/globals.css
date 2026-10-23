@@ -350,7 +350,7 @@ textarea.field { width: 100%; font-family: var(--font-mono); }
 }
 .landing-bg {
   position: absolute; inset: 0;
-  background: linear-gradient(180deg, #161d1fd9 0%, #161d1fa6 45%, #161d1ff5 100%), var(--landing-map, url(/map/hr-reljef.jpg)) center 35% / cover;
+  background: linear-gradient(180deg, #161d1fd9 0%, #161d1fa6 45%, #161d1ff5 100%), var(--landing-map, url(/map/hr-reljef.webp)) center 35% / cover;
   /* karta se rubovima postupno stapa s pozadinom stranice, bez okvira */
   -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 55%, transparent 100%);
   mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 55%, transparent 100%);

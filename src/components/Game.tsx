@@ -226,7 +226,9 @@ function Play({ state, onScored, onLost }: { state: GameState; onScored: (s: Gam
   const t = useT();
   const seconds = cfg.secondsPerCategory;
   const [value, setValue] = useState("");
-  const [left, setLeft] = useState(cur.remainingMs / 1000);
+  // sekunde se iscrtavaju kroz React samo kad se promijene, a traka izravno u svakom okviru
+  const [left, setLeft] = useState(Math.ceil(cur.remainingMs / 1000));
+  const barRef = useRef<HTMLElement>(null);
   const [sending, setSending] = useState<{ kind: "idle" | "preview" | "nope"; canonical?: string | null }>({ kind: "idle" });
   const busy = useRef(false);
   const valueRef = useRef(value);
@@ -257,7 +259,8 @@ function Play({ state, onScored, onLost }: { state: GameState; onScored: (s: Gam
     let raf = 0, lastBeep = Math.ceil(cur.remainingMs / 1000);
     const tick = () => {
       const l = Math.max(0, (deadline - performance.now()) / 1000);
-      setLeft(l);
+      setLeft(Math.ceil(l));
+      barRef.current?.style.setProperty("transform", `scaleX(${l / seconds})`);
       // zadnjih 5 sekundi otkucava
       if (l > 0 && l <= 5 && Math.ceil(l) < lastBeep) {
         lastBeep = Math.ceil(l);
@@ -299,9 +302,9 @@ function Play({ state, onScored, onLost }: { state: GameState; onScored: (s: Gam
       <div className="cat">{cur.category.title}</div>
       {cur.category.hint && <p className="hint">{cur.category.hint}</p>}
       <div className={"timer" + (left <= 5 ? " low" : "")}>
-        <i style={{ transform: `scaleX(${left / seconds})` }} />
+        <i ref={barRef} style={{ transform: `scaleX(${cur.remainingMs / 1000 / seconds})` }} />
       </div>
-      <div className="trow"><span>{Math.ceil(left)} s</span><span>{t("Rjeđi odgovor = brže prijevozno sredstvo")}</span></div>
+      <div className="trow"><span>{left} s</span><span>{t("Rjeđi odgovor = brže prijevozno sredstvo")}</span></div>
       <form
         className="answer"
         autoComplete="off"
