@@ -3,6 +3,7 @@
 // Seed samo dodaje nove kategorije i odgovore, pa se stare kategorije proširuju kroz prosirenja.ts.
 import { parseSeedAnswers } from "../../lib/matcher";
 import { RARE_PRIOR } from "../../lib/scoring";
+import { aliasi } from "./kategorije/aliasi";
 import { dodaci } from "./kategorije/dodaci";
 import { helikopter } from "./kategorije/helikopter";
 import { hrKategorije } from "./kategorije/hr";
@@ -43,7 +44,7 @@ export const hrCategories: SeedCategory[] = [
   ...opceKategorije,
   ...zaigranoKategorije,
   ...kvizKategorije,
-].map(withDodaci).map(withWiki).map(withRare);
+].map(withDodaci).map(withAliasi).map(withWiki).map(withRare);
 
 function format(list: ReturnType<typeof parseSeedAnswers>) {
   return list.map((a) => `${[a.canonical, ...a.variants].join("/")}=${a.share}${a.rare ? "!" : ""}`).join(";");
@@ -52,6 +53,14 @@ function format(list: ReturnType<typeof parseSeedAnswers>) {
 /** Dodatni odgovori iz dodaci.ts na kraj popisa. */
 function withDodaci(c: SeedCategory): SeedCategory {
   return dodaci[c.slug] ? { ...c, answers: `${c.answers};${dodaci[c.slug]}` } : c;
+}
+
+/** Dodatni aliasi iz aliasi.ts za postojeće odgovore. */
+function withAliasi(c: SeedCategory): SeedCategory {
+  const m = aliasi[c.slug];
+  if (!m) return c;
+  const list = parseSeedAnswers(c.answers).map((a) => (m[a.canonical] ? { ...a, variants: [...a.variants, ...m[a.canonical].split("/")] } : a));
+  return { ...c, answers: format(list) };
 }
 
 /** Udjeli dorađeni Wikipedia pregledima (wikipedija.ts) zamjenjuju ručne procjene. */
