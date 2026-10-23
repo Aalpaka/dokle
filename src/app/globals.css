@@ -401,13 +401,7 @@ textarea.field { width: 100%; font-family: var(--font-mono); }
 .howto .rules { margin-top: 12px; font-size: 14px; }
 
 /* odbrojavanje prije kategorije */
-.countdown { display: grid; justify-items: center; gap: 6px; padding: 18px 0 22px; text-align: center; overflow: clip; }
-.countdown .num {
-  font-family: var(--font-town); font-weight: 600; font-size: clamp(64px, 12vw, 110px); line-height: 1; color: var(--town-sign);
-  animation: cd-pop 0.75s cubic-bezier(.2, .9, .3, 1.2) both;
-}
 @keyframes cd-pop { from { transform: scale(1.6); opacity: 0; } 35% { transform: scale(1); opacity: 1; } to { transform: scale(0.92); opacity: 0.85; } }
-@media (prefers-reduced-motion: reduce) { .countdown .num { animation: none; } }
 
 /* replay na kraju: karta je manja, ispod se odmah vide odgovori */
 .hud.bl { left: 12px; bottom: 12px; pointer-events: auto; }
@@ -444,8 +438,6 @@ textarea.field { width: 100%; font-family: var(--font-mono); }
     background: var(--bg); border-radius: 18px 18px 0 0; padding: 14px 16px calc(14px + env(safe-area-inset-bottom));
     box-shadow: 0 -12px 30px -12px #000d;
   }
-  .wrap.fit .countdown { padding: 4px 0 8px; }
-  .wrap.fit .countdown .num { font-size: 64px; }
   .stage .maptoast { bottom: calc(var(--inset, 0px) + 60px); }
 
   .veh .badge { left: -17px; top: -17px; width: 34px; height: 34px; box-shadow: 0 0 0 2px #fff, 0 4px 10px -2px #0008; }
