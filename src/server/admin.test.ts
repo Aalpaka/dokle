@@ -14,11 +14,11 @@ async function playAllWith(raw: string) {
   const id = crypto.randomUUID();
   ids.push(id);
   await ensurePlayer(id);
-  let state = await startNext(skin, id);
+  let state = await startNext(skin, id, 0);
   while (state.phase !== "end") {
     const r = await submitAnswer(skin, id, raw, true);
     if (r.status !== "scored") throw new Error(r.status);
-    state = r.state.phase === "end" ? r.state : await startNext(skin, id);
+    state = r.state.phase === "end" ? r.state : await startNext(skin, id, 0);
   }
   return id;
 }

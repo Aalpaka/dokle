@@ -20,13 +20,13 @@ describe.skipIf(!process.env.DATABASE_URL)("svi odgovori nakon igre", () => {
     const id = crypto.randomUUID();
     ids.push(id);
     await ensurePlayer(id);
-    let state = await startNext(skin, id);
+    let state = await startNext(skin, id, 0);
     expect(await answerList(skin, id, 0)).toBeNull();
 
     while (state.phase !== "end") {
       const r = await submitAnswer(skin, id, "zzqx nema", true);
       if (r.status !== "scored") throw new Error(r.status);
-      state = r.state.phase === "end" ? r.state : await startNext(skin, id);
+      state = r.state.phase === "end" ? r.state : await startNext(skin, id, 0);
     }
 
     const list = await answerList(skin, id, 0);
@@ -48,7 +48,7 @@ describe.skipIf(!process.env.DATABASE_URL)("svi odgovori nakon igre", () => {
     const id = crypto.randomUUID();
     ids.push(id);
     await ensurePlayer(id);
-    const state = await startNext(skin, id);
+    const state = await startNext(skin, id, 0);
     const [top] = await db
       .select({ canonical: answers.canonical })
       .from(answers)
@@ -66,7 +66,7 @@ describe.skipIf(!process.env.DATABASE_URL)("svi odgovori nakon igre", () => {
     const id = crypto.randomUUID();
     ids.push(id);
     await ensurePlayer(id);
-    const state = await startNext(skin, id);
+    const state = await startNext(skin, id, 0);
     const [rare] = await db
       .select({ canonical: answers.canonical })
       .from(answers)
@@ -84,7 +84,7 @@ describe.skipIf(!process.env.DATABASE_URL)("svi odgovori nakon igre", () => {
     const id = crypto.randomUUID();
     ids.push(id);
     await ensurePlayer(id);
-    let state = await startNext(skin, id);
+    let state = await startNext(skin, id, 0);
     const [top] = await db
       .select({ canonical: answers.canonical })
       .from(answers)
@@ -97,7 +97,7 @@ describe.skipIf(!process.env.DATABASE_URL)("svi odgovori nakon igre", () => {
       const r = await submitAnswer(skin, id, first ? top.canonical : "zzqx nema", true);
       if (r.status !== "scored") throw new Error(r.status);
       first = false;
-      state = r.state.phase === "end" ? r.state : await startNext(skin, id);
+      state = r.state.phase === "end" ? r.state : await startNext(skin, id, 0);
     }
 
     // kao da je odgovor u međuvremenu promijenio prijevoz: igrač je dobio drugi od onoga koji sad vrijedi
@@ -138,9 +138,9 @@ describe.skipIf(!process.env.DATABASE_URL)("svi odgovori nakon igre", () => {
     ids.push(id);
     const [hr, rs] = [await getSkin("hr"), await getSkin("rs")];
     expect((await getState(rs, id)).ranked).toBe(true);
-    expect((await startNext(hr, id)).ranked).toBe(true);
+    expect((await startNext(hr, id, 0)).ranked).toBe(true);
     expect((await getState(rs, id)).ranked).toBe(false);
-    expect((await startNext(rs, id)).ranked).toBe(false);
+    expect((await startNext(rs, id, 0)).ranked).toBe(false);
     expect((await getState(hr, id)).ranked).toBe(true);
     // odgovori iz partije izvan konkurencije ne mijenjaju udjele ni poredak odgovora
     const puzzle = await getOrCreatePuzzle(rs, localDate(rs.timezone));
@@ -152,7 +152,7 @@ describe.skipIf(!process.env.DATABASE_URL)("svi odgovori nakon igre", () => {
       const r = await submitAnswer(rs, id, first ? before.at(-1)!.canonical : "zzqx nema", true);
       first = false;
       if (r.status !== "scored") throw new Error(r.status);
-      st = r.state.phase === "end" ? r.state : await startNext(rs, id);
+      st = r.state.phase === "end" ? r.state : await startNext(rs, id, 0);
     }
     expect(await dayCompare(rs, id)).toBeNull();
     expect(await categoryShares(rs, puzzle.id, puzzle.categoryIds[0])).toEqual(before);
