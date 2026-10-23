@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { SkinProvider } from "@/components/skin";
 import Profile from "@/components/Profile";
 
-export const metadata: Metadata = { title: "Profil · Dokle?" };
+export const metadata: Metadata = { title: "Profil · Dokle?", robots: { index: false } };
 
 export default function ProfilPage() {
   return (

@@ -1,9 +1,15 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { SITE_URL } from "@/lib/site";
+
+const description = "Dnevna igra: koliko daleko stigneš od Vukovara do Dubrovnika?";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "Dokle?",
-  description: "Dnevna igra: koliko daleko stigneš od Vukovara do Dubrovnika?",
+  description,
+  openGraph: { type: "website", siteName: "Dokle?", locale: "hr_HR", title: "Dokle?", description },
+  twitter: { card: "summary" },
 };
 
 export const viewport: Viewport = { width: "device-width", initialScale: 1, viewportFit: "cover" };
