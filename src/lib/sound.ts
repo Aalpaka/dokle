@@ -126,6 +126,8 @@ function engine(c: AudioContext, t: number, dur: number, bus: boolean) {
 }
 
 const clips = new Map<string, Promise<AudioBuffer | null>>();
+let clipEnd = 0;
+
 function loadClip(c: AudioContext, url: string) {
   let p = clips.get(url);
   if (!p) {
@@ -175,7 +177,7 @@ export const sfx = {
     tone(c, "square", 90, t + 0.3, 0.005, 0.25, 0.3, 40);
     for (let i = 0; i < 9; i++) tone(c, "sine", 2800 + Math.random() * 3200, t + 0.42 + i * 0.045 + Math.random() * 0.03, 0.002, 0.05, 0.12);
   },
-  /** Snimljeni isječak iz public/; ako datoteke nema, ništa se ne čuje. */
+  /** Snimljeni isječak iz public/; ako datoteke nema, ništa se ne čuje. Isječci se ne preklapaju, novi čeka kraj prethodnog. */
   clip(url: string, delay = 0) {
     const c = ready();
     if (!c) return;
@@ -185,7 +187,9 @@ export const sfx = {
       const s = c.createBufferSource();
       s.buffer = buf;
       s.connect(master!);
-      s.start(Math.max(at, c.currentTime));
+      const start = Math.max(at, c.currentTime, clipEnd);
+      clipEnd = start + buf.duration;
+      s.start(start);
     });
   },
   station() {
