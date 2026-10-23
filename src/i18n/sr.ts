@@ -63,6 +63,7 @@ export const sr: Record<string, string> = {
   "Traži odgovor": "Traži odgovor",
   "Udio igrača danas i km koje odgovor donosi, bez bonusa za brzinu.": "Udeo igrača danas i km koje odgovor donosi, bez bonusa za brzinu.",
   "tvoj": "tvoj",
+  "Prijevoz koji si dobio kad si igrao. Od tada je odgovor promijenio mjesto među ostalima.": "Prevoz koji si dobio kad si igrao. Od tada je odgovor promenio mesto među ostalima.",
   "Nema takvog odgovora.": "Nema takvog odgovora.",
   "Nova ruta za {h} h {m} min": "Nova ruta za {h} h {m} min",
   // karta

@@ -436,6 +436,8 @@ export type AnswerList = {
   position: number;
   title: string;
   mine: string | null;
+  /** igračev odgovor je u međuvremenu promijenio prijevoz pa je izdvojen na vrh, s onim što je igrač stvarno dobio */
+  pinned: boolean;
   answers: { canonical: string; share: number; tier: string; km: number }[];
 };
 
@@ -451,19 +453,21 @@ export async function answerList(skin: Skin, playerId: string, position: number)
     .innerJoin(answers, eq(answers.id, rounds.answerId))
     .where(and(eq(rounds.gameId, game.id), eq(rounds.position, position)));
   const cat = await getCategory(categoryId);
-  // svoj odgovor igrač vidi s udjelom, mjestom i prijevozom kakve je imao kad ga je odigrao, i kad se od tada promijenio
+  const all = (await categoryShares(skin, puzzle.id, categoryId)).sort((a, b) => b.share - a.share);
+  // odgovori posebnog tiera (helikopter) uvijek na dnu, da se ne miješaju s najrjeđim običnima
+  const ordered = [...all.filter((a) => !a.tier.rare), ...all.filter((a) => a.tier.rare)];
+  // svoj odgovor igrač uvijek vidi s prijevozom i km koje je stvarno dobio; ako se od tada promijenio,
+  // ne bi se uklopio među susjede pa ide na vrh, izdvojen od poretka po trenutnom udjelu
   const got = mine?.tier ? baseTier(skin.config, mine.tier, mine.share) : null;
-  const all = (await categoryShares(skin, puzzle.id, categoryId))
-    .map((a) => (got && a.id === mine.answerId ? { ...a, tier: got, share: mine.share ?? a.share } : a))
-    .sort((a, b) => b.share - a.share);
+  const now = mine && ordered.find((a) => a.id === mine.answerId);
+  const pinned = !!(got && now && got.name !== now.tier.name);
+  const rows = pinned ? [{ ...now!, tier: got!, share: mine.share ?? now!.share }, ...ordered.filter((a) => a !== now)] : ordered;
   return {
     position,
     title: cat.title,
     mine: mine?.canonical ?? null,
-    // odgovori posebnog tiera (helikopter) uvijek na dnu, da se ne miješaju s najrjeđim običnima
-    answers: [...all.filter((a) => !a.tier.rare), ...all.filter((a) => a.tier.rare)].map((a) => {
-      return { canonical: a.canonical, share: a.share, tier: a.tier.name, km: a.tier.km };
-    }),
+    pinned,
+    answers: rows.map((a) => ({ canonical: a.canonical, share: a.share, tier: a.tier.name, km: a.tier.km })),
   };
 }
 

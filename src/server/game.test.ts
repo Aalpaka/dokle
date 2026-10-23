@@ -79,7 +79,7 @@ describe.skipIf(!process.env.DATABASE_URL)("svi odgovori nakon igre", () => {
     expect(round.km).toBeGreaterThanOrEqual(150 * 0.9);
   });
 
-  it("u popisu svoj odgovor ima prijevoz koji je dobio, i kad se od tada promijenio", async () => {
+  it("u popisu svoj odgovor ima prijevoz koji je dobio, a ako se od tada promijenio, izdvojen je na vrhu", async () => {
     const skin = await getSkin("hr");
     const id = crypto.randomUUID();
     ids.push(id);
@@ -108,11 +108,18 @@ describe.skipIf(!process.env.DATABASE_URL)("svi odgovori nakon igre", () => {
 
     const list = (await answerList(skin, id, 0))!;
     expect(list.mine).toBe(top.canonical);
-    expect(list.answers.find((a) => a.canonical === top.canonical)).toMatchObject({ tier: got.name, km: got.km, share: 0.001 });
-    // i mjesto na listi je ono iz trenutka odgovora
-    const normal = list.answers.filter((a) => !skin.config.tiers.find((t) => t.name === a.tier)?.rare);
-    expect(normal.findIndex((a) => a.canonical === top.canonical)).toBeGreaterThan(0);
+    expect(list.pinned).toBe(true);
+    // izdvojen je na vrhu s onim što je stvarno dobio, a ostali ostaju poredani po udjelu
+    expect(list.answers[0]).toMatchObject({ canonical: top.canonical, tier: got.name, km: got.km, share: 0.001 });
+    expect(list.answers.filter((a) => a.canonical === top.canonical)).toHaveLength(1);
+    const normal = list.answers.slice(1).filter((a) => !skin.config.tiers.find((t) => t.name === a.tier)?.rare);
     expect(normal.map((a) => a.share)).toEqual([...normal.map((a) => a.share)].sort((a, b) => b - a));
+
+    // kad dobiveni prijevoz i dalje vrijedi, odgovor ostaje na svom mjestu
+    await db.update(rounds).set({ tier: now }).where(and(eq(rounds.gameId, game.id), eq(rounds.position, 0)));
+    const same = (await answerList(skin, id, 0))!;
+    expect(same.pinned).toBe(false);
+    expect(same.answers.find((a) => a.canonical === top.canonical)!.tier).toBe(now);
   });
 
   it("BiH i Srbija dobiju iste kategorije kao Hrvatska, a broji se samo prva država dana", async () => {
