@@ -436,10 +436,17 @@ export type AnswerList = {
   position: number;
   title: string;
   mine: string | null;
-  /** igračev odgovor je u međuvremenu promijenio prijevoz pa je izdvojen na vrh, s onim što je igrač stvarno dobio */
-  pinned: boolean;
   answers: { canonical: string; share: number; tier: string; km: number }[];
 };
+
+/** Umeće igračev odgovor među odgovore istog prijevoza (po udjelu); ako ih nema, na granicu prema rjeđem prijevozu. */
+export function placeMine<T extends { share: number; tier: { name: string } }>(cfg: SkinConfig, others: T[], mine: T): T[] {
+  const rank = (t: { name: string }) => cfg.tiers.findIndex((x) => x.name === t.name);
+  const r = rank(mine.tier);
+  let at = others.findIndex((a) => rank(a.tier) > r || (rank(a.tier) === r && a.share < mine.share));
+  if (at < 0) at = others.length;
+  return [...others.slice(0, at), mine, ...others.slice(at)];
+}
 
 /** Svi mogući odgovori jedne današnje kategorije s km koje vrijede; tek kad je igrač završio partiju. */
 export async function answerList(skin: Skin, playerId: string, position: number): Promise<AnswerList | null> {
@@ -456,17 +463,15 @@ export async function answerList(skin: Skin, playerId: string, position: number)
   const all = (await categoryShares(skin, puzzle.id, categoryId)).sort((a, b) => b.share - a.share);
   // odgovori posebnog tiera (helikopter) uvijek na dnu, da se ne miješaju s najrjeđim običnima
   const ordered = [...all.filter((a) => !a.tier.rare), ...all.filter((a) => a.tier.rare)];
-  // svoj odgovor igrač uvijek vidi s prijevozom i km koje je stvarno dobio; ako se od tada promijenio,
-  // ne bi se uklopio među susjede pa ide na vrh, izdvojen od poretka po trenutnom udjelu
+  // svoj odgovor igrač uvijek vidi s prijevozom, km i udjelom koje je stvarno dobio, i to među odgovorima
+  // tog prijevoza, makar se od tada pomaknuo među druge
   const got = mine?.tier ? baseTier(skin.config, mine.tier, mine.share) : null;
   const now = mine && ordered.find((a) => a.id === mine.answerId);
-  const pinned = !!(got && now && got.name !== now.tier.name);
-  const rows = pinned ? [{ ...now!, tier: got!, share: mine.share ?? now!.share }, ...ordered.filter((a) => a !== now)] : ordered;
+  const rows = got && now ? placeMine(skin.config, ordered.filter((a) => a !== now), { ...now, tier: got, share: mine.share ?? now.share }) : ordered;
   return {
     position,
     title: cat.title,
     mine: mine?.canonical ?? null,
-    pinned,
     answers: rows.map((a) => ({ canonical: a.canonical, share: a.share, tier: a.tier.name, km: a.tier.km })),
   };
 }

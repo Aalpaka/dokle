@@ -79,7 +79,7 @@ describe.skipIf(!process.env.DATABASE_URL)("svi odgovori nakon igre", () => {
     expect(round.km).toBeGreaterThanOrEqual(150 * 0.9);
   });
 
-  it("u popisu svoj odgovor ima prijevoz koji je dobio, a ako se od tada promijenio, izdvojen je na vrhu", async () => {
+  it("u popisu svoj odgovor ima prijevoz koji je dobio, i stoji među odgovorima tog prijevoza", async () => {
     const skin = await getSkin("hr");
     const id = crypto.randomUUID();
     ids.push(id);
@@ -108,18 +108,13 @@ describe.skipIf(!process.env.DATABASE_URL)("svi odgovori nakon igre", () => {
 
     const list = (await answerList(skin, id, 0))!;
     expect(list.mine).toBe(top.canonical);
-    expect(list.pinned).toBe(true);
-    // izdvojen je na vrhu s onim što je stvarno dobio, a ostali ostaju poredani po udjelu
-    expect(list.answers[0]).toMatchObject({ canonical: top.canonical, tier: got.name, km: got.km, share: 0.001 });
     expect(list.answers.filter((a) => a.canonical === top.canonical)).toHaveLength(1);
-    const normal = list.answers.slice(1).filter((a) => !skin.config.tiers.find((t) => t.name === a.tier)?.rare);
-    expect(normal.map((a) => a.share)).toEqual([...normal.map((a) => a.share)].sort((a, b) => b - a));
-
-    // kad dobiveni prijevoz i dalje vrijedi, odgovor ostaje na svom mjestu
-    await db.update(rounds).set({ tier: now }).where(and(eq(rounds.gameId, game.id), eq(rounds.position, 0)));
-    const same = (await answerList(skin, id, 0))!;
-    expect(same.pinned).toBe(false);
-    expect(same.answers.find((a) => a.canonical === top.canonical)!.tier).toBe(now);
+    const at = list.answers.findIndex((a) => a.canonical === top.canonical);
+    expect(list.answers[at]).toMatchObject({ tier: got.name, km: got.km, share: 0.001 });
+    // stoji među odgovorima prijevoza koji je dobio: prije njega nijedan rjeđi prijevoz, poslije nijedan češći
+    const rank = (name: string) => skin.config.tiers.findIndex((t) => t.name === name);
+    expect(list.answers.slice(0, at).every((a) => rank(a.tier) <= rank(got.name))).toBe(true);
+    expect(list.answers.slice(at + 1).every((a) => rank(a.tier) >= rank(got.name))).toBe(true);
   });
 
   it("BiH i Srbija dobiju iste kategorije kao Hrvatska, a broji se samo prva država dana", async () => {

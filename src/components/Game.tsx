@@ -598,14 +598,11 @@ function AllAnswers({ position, cfg }: { position: number; cfg: SkinConfig }) {
         {shown.map((a) => {
           const tier = cfg.tiers.find((x) => x.name === a.tier);
           return (
-            <li key={a.canonical} className={a.canonical === list.mine ? (list.pinned ? "mine pinned" : "mine") : ""}>
+            <li key={a.canonical} className={a.canonical === list.mine ? "mine" : ""}>
               <span className="ti">{tier && <TierIcon emoji={tier.emoji} icon={tier.badge ?? tier.icon} />}</span>
               <span className="n">{a.canonical}{a.canonical === list.mine && <em> · {t("tvoj")}</em>}</span>
               <span className="s">{formatShare(a.share)}</span>
               <span className="k">+{a.km}</span>
-              {a.canonical === list.mine && list.pinned && (
-                <span className="note">{t("Prijevoz koji si dobio kad si igrao. Od tada je odgovor promijenio mjesto među ostalima.")}</span>
-              )}
             </li>
           );
         })}
