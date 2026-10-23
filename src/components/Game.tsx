@@ -292,18 +292,25 @@ function Play({ state, onScored, onLost }: { state: GameState; onScored: (s: Gam
     return () => cancelAnimationFrame(raf);
   }, [cur.remainingMs, cur.waitMs, send]);
 
-  // "Šalje se:" pregled sa servera
+  // "Šalje se:" pregled sa servera; pita tek kad igrač zastane, a već viđeni upis (brisanje unatrag) ne pita opet
+  const previews = useRef(new Map<string, string | null>());
   useEffect(() => {
-    if (!value.trim()) return setSending({ kind: "idle" });
+    const q = value.trim();
+    if (!q) return setSending({ kind: "idle" });
+    const key = `${cur.position}|${q.toLowerCase()}`;
+    if (previews.current.has(key)) return setSending({ kind: "preview", canonical: previews.current.get(key)! });
     const ctrl = new AbortController();
     const timer = setTimeout(() => {
-      skinFetch("/api/game/preview?q=" + encodeURIComponent(value), { signal: ctrl.signal })
+      skinFetch("/api/game/preview?q=" + encodeURIComponent(q), { signal: ctrl.signal })
         .then((r) => r.json())
-        .then((r: { canonical: string | null }) => setSending({ kind: "preview", canonical: r.canonical }))
+        .then((r: { canonical: string | null }) => {
+          previews.current.set(key, r.canonical);
+          setSending({ kind: "preview", canonical: r.canonical });
+        })
         .catch(() => {});
-    }, 120);
+    }, 300);
     return () => { clearTimeout(timer); ctrl.abort(); };
-  }, [value]);
+  }, [value, cur.position]);
 
   const shown = sending.kind === "preview" ? (sending.canonical ?? value.trim()) : "";
   const changed = sending.kind === "preview" && !!sending.canonical && value.trim().toLowerCase() !== sending.canonical.toLowerCase();

@@ -4,7 +4,14 @@ import * as schema from "./schema";
 
 // Jedna konekcija po procesu; u dev načinu preživi hot reload.
 const g = globalThis as unknown as { __dokleSql?: ReturnType<typeof postgres> };
-const sql = g.__dokleSql ?? postgres(process.env.DATABASE_URL!, { max: 5, prepare: false });
+const sql =
+  g.__dokleSql ??
+  postgres(process.env.DATABASE_URL!, {
+    max: 5,
+    prepare: false, // Supabase pooler u transaction načinu ne podržava pripremljene upite
+    idle_timeout: 20, // neaktivna funkcija ne drži mjesto u pooleru
+    connect_timeout: 10,
+  });
 if (process.env.NODE_ENV !== "production") g.__dokleSql = sql;
 
 export const db = drizzle(sql, { schema });

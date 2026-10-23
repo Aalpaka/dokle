@@ -1,6 +1,11 @@
+// stvaranje formatera je skupo (zove se u svakom zahtjevu), pa jedan po vremenskoj zoni
+const formats = new Map<string, Intl.DateTimeFormat>();
+
 /** Današnji datum (YYYY-MM-DD) u vremenskoj zoni skina; novi dan počinje u ponoć po lokalnom vremenu. */
 export function localDate(timezone: string, now = new Date()): string {
-  return new Intl.DateTimeFormat("en-CA", { timeZone: timezone, year: "numeric", month: "2-digit", day: "2-digit" }).format(now);
+  let f = formats.get(timezone);
+  if (!f) formats.set(timezone, (f = new Intl.DateTimeFormat("en-CA", { timeZone: timezone, year: "numeric", month: "2-digit", day: "2-digit" })));
+  return f.format(now);
 }
 
 /** Redni broj dana igre; dan lansiranja je #1. */
