@@ -50,13 +50,19 @@ export function GoogleButton({ label, className, compact }: { label?: string; cl
     googleIdentity().then(
       (gsi) => {
         if (live && ref.current)
-          gsi.renderButton(ref.current, {
-            theme: "filled_black",
-            shape: "pill",
-            locale: htmlLang,
-            size: compact ? "medium" : "large",
-            text: compact ? "signin" : "signin_with",
-          });
+          gsi.renderButton(
+            ref.current,
+            // na mobitelu u zaglavlju nema mjesta za tekst: samo okrugli G (Googleov gumb ne zna se suziti sam)
+            compact && window.matchMedia("(max-width: 520px)").matches
+              ? { type: "icon", theme: "filled_black", shape: "circle", locale: htmlLang, size: "large" }
+              : {
+                  theme: "filled_black",
+                  shape: "pill",
+                  locale: htmlLang,
+                  size: compact ? "medium" : "large",
+                  text: compact ? "signin" : "signin_with",
+                },
+          );
       },
       () => live && setFallback(true),
     );
