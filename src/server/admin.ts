@@ -151,6 +151,103 @@ export async function weekAverages(skin: Skin, monday: string) {
   return { from: monday, today: localDate(skin.timezone), days: dailyAverages(rows, days) };
 }
 
+// ---------- Opća statistika ----------
+
+/** Brojke kroz sve dane skina (ukupno) i zadnjih 30 dana (raspodjele); samo partije koje se broje. */
+export async function generalStats(skin: Skin) {
+  const today = localDate(skin.timezone);
+  const since = addDays(today, -29);
+  const base = and(eq(dailyPuzzles.skinId, skin.id), eq(games.ranked, true));
+  const recent = and(base, gte(dailyPuzzles.date, since));
+  const [totals] = await db
+    .select({
+      days: sql<number>`count(distinct ${dailyPuzzles.date})::int`,
+      games: sql<number>`count(*)::int`,
+      finished: sql<number>`count(${games.finishedAt})::int`,
+      players: sql<number>`count(distinct ${games.playerId})::int`,
+      avgKm: sql<number>`coalesce(round(avg(${games.totalKm}) filter (where ${games.finishedAt} is not null)), 0)::int`,
+    })
+    .from(games)
+    .innerJoin(dailyPuzzles, eq(dailyPuzzles.id, games.puzzleId))
+    .where(base);
+  const [best] = await db
+    .select({ km: games.totalKm, date: dailyPuzzles.date, player: sql<string>`coalesce(${players.nickname}, 'anonimni igrač')` })
+    .from(games)
+    .innerJoin(dailyPuzzles, eq(dailyPuzzles.id, games.puzzleId))
+    .innerJoin(players, eq(players.id, games.playerId))
+    .where(and(base, isNotNull(games.finishedAt)))
+    .orderBy(desc(games.totalKm), asc(games.finishedAt))
+    .limit(1);
+  // runde zadnjih 30 dana: pogođene, promašene, prijevoz i vrijeme odgovora
+  const [answersRow] = await db
+    .select({
+      answered: sql<number>`count(*)::int`,
+      hit: sql<number>`count(${rounds.answerId})::int`,
+      avgMs: sql<number>`coalesce(round(avg(extract(epoch from ${rounds.answeredAt} - ${rounds.startedAt}) * 1000) filter (where ${rounds.answerId} is not null)), 0)::int`,
+    })
+    .from(rounds)
+    .innerJoin(games, eq(games.id, rounds.gameId))
+    .innerJoin(dailyPuzzles, eq(dailyPuzzles.id, games.puzzleId))
+    .where(and(recent, isNotNull(rounds.answeredAt)));
+  const tierRows = await db
+    .select({ tier: rounds.tier, n: sql<number>`count(*)::int` })
+    .from(rounds)
+    .innerJoin(games, eq(games.id, rounds.gameId))
+    .innerJoin(dailyPuzzles, eq(dailyPuzzles.id, games.puzzleId))
+    .where(and(recent, isNotNull(rounds.answerId)))
+    .groupBy(rounds.tier);
+  const kms = await db
+    .select({ km: games.totalKm })
+    .from(games)
+    .innerJoin(dailyPuzzles, eq(dailyPuzzles.id, games.puzzleId))
+    .where(and(recent, isNotNull(games.finishedAt)));
+  const step = 100;
+  const top = Math.max(skin.config.maxKm, ...kms.map((k) => k.km));
+  const histogram = Array.from({ length: Math.ceil((top + 1) / step) }, (_, i) => ({ from: i * step, n: 0 }));
+  for (const { km } of kms) histogram[Math.floor(km / step)].n++;
+  // koliko se igrači vraćaju: broj odigranih dana po igraču (svi dani)
+  const perPlayer = await db
+    .select({ n: sql<number>`count(*)::int` })
+    .from(games)
+    .innerJoin(dailyPuzzles, eq(dailyPuzzles.id, games.puzzleId))
+    .where(and(base, isNotNull(games.finishedAt)))
+    .groupBy(games.playerId);
+  const loyalty = [
+    { label: "1 dan", min: 1, max: 1 },
+    { label: "2–3 dana", min: 2, max: 3 },
+    { label: "4–7 dana", min: 4, max: 7 },
+    { label: "8–14 dana", min: 8, max: 14 },
+    { label: "15+ dana", min: 15, max: Infinity },
+  ].map((b) => ({ label: b.label, n: perPlayer.filter((p) => p.n >= b.min && p.n <= b.max).length }));
+  // kategorije zadnjih 30 dana po udjelu promašaja (bez točnog odgovora)
+  const cats = await db
+    .select({
+      title: categories.title,
+      date: sql<string>`max(${dailyPuzzles.date})`,
+      answered: sql<number>`count(*)::int`,
+      missed: sql<number>`count(*) filter (where ${rounds.answerId} is null)::int`,
+    })
+    .from(rounds)
+    .innerJoin(games, eq(games.id, rounds.gameId))
+    .innerJoin(dailyPuzzles, eq(dailyPuzzles.id, games.puzzleId))
+    .innerJoin(categories, eq(categories.id, rounds.categoryId))
+    .where(and(recent, isNotNull(rounds.answeredAt)))
+    .groupBy(categories.id, categories.title)
+    .having(sql`count(*) >= 5`);
+  const byMiss = cats.map((c) => ({ ...c, missPct: Math.round((100 * c.missed) / c.answered) })).sort((a, b) => b.missPct - a.missPct);
+  return {
+    today,
+    since,
+    totals: { ...totals, ...answersRow },
+    best: best ?? null,
+    tiers: skin.config.tiers.map((t) => ({ name: t.name, emoji: t.emoji, n: tierRows.find((r) => r.tier === t.name)?.n ?? 0 })),
+    histogram,
+    loyalty,
+    hardest: byMiss.slice(0, 5),
+    easiest: byMiss.slice(Math.max(5, byMiss.length - 5)).reverse(),
+  };
+}
+
 // ---------- Pregled odbijenih odgovora ----------
 
 export async function reviewQueue(skin: Skin, limit = 200) {

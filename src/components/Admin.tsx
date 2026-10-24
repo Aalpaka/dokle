@@ -78,7 +78,7 @@ function useTierPrior(others?: { share: number; rare?: boolean }[]) {
   return { select, prior, rare: !!tiers[index]?.rare };
 }
 
-const TABS = ["Dan", "Za pregled", "Igrači", "Sadržaj", "Raspored", "Odgovori"] as const;
+const TABS = ["Dan", "Statistika", "Za pregled", "Igrači", "Sadržaj", "Raspored", "Odgovori"] as const;
 type Tab = (typeof TABS)[number];
 
 /** Admin za jednu zemlju (?skin=ba); svaka zemlja ima svoje kategorije, raspored i igrače. */
@@ -119,6 +119,7 @@ function AdminSkin() {
       </nav>
       <section className="card stack">
         {tab === "Dan" && <Day today={m.today} />}
+        {tab === "Statistika" && <GeneralStats today={m.today} />}
         {tab === "Za pregled" && <Review />}
         {tab === "Igrači" && <Players />}
         {tab === "Sadržaj" && <Content groups={m.groups} mirror={m.mirror} />}
@@ -215,7 +216,7 @@ function WeekAverages({ today }: { today: string }) {
   const weekAvg = total ? Math.round(played.reduce((a, d) => a + d.avgKm! * d.players, 0) / total) : null;
   return (
     <div className="stack">
-      <h2>Prosjek km po danu</h2>
+      <span className="eyebrow">Prosjek km po danu</span>
       <div className="row">
         <button className="ghost" onClick={() => data && setDate(addDays(data.from, -7))} aria-label="Prošli tjedan">‹</button>
         <span className="small">{data ? `${fmtDate(data.from).slice(0, -5)} – ${fmtDate(addDays(data.from, 6))}` : ""}</span>
@@ -232,13 +233,112 @@ function WeekAverages({ today }: { today: string }) {
   );
 }
 
+// ---------- Statistika ----------
+
+type StatsData = {
+  today: string;
+  since: string;
+  totals: { days: number; games: number; finished: number; players: number; avgKm: number; answered: number; hit: number; avgMs: number };
+  best: { km: number; date: string; player: string } | null;
+  tiers: { name: string; emoji: string; n: number }[];
+  histogram: { from: number; n: number }[];
+  loyalty: { label: string; n: number }[];
+  hardest: { title: string; date: string; answered: number; missPct: number }[];
+  easiest: { title: string; date: string; answered: number; missPct: number }[];
+};
+
+/** Vodoravni stupci s brojem i postotkom (prijevoz, vjernost igrača). */
+function Bars({ rows }: { rows: { label: string; n: number }[] }) {
+  const max = Math.max(1, ...rows.map((r) => r.n));
+  const total = rows.reduce((a, r) => a + r.n, 0) || 1;
+  return (
+    <div className="stack" style={{ gap: 4 }}>
+      {rows.map((r) => (
+        <div key={r.label} className="bar wide">
+          <span>{r.label}</span>
+          <i style={{ width: `${(r.n / max) * 100}%` }} />
+          <b>{r.n}</b>
+          <em>{Math.round((100 * r.n) / total)} %</em>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/** Opće brojke igre (ne vežu se za jedan dan): ukupno, tjedni prosjek km, raspodjele zadnjih 30 dana. */
+function GeneralStats({ today }: { today: string }) {
+  const { data, error } = useLoad<StatsData>("/api/admin/stats");
+  const t = data?.totals;
+  const hmax = Math.max(1, ...(data?.histogram ?? []).map((h) => h.n));
+  return (
+    <div className="stack">
+      <h2>Statistika</h2>
+      <Err msg={error} />
+      {data && t && (
+        <div className="kpis">
+          <Kpi v={t.days} l="dana igre" />
+          <Kpi v={t.games} l="partija ukupno" />
+          <Kpi v={t.players} l="različitih igrača" />
+          <Kpi v={t.games ? Math.round((100 * t.finished) / t.games) : 0} l="% partija završeno" />
+          <Kpi v={t.avgKm} l="prosjek km (sve partije)" />
+          {data.best && <Kpi v={data.best.km} l="rekord km" sub={`${data.best.player}, ${fmtDate(data.best.date)}`} />}
+        </div>
+      )}
+      <section className="stack panel-sub"><WeekAverages today={today} /></section>
+      {data && t && (
+        <>
+          <p className="small">Ispod je zadnjih 30 dana ({fmtDate(data.since)} – {fmtDate(data.today)}).</p>
+          <div className="kpis">
+            <Kpi v={t.answered ? Math.round((100 * t.hit) / t.answered) : 0} l="% pitanja s točnim odgovorom" />
+            <Kpi v={(t.avgMs / 1000).toFixed(1).replace(".", ",")} l="s prosječno do točnog odgovora" />
+          </div>
+          <div className="stat-grid">
+            <section className="stack panel-sub">
+              <span className="eyebrow">Koliko daleko igrači stignu</span>
+              <div className="histo">
+                {data.histogram.map((h) => (
+                  <div key={h.from} className="histo-slot" title={`${h.from}–${h.from + 99} km: ${h.n} partija`}>
+                    <span style={{ height: `${(100 * h.n) / hmax}%` }} />
+                  </div>
+                ))}
+              </div>
+              <div className="histo-x">
+                {data.histogram.map((h, i) => <span key={h.from}>{i % 3 === 0 ? h.from : ""}</span>)}
+              </div>
+              <p className="small">Broj završenih partija po 100 km.</p>
+            </section>
+            <section className="stack panel-sub">
+              <span className="eyebrow">Prijevoz za točne odgovore</span>
+              <Bars rows={data.tiers.map((x) => ({ label: `${x.emoji} ${x.name}`, n: x.n }))} />
+            </section>
+            <section className="stack panel-sub">
+              <span className="eyebrow">Koliko dana su igrači odigrali (od početka)</span>
+              <Bars rows={data.loyalty} />
+            </section>
+            <section className="stack panel-sub">
+              <span className="eyebrow">Najteže i najlakše kategorije</span>
+              <p className="small">Udio igrača bez točnog odgovora.</p>
+              <table className="tbl">
+                <tbody>
+                  {data.hardest.map((c) => <tr key={"h" + c.title}><td>{c.title}</td><td className="num">{c.missPct} %</td></tr>)}
+                  {!!data.easiest.length && <tr><td colSpan={2} className="small">najlakše</td></tr>}
+                  {data.easiest.map((c) => <tr key={"e" + c.title}><td>{c.title}</td><td className="num">{c.missPct} %</td></tr>)}
+                </tbody>
+              </table>
+            </section>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 function Day({ today }: { today: string }) {
   const [date, setDate] = useState(today);
   const { data, error } = useLoad<DayData>(`/api/admin/day?date=${date}`);
   const maxStation = Math.max(1, ...(data?.stations ?? []).map((s) => s.n));
   return (
     <div className="stack">
-      <WeekAverages today={today} />
       <div className="row">
         <h2>Pregled dana</h2>
         <input type="date" className="field" value={date} onChange={(e) => setDate(e.target.value)} />
@@ -427,13 +527,21 @@ function ago(iso: string) {
   return new Date(iso).toLocaleDateString("hr-HR");
 }
 
+// stupci popisa igrača; klik na naslov poreda po tom stupcu (od najvećeg)
+/** Datum zadnje partije: "danas", "jučer" ili "21. 10.". */
+function playedOn(date: string | null, today: string) {
+  if (!date) return "—";
+  if (date === today) return "danas";
+  if (date === addDays(today, -1)) return "jučer";
+  return fmtDate(date).slice(0, -6);
+}
+
 const SORTS = {
-  lastSeenAt: { label: "Zadnji put", get: (p: PlayerRow) => p.lastSeenAt },
-  played: { label: "Odigrano", get: (p: PlayerRow) => p.stats.played },
-  currentStreak: { label: "Streak", get: (p: PlayerRow) => p.stats.currentStreak * 1000 + p.stats.longestStreak },
-  avgKm: { label: "Prosjek", get: (p: PlayerRow) => p.stats.avgKm },
-  bestKm: { label: "Najdalje", get: (p: PlayerRow) => p.stats.bestKm },
-  createdAt: { label: "Račun od", get: (p: PlayerRow) => p.createdAt },
+  lastPlayed: { label: "Zadnja partija", hint: "datum zadnje odigrane partije", get: (p: PlayerRow) => p.lastPlayed ?? "" },
+  played: { label: "Dana", hint: "koliko je dana odigrao", get: (p: PlayerRow) => p.stats.played },
+  currentStreak: { label: "Niz", hint: "uzastopnih dana sada (najdulji niz ispod)", get: (p: PlayerRow) => p.stats.currentStreak * 1000 + p.stats.longestStreak },
+  avgKm: { label: "Prosjek", hint: "prosječno km po partiji", get: (p: PlayerRow) => p.stats.avgKm },
+  bestKm: { label: "Rekord", hint: "najviše km u jednoj partiji", get: (p: PlayerRow) => p.stats.bestKm },
 } as const;
 type SortKey = keyof typeof SORTS;
 
@@ -468,7 +576,7 @@ function ActivityChart({ daily, today }: { daily: DailyRow[]; today: string }) {
 function Players() {
   const { data, error } = useLoad<PlayersData>("/api/admin/players");
   const [q, setQ] = useState("");
-  const [sort, setSort] = useState<SortKey>("lastSeenAt");
+  const [sort, setSort] = useState<SortKey>("lastPlayed");
   const [limit, setLimit] = useState(50);
   const [openId, setOpenId] = useState<string | null>(null);
   if (!data) return <div className="stack"><h2>Igrači</h2><Err msg={error} />{!error && <p className="loading">Učitavam…</p>}</div>;
@@ -499,14 +607,19 @@ function Players() {
           <span className="eyebrow">Prijavljeni igrači · {list.length}</span>
           <input className="field" type="search" placeholder="Traži nadimak ili email" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Traži igrača" />
         </div>
-        <div className="seg sorts" role="group" aria-label="Poredaj">
+        <div className="phead" role="row">
+          <span />
+          <span>Igrač</span>
           {(Object.keys(SORTS) as SortKey[]).map((k) => (
-            <button key={k} className={sort === k ? "" : "ghost"} aria-pressed={sort === k} onClick={() => setSort(k)}>{SORTS[k].label}</button>
+            <button key={k} className={"psort" + (sort === k ? " on" : "") + (k === "lastPlayed" ? " plast" : "") + (k === "currentStreak" ? " pstreak" : "") + (k === "bestKm" ? " pbest" : "")} title={SORTS[k].hint} onClick={() => setSort(k)}>
+              {SORTS[k].label}{sort === k && " ↓"}
+            </button>
           ))}
         </div>
         <ul className="plist">
           {list.slice(0, limit).map((p) => {
             const name = p.nickname || p.email || "bez imena";
+            const s = p.stats;
             return (
               <li key={p.id}>
                 <button className="prow" onClick={() => setOpenId(p.id)}>
@@ -515,15 +628,17 @@ function Players() {
                     <b>{name}{p.role === "admin" && <span className="tag">admin</span>}</b>
                     <span className="small">{p.email}</span>
                   </span>
-                  <span className="pnum" title="odigranih dana"><b>{p.stats.played}</b><span>dana</span></span>
-                  <span className="pnum pstreak" title="trenutni / najdulji streak"><b>{p.stats.currentStreak ? `🔥${p.stats.currentStreak}` : "—"}</b><span>max {p.stats.longestStreak}</span></span>
-                  <span className="pnum" title="prosjek / najdalje"><b>{p.stats.played ? p.stats.avgKm : "—"}</b><span>{p.stats.played ? `max ${p.stats.bestKm}` : "km"}</span></span>
-                  <span className="pwhen">{ago(p.lastSeenAt)}</span>
+                  <span className="pnum plast"><b>{playedOn(p.lastPlayed, data.today)}</b></span>
+                  <span className="pnum"><b>{s.played}</b></span>
+                  <span className="pnum pstreak"><b>{s.currentStreak ? `🔥 ${s.currentStreak}` : "0"}</b><span>najdulji {s.longestStreak}</span></span>
+                  <span className="pnum"><b>{s.played ? s.avgKm : "—"}</b><span>km</span></span>
+                  <span className="pnum pbest"><b>{s.played ? s.bestKm : "—"}</b><span>km</span></span>
                 </button>
               </li>
             );
           })}
         </ul>
+        <p className="small">Brojke su iz završenih partija u ovoj državi. Klik na igrača otvara sve njegove partije.</p>
         {list.length > limit && <button className="ghost small-btn" onClick={() => setLimit(limit + 100)}>Prikaži još ({list.length - limit})</button>}
       </section>
       {openId && <PlayerModal id={openId} onClose={() => setOpenId(null)} />}
@@ -531,7 +646,7 @@ function Players() {
   );
 }
 
-function Kpi({ v, l, sub }: { v: number; l: string; sub?: string }) {
+function Kpi({ v, l, sub }: { v: number | string; l: string; sub?: string }) {
   return <div className="kpi"><b>{v}</b><span>{l}</span>{sub && <em>{sub}</em>}</div>;
 }
 
@@ -556,7 +671,7 @@ function PlayerModal({ id, onClose }: { id: string; onClose: () => void }) {
       <Err msg={error} />
       {data && (
         <>
-          <p className="small">{data.email} · račun od {new Date(data.createdAt).toLocaleDateString("hr-HR")} · zadnji put {ago(data.lastSeenAt)}</p>
+          <p className="small">{data.email} · račun od {new Date(data.createdAt).toLocaleDateString("hr-HR")} · zadnji put na stranici {ago(data.lastSeenAt)}</p>
           <div className="stats">
             <Stat v={data.stats.played} l="odigranih dana" />
             <Stat v={data.stats.currentStreak} l="trenutni streak" />
