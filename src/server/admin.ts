@@ -17,6 +17,7 @@ import { capitalize, fold, parseSeedAnswers } from "@/lib/matcher";
 import { stationAt } from "@/lib/scoring";
 import { computeStats } from "@/lib/stats";
 import { dayNumber, localDate } from "@/lib/day";
+import { dailyAverages, weekDays } from "@/lib/league";
 import { isAdminEmail } from "./accounts";
 import { resolveIdentity } from "./player";
 import { categoryShares, clearCategoryCache, clearPuzzleCache, followersOf, getOrCreatePuzzle, pairedSlugs, rescoreMisses, type Skin } from "./game";
@@ -125,6 +126,26 @@ export async function dayOverview(skin: Skin, date: string) {
       };
     }),
   };
+}
+
+// ---------- Prosjek km po danu ----------
+
+/** Prosječni km svih igrača po danu za tjedan od ponedjeljka `monday`; broje se samo završene partije koje ulaze u statistiku. */
+export async function weekAverages(skin: Skin, monday: string) {
+  const days = weekDays(monday);
+  const rows = await db
+    .select({ date: dailyPuzzles.date, km: games.totalKm })
+    .from(games)
+    .innerJoin(dailyPuzzles, eq(dailyPuzzles.id, games.puzzleId))
+    .where(
+      and(
+        eq(dailyPuzzles.skinId, skin.id),
+        inArray(dailyPuzzles.date, days),
+        eq(games.ranked, true),
+        isNotNull(games.finishedAt),
+      ),
+    );
+  return { from: monday, today: localDate(skin.timezone), days: dailyAverages(rows, days) };
 }
 
 // ---------- Pregled odbijenih odgovora ----------

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { CODE_RE, cleanLeagueName, computeStandings, newLeagueCode, periodStart } from "./league";
+import { CODE_RE, addDays, cleanLeagueName, computeStandings, dailyAverages, newLeagueCode, periodStart, weekDays } from "./league";
 
 const members = [
   { memberId: 1, playerId: "a", nickname: "Ana" },
@@ -64,5 +64,29 @@ describe("kod i ime lige", () => {
     expect(cleanLeagueName("x")).toBeNull();
     expect(cleanLeagueName("<script>")).toBeNull();
     expect(cleanLeagueName(5)).toBeNull();
+  });
+});
+
+describe("prosjek po danu", () => {
+  it("tjedan pon–ned, i preko kraja mjeseca", () => {
+    expect(weekDays("2026-10-26")).toEqual(["2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30", "2026-10-31", "2026-11-01"]);
+    expect(addDays("2026-10-19", 7)).toBe("2026-10-26");
+    expect(addDays("2026-03-02", -7)).toBe("2026-02-23");
+  });
+  it("broji samo odigrane, dan bez partija je null", () => {
+    const days = weekDays("2026-10-19");
+    const avg = dailyAverages(
+      [
+        { date: "2026-10-19", km: 300 },
+        { date: "2026-10-19", km: 501 },
+        { date: "2026-10-21", km: 0 },
+        { date: "2026-10-12", km: 999 },
+      ],
+      days,
+    );
+    expect(avg[0]).toEqual({ date: "2026-10-19", avgKm: 401, players: 2 });
+    expect(avg[1]).toEqual({ date: "2026-10-20", avgKm: null, players: 0 });
+    expect(avg[2]).toEqual({ date: "2026-10-21", avgKm: 0, players: 1 });
+    expect(avg).toHaveLength(7);
   });
 });

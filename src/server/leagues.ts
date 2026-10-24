@@ -7,8 +7,11 @@ import { placeAt } from "@/skins/mjesta";
 import {
   LEAGUE_LIMITS,
   computeStandings,
+  dailyAverages,
   newLeagueCode,
   periodStart,
+  weekDays,
+  type DayAvg,
   type Member,
   type Period,
   type StandingRow,
@@ -200,6 +203,7 @@ export type LeagueView = {
   standings?: StandingRow[];
   today?: TodayStatus[];
   answers?: TodayAnswers | null; // null dok igrač nije završio današnju partiju
+  week?: { today: string; days: DayAvg[] }; // prosjek km članova po danu, samo tekući tjedan pon–ned
 };
 
 /** Stranica lige. Tko nije član vidi samo ime, osnivača i broj članova. */
@@ -225,6 +229,8 @@ export async function leagueView(skin: Skin, league: League, playerId: string | 
   // streak treba i dane prije razdoblja
   const all = await finishedGames(skin, ids);
   const standings = computeStandings(members, all, from, today);
+  // graf prosjeka uvijek za tekući tjedan, neovisno o odabranom razdoblju tablice
+  const week = { today, days: dailyAverages(all, weekDays(periodStart("week", today, today))) };
 
   const [puzzle] = await db
     .select()
@@ -247,7 +253,7 @@ export async function leagueView(skin: Skin, league: League, playerId: string | 
 
   const mineToday = byPlayer.get(me.playerId);
   const answersView = puzzle && mineToday?.finishedAt ? await dayAnswers(skin, puzzle.id, members, todays) : null;
-  return { ...base, period, from, standings, today: todayStatus, answers: answersView };
+  return { ...base, period, from, standings, today: todayStatus, answers: answersView, week };
 }
 
 /** Odgovori zadanih partija jednog dana, po kategorijama. */

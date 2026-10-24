@@ -87,3 +87,24 @@ export function computeStandings(members: Member[], games: MemberGame[], from: s
   });
   return rows;
 }
+
+/** Sedam datuma tjedna (pon–ned) koji počinje danom `monday`. */
+export function weekDays(monday: string): string[] {
+  const i = toIdx(monday);
+  return Array.from({ length: 7 }, (_, d) => fromIdx(i + d));
+}
+
+/** Pomak datuma za n dana (npr. -7 za prošli tjedan). */
+export function addDays(date: string, n: number): string {
+  return fromIdx(toIdx(date) + n);
+}
+
+export type DayAvg = { date: string; avgKm: number | null; players: number };
+
+/** Prosječni km po danu, samo od onih koji su taj dan završili partiju; dan bez ijedne partije ima avgKm null. */
+export function dailyAverages(games: { date: string; km: number }[], days: string[]): DayAvg[] {
+  return days.map((date) => {
+    const kms = games.filter((g) => g.date === date).map((g) => g.km);
+    return { date, avgKm: kms.length ? Math.round(kms.reduce((a, k) => a + k, 0) / kms.length) : null, players: kms.length };
+  });
+}

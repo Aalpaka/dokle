@@ -88,6 +88,12 @@ describe.skipIf(!process.env.DATABASE_URL)("lige", () => {
     await playToday(bruno, "nešto");
     expect((await memberDay(skin, league, bruno, anaId, today)).nickname).toBe("Ana");
 
+    // graf prosjeka: tekući tjedan pon–ned i kad je odabran dan; danas su igrala oba člana
+    const w = (await leagueView(skin, league, ana, "day")).week!;
+    expect(w.today).toBe(today);
+    expect(w.days).toHaveLength(7);
+    expect(w.days.find((d) => d.date === today)).toMatchObject({ players: 2, avgKm: 0 });
+
     const mine = await myLeagues(skin, bruno);
     expect(mine).toEqual([expect.objectContaining({ code: league.code, members: 2, isOwner: false })]);
   });

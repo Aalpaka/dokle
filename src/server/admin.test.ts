@@ -3,7 +3,9 @@ import { and, eq, inArray } from "drizzle-orm";
 import { db, sql } from "@/db";
 import { answers, categories, dailyPuzzles, games, players, reviewDecisions, rounds } from "@/db/schema";
 import { ensurePlayer, getOrCreatePuzzle, getSkin, startNext, submitAnswer } from "./game";
-import { decide, listCategories, reviewQueue, searchAttempts, setSchedule } from "./admin";
+import { decide, listCategories, reviewQueue, searchAttempts, setSchedule, weekAverages } from "./admin";
+import { localDate } from "@/lib/day";
+import { periodStart } from "@/lib/league";
 
 // Integracijski testovi nad lokalnom bazom (npm run db:migrate && npm run db:seed).
 const WEIRD = "zzqx odgovor";
@@ -30,6 +32,17 @@ describe.skipIf(!process.env.DATABASE_URL)("admin", () => {
     await db.delete(reviewDecisions).where(eq(reviewDecisions.normalized, WEIRD));
     await db.delete(answers).where(eq(answers.canonical, "Zzqx odgovor"));
     await sql.end();
+  });
+
+  it("prosjek km po danu broji samo završene partije tog tjedna", async () => {
+    const skin = await getSkin("hr");
+    const today = localDate(skin.timezone);
+    const before = (await weekAverages(skin, periodStart("week", today, today))).days.find((d) => d.date === today)!;
+    await playAllWith("zzqx nista");
+    const w = await weekAverages(skin, periodStart("week", today, today));
+    expect(w.days).toHaveLength(7);
+    expect(w.days[0].date).toBe(periodStart("week", today, today));
+    expect(w.days.find((d) => d.date === today)!.players).toBe(before.players + 1);
   });
 
   it("odbijeni upis je u redu za pregled, a prihvaćanje naknadno boduje", async () => {
