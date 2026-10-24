@@ -13,12 +13,12 @@ function axis(max: number): number[] {
 }
 
 /** Bar chart pon–ned s prosjekom km; dan bez ijedne partije nema stupca, budući dani su zatamnjeni. */
-export default function WeekChart({ days, today }: { days: DayAvg[]; today: string }) {
+export default function WeekChart({ days, today, compact }: { days: DayAvg[]; today: string; compact?: boolean }) {
   const t = useT();
   const ticks = axis(Math.max(0, ...days.map((d) => d.avgKm ?? 0)));
   const top = ticks.at(-1)!;
   return (
-    <div className="week-chart">
+    <div className={"week-chart" + (compact ? " compact" : "")}>
       <div className="wc-y" aria-hidden>
         {ticks.map((v) => (
           <span key={v} style={{ bottom: `${(100 * v) / top}%` }}>{v}</span>
