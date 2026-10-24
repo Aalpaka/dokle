@@ -39,7 +39,7 @@ export default function Privatnost() {
           <li>Drugi igrači vide samo tvoj nadimak, kilometre i odgovore (u ligama kojima se pridružiš). Ne vide tvoje ime ni email.</li>
           <li>Supabase (baza i prijava, poslužitelji u Frankfurtu, EU).</li>
           <li>Vercel (poslužuje stranicu, poslužitelji u Frankfurtu; tvrtka je iz SAD-a i prenosi podatke prema EU-US Data Privacy Frameworku).</li>
-          <li>Google, samo kad se prijavljuješ Googleovim gumbom.</li>
+          <li>Google, kad se prikaže ili koristi Googleov gumb za prijavu (učitava se s Googleovih poslužitelja).</li>
         </ul>
         <p>Ne prodajemo i ne dijelimo podatke nikome drugome.</p>
         <h2>Koliko dugo</h2>
@@ -54,6 +54,7 @@ export default function Privatnost() {
           adresu gore i odgovorit ćemo u roku od mjesec dana. Ako misliš da kršimo pravila, možeš podnijeti pritužbu Agenciji za
           zaštitu osobnih podataka (<a href="https://azop.hr">azop.hr</a>).
         </p>
+        <p>Pravila igre su u <a href="/uvjeti">uvjetima korištenja</a>.</p>
         <p className="small">Zadnja izmjena: 23. listopada 2026.</p>
       </section>
     </div>

@@ -103,7 +103,7 @@ function LoggedIn({ me, onChange }: { me: NonNullable<ReturnType<typeof useMe>>;
             <button className="ghost" onClick={() => signOut(href("/"))}>{t("Odjava")}</button>
             <button className="danger" onClick={del}>{t("Obriši račun")}</button>
           </div>
-          <p className="small"><a href="/privatnost">{t("Privatnost")}</a>{me.user!.isAdmin && <> · <a href="/admin">Admin</a></>}</p>
+          <p className="small"><a href="/privatnost">{t("Privatnost")}</a> · <a href="/uvjeti">{t("Uvjeti korištenja")}</a>{me.user!.isAdmin && <> · <a href="/admin">Admin</a></>}</p>
         </section>
       </div>
     </div>

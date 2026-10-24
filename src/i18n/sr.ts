@@ -184,6 +184,7 @@ export const sr: Record<string, string> = {
   "Odjava": "Odjava",
   "Obriši račun": "Obriši nalog",
   "Privatnost": "Privatnost",
+  "Uvjeti korištenja": "Uslovi korišćenja",
   // poruke sa servera
   "Ta liga ne postoji (ili je obrisana).": "Ta liga ne postoji (ili je obrisana).",
   "Za lige se treba prijaviti.": "Za lige je potrebna prijava.",

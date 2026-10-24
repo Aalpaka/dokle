@@ -13,10 +13,10 @@
   --stop: #e2572b;        /* radovi na cesti */
   --sea: #6aa8cc;
   --map-ink: #1d2628;     /* tekst na karti */
-  --font-sign: "Overpass", "Helvetica Neue", Arial, sans-serif;
+  --font-sign: var(--nf-sign), "Overpass", "Helvetica Neue", Arial, sans-serif;
   /* Barlow nema ćirilicu; ćirilična slova (Докле, бре?) uzima Roboto Condensed */
-  --font-town: "Barlow Semi Condensed", "Roboto Condensed", "DIN Alternate", "Arial Narrow", sans-serif;
-  --font-mono: "Overpass Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-town: var(--nf-town), var(--nf-town-cyr), "Barlow Semi Condensed", "Roboto Condensed", "DIN Alternate", "Arial Narrow", sans-serif;
+  --font-mono: var(--nf-mono), "Overpass Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   color-scheme: dark;
 }
 html, body { min-height: 100%; }
@@ -561,3 +561,5 @@ details.answers[open] > summary { margin-bottom: 14px; }
 /* Googleov gumb (iframe); visina rezervirana da se ništa ne pomiče dok se učita */
 .gsi-btn { min-height: 40px; display: inline-flex; align-items: center; flex-shrink: 0; color-scheme: normal; }
 .top .gsi-btn { min-height: 32px; }
+.landing-main .legal { margin: 4px 0 0; text-align: center; }
+.landing-main .legal a { color: var(--muted); }
