@@ -142,8 +142,8 @@ export const sr: Record<string, string> = {
   "najbolje": "najbolje",
   "dani na kojima je stigao najdalje u ligi": "dani kada je stigao najdalje u ligi",
   "trenutni streak": "trenutni niz",
-  "dana = odigrani dani · najbolje = klikni za pitanja i odgovore tog dana · 🏆 = dani kad je stigao najdalje u ligi · 🔥 = streak":
-    "dana = odigrani dani · najbolje = klikni za pitanja i odgovore tog dana · 🏆 = dani kada je stigao najdalje u ligi · 🔥 = niz",
+  "dana = odigrani dani · najbolje = klikni za pitanja i odgovore najboljeg dana · 🏆 = dani kad je stigao najdalje u ligi · 🔥 = streak":
+    "dana = odigrani dani · najbolje = klikni za pitanja i odgovore najboljeg dana · 🏆 = dani kada je stigao najdalje u ligi · 🔥 = niz",
   "igra…": "igra…",
   "još nije igrao": "još nije igrao",
   "Današnji odgovori": "Današnji odgovori",

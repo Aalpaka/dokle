@@ -422,7 +422,7 @@ function Standings({ rows, me, period, onDay }: { rows: StandingRow[]; me: numbe
           ))}
         </tbody>
       </table>
-      {full && <p className="small legend">{t("dana = odigrani dani · najbolje = klikni za pitanja i odgovore tog dana · 🏆 = dani kad je stigao najdalje u ligi · 🔥 = streak")}</p>}
+      {full && <p className="small legend">{t("dana = odigrani dani · najbolje = klikni za pitanja i odgovore najboljeg dana · 🏆 = dani kad je stigao najdalje u ligi · 🔥 = streak")}</p>}
     </div>
   );
 }
