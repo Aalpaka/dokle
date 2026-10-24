@@ -5,6 +5,7 @@ import {
   answerAliases,
   answers,
   attempts,
+  removedAliases,
   categories,
   dailyPuzzles,
   games,
@@ -544,11 +545,12 @@ export async function addAnswer(categoryId: number, input: { canonical: string; 
 /**
  * Izmjena postojećeg odgovora: naziv, procjena i helikopter. Seed izmjene ne poništava: preimenovani odgovor pamti izvorni
  * naziv (seedCanonical), a ručno mijenjana rijetkost (editedAt) se više ne dira. Stari naziv može ostati kao varijanta.
+ * Varijante se dodaju i brišu; obrisana se pamti (removedAliases) da je seed ne vrati.
  */
 export async function updateAnswer(
   categoryId: number,
   answerId: number,
-  patch: { canonical?: string; priorShare?: number; rare?: boolean; keepOld?: boolean },
+  patch: { canonical?: string; priorShare?: number; rare?: boolean; keepOld?: boolean; addAliases?: string[]; removeAliases?: string[] },
 ) {
   const [ans] = await db.select().from(answers).where(and(eq(answers.id, answerId), eq(answers.categoryId, categoryId)));
   if (!ans) throw new Error("Odgovor ne pripada kategoriji");
@@ -566,8 +568,31 @@ export async function updateAnswer(
   }
   if (typeof patch.rare === "boolean" && patch.rare !== ans.rare) set.rare = patch.rare;
   if (set.priorShare !== undefined || set.rare !== undefined) set.editedAt = new Date();
-  if (!Object.keys(set).length) return ans;
+  const add = [...new Set((patch.addAliases ?? []).map((a) => a.trim()).filter(Boolean))];
+  const remove = (patch.removeAliases ?? []).filter(Boolean);
+  if (add.length) {
+    // varijanta koja već pripada drugom odgovoru kategorije bi zbunila prepoznavanje
+    const others = await db
+      .select({ id: answers.id, canonical: answers.canonical, alias: answerAliases.alias })
+      .from(answers)
+      .leftJoin(answerAliases, eq(answerAliases.answerId, answers.id))
+      .where(and(eq(answers.categoryId, categoryId), sql`${answers.id} <> ${answerId}`));
+    for (const a of add) {
+      const clash = others.find((o) => fold(o.canonical) === fold(a) || (o.alias && fold(o.alias) === fold(a)));
+      if (clash) throw new Error(`„${a}” već pripada odgovoru „${clash.canonical}”`);
+    }
+  }
+  if (!Object.keys(set).length && !add.length && !remove.length) return ans;
   const [row] = await db.transaction(async (tx) => {
+    if (add.length) {
+      await tx.insert(answerAliases).values(add.map((alias) => ({ answerId, alias }))).onConflictDoNothing();
+      await tx.delete(removedAliases).where(and(eq(removedAliases.answerId, answerId), inArray(removedAliases.alias, add)));
+    }
+    if (remove.length) {
+      await tx.delete(answerAliases).where(and(eq(answerAliases.answerId, answerId), inArray(answerAliases.alias, remove)));
+      await tx.insert(removedAliases).values(remove.map((alias) => ({ answerId, alias }))).onConflictDoNothing();
+    }
+    if (!Object.keys(set).length) return [ans];
     // tko je upisao stari naziv i dalje pogađa isti odgovor
     if (set.canonical && patch.keepOld !== false && fold(ans.canonical) !== fold(canonical))
       await tx.insert(answerAliases).values({ answerId, alias: ans.canonical }).onConflictDoNothing();

@@ -943,7 +943,10 @@ function AnswerEdit({ catId, answer, others, onSaved, onCancel }: { catId: numbe
   const [share, setShare] = useState(pct(answer.priorShare));
   const [rare, setRare] = useState(answer.rare);
   const [keepOld, setKeepOld] = useState(true);
+  const [removed, setRemoved] = useState<string[]>([]);
+  const [newAliases, setNewAliases] = useState("");
   const [err, setErr] = useState("");
+  const added = newAliases.split(",").map((a) => a.trim()).filter(Boolean);
   const value = Number(share.replace(",", "."));
   const valid = Number.isFinite(value) && value > 0 && value <= 100;
   // prijevoz koji bi odgovor dobio s ovom procjenom (isti izračun kao popis gore)
@@ -955,8 +958,8 @@ function AnswerEdit({ catId, answer, others, onSaved, onCancel }: { catId: numbe
   };
   const renamed = name.trim() && name.trim() !== answer.canonical;
   const save = () =>
-    api(`/api/admin/categories/${catId}/answers/${answer.id}`, "PATCH", { canonical: name, priorShare: value, rare, keepOld }).then(
-      () => onSaved(`Spremljeno: „${upperFirst(name.trim())}”.`),
+    api(`/api/admin/categories/${catId}/answers/${answer.id}`, "PATCH", { canonical: name, priorShare: value, rare, keepOld, addAliases: added, removeAliases: removed }).then(
+      () => onSaved(`Spremljeno: „${upperFirst(name.trim())}”${added.length ? `, dodano varijanti: ${added.length}` : ""}${removed.length ? `, obrisano: ${removed.length}` : ""}.`),
       (e: Error) => setErr(e.message),
     );
   return (
@@ -985,6 +988,23 @@ function AnswerEdit({ catId, answer, others, onSaved, onCancel }: { catId: numbe
           <input type="checkbox" checked={keepOld} onChange={(e) => setKeepOld(e.target.checked)} /> „{answer.canonical}” ostaje kao varijanta (tko to upiše i dalje pogađa)
         </label>
       )}
+      <div className="stack" style={{ gap: 6 }}>
+        <span className="small">varijante (i ovo se prihvaća kao taj odgovor)</span>
+        <div className="chips">
+          {answer.aliases.map((a) => {
+            const off = removed.includes(a);
+            return (
+              <button key={a} type="button" className={"chip alias-chip" + (off ? " off" : "")} title={off ? "Vrati" : "Obriši varijantu"}
+                onClick={() => setRemoved(off ? removed.filter((x) => x !== a) : [...removed, a])}>
+                {a} <span>{off ? "↺" : "✕"}</span>
+              </button>
+            );
+          })}
+          {!answer.aliases.length && <span className="small">Još nema varijanti.</span>}
+        </div>
+        <input className="field" placeholder="Nove varijante, odvojene zarezom (npr. otok Krk, Krčki otok)" value={newAliases} onChange={(e) => setNewAliases(e.target.value)} />
+        <p className="small">Velika slova, kvačice i sitni tipfeleri se ionako prepoznaju; varijanta treba za drugi naziv ili kraticu.</p>
+      </div>
       {answer.seedCanonical && <p className="small">Izvorni naziv iz seeda: {answer.seedCanonical}</p>}
       <div className="row">
         <button className="small-btn" disabled={!valid || !name.trim()} onClick={save}>Spremi</button>

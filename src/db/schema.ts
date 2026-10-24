@@ -68,6 +68,16 @@ export const answerAliases = pgTable(
   (t) => [uniqueIndex("answer_aliases_answer_alias").on(t.answerId, t.alias)],
 );
 
+// varijante koje je admin obrisao; seed ih ne vraća
+export const removedAliases = pgTable(
+  "removed_aliases",
+  {
+    answerId: integer("answer_id").notNull().references(() => answers.id, { onDelete: "cascade" }),
+    alias: text("alias").notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.answerId, t.alias] })],
+);
+
 export const dailyPuzzles = pgTable(
   "daily_puzzles",
   {

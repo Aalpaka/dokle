@@ -2,7 +2,7 @@
 // (jedina izmjena postojećih je oznaka najrjeđeg odgovora za helikopter). Izmjene iz admina (naziv, rijetkost) ostaju.
 import { and, eq } from "drizzle-orm";
 import { db, sql } from "../src/db";
-import { answerAliases, answers, categories, skins } from "../src/db/schema";
+import { answerAliases, answers, categories, removedAliases, skins } from "../src/db/schema";
 import { parseSeedAnswers } from "../src/lib/matcher";
 import { localDate } from "../src/lib/day";
 import { hrSkin } from "../src/skins/hr/config";
@@ -58,6 +58,12 @@ for (const { skin, categories: cats } of SKINS) {
       added += inserted.length;
       await loadKnown();
     }
+    // varijante koje je admin obrisao ostaju obrisane
+    const removed = new Set(
+      (await db.select().from(removedAliases).innerJoin(answers, eq(answers.id, removedAliases.answerId)).where(eq(answers.categoryId, cat.id))).map(
+        (r) => `${r.removed_aliases.answerId}:${r.removed_aliases.alias}`,
+      ),
+    );
     const aliases: { answerId: number; alias: string }[] = [];
     for (const a of seeded) {
       const ans = known.get(a.canonical)!;
@@ -70,7 +76,7 @@ for (const { skin, categories: cats } of SKINS) {
           .where(eq(answers.id, ans.id));
         marked++;
       }
-      for (const alias of a.variants) aliases.push({ answerId: ans.id, alias });
+      for (const alias of a.variants) if (!removed.has(`${ans.id}:${alias}`)) aliases.push({ answerId: ans.id, alias });
     }
     if (aliases.length) await db.insert(answerAliases).values(aliases).onConflictDoNothing();
   }
