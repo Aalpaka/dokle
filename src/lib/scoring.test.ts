@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 import { assignTiers, blendedShare, priorForTier, scoreKm, speedFor, stationAt, tierFor, tierSizes, landingAt, routeKm } from "./scoring";
 import { dayNumber, localDate } from "./day";
 import { hrConfig } from "@/skins/hr/config";
+import { baConfig } from "@/skins/ba/config";
+import { rsConfig } from "@/skins/rs/config";
 
 describe("scoring", () => {
   it("bez igrača vraća procjenu", () => {
@@ -58,7 +60,7 @@ describe("scoring", () => {
   it("helikopter samo za označene najrjeđe odgovore", () => {
     expect(tierFor(hrConfig, 0.05).name).toBe("Croatia Airlines");
     expect(tierFor(hrConfig, 0.05, true).name).toBe("Milanovićev helikopter");
-    expect(tierFor(hrConfig, 0.05, true).km).toBe(150);
+    expect(tierFor(hrConfig, 0.05, true).km).toBe(185);
     // kad ga puno igrača da, gubi helikopter
     expect(tierFor(hrConfig, 3, true).name).toBe("Čazmatrans");
   });
@@ -80,11 +82,12 @@ describe("scoring", () => {
     expect(landingAt(hrConfig, hrConfig.maxKm).name).toBe("Dubrovnik");
     expect(landingAt(hrConfig, allPlanes).name).toBe("Dubrovnik");
     expect(landingAt(hrConfig, 7 * scoreKm(hrConfig, 0, 0).km + scoreKm(hrConfig, 0, 0, true).km).name).toBe("Dubrovnik");
-    expect(landingAt(hrConfig, 1350).name).toBe("Dubrovnik");
-    expect(landingAt(hrConfig, 1351).name).toBe("Budva");
-    expect(stationAt(hrConfig, 1400).name).toBe("Dubrovnik");
+    expect(landingAt(hrConfig, 6 * scoreKm(hrConfig, 0, 0).km + 2 * scoreKm(hrConfig, 0, 0, true).km).name).toBe("Budva");
+    expect(landingAt(hrConfig, 1400).name).toBe("Dubrovnik");
+    expect(landingAt(hrConfig, 1401).name).toBe("Budva");
+    expect(stationAt(hrConfig, 1450).name).toBe("Dubrovnik");
     expect(routeKm(hrConfig, 1250)).toBe(hrConfig.maxKm);
-    expect(routeKm(hrConfig, 1400)).toBe(hrConfig.overshoot!.station.km);
+    expect(routeKm(hrConfig, 1450)).toBe(hrConfig.overshoot!.station.km);
     expect(routeKm(hrConfig, 600)).toBe(600);
   });
   it("brzina", () => {
@@ -93,6 +96,13 @@ describe("scoring", () => {
     expect(speedFor(hrConfig, 9000).multiplier).toBe(1.15);
     expect(speedFor(hrConfig, 15000).multiplier).toBe(1);
     expect(speedFor(hrConfig, 26000).multiplier).toBe(0.9);
+  });
+  it("helikopter i najsporiji vrijedi više od najbržeg aviona", () => {
+    for (const cfg of [hrConfig, baConfig, rsConfig]) {
+      const slowest = Math.min(...cfg.speed.map((s) => s.multiplier)), fastest = Math.max(...cfg.speed.map((s) => s.multiplier));
+      const heli = cfg.tiers.find((t) => t.rare)!, best = Math.max(...cfg.tiers.filter((t) => !t.rare).map((t) => t.km));
+      expect(Math.round(heli.km * slowest)).toBeGreaterThan(Math.round(best * fastest));
+    }
   });
   it("km s brzinom", () => {
     expect(scoreKm(hrConfig, 0.1, 4000).km).toBe(163); // 125 × 1,3
