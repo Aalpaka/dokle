@@ -173,6 +173,7 @@ export const sr: Record<string, string> = {
   "prosjek km": "prosek km",
   "najdalje km": "najdalje km",
   "Povijest": "Istorija",
+  "Poredaj": "Poređaj",
   "Još nema završenih partija.": "Još nema završenih partija.",
   "Odigraj današnju.": "Odigraj današnju.",
   "Nadimak": "Nadimak",

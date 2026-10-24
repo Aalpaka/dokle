@@ -8,6 +8,8 @@ import {
   categories,
   dailyPuzzles,
   games,
+  leagueMembers,
+  leagues,
   players,
   puzzleCategories,
   reviewDecisions,
@@ -17,7 +19,8 @@ import { capitalize, fold, parseSeedAnswers } from "@/lib/matcher";
 import { stationAt } from "@/lib/scoring";
 import { computeStats } from "@/lib/stats";
 import { dayNumber, localDate } from "@/lib/day";
-import { dailyAverages, weekDays } from "@/lib/league";
+import { addDays, dailyAverages, weekDays } from "@/lib/league";
+import { placeAt } from "@/skins/mjesta";
 import { isAdminEmail } from "./accounts";
 import { resolveIdentity } from "./player";
 import { categoryShares, clearCategoryCache, clearPuzzleCache, followersOf, getOrCreatePuzzle, pairedSlugs, rescoreMisses, type Skin } from "./game";
@@ -211,8 +214,10 @@ export async function decide(skin: Skin, adminId: string | null, a: ReviewAction
 // ---------- Igrači ----------
 
 export async function playersOverview(skin: Skin) {
-  const since = new Date(Date.now() - 14 * 86400000).toISOString().slice(0, 10);
-  const daily = await db
+  const today = localDate(skin.timezone);
+  const since = addDays(today, -29);
+  // svaki dan zadnjih 30, i dan bez igrača (za graf)
+  const rows = await db
     .select({
       date: dailyPuzzles.date,
       players: sql<number>`count(*)::int`,
@@ -223,31 +228,88 @@ export async function playersOverview(skin: Skin) {
     .innerJoin(dailyPuzzles, eq(dailyPuzzles.id, games.puzzleId))
     .innerJoin(players, eq(players.id, games.playerId))
     .where(and(eq(dailyPuzzles.skinId, skin.id), gte(dailyPuzzles.date, since)))
-    .groupBy(dailyPuzzles.date)
-    .orderBy(desc(dailyPuzzles.date));
+    .groupBy(dailyPuzzles.date);
+  const daily = Array.from({ length: 30 }, (_, i) => addDays(since, i)).map(
+    (date) => rows.find((r) => r.date === date) ?? { date, players: 0, registered: 0, finished: 0 },
+  );
 
   const list = await db
-    .select({ id: players.id, nickname: players.nickname, email: players.email, role: players.role, lastSeenAt: players.lastSeenAt })
+    .select({
+      id: players.id,
+      nickname: players.nickname,
+      email: players.email,
+      role: players.role,
+      createdAt: players.createdAt,
+      lastSeenAt: players.lastSeenAt,
+    })
     .from(players)
     .where(isNotNull(players.authUserId))
     .orderBy(desc(players.lastSeenAt))
-    .limit(200);
+    .limit(1000);
   const ids = list.map((p) => p.id);
   const played = ids.length
     ? await db
         .select({ playerId: games.playerId, date: dailyPuzzles.date, km: games.totalKm })
         .from(games)
         .innerJoin(dailyPuzzles, eq(dailyPuzzles.id, games.puzzleId))
-        .where(and(inArray(games.playerId, ids), isNotNull(games.finishedAt), eq(dailyPuzzles.skinId, skin.id)))
+        .where(and(inArray(games.playerId, ids), isNotNull(games.finishedAt), eq(games.ranked, true), eq(dailyPuzzles.skinId, skin.id)))
     : [];
-  const today = localDate(skin.timezone);
+  // statistika kao na profilu igrača: samo završene partije koje se broje
+  const byPlayer = new Map<string, { date: string; km: number }[]>();
+  for (const g of played) {
+    if (!byPlayer.has(g.playerId)) byPlayer.set(g.playerId, []);
+    byPlayer.get(g.playerId)!.push(g);
+  }
   const [counts] = await db
-    .select({ total: sql<number>`count(*)::int`, registered: sql<number>`count(${players.authUserId})::int` })
+    .select({
+      total: sql<number>`count(*)::int`,
+      registered: sql<number>`count(${players.authUserId})::int`,
+      newRegistered: sql<number>`count(${players.authUserId}) filter (where ${players.createdAt} >= now() - interval '7 days')::int`,
+    })
     .from(players);
+  const active = (from: string) =>
+    db
+      .select({ n: sql<number>`count(distinct ${games.playerId})::int` })
+      .from(games)
+      .innerJoin(dailyPuzzles, eq(dailyPuzzles.id, games.puzzleId))
+      .where(and(eq(dailyPuzzles.skinId, skin.id), gte(dailyPuzzles.date, from)))
+      .then(([r]) => r.n);
   return {
-    counts,
+    today,
+    counts: { ...counts, activeToday: await active(today), active7: await active(addDays(today, -6)), active30: await active(since) },
     daily,
-    players: list.map((p) => ({ ...p, stats: computeStats(played.filter((g) => g.playerId === p.id), today) })),
+    players: list.map((p) => {
+      const days = byPlayer.get(p.id) ?? [];
+      return { ...p, lastPlayed: days.reduce<string | null>((m, d) => (m && m > d.date ? m : d.date), null), stats: computeStats(days, today) };
+    }),
+  };
+}
+
+/** Jedan igrač za admin: zadnje partije u ovom skinu i lige. */
+export async function playerDetail(skin: Skin, id: string) {
+  const [p] = await db
+    .select({ id: players.id, nickname: players.nickname, email: players.email, role: players.role, createdAt: players.createdAt, lastSeenAt: players.lastSeenAt })
+    .from(players)
+    .where(eq(players.id, id));
+  if (!p) throw new Error("Nema igrača");
+  const rows = await db
+    .select({ date: dailyPuzzles.date, number: dailyPuzzles.number, km: games.totalKm, finished: sql<boolean>`${games.finishedAt} is not null`, ranked: games.ranked })
+    .from(games)
+    .innerJoin(dailyPuzzles, eq(dailyPuzzles.id, games.puzzleId))
+    .where(and(eq(games.playerId, id), eq(dailyPuzzles.skinId, skin.id)))
+    .orderBy(desc(dailyPuzzles.date));
+  const today = localDate(skin.timezone);
+  const done = rows.filter((r) => r.finished && r.ranked);
+  const myLeagues = await db
+    .select({ name: leagues.name, code: leagues.code, members: sql<number>`(select count(*)::int from ${leagueMembers} m where m.league_id = ${leagues.id})` })
+    .from(leagueMembers)
+    .innerJoin(leagues, eq(leagues.id, leagueMembers.leagueId))
+    .where(and(eq(leagueMembers.playerId, id), eq(leagues.skinId, skin.id)));
+  return {
+    ...p,
+    stats: computeStats(done, today),
+    games: rows.slice(0, 60).map((r) => ({ ...r, station: r.finished ? placeAt(skin.id, skin.config, r.km) : null })),
+    leagues: myLeagues,
   };
 }
 
@@ -298,18 +360,28 @@ export async function categoryDetail(id: number) {
   const [cat] = await db.select().from(categories).where(eq(categories.id, id));
   if (!cat) return null;
   const rows = await db
-    .select({ id: answers.id, canonical: answers.canonical, priorShare: answers.priorShare, rare: answers.rare, source: answers.source, alias: answerAliases.alias })
+    .select({
+      id: answers.id,
+      canonical: answers.canonical,
+      priorShare: answers.priorShare,
+      rare: answers.rare,
+      source: answers.source,
+      seedCanonical: answers.seedCanonical,
+      edited: sql<boolean>`${answers.editedAt} is not null`,
+      alias: answerAliases.alias,
+    })
     .from(answers)
     .leftJoin(answerAliases, eq(answerAliases.answerId, answers.id))
     .where(eq(answers.categoryId, id))
     .orderBy(desc(answers.priorShare), asc(answers.canonical));
-  const list: { id: number; canonical: string; priorShare: number; rare: boolean; source: string; aliases: string[] }[] = [];
-  for (const r of rows) {
-    let a = list.find((x) => x.id === r.id);
-    if (!a) list.push((a = { id: r.id, canonical: r.canonical, priorShare: r.priorShare, rare: r.rare, source: r.source, aliases: [] }));
-    if (r.alias) a.aliases.push(r.alias);
+  type Row = Omit<(typeof rows)[number], "alias"> & { aliases: string[] };
+  const byId = new Map<number, Row>();
+  for (const { alias, ...r } of rows) {
+    let a = byId.get(r.id);
+    if (!a) byId.set(r.id, (a = { ...r, aliases: [] }));
+    if (alias) a.aliases.push(alias);
   }
-  return { ...cat, answers: list };
+  return { ...cat, answers: [...byId.values()] };
 }
 
 const slugify = (s: string) => fold(s).replace(/ /g, "-").slice(0, 40) || "kategorija";
@@ -364,13 +436,50 @@ export async function addAnswer(categoryId: number, input: { canonical: string; 
   const [ans] = await db
     .insert(answers)
     .values({ categoryId, canonical: capitalize(input.canonical), priorShare: input.priorShare, rare, source: "review" })
-    .onConflictDoUpdate({ target: [answers.categoryId, answers.canonical], set: { priorShare: input.priorShare, rare } })
+    .onConflictDoUpdate({ target: [answers.categoryId, answers.canonical], set: { priorShare: input.priorShare, rare, editedAt: new Date() } })
     .returning();
   const variants = input.variants.map((v) => v.trim()).filter(Boolean);
   if (variants.length) await db.insert(answerAliases).values(variants.map((alias) => ({ answerId: ans.id, alias }))).onConflictDoNothing();
   clearCategoryCache(categoryId);
   return ans;
 }
+
+/**
+ * Izmjena postojećeg odgovora: naziv, procjena i helikopter. Seed izmjene ne poništava: preimenovani odgovor pamti izvorni
+ * naziv (seedCanonical), a ručno mijenjana rijetkost (editedAt) se više ne dira. Stari naziv može ostati kao varijanta.
+ */
+export async function updateAnswer(
+  categoryId: number,
+  answerId: number,
+  patch: { canonical?: string; priorShare?: number; rare?: boolean; keepOld?: boolean },
+) {
+  const [ans] = await db.select().from(answers).where(and(eq(answers.id, answerId), eq(answers.categoryId, categoryId)));
+  if (!ans) throw new Error("Odgovor ne pripada kategoriji");
+  const set: Partial<typeof answers.$inferInsert> = {};
+  const canonical = patch.canonical?.trim() ? capitalize(patch.canonical.trim()) : ans.canonical;
+  if (canonical !== ans.canonical) {
+    const [taken] = await db.select({ id: answers.id }).from(answers).where(and(eq(answers.categoryId, categoryId), eq(answers.canonical, canonical)));
+    if (taken) throw new Error(`„${canonical}” već postoji u ovoj kategoriji`);
+    set.canonical = canonical;
+    set.seedCanonical = ans.seedCanonical ?? ans.canonical;
+  }
+  if (patch.priorShare !== undefined) {
+    if (!Number.isFinite(patch.priorShare) || patch.priorShare <= 0 || patch.priorShare > 100) throw new Error("Procjena mora biti između 0 i 100 %");
+    if (patch.priorShare !== ans.priorShare) set.priorShare = patch.priorShare;
+  }
+  if (typeof patch.rare === "boolean" && patch.rare !== ans.rare) set.rare = patch.rare;
+  if (set.priorShare !== undefined || set.rare !== undefined) set.editedAt = new Date();
+  if (!Object.keys(set).length) return ans;
+  const [row] = await db.transaction(async (tx) => {
+    // tko je upisao stari naziv i dalje pogađa isti odgovor
+    if (set.canonical && patch.keepOld !== false && fold(ans.canonical) !== fold(canonical))
+      await tx.insert(answerAliases).values({ answerId, alias: ans.canonical }).onConflictDoNothing();
+    return tx.update(answers).set(set).where(eq(answers.id, answerId)).returning();
+  });
+  clearCategoryCache(categoryId);
+  return row;
+}
+
 
 // ---------- Raspored ----------
 

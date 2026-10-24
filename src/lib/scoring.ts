@@ -53,6 +53,28 @@ export function priorForTier(tiers: Pick<Tier, "minShare" | "rare">[], index: nu
   return Math.round(((min + max) / 2) * 100) / 100;
 }
 
+/**
+ * Procjena (%) koja odgovor smjesti u sredinu ranga tiera `index` među ostalim odgovorima kategorije (za admin kad bira
+ * prijevoz); tier u igri ide po rangu, pa sredina raspona postotka (priorForTier) često ne pogodi željeni tier.
+ * Helikopter nije rang nego oznaka: vraća RARE_PRIOR. `others` su ostali odgovori, bilo kojim redom.
+ */
+export function priorForRank(tiers: Pick<Tier, "minShare" | "rare">[], index: number, others: { share: number; rare?: boolean }[]): number {
+  if (tiers[index].rare) return RARE_PRIOR;
+  const normal = tiers.filter((t) => !t.rare);
+  const k = normal.indexOf(tiers[index]);
+  const total = others.length + 1;
+  // označeni helikopteri ne zauzimaju mjesta u rangu običnih tierova; ako ih je manje od rareCount, najrjeđi ostali postaju helikopter
+  const list = others.filter((o) => !o.rare).map((o) => o.share).sort((a, b) => b - a);
+  const fill = tiers.some((t) => t.rare) ? Math.max(0, rareCount(total) - (others.length - list.length)) : 0;
+  const sizes = tierSizes(total);
+  const start = sizes.slice(0, k).reduce((a, b) => a + b, 0);
+  const end = k === normal.length - 1 ? Math.max(start, list.length - fill) : start + sizes[k] - 1;
+  const rank = Math.min(Math.floor((start + end) / 2), list.length);
+  const above = list[rank - 1], below = list[rank];
+  const share = above === undefined ? (below ?? priorForTier(tiers, index)) * 1.2 + 0.1 : below === undefined ? above * 0.8 : (above + below) / 2;
+  return Math.max(0.01, Math.round(share * 100) / 100);
+}
+
 export function speedFor(cfg: SkinConfig, elapsedMs: number): SpeedStep {
   const steps = cfg.speed ?? [];
   return steps.find((s) => s.maxSeconds === undefined || elapsedMs <= s.maxSeconds * 1000) ?? { multiplier: 1, emoji: "", name: "" };

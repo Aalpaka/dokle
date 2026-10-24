@@ -49,6 +49,10 @@ export const answers = pgTable(
     priorShare: real("prior_share").notNull(), // procijenjeni % igrača prije stvarnih podataka
     rare: boolean("rare").notNull().default(false), // najrjeđi odgovor kategorije (poseban tier, helikopter)
     source: text("source").notNull().default("seed"), // seed | review
+    // admin je preimenovao odgovor: izvorni naziv iz seeda, da ga seed ne doda ponovno kao novi odgovor
+    seedCanonical: text("seed_canonical"),
+    // admin je ručno mijenjao procjenu ili helikopter; seed to više ne dira
+    editedAt: timestamp("edited_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [uniqueIndex("answers_category_canonical").on(t.categoryId, t.canonical)],

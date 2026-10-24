@@ -1,7 +1,8 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
-import { assignTiers, priorForTier, tierFor } from "@/lib/scoring";
+import { assignTiers, priorForRank, priorForTier } from "@/lib/scoring";
+import { fold } from "@/lib/matcher";
 import { addDays, type DayAvg } from "@/lib/league";
 import Modal from "./Modal";
 import WeekChart from "./WeekChart";
@@ -44,13 +45,6 @@ const pct = (n: number) => String(n).replace(".", ",");
 // kanonski odgovori počinju velikim slovom (server to i sam osigura)
 const upperFirst = (v: string) => v.charAt(0).toLocaleUpperCase("hr") + v.slice(1);
 
-/** Oznaka prijevoza; `tier` kad je već izračunat za cijelu kategoriju (assignTiers), inače po udjelu. */
-function TierLabel({ share, rare, tier }: { share: number; rare?: boolean; tier?: TierInfo }) {
-  const tiers = useContext(Tiers);
-  const t = tier ?? (tiers.length ? tierFor({ tiers }, share, rare) : undefined);
-  return t ? <span className="chip">{t.emoji} {t.name}</span> : null;
-}
-
 /** Koji broj upisati za koji prijevoz (sredina raspona), za unos više odgovora odjednom. */
 function TierLegend() {
   const tiers = useContext(Tiers);
@@ -61,8 +55,11 @@ function TierLegend() {
   );
 }
 
-/** Izbor prijevoza umjesto postotka; vraća procjenu iz sredine raspona tiera. Zadano je najrjeđi obični tier. */
-function useTierPrior() {
+/**
+ * Izbor prijevoza umjesto postotka. S ostalim odgovorima kategorije (`others`) procjena smjesti odgovor u sredinu ranga
+ * tog prijevoza (tier u igri ide po rangu), inače sredina raspona postotka. Zadano je najrjeđi obični tier.
+ */
+function useTierPrior(others?: { share: number; rare?: boolean }[]) {
   const tiers = useContext(Tiers);
   const [index, setIndex] = useState(() => Math.max(tiers.findLastIndex((t) => !t.rare), 0));
   const select = (
@@ -71,13 +68,14 @@ function useTierPrior() {
       <select className="field" value={index} onChange={(e) => setIndex(Number(e.target.value))} aria-label="Prijevoz">
         {tiers.map((t, i) => (
           <option key={t.name} value={i}>
-            {t.emoji} {t.name} ({t.rare ? "1 do 2 najrjeđa po kategoriji" : `procjena ${pct(priorForTier(tiers, i))} %`})
+            {t.emoji} {t.name}{t.rare ? " (najrjeđi)" : others ? "" : ` (procjena ${pct(priorForTier(tiers, i))} %)`}
           </option>
         ))}
       </select>
     </label>
   );
-  return { select, prior: tiers.length ? priorForTier(tiers, index) : 0.1, rare: !!tiers[index]?.rare };
+  const prior = !tiers.length ? 0.1 : others ? priorForRank(tiers, index, others) : priorForTier(tiers, index);
+  return { select, prior, rare: !!tiers[index]?.rare };
 }
 
 const TABS = ["Dan", "Za pregled", "Igrači", "Sadržaj", "Raspored", "Odgovori"] as const;
@@ -305,7 +303,9 @@ function Stat({ v, l }: { v: string | number; l: string }) {
 // ---------- Za pregled ----------
 
 type ReviewRow = { categoryId: number; category: string; normalized: string; n: number; examples: string[] };
-type CatDetail = { id: number; title: string; active: boolean; hint: string | null; answers: { id: number; canonical: string; priorShare: number; rare: boolean; source: string; aliases: string[] }[] };
+type AnswerRow = { id: number; canonical: string; priorShare: number; rare: boolean; source: string; seedCanonical: string | null; edited: boolean; aliases: string[] };
+type CatDetail = { id: number; title: string; active: boolean; hint: string | null; answers: AnswerRow[] };
+const asOthers = (list: AnswerRow[], except?: number) => list.filter((a) => a.id !== except).map((a) => ({ share: a.priorShare, rare: a.rare }));
 
 function Review() {
   const { data, error, reload } = useLoad<ReviewRow[]>("/api/admin/review");
@@ -364,7 +364,7 @@ function Review() {
 function Decide({ row, onDone }: { row: ReviewRow; onDone: (msg: string) => void }) {
   const cat = useLoad<CatDetail>(`/api/admin/categories/${row.categoryId}`);
   const [canonical, setCanonical] = useState(upperFirst(row.examples[0] ?? row.normalized));
-  const tier = useTierPrior();
+  const tier = useTierPrior(cat.data ? asOthers(cat.data.answers) : undefined);
   const [answerId, setAnswerId] = useState("");
   const [err, setErr] = useState("");
   const send = (body: object, label: string) =>
@@ -404,49 +404,197 @@ function Decide({ row, onDone }: { row: ReviewRow; onDone: (msg: string) => void
 
 // ---------- Igrači ----------
 
+type PlayerStats = { played: number; currentStreak: number; longestStreak: number; avgKm: number; bestKm: number };
+type PlayerRow = { id: string; nickname: string | null; email: string | null; role: string; createdAt: string; lastSeenAt: string; lastPlayed: string | null; stats: PlayerStats };
+type DailyRow = { date: string; players: number; registered: number; finished: number };
 type PlayersData = {
-  counts: { total: number; registered: number };
-  daily: { date: string; players: number; registered: number; finished: number }[];
-  players: { id: string; nickname: string | null; email: string | null; role: string; lastSeenAt: string; stats: { played: number; currentStreak: number; longestStreak: number; avgKm: number } }[];
+  today: string;
+  counts: { total: number; registered: number; newRegistered: number; activeToday: number; active7: number; active30: number };
+  daily: DailyRow[];
+  players: PlayerRow[];
 };
+
+/** "prije 5 min", "prije 3 h", "jučer", "prije 4 dana", a starije datum. */
+function ago(iso: string) {
+  const min = Math.round((Date.now() - new Date(iso).getTime()) / 60000);
+  if (min < 2) return "upravo";
+  if (min < 60) return `prije ${min} min`;
+  const h = Math.round(min / 60);
+  if (h < 24) return `prije ${h} h`;
+  const d = Math.round(h / 24);
+  if (d === 1) return "jučer";
+  if (d < 14) return `prije ${d} dana`;
+  return new Date(iso).toLocaleDateString("hr-HR");
+}
+
+const SORTS = {
+  lastSeenAt: { label: "Zadnji put", get: (p: PlayerRow) => p.lastSeenAt },
+  played: { label: "Odigrano", get: (p: PlayerRow) => p.stats.played },
+  currentStreak: { label: "Streak", get: (p: PlayerRow) => p.stats.currentStreak * 1000 + p.stats.longestStreak },
+  avgKm: { label: "Prosjek", get: (p: PlayerRow) => p.stats.avgKm },
+  bestKm: { label: "Najdalje", get: (p: PlayerRow) => p.stats.bestKm },
+  createdAt: { label: "Račun od", get: (p: PlayerRow) => p.createdAt },
+} as const;
+type SortKey = keyof typeof SORTS;
+
+/** Inicijal u krugu, boja stalna po igraču. */
+function Avatar({ id, name }: { id: string; name: string }) {
+  const hue = parseInt(id.slice(0, 6), 16) % 360;
+  return <span className="avatar" style={{ background: `hsl(${hue} 45% 32%)` }} aria-hidden>{name.charAt(0).toLocaleUpperCase("hr")}</span>;
+}
+
+/** Igrači po danu zadnjih 30 dana: stupac = svi igrači, tamniji dio = s računom; danas istaknut. */
+function ActivityChart({ daily, today }: { daily: DailyRow[]; today: string }) {
+  const max = Math.max(1, ...daily.map((d) => d.players));
+  return (
+    <div className="activity">
+      <div className="act-plot">
+        {daily.map((d) => (
+          <div key={d.date} className={"act-slot" + (d.date === today ? " today" : "")} title={`${fmtDate(d.date)}: ${d.players} igrača, ${d.registered} s računom, ${d.finished} završilo`}>
+            <span className="act-bar" style={{ height: `${(100 * d.players) / max}%` }}>
+              <i style={{ height: d.players ? `${(100 * d.registered) / d.players}%` : 0 }} />
+            </span>
+          </div>
+        ))}
+      </div>
+      <div className="act-x">
+        {daily.map((d, i) => <span key={d.date}>{i % 5 === 4 || d.date === today ? fmtDate(d.date).slice(0, -6) : ""}</span>)}
+      </div>
+      <p className="small legend"><i className="lg-all" /> svi igrači <i className="lg-reg" /> s računom · najviše {max} u danu</p>
+    </div>
+  );
+}
 
 function Players() {
   const { data, error } = useLoad<PlayersData>("/api/admin/players");
+  const [q, setQ] = useState("");
+  const [sort, setSort] = useState<SortKey>("lastSeenAt");
+  const [limit, setLimit] = useState(50);
+  const [openId, setOpenId] = useState<string | null>(null);
+  if (!data) return <div className="stack"><h2>Igrači</h2><Err msg={error} />{!error && <p className="loading">Učitavam…</p>}</div>;
+  const c = data.counts;
+  const needle = fold(q.trim());
+  const list = data.players
+    .filter((p) => !needle || fold(`${p.nickname ?? ""} ${p.email ?? ""}`).includes(needle))
+    .sort((a, b) => {
+      const x = SORTS[sort].get(a), y = SORTS[sort].get(b);
+      return x < y ? 1 : x > y ? -1 : 0;
+    });
   return (
     <div className="stack">
       <h2>Igrači</h2>
+      <div className="kpis">
+        <Kpi v={c.activeToday} l="igralo danas" />
+        <Kpi v={c.active7} l="zadnjih 7 dana" />
+        <Kpi v={c.active30} l="zadnjih 30 dana" />
+        <Kpi v={c.registered} l="s računom" sub={c.newRegistered ? `+${c.newRegistered} ovaj tjedan` : undefined} />
+        <Kpi v={c.total} l="ukupno (i anonimni)" />
+      </div>
+      <section className="stack panel-sub">
+        <span className="eyebrow">Igrači po danu · 30 dana</span>
+        <ActivityChart daily={data.daily} today={data.today} />
+      </section>
+      <section className="stack panel-sub">
+        <div className="row" style={{ justifyContent: "space-between" }}>
+          <span className="eyebrow">Prijavljeni igrači · {list.length}</span>
+          <input className="field" type="search" placeholder="Traži nadimak ili email" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Traži igrača" />
+        </div>
+        <div className="seg sorts" role="group" aria-label="Poredaj">
+          {(Object.keys(SORTS) as SortKey[]).map((k) => (
+            <button key={k} className={sort === k ? "" : "ghost"} aria-pressed={sort === k} onClick={() => setSort(k)}>{SORTS[k].label}</button>
+          ))}
+        </div>
+        <ul className="plist">
+          {list.slice(0, limit).map((p) => {
+            const name = p.nickname || p.email || "bez imena";
+            return (
+              <li key={p.id}>
+                <button className="prow" onClick={() => setOpenId(p.id)}>
+                  <Avatar id={p.id} name={name} />
+                  <span className="pwho">
+                    <b>{name}{p.role === "admin" && <span className="tag">admin</span>}</b>
+                    <span className="small">{p.email}</span>
+                  </span>
+                  <span className="pnum" title="odigranih dana"><b>{p.stats.played}</b><span>dana</span></span>
+                  <span className="pnum pstreak" title="trenutni / najdulji streak"><b>{p.stats.currentStreak ? `🔥${p.stats.currentStreak}` : "—"}</b><span>max {p.stats.longestStreak}</span></span>
+                  <span className="pnum" title="prosjek / najdalje"><b>{p.stats.played ? p.stats.avgKm : "—"}</b><span>{p.stats.played ? `max ${p.stats.bestKm}` : "km"}</span></span>
+                  <span className="pwhen">{ago(p.lastSeenAt)}</span>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+        {list.length > limit && <button className="ghost small-btn" onClick={() => setLimit(limit + 100)}>Prikaži još ({list.length - limit})</button>}
+      </section>
+      {openId && <PlayerModal id={openId} onClose={() => setOpenId(null)} />}
+    </div>
+  );
+}
+
+function Kpi({ v, l, sub }: { v: number; l: string; sub?: string }) {
+  return <div className="kpi"><b>{v}</b><span>{l}</span>{sub && <em>{sub}</em>}</div>;
+}
+
+type PlayerDetail = {
+  id: string;
+  nickname: string | null;
+  email: string | null;
+  createdAt: string;
+  lastSeenAt: string;
+  stats: PlayerStats;
+  games: { date: string; number: number; km: number; finished: boolean; ranked: boolean; station: string | null }[];
+  leagues: { name: string; code: string; members: number }[];
+};
+
+function PlayerModal({ id, onClose }: { id: string; onClose: () => void }) {
+  const { data, error } = useLoad<PlayerDetail>(`/api/admin/players/${id}`);
+  const name = data ? data.nickname || data.email || "bez imena" : "Igrač";
+  const recent = (data?.games ?? []).filter((g) => g.finished).slice(0, 30).reverse();
+  const max = Math.max(1, ...recent.map((g) => g.km));
+  return (
+    <Modal title={name} onClose={onClose}>
       <Err msg={error} />
       {data && (
         <>
+          <p className="small">{data.email} · račun od {new Date(data.createdAt).toLocaleDateString("hr-HR")} · zadnji put {ago(data.lastSeenAt)}</p>
           <div className="stats">
-            <Stat v={data.counts.total} l="ukupno igrača" />
-            <Stat v={data.counts.registered} l="s računom" />
+            <Stat v={data.stats.played} l="odigranih dana" />
+            <Stat v={data.stats.currentStreak} l="trenutni streak" />
+            <Stat v={data.stats.longestStreak} l="najdulji streak" />
+            <Stat v={data.stats.avgKm} l="prosjek km" />
+            <Stat v={data.stats.bestKm} l="najdalje km" />
           </div>
-          <span className="eyebrow">Zadnjih 14 dana</span>
-          <table className="tbl">
-            <thead><tr><th>Datum</th><th>Igrača</th><th>Završilo</th><th>S računom</th></tr></thead>
-            <tbody>{data.daily.map((d) => <tr key={d.date}><td>{fmtDate(d.date)}</td><td>{d.players}</td><td>{d.finished}</td><td>{d.registered}</td></tr>)}</tbody>
-          </table>
-          <span className="eyebrow">Prijavljeni igrači</span>
-          <table className="tbl">
-            <thead><tr><th>Nadimak</th><th>Email</th><th>Odigrano</th><th>Streak</th><th>Najdulji</th><th>Prosjek km</th><th>Zadnji put</th></tr></thead>
-            <tbody>
-              {data.players.map((p) => (
-                <tr key={p.id}>
-                  <td>{p.nickname}{p.role === "admin" && " (admin)"}</td>
-                  <td>{p.email}</td>
-                  <td>{p.stats.played}</td>
-                  <td>{p.stats.currentStreak}</td>
-                  <td>{p.stats.longestStreak}</td>
-                  <td>{p.stats.avgKm}</td>
-                  <td>{new Date(p.lastSeenAt).toLocaleString("hr-HR")}</td>
-                </tr>
+          {recent.length > 1 && (
+            <div className="stack" style={{ gap: 6 }}>
+              <span className="eyebrow">Km po partiji · zadnjih {recent.length}</span>
+              <div className="spark">
+                {recent.map((g) => <i key={g.date} style={{ height: `${(100 * g.km) / max}%` }} title={`${fmtDate(g.date)}: ${g.km} km`} />)}
+              </div>
+            </div>
+          )}
+          {!!data.leagues.length && (
+            <p className="small">Lige: {data.leagues.map((l) => `${l.name} (${l.members})`).join(", ")}</p>
+          )}
+          <span className="eyebrow">Partije</span>
+          {data.games.length ? (
+            <ul className="recap history">
+              {data.games.map((g) => (
+                <li key={g.date}>
+                  <span className="n">#{g.number}</span>
+                  <span className="w">
+                    <span className="a">{g.station ?? "nije završio"}</span>
+                    <span className="c">{fmtDate(g.date)}{!g.ranked && " · za gušt"}</span>
+                  </span>
+                  <span className="k">{g.finished ? `${g.km} km` : "—"}</span>
+                </li>
               ))}
-            </tbody>
-          </table>
+            </ul>
+          ) : (
+            <p className="small">U ovoj državi još nije igrao.</p>
+          )}
         </>
       )}
-    </div>
+    </Modal>
   );
 }
 
@@ -574,25 +722,93 @@ function NewCategory({ groups, unpaired, onDone }: { groups: Record<string, stri
 
 function CategoryAnswers({ id, onChange, onClose }: { id: number; onChange: () => void; onClose: () => void }) {
   const { data, error, reload } = useLoad<CatDetail>(`/api/admin/categories/${id}`);
-  const [canonical, setCanonical] = useState("");
-  const [variants, setVariants] = useState("");
-  const tier = useTierPrior();
   const tiers = useContext(Tiers);
-  const [err, setErr] = useState("");
+  const [q, setQ] = useState("");
+  const [editId, setEditId] = useState<number | null>(null);
+  const [adding, setAdding] = useState(false);
+  const [msg, setMsg] = useState("");
   if (!data) return error ? <Modal title="Odgovori" onClose={onClose}><Err msg={error} /></Modal> : null;
   // odgovori dolaze sortirani po procjeni; prijevoz kao u igri prije prvih igrača (po rangu)
   const assigned = tiers.length ? assignTiers({ tiers }, data.answers.map((a) => ({ share: a.priorShare, rare: a.rare }))) : [];
+  const rows = data.answers.map((a, i) => ({ ...a, tier: assigned[i] }));
+  const needle = fold(q.trim());
+  const shown = needle ? rows.filter((r) => fold([r.canonical, ...r.aliases].join(" ")).includes(needle)) : rows;
+  const saved = (text: string) => {
+    setMsg(text);
+    setEditId(null);
+    setAdding(false);
+    reload();
+    onChange();
+  };
   return (
-    <Modal title={`${data.title} · ${data.answers.length}`} onClose={onClose}>
+    <Modal title={data.title} onClose={onClose} className="answers-modal">
+      <div className="tier-summary">
+        {tiers.map((t) => {
+          const n = rows.filter((r) => r.tier === t).length;
+          return <span key={t.name} className="chip">{t.emoji} {t.name}<span>{n}</span></span>;
+        })}
+        <span className="chip">ukupno<span>{rows.length}</span></span>
+      </div>
       <div className="row">
-        <input className="field" placeholder="Novi odgovor" value={canonical} onChange={(e) => setCanonical(upperFirst(e.target.value))} />
-        <input className="field" placeholder="Varijante, odvojene zarezom" value={variants} onChange={(e) => setVariants(e.target.value)} />
+        <input className="field grow" type="search" placeholder="Traži odgovor ili varijantu" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Traži" />
+        <button className="small-btn" onClick={() => { setAdding(!adding); setEditId(null); }}>{adding ? "Zatvori" : "+ Novi odgovor"}</button>
+      </div>
+      {adding && <NewAnswer catId={id} others={asOthers(data.answers)} onSaved={saved} />}
+      {msg && <p className="small ok-msg">{msg}</p>}
+      <p className="small">
+        Prijevoz je procjena prije igrača: u igri se procjena miješa sa stvarnim odgovorima, pa se odgovor s vremenom može pomaknuti.
+        ✎ = ručno uređeno (seed to više ne mijenja).
+      </p>
+      {tiers.map((t) => {
+        const list = shown.filter((r) => r.tier === t);
+        if (!list.length) return null;
+        return (
+          <section key={t.name} className="ans-group">
+            <h3 className="eyebrow">{t.emoji} {t.name} · {list.length}</h3>
+            <ul className="ans-list">
+              {list.map((a) =>
+                editId === a.id ? (
+                  <li key={a.id} className="ans-row editing">
+                    <AnswerEdit catId={id} answer={a} others={asOthers(data.answers, a.id)} onSaved={saved} onCancel={() => setEditId(null)} />
+                  </li>
+                ) : (
+                  <li key={a.id} className="ans-row">
+                    <div className="ans-name">
+                      <b>{a.canonical}</b>
+                      {(a.edited || a.seedCanonical) && <span className="tag" title={a.seedCanonical ? `izvorno: ${a.seedCanonical}` : "ručno uređena rijetkost"}>✎</span>}
+                      {a.source === "review" && <span className="tag" title="dodano u adminu">admin</span>}
+                      {!!a.aliases.length && <span className="small ans-alias">{a.aliases.join(", ")}</span>}
+                    </div>
+                    <span className="ans-pct">{pct(a.priorShare)} %</span>
+                    <button className="ghost small-btn" onClick={() => { setEditId(a.id); setAdding(false); setMsg(""); }}>Uredi</button>
+                  </li>
+                ),
+              )}
+            </ul>
+          </section>
+        );
+      })}
+      {!shown.length && <p className="small">Nema odgovora za „{q}”.</p>}
+    </Modal>
+  );
+}
+
+function NewAnswer({ catId, others, onSaved }: { catId: number; others: { share: number; rare?: boolean }[]; onSaved: (msg: string) => void }) {
+  const [canonical, setCanonical] = useState("");
+  const [variants, setVariants] = useState("");
+  const tier = useTierPrior(others);
+  const [err, setErr] = useState("");
+  return (
+    <div className="decide stack" style={{ gap: 8 }}>
+      <div className="row">
+        <input className="field grow" placeholder="Novi odgovor" value={canonical} onChange={(e) => setCanonical(upperFirst(e.target.value))} />
+        <input className="field grow" placeholder="Varijante, odvojene zarezom" value={variants} onChange={(e) => setVariants(e.target.value)} />
         {tier.select}
         <button
           className="small-btn"
           onClick={() =>
-            api(`/api/admin/categories/${id}/answers`, "POST", { canonical, variants: variants.split(","), priorShare: tier.prior, rare: tier.rare }).then(
-              () => { setCanonical(""); setVariants(""); reload(); onChange(); },
+            api(`/api/admin/categories/${catId}/answers`, "POST", { canonical, variants: variants.split(","), priorShare: tier.prior, rare: tier.rare }).then(
+              () => onSaved(`Dodano: „${canonical}”.`),
               (e: Error) => setErr(e.message),
             )
           }
@@ -601,15 +817,67 @@ function CategoryAnswers({ id, onChange, onClose }: { id: number; onChange: () =
         </button>
       </div>
       <Err msg={err} />
-      <table className="tbl">
-        <thead><tr><th>Odgovor</th><th>Varijante</th><th>Prijevoz (procjena)</th></tr></thead>
-        <tbody>
-          {data.answers.map((a, i) => (
-            <tr key={a.id}><td>{a.canonical}{a.source === "review" && " ✎"}</td><td>{a.aliases.join(", ")}</td><td><TierLabel share={a.priorShare} rare={a.rare} tier={assigned[i]} /> <span className="small">{pct(a.priorShare)} %</span></td></tr>
-          ))}
-        </tbody>
-      </table>
-    </Modal>
+    </div>
+  );
+}
+
+/** Uređivanje jednog odgovora: naziv, prijevoz (ili točan postotak) i helikopter, s pregledom prijevoza prije spremanja. */
+function AnswerEdit({ catId, answer, others, onSaved, onCancel }: { catId: number; answer: AnswerRow; others: { share: number; rare?: boolean }[]; onSaved: (msg: string) => void; onCancel: () => void }) {
+  const tiers = useContext(Tiers);
+  const [name, setName] = useState(answer.canonical);
+  const [share, setShare] = useState(pct(answer.priorShare));
+  const [rare, setRare] = useState(answer.rare);
+  const [keepOld, setKeepOld] = useState(true);
+  const [err, setErr] = useState("");
+  const value = Number(share.replace(",", "."));
+  const valid = Number.isFinite(value) && value > 0 && value <= 100;
+  // prijevoz koji bi odgovor dobio s ovom procjenom (isti izračun kao popis gore)
+  const all = [...others, { share: valid ? value : answer.priorShare, rare, me: true }].sort((a, b) => b.share - a.share);
+  const preview = tiers.length ? assignTiers({ tiers }, all)[all.findIndex((a) => "me" in a)] : undefined;
+  const pickTier = (i: number) => {
+    setRare(!!tiers[i].rare);
+    setShare(pct(priorForRank(tiers, i, others)));
+  };
+  const renamed = name.trim() && name.trim() !== answer.canonical;
+  const save = () =>
+    api(`/api/admin/categories/${catId}/answers/${answer.id}`, "PATCH", { canonical: name, priorShare: value, rare, keepOld }).then(
+      () => onSaved(`Spremljeno: „${upperFirst(name.trim())}”.`),
+      (e: Error) => setErr(e.message),
+    );
+  return (
+    <div className="stack ans-edit">
+      <div className="ans-edit-grid">
+        <label className="small">
+          naziv
+          <input className="field" value={name} onChange={(e) => setName(upperFirst(e.target.value))} autoFocus />
+        </label>
+        <label className="small">
+          prijevoz
+          <select className="field" value={preview ? tiers.indexOf(preview) : 0} onChange={(e) => pickTier(Number(e.target.value))}>
+            {tiers.map((t, i) => <option key={t.name} value={i}>{t.emoji} {t.name}</option>)}
+          </select>
+        </label>
+        <label className="small">
+          procjena %
+          <input className="field narrow-num" inputMode="decimal" value={share} onChange={(e) => setShare(e.target.value)} />
+        </label>
+        <label className="small check">
+          <input type="checkbox" checked={rare} onChange={(e) => setRare(e.target.checked)} /> helikopter (najrjeđi)
+        </label>
+      </div>
+      {renamed && (
+        <label className="small check">
+          <input type="checkbox" checked={keepOld} onChange={(e) => setKeepOld(e.target.checked)} /> „{answer.canonical}” ostaje kao varijanta (tko to upiše i dalje pogađa)
+        </label>
+      )}
+      {answer.seedCanonical && <p className="small">Izvorni naziv iz seeda: {answer.seedCanonical}</p>}
+      <div className="row">
+        <button className="small-btn" disabled={!valid || !name.trim()} onClick={save}>Spremi</button>
+        <button className="ghost small-btn" onClick={onCancel}>Odustani</button>
+        {preview && <span className="small">Prije igrača: {preview.emoji} {preview.name}</span>}
+        <Err msg={valid ? err : "Procjena mora biti između 0 i 100"} />
+      </div>
+    </div>
   );
 }
 
