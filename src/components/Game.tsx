@@ -461,6 +461,9 @@ function End({ state, me }: { state: GameState; me: Me | null }) {
       <div className="arrive">
         <span className="kmt">{first.name} → {km} km</span>
         <span className="town">{place}</span>
+        {!egg && near.name !== place && (
+          <span className="near">{t("Najbliži veći grad: {grad}, {n} km", { grad: near.name, n: Math.abs(near.km - km) })}</span>
+        )}
         {message && <span>{message}</span>}
       </div>
       {!state.ranked && <p className="small">{t("Izvan konkurencije: danas se broji samo prva država koju si odigrao.")}</p>}
