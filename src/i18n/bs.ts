@@ -21,4 +21,5 @@ export const bs: Record<string, string> = {
   "Nešto je pošlo krivo. Osvježi stranicu.": "Nešto nije u redu. Osvježi stranicu.",
   "Kopirano, zalijepi gdje želiš.": "Kopirano, zalijepi gdje hoćeš.",
   "Uđi u moju ligu \"{x}\" na {igra}": "Uđi u moju ligu \"{x}\" na {igra}",
+  "Ovaj tjedan, samo članovi koji su taj dan odigrali.": "Ove sedmice, samo članovi koji su taj dan odigrali.",
 };

@@ -564,3 +564,16 @@ details.answers[open] > summary { margin-bottom: 14px; }
 .top .gsi-btn { min-height: 32px; }
 .landing-main .legal { margin: 4px 0 0; text-align: center; }
 .landing-main .legal a { color: var(--muted); }
+
+/* graf prosjeka km po danu (pon–ned), admin i liga */
+.week-chart { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+.week-chart li { display: grid; grid-template-rows: auto 140px auto auto auto; justify-items: center; gap: 4px; min-width: 0; }
+.wc-km { font-family: var(--font-mono); font-weight: 700; font-size: 14px; font-variant-numeric: tabular-nums; min-height: 1.3em; }
+.wc-col { width: 100%; max-width: 44px; height: 100%; display: flex; align-items: flex-end; border-radius: 6px; background: var(--bg); overflow: hidden; }
+.wc-col > span { display: block; width: 100%; border-radius: 6px 6px 0 0; background: var(--sign); }
+.week-chart li.today .wc-col > span { background: var(--signal); }
+.week-chart li.today .wc-day { color: var(--signal); }
+.wc-day { font-weight: 800; font-size: 13px; }
+.wc-date, .wc-n { font-family: var(--font-mono); font-size: 11px; color: var(--muted); white-space: nowrap; min-height: 1.2em; }
+.week-chart li.future { opacity: .45; }
+@media (max-width: 480px) { .week-chart li { grid-template-rows: auto 110px auto auto auto; } .wc-km { font-size: 12px; } .wc-m { display: none; } }

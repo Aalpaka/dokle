@@ -7,6 +7,7 @@ import type { LeagueSummary, LeagueView, MemberDay } from "@/server/leagues";
 import { SKIN_META, isSkinId } from "@/skins/meta";
 import { codeConfigs } from "@/skins/maps";
 import Modal from "./Modal";
+import WeekChart from "./WeekChart";
 import { skinFetch, useSkin, useT, type T } from "./skin";
 
 async function post<T>(url: string, body: unknown): Promise<T> {
@@ -297,6 +298,13 @@ export function LeaguePage({ code }: { code: string }) {
             <span className="eyebrow">{t("Danas")}</span>
             <Today view={view} />
           </section>
+          {view.week && (
+            <section className="card stack">
+              <span className="eyebrow">{t("Prosjek km po danu")}</span>
+              <p className="small">{t("Ovaj tjedan, samo članovi koji su taj dan odigrali.")}</p>
+              <WeekChart days={view.week.days} today={view.week.today} />
+            </section>
+          )}
         </div>
 
         <div className="side">

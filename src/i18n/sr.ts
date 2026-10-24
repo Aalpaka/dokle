@@ -197,4 +197,7 @@ export const sr: Record<string, string> = {
   "Odigraj današnju partiju pa ćeš vidjeti tuđe današnje odgovore.": "Odigraj današnju partiju pa ćeš videti tuđe današnje odgovore.",
   "Nadimak: 2 do 24 slova, brojke ili razmaci.": "Nadimak: 2 do 24 slova, brojevi ili razmaci.",
   "Nisi prijavljen.": "Nisi prijavljen.",
+  "Sri": "Sre",
+  "Prosjek km po danu": "Prosek km po danu",
+  "Ovaj tjedan, samo članovi koji su taj dan odigrali.": "Ove nedelje, samo članovi koji su taj dan odigrali.",
 };

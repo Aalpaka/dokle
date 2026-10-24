@@ -2,7 +2,9 @@
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { assignTiers, priorForTier, tierFor } from "@/lib/scoring";
+import { addDays, type DayAvg } from "@/lib/league";
 import Modal from "./Modal";
+import WeekChart from "./WeekChart";
 import { AccountLink, useMe } from "./account";
 import { SkinProvider, skinFetch, useSkin } from "./skin";
 import { SKIN_IDS, SKIN_META, type SkinId } from "@/skins/meta";
@@ -203,12 +205,42 @@ function DayAnswers({ answers }: { answers: { canonical: string; n: number; shar
 
 const formatPct = (s: number) => (s < 0.1 ? "< 0,1 %" : `${pct(Math.round(s * 10) / 10)} %`);
 
+type WeekData = { from: string; today: string; days: DayAvg[] };
+
+/** Prosjek km svih igrača po danu, tjedan pon–ned; admin može listati i prošle tjedne. */
+function WeekAverages({ today }: { today: string }) {
+  const [date, setDate] = useState(today);
+  const { data, error } = useLoad<WeekData>(`/api/admin/week?date=${date}`);
+  const current = !!data && data.days.some((d) => d.date === data.today);
+  const played = data?.days.filter((d) => d.avgKm !== null) ?? [];
+  const total = played.reduce((a, d) => a + d.players, 0);
+  const weekAvg = total ? Math.round(played.reduce((a, d) => a + d.avgKm! * d.players, 0) / total) : null;
+  return (
+    <div className="stack">
+      <h2>Prosjek km po danu</h2>
+      <div className="row">
+        <button className="ghost" onClick={() => data && setDate(addDays(data.from, -7))} aria-label="Prošli tjedan">‹</button>
+        <span className="small">{data ? `${fmtDate(data.from).slice(0, -5)} – ${fmtDate(addDays(data.from, 6))}` : ""}</span>
+        <button className="ghost" disabled={!data || current} onClick={() => data && setDate(addDays(data.from, 7))} aria-label="Sljedeći tjedan">›</button>
+        {data && !current && <button className="ghost" onClick={() => setDate(today)}>Ovaj tjedan</button>}
+      </div>
+      <p className="small">
+        Samo završene partije (bez „za gušt”); tko taj dan nije igrao ne ulazi u prosjek.
+        {weekAvg !== null && <> Cijeli tjedan: <b>{weekAvg} km</b> iz {total} partija.</>}
+      </p>
+      <Err msg={error} />
+      {data && <WeekChart days={data.days} today={data.today} />}
+    </div>
+  );
+}
+
 function Day({ today }: { today: string }) {
   const [date, setDate] = useState(today);
   const { data, error } = useLoad<DayData>(`/api/admin/day?date=${date}`);
   const maxStation = Math.max(1, ...(data?.stations ?? []).map((s) => s.n));
   return (
     <div className="stack">
+      <WeekAverages today={today} />
       <div className="row">
         <h2>Pregled dana</h2>
         <input type="date" className="field" value={date} onChange={(e) => setDate(e.target.value)} />
