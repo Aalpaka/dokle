@@ -31,8 +31,11 @@ function LoggedIn({ me, onChange }: { me: NonNullable<ReturnType<typeof useMe>>;
   const s = me.stats!;
   const [nick, setNick] = useState(me.user!.nickname ?? "");
   const [msg, setMsg] = useState("");
+  const [byKm, setByKm] = useState(false);
   const t = useT();
   const { href, name } = useSkin();
+  // povijest dolazi od najnovije; po udaljenosti od najdalje, a isti km od novijeg
+  const history = byKm ? [...me.history].sort((a, b) => b.km - a.km || b.date.localeCompare(a.date)) : me.history;
 
   const saveNick = async () => {
     const r = await skinFetch("/api/me", { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify({ nickname: nick }) });
@@ -61,15 +64,23 @@ function LoggedIn({ me, onChange }: { me: NonNullable<ReturnType<typeof useMe>>;
       </section>
 
       <section className="card stack hist">
-        <span className="eyebrow">{t("Povijest")} · {name}</span>
-        {me.history.length ? (
+        <div className="row hist-head">
+          <span className="eyebrow">{t("Povijest")} · {name}</span>
+          {me.history.length > 1 && (
+            <div className="seg" role="group" aria-label={t("Poredaj")}>
+              <button className={byKm ? "ghost" : ""} aria-pressed={!byKm} onClick={() => setByKm(false)}>{t("Najnovije")}</button>
+              <button className={byKm ? "" : "ghost"} aria-pressed={byKm} onClick={() => setByKm(true)}>{t("Najdalje")}</button>
+            </div>
+          )}
+        </div>
+        {history.length ? (
           <ul className="recap history">
-            {me.history.map((h) => {
+            {history.map((h, i) => {
               const [y, m, d] = h.date.split("-");
               return (
                 <li key={h.date}>
-                  <span className="n">#{h.number}</span>
-                  <span className="w"><span className="a">{h.station}</span><span className="c">{+d}. {+m}. {y}.</span></span>
+                  <span className="n">{byKm ? `${i + 1}.` : `#${h.number}`}</span>
+                  <span className="w"><span className="a">{h.station}</span><span className="c">{byKm && `#${h.number} · `}{+d}. {+m}. {y}.</span></span>
                   <span className="k">{h.km} km</span>
                 </li>
               );

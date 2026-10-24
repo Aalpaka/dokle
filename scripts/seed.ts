@@ -1,5 +1,5 @@
 // Puni bazu skinom i početnim kategorijama. Može se pokretati više puta: config skina osvježava, kategorije i odgovore samo dodaje
-// (jedina izmjena postojećih je oznaka najrjeđeg odgovora za helikopter).
+// (jedina izmjena postojećih je oznaka najrjeđeg odgovora za helikopter). Izmjene iz admina (naziv, rijetkost) ostaju.
 import { and, eq } from "drizzle-orm";
 import { db, sql } from "../src/db";
 import { answerAliases, answers, categories, skins } from "../src/db/schema";
@@ -39,18 +39,31 @@ for (const { skin, categories: cats } of SKINS) {
     if (!cat) [cat] = await db.select().from(categories).where(and(eq(categories.skinId, skin.id), eq(categories.slug, c.slug)));
     // odgovori i aliasi idu skupno po kategoriji: upit po odgovoru je za desetke tisuća odgovora predug za build
     const seeded = parseSeedAnswers(c.answers);
-    const inserted = await db
-      .insert(answers)
-      .values(seeded.map((a) => ({ categoryId: cat.id, canonical: a.canonical, priorShare: a.share, rare: a.rare })))
-      .onConflictDoNothing()
-      .returning({ id: answers.id });
-    added += inserted.length;
-    const byCanonical = new Map((await db.select().from(answers).where(eq(answers.categoryId, cat.id))).map((x) => [x.canonical, x]));
+    // odgovor koji je admin preimenovao prepoznaje se po izvornom nazivu (seedCanonical), da se ne vrati kao novi
+    const known = new Map<string, typeof answers.$inferSelect>();
+    const loadKnown = async () => {
+      known.clear();
+      const rows = await db.select().from(answers).where(eq(answers.categoryId, cat.id));
+      for (const x of rows) known.set(x.canonical, x);
+      for (const x of rows) if (x.seedCanonical && !known.has(x.seedCanonical)) known.set(x.seedCanonical, x);
+    };
+    await loadKnown();
+    const fresh = seeded.filter((a) => !known.has(a.canonical));
+    if (fresh.length) {
+      const inserted = await db
+        .insert(answers)
+        .values(fresh.map((a) => ({ categoryId: cat.id, canonical: a.canonical, priorShare: a.share, rare: a.rare })))
+        .onConflictDoNothing()
+        .returning({ id: answers.id });
+      added += inserted.length;
+      await loadKnown();
+    }
     const aliases: { answerId: number; alias: string }[] = [];
     for (const a of seeded) {
-      const ans = byCanonical.get(a.canonical)!;
-      // najrjeđi (helikopter) se označava i na postojećim odgovorima; procjena se smije samo spustiti
-      if (a.rare && !ans.rare) {
+      const ans = known.get(a.canonical)!;
+      // najrjeđi (helikopter) se označava i na postojećim odgovorima; procjena se smije samo spustiti.
+      // Odgovor kojem je admin ručno mijenjao rijetkost (editedAt) ostaje kako ga je admin ostavio.
+      if (a.rare && !ans.rare && !ans.editedAt) {
         await db
           .update(answers)
           .set({ rare: true, priorShare: Math.min(ans.priorShare, a.share) })

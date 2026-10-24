@@ -1,9 +1,9 @@
 import { afterAll, describe, expect, it } from "vitest";
 import { and, eq, inArray } from "drizzle-orm";
 import { db, sql } from "@/db";
-import { answers, categories, dailyPuzzles, games, players, reviewDecisions, rounds } from "@/db/schema";
+import { answerAliases, answers, categories, dailyPuzzles, games, players, reviewDecisions, rounds } from "@/db/schema";
 import { ensurePlayer, getOrCreatePuzzle, getSkin, startNext, submitAnswer } from "./game";
-import { decide, listCategories, reviewQueue, searchAttempts, setSchedule, weekAverages } from "./admin";
+import { decide, listCategories, playerDetail, playersOverview, reviewQueue, searchAttempts, setSchedule, updateAnswer, weekAverages } from "./admin";
 import { localDate } from "@/lib/day";
 import { periodStart } from "@/lib/league";
 
@@ -43,6 +43,37 @@ describe.skipIf(!process.env.DATABASE_URL)("admin", () => {
     expect(w.days).toHaveLength(7);
     expect(w.days[0].date).toBe(periodStart("week", today, today));
     expect(w.days.find((d) => d.date === today)!.players).toBe(before.players + 1);
+  });
+
+  it("uređivanje odgovora pamti izvorni naziv i ručnu rijetkost", async () => {
+    const [cat] = await db.select().from(categories).where(and(eq(categories.skinId, "hr"), eq(categories.slug, "otok")));
+    const [krk] = await db.select().from(answers).where(and(eq(answers.categoryId, cat.id), eq(answers.canonical, "Krk")));
+    try {
+      const row = await updateAnswer(cat.id, krk.id, { canonical: "otok krk zzqx", priorShare: 3.5, rare: false });
+      expect(row).toMatchObject({ canonical: "Otok krk zzqx", seedCanonical: "Krk", priorShare: 3.5 });
+      expect(row.editedAt).toBeTruthy();
+      const aliases = await db.select().from(answerAliases).where(eq(answerAliases.answerId, krk.id));
+      expect(aliases.map((a) => a.alias)).toContain("Krk");
+      // drugo preimenovanje ne gubi izvorni naziv iz seeda
+      expect((await updateAnswer(cat.id, krk.id, { canonical: "Krk zzqx" })).seedCanonical).toBe("Krk");
+      await expect(updateAnswer(cat.id, krk.id, { canonical: "Hvar" })).rejects.toThrow("već postoji");
+      await expect(updateAnswer(cat.id, krk.id, { priorShare: 0 })).rejects.toThrow();
+    } finally {
+      await db.update(answers).set({ canonical: krk.canonical, seedCanonical: null, priorShare: krk.priorShare, rare: krk.rare, editedAt: null }).where(eq(answers.id, krk.id));
+      await db.delete(answerAliases).where(and(eq(answerAliases.answerId, krk.id), inArray(answerAliases.alias, ["Krk", "Otok krk zzqx"])));
+    }
+  });
+
+  it("igrači: brojke, 30 dana i detalj igrača", async () => {
+    const skin = await getSkin("hr");
+    const id = await playAllWith("zzqx igrac");
+    const o = await playersOverview(skin);
+    expect(o.daily).toHaveLength(30);
+    expect(o.daily.at(-1)!.date).toBe(o.today);
+    expect(o.counts.activeToday).toBeGreaterThanOrEqual(1);
+    const d = await playerDetail(skin, id);
+    expect(d.games).toHaveLength(1);
+    expect(d.games[0].finished).toBe(true);
   });
 
   it("odbijeni upis je u redu za pregled, a prihvaćanje naknadno boduje", async () => {

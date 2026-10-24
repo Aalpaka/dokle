@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { assignTiers, blendedShare, priorForTier, scoreKm, speedFor, stationAt, tierFor, tierSizes, landingAt, routeKm } from "./scoring";
+import { assignTiers, blendedShare, priorForRank, priorForTier, scoreKm, speedFor, stationAt, tierFor, tierSizes, landingAt, routeKm } from "./scoring";
 import { dayNumber, localDate } from "./day";
 import { hrConfig } from "@/skins/hr/config";
 import { baConfig } from "@/skins/ba/config";
@@ -120,5 +120,22 @@ describe("day", () => {
   it("broj dana", () => {
     expect(dayNumber("2026-10-21", "2026-10-21")).toBe(1);
     expect(dayNumber("2026-10-21", "2026-11-01")).toBe(12);
+  });
+});
+
+describe("priorForRank", () => {
+  it("procjena smjesti odgovor u odabrani tier po rangu", () => {
+    const others = Array.from({ length: 99 }, (_, i) => ({ share: 30 / (i + 1), rare: i === 98 }));
+    hrConfig.tiers.forEach((t, i) => {
+      const prior = priorForRank(hrConfig.tiers, i, others);
+      const all = [...others, { share: prior, rare: !!t.rare, me: true }].sort((a, b) => b.share - a.share);
+      const tiers = assignTiers(hrConfig, all);
+      expect(tiers[all.findIndex((a) => "me" in a)].name).toBe(t.name);
+    });
+  });
+  it("radi i u maloj kategoriji", () => {
+    const others = [{ share: 40 }, { share: 20 }, { share: 5 }];
+    const prior = priorForRank(hrConfig.tiers, 0, others);
+    expect(prior).toBeGreaterThan(20);
   });
 });
