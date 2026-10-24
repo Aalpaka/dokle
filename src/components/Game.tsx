@@ -3,9 +3,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { AnswerList, GameState, RoundView } from "@/server/game";
 import { BUCKET_KM, type DayCompare } from "@/lib/compare";
-import type { SkinConfig, Station } from "@/skins/types";
-import { formatShare, landingAt, stationAt } from "@/lib/scoring";
+import type { SkinConfig } from "@/skins/types";
+import { formatShare, landingAt } from "@/lib/scoring";
 import { maps, withVisuals } from "@/skins/maps";
+import { nearestStation, placeAt } from "@/skins/mjesta";
 import { setMuted, sfx, useMuted } from "@/lib/sound";
 import MapStage from "./MapStage";
 import { vehicleIcons } from "./vehicleIcons";
@@ -83,7 +84,7 @@ export default function Game() {
   // igra stane na jedan ekran (karta + pitanje), kraj je obična stranica koja se skrola
   return (
     <Shell state={state} me={me} fit={phase !== "end"}>
-      <MapStage cfg={cfg} map={map} rounds={state.rounds} perDay={state.perDay} ended={phase === "end"} inset={phase === "end" ? 0 : sheet} />
+      <MapStage skinId={state.skin.id} cfg={cfg} map={map} rounds={state.rounds} perDay={state.perDay} ended={phase === "end"} inset={phase === "end" ? 0 : sheet} />
       <section className="panel" aria-live="polite" ref={panelRef}>
         {phase === "play" && state.current && (
           <Play key={state.current.position} state={vstate} onScored={setState} onLost={load} />
@@ -427,7 +428,12 @@ function what(r: RoundView, t: T) {
 function End({ state, me }: { state: GameState; me: Me | null }) {
   const cfg = withVisuals(state.skin.id, state.skin.config);
   const km = state.totalKm;
-  const st = landingAt(cfg, km);
+  // ime je najbliže stvarno mjesto, a šala iz poruke samo od postaje do koje je igrač blizu (cilj tek kad je stigao)
+  const place = placeAt(state.skin.id, cfg, km);
+  const egg = !!cfg.overshoot && km > cfg.overshoot.overKm;
+  const near = nearestStation(cfg, km);
+  const goal = cfg.stations[cfg.stations.length - 1];
+  const message = egg || (Math.abs(near.km - km) <= 15 && (near !== goal || km >= goal.km)) ? near.message : "";
   const next = cfg.stations.find((s) => s.km > km);
   const first = cfg.stations[0];
   const t = useT();
@@ -438,7 +444,7 @@ function End({ state, me }: { state: GameState; me: Me | null }) {
   useEffect(() => {
     if (state.ranked) api<Compare | null>("/api/game/compare").then(setCmp, () => setCmp(null));
   }, [state.ranked]);
-  const share = shareText(state, st, cmp?.ahead ?? null, t);
+  const share = shareText(state, place, egg, cmp?.ahead ?? null, t);
   const onShare = () => {
     const copy = () =>
       navigator.clipboard.writeText(share).then(() => setCopied(t("Kopirano, zalijepi gdje želiš.")), () => setCopied(t("Kopiraj ručno.")));
@@ -454,12 +460,12 @@ function End({ state, me }: { state: GameState; me: Me | null }) {
       </div>
       <div className="arrive">
         <span className="kmt">{first.name} → {km} km</span>
-        <span className="town">{st.name}</span>
-        <span>{st.message}</span>
+        <span className="town">{place}</span>
+        {message && <span>{message}</span>}
       </div>
       {!state.ranked && <p className="small">{t("Izvan konkurencije: danas se broji samo prva država koju si odigrao.")}</p>}
       {next && <p className="small">{t("Do {mjesta} ti je falilo još {n} km.", { mjesta: next.genitive ?? next.name, n: next.km - km })}</p>}
-      {cmp && <CompareChart c={cmp} cfg={cfg} />}
+      {cmp && <CompareChart c={cmp} cfg={cfg} skinId={state.skin.id} />}
       <span className="small">{t("Klikni kategoriju za sve moguće odgovore i koliko je koji vrijedio.")}</span>
       <ul className="recap">
         {state.rounds.map((r) => (
@@ -489,15 +495,15 @@ function End({ state, me }: { state: GameState; me: Me | null }) {
 }
 
 /** Tekst za dijeljenje: naslov i km, ruta, usporedba, pa prijevoz po kategorijama u dva reda (bez oznaka brzine). */
-function shareText(state: GameState, town: Station, ahead: number | null, t: T) {
+function shareText(state: GameState, town: string, egg: boolean, ahead: number | null, t: T) {
   const cfg = state.skin.config;
-  const flag = town.km > cfg.maxKm ? " 🙃" : state.totalKm >= cfg.maxKm ? " 🏁" : "";
+  const flag = egg ? " 🙃" : state.totalKm >= cfg.maxKm ? " 🏁" : "";
   const km = state.totalKm;
   const half = Math.ceil(state.rounds.length / 2);
   const icons = state.rounds.map((r) => r.emoji);
   return [
     `${cfg.title} #${state.number} · ${km} km`,
-    `📍 ${cfg.stations[0].name} → ${town.name}${flag}`,
+    `📍 ${cfg.stations[0].name} → ${town}${flag}`,
     ...(ahead != null ? [`🏆 ${t("Dalje od {n} % igrača", { n: ahead })}`] : []),
     "",
     icons.slice(0, half).join(" "),
@@ -510,7 +516,7 @@ function shareText(state: GameState, town: Station, ahead: number | null, t: T) 
 type Compare = DayCompare & { mine: number };
 
 /** Gdje su danas stali ostali: stupci po 100 km uz rutu bez brojeva (iza igrača zeleno, ispred sivo), igračev stupac žut s pločom TI. */
-function CompareChart({ c, cfg }: { c: Compare; cfg: SkinConfig }) {
+function CompareChart({ c, cfg, skinId }: { c: Compare; cfg: SkinConfig; skinId: string }) {
   const t = useT();
   if (c.ahead === null)
     return (
@@ -521,7 +527,7 @@ function CompareChart({ c, cfg }: { c: Compare; cfg: SkinConfig }) {
   const end = c.hist.length * BUCKET_KM;
   const pct = (km: number) => `${(100 * Math.min(km, end)) / end}%`;
   const top = Math.max(1, ...c.hist);
-  const avgAt = stationAt(cfg, c.avgKm);
+  const avgAt = placeAt(skinId, cfg, c.avgKm);
   // glavne stanice od starta do cilja, plus Budva (easter egg) ako je netko stigao do nje
   const o = cfg.overshoot;
   const labels = [...cfg.stations.filter((s) => s.alwaysLabel), ...(o && c.bestKm > o.overKm ? [o.station] : [])];
@@ -568,7 +574,7 @@ function CompareChart({ c, cfg }: { c: Compare; cfg: SkinConfig }) {
         <span><i className="front" />{c.players - 1 - c.behind} {t("ispred tebe")}</span>
       </p>
       <p className="small">
-        {t("Završenih partija danas:")} <b>{c.players}</b> · {t("prosjek")} {c.avgKm} km ({avgAt.name}) · {t("najdalje")} {c.bestKm} km ({c.bestTown})
+        {t("Završenih partija danas:")} <b>{c.players}</b> · {t("prosjek")} {c.avgKm} km ({avgAt}) · {t("najdalje")} {c.bestKm} km ({c.bestTown})
       </p>
     </div>
   );

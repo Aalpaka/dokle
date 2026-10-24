@@ -131,7 +131,6 @@ export const sr: Record<string, string> = {
   "Liga": "Liga",
   "od": "od",
   "Najbolji dan": "Najbolji dan",
-  "stigao do": "stigao do",
   "Uđi u moju ligu \"{x}\" na {igra}": "Uđi u moju ligu \"{x}\" na {igra}",
   "Link kopiran.": "Link kopiran.",
   "Pozovi ekipu": "Pozovi ekipu",

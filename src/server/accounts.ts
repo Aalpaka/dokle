@@ -4,7 +4,7 @@ import { db } from "@/db";
 import { dailyPuzzles, games, players } from "@/db/schema";
 import { computeStats } from "@/lib/stats";
 import { localDate } from "@/lib/day";
-import { stationAt } from "@/lib/scoring";
+import { placeAt } from "@/skins/mjesta";
 import type { Skin } from "./game";
 
 export function isAdminEmail(email: string | null | undefined) {
@@ -80,7 +80,7 @@ export async function profileFor(skin: Skin, playerId: string) {
     .where(and(eq(games.playerId, playerId), eq(dailyPuzzles.skinId, skin.id), eq(games.ranked, true), isNotNull(games.finishedAt)))
     .orderBy(desc(dailyPuzzles.date));
   const stats = computeStats(rows, localDate(skin.timezone));
-  const history = rows.map((r) => ({ ...r, station: stationAt(skin.config, r.km).name }));
+  const history = rows.map((r) => ({ ...r, station: placeAt(skin.id, skin.config, r.km) }));
   return { stats, history };
 }
 
