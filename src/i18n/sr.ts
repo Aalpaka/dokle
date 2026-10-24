@@ -200,5 +200,4 @@ export const sr: Record<string, string> = {
   "Nisi prijavljen.": "Nisi prijavljen.",
   "Sri": "Sre",
   "Prosjek km po danu": "Prosek km po danu",
-  "Ovaj tjedan, samo članovi koji su taj dan odigrali.": "Ove nedelje, samo članovi koji su taj dan odigrali.",
 };

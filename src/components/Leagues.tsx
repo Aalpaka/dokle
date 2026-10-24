@@ -271,6 +271,12 @@ export function LeaguePage({ code }: { code: string }) {
           <p className="small">{members(view.members, t)} · {t("osnivač")} {view.owner} · {t("od")} {fmtDate(view.createdAt.slice(0, 10))}</p>
           <Invite code={view.code} name={view.name} />
         </div>
+        {view.week && (
+          <div className="lh-week">
+            <span className="eyebrow">{t("Prosjek km po danu")}</span>
+            <WeekChart days={view.week.days} today={view.week.today} compact />
+          </div>
+        )}
         {mine && (
           <div className="lh-me">
             <span className="rank-big">{medal(mine.rank)}</span>
@@ -298,13 +304,6 @@ export function LeaguePage({ code }: { code: string }) {
             <span className="eyebrow">{t("Danas")}</span>
             <Today view={view} />
           </section>
-          {view.week && (
-            <section className="card stack">
-              <span className="eyebrow">{t("Prosjek km po danu")}</span>
-              <p className="small">{t("Ovaj tjedan, samo članovi koji su taj dan odigrali.")}</p>
-              <WeekChart days={view.week.days} today={view.week.today} />
-            </section>
-          )}
         </div>
 
         <div className="side">
