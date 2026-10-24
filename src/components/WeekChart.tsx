@@ -5,27 +5,52 @@ import { useT } from "./skin";
 
 const DAYS = ["Pon", "Uto", "Sri", "Čet", "Pet", "Sub", "Ned"];
 
-/** Stupci pon–ned s prosjekom km; dan bez ijedne partije je prazan, budući dani su zatamnjeni. */
+/** Okrugli korak osi za otprilike četiri crte mreže. */
+function axis(max: number): number[] {
+  const step = [50, 100, 200, 250, 500].find((s) => max / s <= 4) ?? 500;
+  const top = Math.max(step, Math.ceil(max / step) * step);
+  return Array.from({ length: top / step + 1 }, (_, i) => i * step);
+}
+
+/** Bar chart pon–ned s prosjekom km; dan bez ijedne partije nema stupca, budući dani su zatamnjeni. */
 export default function WeekChart({ days, today }: { days: DayAvg[]; today: string }) {
   const t = useT();
-  const max = Math.max(1, ...days.map((d) => d.avgKm ?? 0));
+  const ticks = axis(Math.max(0, ...days.map((d) => d.avgKm ?? 0)));
+  const top = ticks.at(-1)!;
   return (
-    <ol className="week-chart">
-      {days.map((d, i) => {
-        const future = d.date > today;
-        const [, m, day] = d.date.split("-").map(Number);
-        return (
-          <li key={d.date} className={(d.date === today ? "today " : "") + (future ? "future" : "")}>
-            <span className="wc-km">{d.avgKm === null ? (future ? "" : "—") : d.avgKm}</span>
-            <span className="wc-col">
-              {d.avgKm !== null && <span style={{ height: `${Math.max(2, (100 * d.avgKm) / max)}%` }} />}
-            </span>
-            <span className="wc-day">{t(DAYS[i])}</span>
-            <span className="wc-date">{day}.<span className="wc-m">{m}.</span></span>
-            <span className="wc-n">{d.players ? `${d.players} 👤` : ""}</span>
-          </li>
-        );
-      })}
-    </ol>
+    <div className="week-chart">
+      <div className="wc-y" aria-hidden>
+        {ticks.map((v) => (
+          <span key={v} style={{ bottom: `${(100 * v) / top}%` }}>{v}</span>
+        ))}
+      </div>
+      <div className="wc-plot">
+        {ticks.map((v) => (
+          <i key={v} className="wc-grid" style={{ bottom: `${(100 * v) / top}%` }} />
+        ))}
+        {days.map((d) => (
+          <div key={d.date} className={"wc-slot" + (d.date === today ? " today" : "")}>
+            {d.avgKm !== null && (
+              <span className="wc-bar" style={{ height: `${(100 * d.avgKm) / top}%` }}>
+                <b>{d.avgKm}</b>
+              </span>
+            )}
+          </div>
+        ))}
+      </div>
+      <span />
+      <ol className="wc-x">
+        {days.map((d, i) => {
+          const [, m, day] = d.date.split("-").map(Number);
+          return (
+            <li key={d.date} className={(d.date === today ? "today " : "") + (d.date > today ? "future" : "")}>
+              <span className="wc-day">{t(DAYS[i])}</span>
+              <span className="wc-date">{day}.<span className="wc-m">{m}.</span></span>
+              <span className="wc-n">{d.players ? `${d.players} 👤` : d.date > today ? "" : "—"}</span>
+            </li>
+          );
+        })}
+      </ol>
+    </div>
   );
 }

@@ -566,14 +566,19 @@ details.answers[open] > summary { margin-bottom: 14px; }
 .landing-main .legal a { color: var(--muted); }
 
 /* graf prosjeka km po danu (pon–ned), admin i liga */
-.week-chart { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
-.week-chart li { display: grid; grid-template-rows: auto 140px auto auto auto; justify-items: center; gap: 4px; min-width: 0; }
-.wc-km { font-family: var(--font-mono); font-weight: 700; font-size: 14px; font-variant-numeric: tabular-nums; min-height: 1.3em; }
-.wc-col { width: 100%; max-width: 44px; height: 100%; display: flex; align-items: flex-end; border-radius: 6px; background: var(--bg); overflow: hidden; }
-.wc-col > span { display: block; width: 100%; border-radius: 6px 6px 0 0; background: var(--sign); }
-.week-chart li.today .wc-col > span { background: var(--signal); }
-.week-chart li.today .wc-day { color: var(--signal); }
+.week-chart { display: grid; grid-template-columns: auto 1fr; column-gap: 8px; padding-top: 22px; }
+.wc-y { position: relative; height: 160px; min-width: 2.2em; }
+.wc-y span { position: absolute; right: 0; transform: translateY(50%); font-family: var(--font-mono); font-size: 11px; color: var(--muted); line-height: 1; }
+.wc-plot { position: relative; height: 160px; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; border-bottom: 1.5px solid var(--muted); }
+.wc-grid { position: absolute; left: 0; right: 0; border-top: 1px dashed var(--line); }
+.wc-slot { position: relative; display: flex; align-items: flex-end; justify-content: center; }
+.wc-bar { position: relative; width: 70%; max-width: 40px; background: var(--sign); border-radius: 3px 3px 0 0; }
+.wc-slot.today .wc-bar { background: var(--signal); }
+.wc-bar b { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); padding-bottom: 3px; font-family: var(--font-mono); font-size: 13px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.wc-x { list-style: none; margin: 6px 0 0; padding: 0; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; }
+.wc-x li { display: grid; justify-items: center; gap: 2px; min-width: 0; }
+.wc-x li.today .wc-day { color: var(--signal); }
+.wc-x li.future { opacity: .45; }
 .wc-day { font-weight: 800; font-size: 13px; }
-.wc-date, .wc-n { font-family: var(--font-mono); font-size: 11px; color: var(--muted); white-space: nowrap; min-height: 1.2em; }
-.week-chart li.future { opacity: .45; }
-@media (max-width: 480px) { .week-chart li { grid-template-rows: auto 110px auto auto auto; } .wc-km { font-size: 12px; } .wc-m { display: none; } }
+.wc-date, .wc-n { font-family: var(--font-mono); font-size: 11px; color: var(--muted); white-space: nowrap; }
+@media (max-width: 480px) { .wc-y, .wc-plot { height: 120px; } .wc-plot, .wc-x { gap: 4px; } .wc-bar { width: 80%; } .wc-bar b { font-size: 11px; } .wc-m { display: none; } }
