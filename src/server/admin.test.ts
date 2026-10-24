@@ -1,7 +1,7 @@
 import { afterAll, describe, expect, it } from "vitest";
 import { and, eq, inArray } from "drizzle-orm";
 import { db, sql } from "@/db";
-import { answerAliases, answers, categories, dailyPuzzles, games, players, reviewDecisions, rounds } from "@/db/schema";
+import { answerAliases, answers, categories, dailyPuzzles, games, players, removedAliases, reviewDecisions, rounds } from "@/db/schema";
 import { ensurePlayer, getOrCreatePuzzle, getSkin, startNext, submitAnswer } from "./game";
 import { decide, generalStats, listCategories, playerDetail, playersOverview, reviewQueue, searchAttempts, setSchedule, updateAnswer, weekAverages } from "./admin";
 import { localDate } from "@/lib/day";
@@ -62,6 +62,28 @@ describe.skipIf(!process.env.DATABASE_URL)("admin", () => {
       await db.update(answers).set({ canonical: krk.canonical, seedCanonical: null, priorShare: krk.priorShare, rare: krk.rare, editedAt: null }).where(eq(answers.id, krk.id));
       await db.delete(answerAliases).where(and(eq(answerAliases.answerId, krk.id), inArray(answerAliases.alias, ["Krk", "Otok krk zzqx"])));
     }
+  });
+
+  it("varijante: dodavanje, brisanje i zaštita od tuđeg odgovora", async () => {
+    const [cat] = await db.select().from(categories).where(and(eq(categories.skinId, "hr"), eq(categories.slug, "otok")));
+    const [krk] = await db.select().from(answers).where(and(eq(answers.categoryId, cat.id), eq(answers.canonical, "Krk")));
+    const list = async () => (await db.select().from(answerAliases).where(eq(answerAliases.answerId, krk.id))).map((a) => a.alias);
+    const before = await list();
+    try {
+      await updateAnswer(cat.id, krk.id, { addAliases: ["Zzqx krk", " "] });
+      expect(await list()).toContain("Zzqx krk");
+      await updateAnswer(cat.id, krk.id, { removeAliases: ["Zzqx krk"] });
+      expect(await list()).not.toContain("Zzqx krk");
+      expect((await db.select().from(removedAliases).where(eq(removedAliases.answerId, krk.id))).map((r) => r.alias)).toContain("Zzqx krk");
+      // ponovno dodana varijanta više nije na popisu obrisanih
+      await updateAnswer(cat.id, krk.id, { addAliases: ["Zzqx krk"] });
+      expect((await db.select().from(removedAliases).where(eq(removedAliases.answerId, krk.id))).length).toBe(0);
+      await expect(updateAnswer(cat.id, krk.id, { addAliases: ["hvar"] })).rejects.toThrow("Hvar");
+    } finally {
+      await db.delete(removedAliases).where(eq(removedAliases.answerId, krk.id));
+      await db.delete(answerAliases).where(and(eq(answerAliases.answerId, krk.id), eq(answerAliases.alias, "Zzqx krk")));
+    }
+    expect(await list()).toEqual(before);
   });
 
   it("igrači: brojke, 30 dana i detalj igrača", async () => {

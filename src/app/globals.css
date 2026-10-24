@@ -676,3 +676,6 @@ details.answers[open] > summary { margin-bottom: 14px; }
 .week-chart.compact .wc-bar b { font-size: 11px; }
 .week-chart.compact .wc-x { margin-top: 3px; }
 .week-chart.compact .wc-day { font-size: 11px; }
+.alias-chip { background: transparent; color: var(--ink); font-weight: 400; cursor: pointer; }
+.alias-chip:hover span { color: var(--stop); }
+.alias-chip.off { text-decoration: line-through; color: var(--muted); }
