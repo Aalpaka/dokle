@@ -10,10 +10,9 @@ describe("placeAt", () => {
     for (const [id, cfg] of [["hr", hrConfig], ["ba", baConfig], ["rs", rsConfig]] as const)
       for (const s of cfg.stations) expect(placeAt(id, cfg, s.km), `${id} ${s.name}`).toBe(s.name);
   });
-  it("5 km prije Zadra nije Gospić", () => {
-    const p = placeAt("hr", hrConfig, 705);
-    expect(p).not.toBe("Gospić");
-    expect(p).not.toBe("Zadar");
+  it("pred Zadrom nije Gospić", () => {
+    expect(placeAt("hr", hrConfig, 705)).toBe("Zadar");
+    expect(placeAt("hr", hrConfig, 680)).toBe("Posedarje");
   });
   it("tablica pokriva cijelu rutu, od starta", () => {
     expect(hr[0][0]).toBe(0);
