@@ -3,7 +3,7 @@ import { and, eq, inArray } from "drizzle-orm";
 import { db, sql } from "@/db";
 import { answerAliases, answers, categories, dailyPuzzles, games, players, reviewDecisions, rounds } from "@/db/schema";
 import { ensurePlayer, getOrCreatePuzzle, getSkin, startNext, submitAnswer } from "./game";
-import { decide, listCategories, playerDetail, playersOverview, reviewQueue, searchAttempts, setSchedule, updateAnswer, weekAverages } from "./admin";
+import { decide, generalStats, listCategories, playerDetail, playersOverview, reviewQueue, searchAttempts, setSchedule, updateAnswer, weekAverages } from "./admin";
 import { localDate } from "@/lib/day";
 import { periodStart } from "@/lib/league";
 
@@ -74,6 +74,17 @@ describe.skipIf(!process.env.DATABASE_URL)("admin", () => {
     const d = await playerDetail(skin, id);
     expect(d.games).toHaveLength(1);
     expect(d.games[0].finished).toBe(true);
+  });
+
+  it("opća statistika: ukupno, raspodjela km i prijevoz", async () => {
+    const skin = await getSkin("hr");
+    await playAllWith("zzqx stat");
+    const st = await generalStats(skin);
+    expect(st.totals.games).toBeGreaterThanOrEqual(1);
+    expect(st.histogram[0].from).toBe(0);
+    expect(st.histogram.reduce((a, h) => a + h.n, 0)).toBeGreaterThanOrEqual(1);
+    expect(st.tiers.map((t) => t.name)).toEqual(skin.config.tiers.map((t) => t.name));
+    expect(st.loyalty.reduce((a, b) => a + b.n, 0)).toBeGreaterThanOrEqual(1);
   });
 
   it("odbijeni upis je u redu za pregled, a prihvaćanje naknadno boduje", async () => {
