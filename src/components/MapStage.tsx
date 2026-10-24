@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { RoundView } from "@/server/game";
 import type { SkinConfig, SkinMap, Tier, Vehicle } from "@/skins/types";
 import { formatShare, landingAt, routeKm, routeStations } from "@/lib/scoring";
+import { placeAt } from "@/skins/mjesta";
 import { Route, project, type Pt } from "@/lib/route";
 import { sfx } from "@/lib/sound";
 import { MISS_COLOR, crashSign, vehicleIcons } from "./vehicleIcons";
@@ -44,7 +45,7 @@ function badgeHtml(t: Tier | null): { html: string; logo: boolean } {
 }
 
 /** Karta s vozilom. S `ended` na kraju igre automatski jednom pusti replay cijelog puta. */
-export default function MapStage({ cfg, map, rounds, perDay, ended = false, inset = 0 }: { cfg: SkinConfig; map: SkinMap; rounds: RoundView[]; perDay: number; ended?: boolean; inset?: number }) {
+export default function MapStage({ skinId, cfg, map, rounds, perDay, ended = false, inset = 0 }: { skinId: string; cfg: SkinConfig; map: SkinMap; rounds: RoundView[]; perDay: number; ended?: boolean; inset?: number }) {
   // ruta ide i do postaje produžetka (easter egg), ali cesta se do nje ne crta dok je netko ne prijeđe
   const allStations = useMemo(() => routeStations(cfg), [cfg]);
   const route = useMemo(() => new Route(allStations, [...map.via, map.overshootVia ?? []]), [allStations, map.via, map.overshootVia]);
@@ -474,9 +475,8 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
     [map],
   );
 
-  const cur = landingAt(cfg, hudKm);
   // na putu u Crnu Goru km na karti nisu stvarni km, pa se pokaže ukupno
-  const egg = cur === cfg.overshoot?.station;
+  const egg = landingAt(cfg, hudKm) === cfg.overshoot?.station;
   const ahead = cfg.stations.filter((s) => s.km > hudKm).slice(0, 3);
   const last = cfg.stations[cfg.stations.length - 1];
 
@@ -523,7 +523,7 @@ export default function MapStage({ cfg, map, rounds, perDay, ended = false, inse
 
       <div className="hud tl">
         <div className="now">
-          {cur.name}
+          {placeAt(skinId, cfg, hudKm)}
           <small>{t("{n} km od {mjesta}", { n: hudKm > cfg.maxKm ? rounds.reduce((a, r) => a + r.km, 0) : hudKm, mjesta: cfg.stations[0].genitive ?? cfg.stations[0].name })}</small>
         </div>
       </div>

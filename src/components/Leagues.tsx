@@ -334,7 +334,7 @@ function DayModal({ code, memberId, date, onClose }: { code: string; memberId: n
       ) : (
         <>
           <p className="small">
-            {codeConfigs[id].title} #{data.number} · {fmtDate(data.date)} · {t("stigao do")} <b className="ink">{data.station}</b>
+            {codeConfigs[id].title} #{data.number} · {fmtDate(data.date)} · 📍 <b className="ink">{data.station}</b>
           </p>
           <ul className="day-rounds">
             {data.rounds.map((r, i) => (

@@ -3,7 +3,7 @@ import { and, asc, count, eq, gte, inArray, isNotNull } from "drizzle-orm";
 import { db } from "@/db";
 import { answers, categories, dailyPuzzles, games, leagueMembers, leagues, players, puzzleCategories, rounds } from "@/db/schema";
 import { localDate } from "@/lib/day";
-import { stationAt } from "@/lib/scoring";
+import { placeAt } from "@/skins/mjesta";
 import {
   LEAGUE_LIMITS,
   computeStandings,
@@ -318,13 +318,12 @@ export async function memberDay(skin: Skin, league: League, viewerId: string, me
     if (!mine?.finishedAt) throw new LeagueError("Odigraj današnju partiju pa ćeš vidjeti tuđe današnje odgovore.");
   }
   const cats = await dayAnswers(skin, puzzle.id, members, [game]);
-  const station = stationAt(skin.config, game.totalKm);
   return {
     nickname: member.nickname,
     date,
     number: puzzle.number,
     km: game.totalKm,
-    station: station.genitive ?? station.name,
+    station: placeAt(skin.id, skin.config, game.totalKm),
     rounds: cats.map((c) => {
       const a = c.answers[0];
       return { title: c.title, answer: a?.answer ?? null, km: a?.km ?? 0, emoji: a?.emoji ?? skin.config.miss.emoji };

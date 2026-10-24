@@ -535,7 +535,7 @@ export async function dayCompare(skin: Skin, playerId: string): Promise<(DayComp
     .where(and(eq(games.puzzleId, puzzle.id), eq(games.ranked, true), isNotNull(games.finishedAt)))
     .groupBy(games.totalKm);
   const kms = rows.flatMap((r) => Array<number>(r.n).fill(r.km));
-  return { ...compareDay(skin.config, kms, game.totalKm), mine: game.totalKm };
+  return { ...compareDay(skin.id, skin.config, kms, game.totalKm), mine: game.totalKm };
 }
 
 export function clearCategoryCache(id?: number) {

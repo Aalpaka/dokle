@@ -1,5 +1,5 @@
 import type { SkinConfig } from "@/skins/types";
-import { landingAt } from "@/lib/scoring";
+import { placeAt } from "@/skins/mjesta";
 
 export const BUCKET_KM = 100;
 
@@ -15,7 +15,7 @@ export type DayCompare = {
 };
 
 /** Usporedba igračevih km sa svim završenim partijama dana (kms uključuje i igračevu). */
-export function compareDay(cfg: SkinConfig, kms: number[], mine: number): DayCompare {
+export function compareDay(skinId: string, cfg: SkinConfig, kms: number[], mine: number): DayCompare {
   const others = [...kms];
   const me = others.indexOf(mine);
   if (me >= 0) others.splice(me, 1);
@@ -29,7 +29,7 @@ export function compareDay(cfg: SkinConfig, kms: number[], mine: number): DayCom
     behind: below,
     avgKm: kms.length ? Math.round(kms.reduce((a, b) => a + b, 0) / kms.length) : 0,
     bestKm,
-    bestTown: landingAt(cfg, bestKm).name,
+    bestTown: placeAt(skinId, cfg, bestKm),
     hist,
     mineBin: Math.floor(mine / BUCKET_KM),
   };
