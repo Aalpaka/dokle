@@ -269,4 +269,8 @@ export const helikopter: Record<string, string[]> = {
   "grad-grcka-turska": ["Kakopetria", "Omodos"],
   "grad-srednja-europa": ["Kunovice", "Hollókő"],
   "svjetska-knjizevnost": ["Middlemarch", "Mansfield Park"],
+  "macka-konj": ["LaPerm", "Kabardinski konj"],
+  "kruh-tjestenina": ["Arepa", "Injera"],
+  izum: ["Leydenska boca", "Bakelit"],
+  "strani-hit": ["Shum", "Highway Star"],
 };
