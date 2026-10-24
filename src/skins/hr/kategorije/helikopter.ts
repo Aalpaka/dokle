@@ -264,4 +264,9 @@ export const helikopter: Record<string, string[]> = {
   "muppet-sezam": ["Mr. Hooper"],
   "star-trek": ["Shran"],
   "james-bond": ["Nick Nack", "Gert Fröbe"],
+  "model-auta": ["Polestar 2", "Lada Granta"],
+  lijek: ["Akrihin", "Naloksan"],
+  "grad-grcka-turska": ["Kakopetria", "Omodos"],
+  "grad-srednja-europa": ["Kunovice", "Hollókő"],
+  "svjetska-knjizevnost": ["Middlemarch", "Mansfield Park"],
 };

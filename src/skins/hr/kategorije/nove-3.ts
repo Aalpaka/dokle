@@ -1,4 +1,5 @@
 // Treći val novih pitanja (2026-10-24): zatvoreni popisi u stilu Pointlessa i Potjere, i otvorena pitanja s 200+ odgovora.
+import { parseSeedAnswers } from "../../../lib/matcher";
 import type { SeedCategory } from "../categories";
 
 const RIMSKI = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX", "XXI", "XXII", "XXIII"];
@@ -9,7 +10,7 @@ function papa(ime: string, n: number, udio: number, ...extra: string[]) {
   return [ime, ...redni, ...extra].join("/") + `=${udio}`;
 }
 
-export const nove3: SeedCategory[] = [
+export const nove3: SeedCategory[] = ([
   {
     slug: "commonwealth",
     group: "kviz",
@@ -439,4 +440,163 @@ export const nove3: SeedCategory[] = [
       Ursula Andress=0.2; Judi Dench=0.3; Ben Whishaw=0.1; Desmond Llewelyn=0.05; Javier Bardem=0.2; Mads Mikkelsen=0.2;
       Christopher Walken=0.1; Christopher Lee=0.1; Gert Fröbe=0.05; Rami Malek=0.1; Adele=0.3; Shirley Bassey=0.2; Billie Eilish=0.2`,
   },
-];
+  {
+    slug: "model-auta",
+    group: "opce",
+    title: "Model automobila",
+    hint: "Model, ne marka: npr. Golf, Clio ili Punto",
+    strip: ["vw", "volkswagen", "opel", "renault", "fiat", "peugeot", "ford", "bmw", "mercedes", "audi", "toyota", "škoda", "skoda", "citroen", "citroën", "seat", "honda", "mazda", "nissan", "hyundai", "kia", "dacia", "tesla", "volvo", "suzuki", "zastava", "lada", "jeep", "porsche", "ferrari", "lamborghini", "mitsubishi", "chevrolet", "dodge", "mini", "lancia", "subaru", "rimac", "jaguar", "cupra", "toyotin", "model"],
+    answers: `Golf/VW Golf=14; Punto/Fiat Punto=6; Clio/Renault Clio=5; Polo/VW Polo=5; Passat=5; Corsa/Opel Corsa=4; Astra/Opel Astra=4;
+      Octavia/Škoda Octavia=4; Fićo/Fiat 600/Fića=4; Stojadin/Yugo 45/Zastava 101=4; Megane/Mégane=3; Mustang/Ford Mustang=3;
+      Buba/VW Buba/Beetle/Käfer=3; Fiesta/Ford Fiesta=3; Focus/Ford Focus=3; Kadett/Opel Kadett=2.5; Yaris=2.5; Corolla=2.5;
+      Model S=2; Model 3=2; Model Y=1.5; Model X=1; Cybertruck=1.5; Panda/Fiat Panda=2; Fiat 500/Cinquecento/Fiat 500e=2;
+      Tipo/Fiat Tipo=1.5; Uno/Fiat Uno=1.5; Stilo=0.6; Bravo=0.6; Multipla=0.6; Doblo=0.5; Ducato=0.5; Seicento=0.5; Palio=0.3;
+      Twingo=1.5; Laguna=1; Scenic/Scénic=1; Kangoo=1; Captur=1; Kadjar=0.6; Espace=0.5; Renault 4/R4/Katrca=1.5; Renault 5/R5=1;
+      Peugeot 206/206=1.5; Peugeot 207/207=1; Peugeot 208/208=1; Peugeot 307/307=1; Peugeot 308/308=1; Peugeot 3008/3008=0.8;
+      Peugeot 2008/2008=0.6; Peugeot 405/405=0.4; Peugeot 406/406=0.6; Peugeot 407/407=0.4; Peugeot 508/508=0.4; Peugeot 106/106=0.4;
+      C3/Citroën C3=0.8; C4/Citroën C4=0.6; C5/Citroën C5=0.4; Picasso/Xsara Picasso=0.6; Xsara=0.4; Saxo=0.4; Berlingo=0.6;
+      Spaček/Citroën 2CV/2CV=1.5; DS=0.4; Ami=0.2; Tiguan=1.5; Touran=0.8; Touareg=0.8; Sharan=0.5; Caddy=0.8; Transporter/Kombi=1;
+      Jetta=0.8; Scirocco=0.6; Arteon=0.3; Up/VW Up=0.6; T-Roc=0.6; ID.3=0.3; ID.4=0.3; ID. Buzz=0.3; Fabia=1.5; Superb=1;
+      Kodiaq=0.6; Karoq=0.5; Rapid=0.4; Felicia=0.6; Favorit=0.4; Yeti=0.4; Kamiq=0.3; Enyaq=0.3; Ibiza=1.5; Leon/Seat Leon=1.2;
+      Toledo=0.6; Arona=0.4; Ateca=0.4; Alhambra=0.3; Marbella=0.3; Formentor=0.3; Insignia=1; Vectra=1; Zafira=0.8; Meriva=0.6;
+      Omega=0.6; Mokka=0.6; Agila=0.3; Tigra=0.3; Calibra=0.4; Manta=0.4; Rekord=0.4; Ascona=0.4; Frontera=0.2; Kuga=0.6;
+      Mondeo=1; Escort=1; Sierra=0.6; Ka/Ford Ka=0.8; Puma=0.5; Transit=0.8; Ranger=0.4; F-150=0.4; Model T=0.6; GT40=0.2; Capri=0.4;
+      Galaxy=0.3; S-Max=0.3; C-Max=0.3; Bronco=0.3; Explorer=0.3; Aygo=0.6; Auris=0.6; Avensis=0.6; RAV4=1; Land Cruiser=1;
+      Prius=1; Hilux=0.8; Supra=0.8; Celica=0.6; C-HR=0.4; Camry=0.4; GT86=0.2; Civic=1.5; Accord=0.6; Jazz=0.6; CR-V=0.6; NSX=0.2;
+      Micra=0.8; Qashqai=1.2; Juke=0.6; X-Trail=0.6; Leaf=0.4; Navara=0.4; Patrol=0.4; GT-R=0.6; Skyline=0.6; Almera=0.3; Primera=0.3;
+      Mazda 3=0.6; Mazda 6=0.4; MX-5/Miata=0.6; RX-7=0.3; CX-5=0.4; Lancer=0.6; Pajero=0.8; Colt=0.4; Outlander=0.4; Space Star=0.3;
+      Swift=0.8; Vitara/Grand Vitara=0.6; Jimny=0.6; Ignis=0.3; SX4=0.3; Baleno=0.2; Alto=0.2; Impreza=0.6; Forester=0.4; Outback=0.3;
+      i10=0.4; i20=0.6; i30=0.8; Tucson=0.8; Santa Fe=0.4; Kona=0.4; Ioniq=0.3; Getz=0.4; Accent=0.3; Elantra=0.2; Sportage=0.8;
+      Ceed/Cee'd=0.6; Picanto=0.4; Rio=0.4; Sorento=0.3; Stonic=0.2; Niro=0.2; Sandero=1; Logan=0.8; Duster=1; Spring=0.3; Jogger=0.3;
+      Serija 3/BMW serije 3/Trojka=1.5; Serija 5/Petica=1; Serija 7=0.6; Serija 1=0.4; X5=1; X3=0.6; X6=0.4; X1=0.4; M3=0.8; M5=0.6;
+      i3=0.3; i8=0.3; Z4=0.3; E36=0.3; E46=0.3; Klasa A/A klasa=0.6; Klasa C/C klasa=0.8; Klasa E/E klasa=0.8; Klasa S/S klasa=0.8;
+      Klasa G/G klasa/Puch/Geländewagen=0.8; Sprinter=0.6; Vito=0.4; SLK=0.3; CLK=0.3; ML=0.3; AMG GT=0.2; Mercedes 190/Baby Benz=0.4;
+      A3=1; A4=1; A6=0.8; A8=0.5; A1=0.4; A5=0.4; Q5=0.6; Q7=0.6; Q3=0.4; Q8=0.3; TT=0.6; R8=0.6; e-tron=0.3; Quattro=0.3; RS6=0.3;
+      911/Porsche 911=1.5; Cayenne=1; Panamera=0.6; Macan=0.5; Boxster=0.4; Cayman=0.4; Taycan=0.4; F40=0.4; Testarossa=0.5;
+      Enzo=0.3; LaFerrari=0.2; 458=0.2; Roma=0.1; Countach=0.6; Diablo=0.5; Murciélago=0.4; Gallardo=0.4; Aventador=0.6; Huracán=0.6;
+      Urus=0.5; Miura=0.2; Veyron=0.8; Chiron=0.6; Nevera/Rimac Nevera=1.5; Concept One/Rimac Concept One=0.6; Giulia=0.6;
+      Giulietta=0.6; Alfa 147/147=0.6; Alfa 156/156=0.4; Alfa 159/159=0.3; Stelvio=0.3; Ypsilon=0.4; Delta=0.4;
+      Stratos=0.2; Thema=0.1; Musa=0.1; Wrangler=0.8; Cherokee/Grand Cherokee=0.8; Renegade=0.4; Compass=0.3; Defender=0.8;
+      Discovery=0.4; Evoque=0.6; Range Rover Sport=0.3; XC90=0.6; XC60=0.6; XC40=0.3; V40=0.3; V70=0.3; S60=0.3; Amazon=0.1;
+      Mini Cooper/Cooper=1.2; Smart Fortwo/Fortwo=0.6; Camaro=0.6; Corvette=0.8; Impala=0.4; Spark=0.3; Aveo=0.3; Cruze=0.3;
+      Captiva=0.2; Challenger=0.5; Charger=0.5; Viper=0.4; Ram=0.3; Escalade=0.4; Hummer/H2=0.5; Thunderbird=0.2; Cadillac DeVille=0.1;
+      DeLorean/DMC-12=0.6; Trabant 601/Trabant=0.6; Lada Niva/Niva=1; Lada Samara/Samara=0.4; Žiguli/Lada 2101=0.5; Moskvič=0.3;
+      Wartburg 353=0.1; Zastava 750/Fićo 750=0.2; Zastava 128=0.4; Florida/Yugo Florida=0.6; Yugo Koral/Koral=0.4; Zastava 10=0.2;
+      Lada Riva=0.2; Dacia 1300=0.3; Škoda 100=0.2; Škoda 120=0.2; Tatra 603=0.05; Golf GTI/GTI=0.6; Golf 2/Golf dvojka=0.6;
+      Fiat 125=0.2; Fiat 126/Peglica=0.6; Fiat 127=0.2; Fiat 128=0.2; Fiat 131=0.1; Fiat Croma/Croma=0.1; Lancia Prisma=0.05;
+      Renault 12=0.1; Renault 18=0.05; Renault 19=0.2; Renault 21=0.05; Citroën GS/GS=0.1;
+      Citroën CX/CX=0.1; Citroën BX/BX=0.1; Citroën AX/AX=0.1; Citroën ZX/ZX=0.05; Opel Senator=0.05;
+      VW Bora/Bora=0.3; VW Vento/Vento=0.2; VW Lupo/Lupo=0.3; VW Fox/Fox=0.1; VW Corrado/Corrado=0.1; VW Phaeton/Phaeton=0.1;
+      Audi 80=0.3; Audi 100=0.2; BMW E30/E30=0.3; Volvo 240=0.05; Saab 900=0.05; Mercedes W123/W123=0.1; Peugeot 504=0.1;
+      Toyota Starlet=0.05; Nissan Sunny=0.1; Honda Prelude=0.05; Mazda 323=0.1; Lada Vesta=0.03; Lada Granta=0.03; BYD Atto 3=0.05;
+      Polestar 2=0.03`,
+  },
+  {
+    slug: "lijek",
+    group: "opce",
+    title: "Lijek",
+    hint: "Naziv lijeka, djelatne tvari ili vrste lijeka",
+    strip: ["tablete", "tableta", "sirup", "kapi", "mast", "krema", "sprej"],
+    answers: `Aspirin=12; Andol=10; Lupocet=8; Paracetamol=8; Ibuprofen=7; Neofen=6; Brufen=5; Antibiotik/Antibiotici=5; Voltaren=4;
+      Nurofen=4; Penicilin=3; Plivadon=3; Analgin/Metamizol=2.5; Normabel/Diazepam=2.5; Xanax/Alprazolam=2; Kafetin=2; Caffetin=1;
+      Coldrex=1.5; Fervex=1.5; Strepsils=1.5; Septolete=1.5; Linex=1.5; Persen=1; Prozac/Fluoksetin=1.5; Viagra/Sildenafil=2;
+      Inzulin=2; Ventolin/Salbutamol=1.2; Panadol=1; Tylenol=0.5; Advil=0.5; Ketonal/Ketoprofen=1; Naproksen/Naprosyn=0.6;
+      Diklofenak=1; Sumamed/Azitromicin=1.5; Amoksicilin=1.2; Klavocin/Amoksiklav=1; Augmentin=0.6; Ciprofloksacin/Cipro=0.6;
+      Doksiciklin=0.4; Kortizon/Kortikosteroidi=0.8; Prednizon/Prednizolon=0.5; Deksametazon=0.4; Hidrokortizon=0.3;
+      Kodein=0.5; Morfij/Morfin=0.8; Tramadol/Tramal=0.6; Fentanil=0.4; Metadon=0.4; Oksikodon=0.3; Heparin=0.4; Varfarin/Martefarin=0.4;
+      Kardiopirin=0.4; Concor/Bisoprolol=0.5; Beta blokatori=0.3; Lekadol=0.6; Ranitidin/Ranital=0.5; Controloc/Pantoprazol=0.6;
+      Omeprazol=0.6; Nolpaza=0.4; Rennie=0.6; Maalox=0.3; Gaviscon=0.3; Talcid=0.2; Probiotik=0.6; Smecta=0.3;
+      Loperamid/Imodium=0.5; Dulcolax=0.3; Lactulose/Laktuloza=0.2; Espumisan=0.3; Buscopan=0.4; No-Spa/Drotaverin=0.3;
+      Metformin=0.5; Glucophage=0.2; Ozempic/Semaglutid=0.8; Statini=0.3; Atorvastatin=0.3; Rosuvastatin=0.2; Simvastatin=0.2;
+      Enap/Enalapril=0.3; Ramipril=0.3; Lizinopril=0.2; Amlodipin=0.3; Furosemid/Lasix=0.3; Hidroklorotiazid=0.1; Euthyrox/Levotiroksin=0.4;
+      Letrox=0.2; Klometiazol/Heminevrin=0.1; Apaurin=0.6; Praxiten/Oksazepam=0.3; Helex=0.3; Lorazepam=0.2; Rivotril/Klonazepam=0.3;
+      Sertralin/Zoloft=0.4; Escitalopram/Cipralex=0.3; Citalopram=0.2; Paroksetin/Seroxat=0.2; Venlafaksin=0.1; Litij=0.2;
+      Ritalin/Metilfenidat=0.4; Adderall=0.3; Melatonin=0.5; Zolpidem/Sanval=0.2; Antihistaminik=0.3; Claritine/Loratadin=0.4;
+      Zyrtec/Cetirizin=0.3; Aerius/Desloratadin=0.2; Fenistil=0.3; Bepanthen=0.6; Panthenol=0.4; Betadine/Povidon jodid=0.4;
+      Hidrogen=0.3; Kreon=0.1; Neosporin=0.1; Fucidin=0.2; Baneocin=0.2; Pevaryl=0.1; Canesten/Klotrimazol=0.3; Aciklovir/Zovirax=0.4;
+      Tamiflu=0.3; Remdesivir=0.1; Paxlovid=0.1; Cjepivo=0.5; Vitamin C=0.6; Vitamin D=0.4; Magnezij=0.4; Željezo=0.2; Sinecod=0.2; Bronhi=0.1; Prospan=0.4; Fluimukocil/Acetilcistein=0.4; Bisolex/Bromheksin=0.3; Herbion=0.2; Mucosolvan/Ambroksol=0.2;
+      Nazalni sprej/Kapi za nos=0.3; Ksilometazolin/Olynth=0.3; Nasonex=0.1; Otrivin=0.2; Kapi za oči=0.2; Kapi za uši=0.1;
+      Kontracepcijske pilule/Pilula=0.6; Pilula za dan poslije/Escapelle=0.2; Clexane=0.2; Plavix/Klopidogrel=0.2; Eliquis/Apiksaban=0.1;
+      Xarelto/Rivaroksaban=0.1; Digoksin=0.1; Nitroglicerin=0.3; Adrenalin/EpiPen=0.3; Atropin=0.1; Lidokain=0.3; Novokain/Prokain=0.1;
+      Ketamin=0.2; Propofol=0.1; Botoks/Botox=0.3; Metotreksat=0.1; Tamoksifen=0.1; Kemoterapija=0.2; Interferon=0.05;
+      Hidroksiklorokin=0.1; Kinin=0.1; Ivermektin=0.1; Albendazol=0.05; Metronidazol=0.1; Nistatin=0.05; Flukonazol=0.1;
+      Valproat=0.05; Karbamazepin/Tegretol=0.1; Lamotrigin=0.05; Gabapentin=0.1; Pregabalin/Lyrica=0.1; Levodopa=0.1; Haloperidol=0.1;
+      Olanzapin=0.05; Kvetiapin/Seroquel=0.1; Risperidon=0.05; Naloksan=0.05; Akrihin=0.02; Gingko/Ginko=0.1; Valerijana/Odoljen=0.2`,
+  },
+  {
+    slug: "grad-grcka-turska",
+    group: "opce",
+    title: "Grad ili mjesto u Grčkoj, Turskoj ili na Cipru",
+    hint: "Uključujući otoke",
+    strip: ["grad"],
+    answers: `Atena=15; Istanbul/Carigrad=15; Solun/Thessaloniki=8; Ankara=6; Antalya/Antalija=5; Izmir/Smirna=4; Nikozija=3; Limassol=3;
+      Larnaka=3; Pafos=2.5; Kavala=2; Patras=2; Heraklion/Iraklion=2; Rodos=2.5; Krf=2; Mikonos=2; Santorini/Thira=2; Bodrum=2.5;
+      Alanya=2; Göreme=0.5; Pirej=1.5; Volos=1; Larisa=1; Ioannina/Janina=1; Kalamata=1; Korint=1; Sparta=1; Olimpija=1;
+      Delfi=1; Mikena=0.6; Nafplio=0.8; Kalambaka=0.5; Chania/Hanja=1; Rethimno=0.8; Agios Nikolaos=0.5; Lindos=0.5;
+      Kos=1; Zakintos/Zante=1.2; Argostoli=0.3; Lefkada=0.8; Paros=0.6; Naxos=0.6; Hidra=0.4; Egina=0.4; Spetses=0.3;
+      Skiathos=0.6; Skopelos=0.3; Thasos=0.8; Paralia=0.6; Katerini=0.5; Leptokarija=0.6; Platamonas=0.4; Nea Moudania=0.2;
+      Polihrono=0.2; Hanioti=0.2; Pefkohori=0.2; Neos Marmaras=0.3; Sarti=0.2; Ouranoupoli=0.2; Asprovalta=0.4; Stavros=0.2;
+      Nea Vrasna=0.1; Keramoti=0.2; Aleksandrupolis/Aleksandroupoli=0.4; Komotini=0.3; Ksanti/Xanthi=0.3; Drama=0.3;
+      Seres/Serres=0.3; Edesa=0.2; Veria=0.2; Kozani=0.2; Kastoria=0.3; Florina=0.2; Lamija=0.2; Trikala=0.3; Karditsa=0.1;
+      Preveza=0.3; Parga=0.6; Sivota=0.2; Igumenica=0.4; Arta=0.2; Agrinio=0.1; Mesolongi=0.2; Halkida=0.2; Eretrija=0.1;
+      Tripoli=0.2; Argos=0.3; Pilos=0.2; Monemvasija=0.3; Githio=0.1; Maraton=0.4; Glifada=0.2; Vouliagmeni=0.1; Sounion=0.3;
+      Elefsina/Eleusis=0.2; Tebe/Tiva=0.3; Lavrio=0.1; Rafina=0.2; Hersonisos=0.4; Malija=0.3; Elounda=0.2; Ierapetra=0.2;
+      Sitia=0.1; Knosos=0.5; Fira=0.2; Oia=0.4; Kamari=0.2; Mitilena=0.3; Hios=0.3; Samos=0.4; Ikarija=0.2; Patmos=0.3;
+      Karpatos=0.2; Simi=0.2; Kalimnos=0.1; Leros=0.1; Milos=0.3; Ios=0.3; Sifnos=0.1; Siros=0.2; Tinos=0.2; Andros=0.2;
+      Kitira=0.1; Itaka=0.4; Paksos=0.2; Lemnos=0.2; Samotraka=0.2; Sveta Gora/Atos=0.4; Lezbos=0.3; Kefalonija=0.6; Kreta=0.8;
+      Bursa=1; Konya=0.8; Adana=0.6; Gaziantep=0.5; Mersin=0.4; Kayseri=0.4; Trabzon=0.8; Samsun=0.4; Eskişehir=0.4; Diyarbakır=0.4;
+      Şanlıurfa/Urfa=0.3; Van=0.3; Erzurum=0.3; Malatya=0.2; Denizli=0.3; Pamukkale=0.8; Efez/Efes=0.8; Kuşadası/Kusadasi=0.8;
+      Marmaris=1; Fethiye=0.8; Kemer=0.8; Side=1; Belek=0.6; Kaş=0.4; Kalkan=0.3; Dalaman=0.4; Didim=0.4; Çeşme=0.5; Ölüdeniz=0.4;
+      Göcek=0.2; Datça=0.2; Manavgat=0.4; Edirne/Jedrene=0.6; Çanakkale=0.6; Troja/Truva=0.6; Galipolje/Gelibolu=0.4;
+      Tekirdağ=0.2; Izmit/Kocaeli=0.3; Bolu=0.1; Zonguldak=0.1; Sinop=0.2; Rize=0.2; Kars=0.2; Antakija/Antakya=0.4;
+      İskenderun/Aleksandreta=0.2; Tarsus=0.3; Kahramanmaraş=0.2; Mardin=0.3; Batman=0.3; Nevşehir=0.2; Ürgüp=0.2; Afyon=0.2;
+      Kütahya=0.1; Isparta=0.1; Burdur=0.1; Muğla=0.2; Aydın=0.2; Manisa=0.2; Balıkesir=0.2; Ayvalık=0.2; Pergam/Bergama=0.3;
+      Iznik/Nikeja=0.3; Famagusta/Gazimağusa=0.6; Kirenija/Girne=0.6; Ayia Napa/Aja Napa=1.2; Protaras=0.5; Paralimni=0.2;
+      Polis=0.1; Lefka=0.05; Morfu/Güzelyurt=0.1; Kakopetria=0.05; Omodos=0.05; Lefkara=0.1`,
+  },
+  {
+    slug: "grad-srednja-europa",
+    group: "opce",
+    title: "Grad ili mjesto u Mađarskoj, Češkoj, Slovačkoj ili Poljskoj",
+    strip: ["grad"],
+    answers: `Budimpešta=15; Prag=15; Varšava=10; Krakov/Kraków=7; Bratislava=7; Brno=3; Debrecin/Debrecen=2; Pečuh/Pécs=3; Segedin/Szeged=2;
+      Balaton=1.5; Siófok=1.5; Gdanjsk/Gdańsk=3; Wrocław/Vroclav=2.5; Poznań/Poznanj=2; Łódź/Lodz=1.5; Katowice=1.5; Szczecin/Ščećin=1;
+      Lublin=0.8; Bydgoszcz=0.5; Toruń/Torun=0.6; Gdynia=0.6; Sopot=0.8; Zakopane=1.5; Częstochowa/Čenstohova=1; Białystok=0.5;
+      Rzeszów=0.4; Kielce=0.3; Olsztyn=0.3; Opole=0.3; Gliwice=0.4; Zabrze=0.2; Bytom=0.2; Sosnowiec=0.2; Radom=0.2; Płock=0.2;
+      Elbląg=0.1; Tarnów=0.2; Nowy Sącz=0.1; Przemyśl=0.2; Zamość=0.2; Malbork=0.4; Wieliczka=0.6; Oświęcim/Auschwitz=1;
+      Wadowice=0.4; Legnica=0.1; Wałbrzych=0.1; Jelenia Góra=0.2; Karpacz=0.2; Szklarska Poręba=0.1; Świnoujście=0.3; Kołobrzeg=0.3;
+      Międzyzdroje=0.1; Hel=0.2; Zielona Góra=0.2; Gorzów Wielkopolski=0.1; Koszalin=0.1; Słupsk=0.1; Kalisz=0.1; Gniezno=0.2;
+      Ostrava=1.2; Plzeň/Plzen=1.5; Olomouc=0.8; Liberec=0.8; České Budějovice/Budweis=1; Hradec Králové=0.5; Pardubice=0.5;
+      Karlovy Vary/Karlsbad=1.5; Mariánské Lázně/Marienbad=0.4; Český Krumlov=1; Kutná Hora=0.6; Ústí nad Labem=0.3; Jihlava=0.3;
+      Zlín=0.4; Teplice=0.2; Most=0.1; Kladno=0.2; Mladá Boleslav=0.4; Opava=0.2; Frýdek-Místek=0.1; Karviná=0.1; Třebíč=0.1;
+      Znojmo=0.2; Mikulov=0.2; Kroměříž=0.2; Telč=0.2; Tábor=0.2; Cheb=0.1; Děčín=0.1; Jablonec nad Nisou=0.1; Trutnov=0.1;
+      Špindlerův Mlýn=0.2; Harrachov=0.1; Litomyšl=0.1; Prostějov=0.1; Přerov=0.1; Vsetín=0.05; Kunovice=0.02;
+      Košice=2; Žilina=1; Banská Bystrica=0.8; Nitra=0.8; Prešov=0.6; Trnava=0.8; Trenčín=0.6; Poprad=0.6; Martin=0.3; Piešťany=0.4;
+      Komárno=0.4; Banská Štiavnica=0.3; Levoča=0.2; Bardejov=0.2; Zvolen=0.2; Ružomberok=0.2; Liptovský Mikuláš=0.2;
+      Štrbské Pleso=0.2; Senec=0.1; Dunajská Streda=0.2; Lučenec=0.1; Spišská Nová Ves=0.1; Michalovce=0.1; Humenné=0.1;
+      Topoľčany=0.05; Skalica=0.1; Bojnice=0.2; Kežmarok=0.1; Rožňava=0.05; Štúrovo=0.1; Jasná=0.1;
+      Đur/Győr=1; Miskolc=0.8; Sopron/Šopron=0.8; Szombathely/Sombathelj=0.4; Székesfehérvár/Stolni Biograd=0.6; Kecskemét=0.5;
+      Nyíregyháza=0.3; Eger=0.6; Veszprém=0.4; Esztergom/Ostrogon=0.5; Szentendre=0.4; Visegrád=0.4; Hévíz=0.5; Keszthely=0.5;
+      Tihany=0.3; Balatonfüred=0.3; Nagykanizsa/Kaniža=0.4; Zalaegerszeg=0.3; Kaposvár=0.3; Mohač/Mohács=0.6; Baja=0.3;
+      Szolnok=0.2; Tokaj=0.4; Gödöllő=0.2; Dunaújváros=0.1; Tata=0.1; Mosonmagyaróvár=0.2; Hajdúszoboszló=0.2; Szekszárd=0.2;
+      Harkány=0.3; Siklós=0.2; Villány=0.2; Bük=0.1; Sárvár=0.1; Zalakaros=0.1; Gyula=0.1; Békéscsaba=0.1; Vác=0.1; Kőszeg=0.1;
+      Hollókő=0.05; Pannonhalma=0.05`,
+  },
+  {
+    slug: "svjetska-knjizevnost",
+    group: "opce",
+    title: "Djelo svjetske književnosti",
+    hint: "Roman, ep, drama ili zbirka strane književnosti; naš ili izvorni naslov",
+    strip: [],
+    answers: `Rat i mir=8; Zločin i kazna=7; Mali princ=7; Don Quijote/Don Kihot=6; Hamlet=5; Romeo i Julija=5; Ana Karenjina=5; Harry Potter=5; 1984=5; Gospodar prstenova=5; Stranac=3; Proces=3; Preobrazba=2.5; Braća Karamazovi=3; Idiot=2; Majstor i Margarita=3; Sto godina samoće=3; Lolita=1.5; Veliki Gatsby/Gatsby=2; Lovac u žitu=2; Ubiti pticu rugalicu/Ubiti pticu ruganicu=1.5; Ponos i predrasude=3; Jane Eyre=1.2; Orkanski visovi=1.5; Madame Bovary/Gospođa Bovary=1.5; Jadnici=2.5; Zvonar crkve Notre-Dame=1.5; Grof Monte Cristo=2.5; Tri mušketira=2; Kapetan Nemo/Dvadeset tisuća milja pod morem=1; Put oko svijeta u 80 dana=1.5; Robinson Crusoe=1.5; Guliverova putovanja=1.2; Oliver Twist=1.5; Božićna priča=0.8; David Copperfield=0.8; Velika očekivanja=0.6; Alisa u Zemlji čudesa=2; Pinokio=1.2; Petar Pan=0.8; Čarobnjak iz Oza=0.8; Moby Dick=1.5; Starac i more=2.5; Kome zvono zvoni=1.2; Zbogom oružje=0.8; Doživljaji Toma Sawyera/Tom Sawyer=1.5; Huckleberry Finn=0.8; Ilijada=2; Odiseja=2.5; Eneida=0.8; Božanstvena komedija=2.5; Dekameron=1; Faust=1.5; Patnje mladog Werthera=0.6; Kralj Lear=1; Macbeth=1.2; Otelo=1; Oluja=0.5; San ivanjske noći=0.8; Mletački trgovac=0.5; Životinjska farma=2.5; Vrli novi svijet=1; Fahrenheit 451=0.8; Hobit=1.5; Kronike iz Narnije/Narnija=1; Dina=0.8; Igra prijestolja=1; Da Vincijev kod=1.5; Alkemičar=1.5; Kradljivica knjiga=0.6; Dnevnik Ane Frank=1.5; Male žene=0.6; Frankenstein=1; Drakula=1.2; Slika Doriana Graya=1; Doktor Jekyll i gospodin Hyde=0.6; Sherlock Holmes=1; Baskervilleski pas=0.6; Ubojstvo u Orient Expressu=0.6; Deset malih crnaca/I onda nije bilo nikoga=0.4; Ime ruže=1; Parfem=1; Mrtve duše=0.5; Oblomov=0.3; Očevi i djeca=0.4; Revizor=0.4; Kabanica=0.4; Na Drini ćuprija=1.5; Prokleta avlija=0.5; Derviš i smrt=0.6; Tvrđava=0.2; Gospođica=0.2; Na zapadu ništa novo=1.2; Kvaka 22=0.6; Klaonica 5=0.4; Let iznad kukavičjeg gnijezda=0.8; Plodovi gnjeva=0.6; O miševima i ljudima=0.8; Istočno od raja=0.3; Ljubav u doba kolere=1; Kronika najavljene smrti=0.4; Lijepi i prokleti=0.1; Uliks=0.8; Portret umjetnika u mladosti=0.2; Gospođa Dalloway=0.3; Prema svjetioniku=0.2; U potrazi za izgubljenim vremenom=0.5; Kandid=0.4; Crveno i crno=0.6; Parmski kartuzijanac=0.2; Otac Goriot=0.4; Germinal=0.3; Nana=0.3; Mučnina=0.4; Kuga=1; Pad=0.2; Čarobni brijeg=0.6; Buddenbrookovi=0.3; Smrt u Veneciji=0.4; Stepski vuk=0.4; Siddhartha=0.6; Demian=0.2; Limeni bubanj=0.3; Dobri vojak Švejk/Švejk=1; Nepodnošljiva lakoća postojanja=0.8; Zov divljine=0.6; Bijeli očnjak=0.6; Ivanhoe=0.5; Otok s blagom=1; Kim=0.2; Knjiga o džungli=1; Tri čovjeka u čamcu=0.3; Vinnetou=1; Posljednji Mohikanac=0.6; Čiča Tomina koliba=0.6; Prohujalo s vihorom=1.5; Rebecca=0.3; Sjaj=0.6; It/Ono=0.6; Misery=0.3; Carrie=0.3; Zeleni kilometar=0.5; Kum=1; Pedeset nijansi sive=0.6; Sumrak=0.6; Igre gladi=0.8; Stopar kroz galaksiju/Vodič kroz galaksiju za autostopere=0.4; Zaklada/Fondacija=0.3; Ja, robot=0.3; Rat svjetova=0.4; Vremeplov=0.4; Nevidljivi čovjek=0.2; Sotonski stihovi=0.3; Ponoćna djeca=0.2; Lovac na zmajeve=0.6; Tisuću čudesnih sunaca=0.3; Moja genijalna prijateljica=0.4; Norveška šuma=0.4; Kafka na žalu=0.2; Gospodar muha=0.8; Sat jedne narančaste/Paklena naranča=0.6; Ljudska komedija=0.1; Gargantua i Pantagruel=0.3; Utopija=0.3; Država=0.4; Vladar=0.6; Umijeće ratovanja=0.6; Tisuću i jedna noć=1; Gilgameš/Ep o Gilgamešu=0.6; Biblija=0.8; Kuran=0.3; Mahabharata=0.2; Beowulf=0.3; Pjesma o Nibelunzima=0.2; Pjesma o Rolandu=0.2; Canterburyjske priče=0.3; Izgubljeni raj=0.3; Tom Jones=0.1; Emma=0.4; Razum i osjećaji=0.6; Mansfield Park=0.1; Middlemarch=0.1; Dvije godine ferija=0.2; Pipi Duga Čarapa=0.6; Emil i detektivi=0.6; Bambi=0.2; Heidi=0.4; Momo=0.3; Beskrajna priča=0.4; Čarlijeva tvornica čokolade/Charlie i tvornica čokolade=0.6; Matilda=0.4; Hladnokrvno=0.2; Na cesti=0.3; Pustinja Tatara=0.1; Leopard/Gepard=0.2; Šum i bijes=0.1`,
+  },
+] satisfies SeedCategory[]).map(najvise150);
+
+/** Dugi popisi: udjeli se razmjerno smanje da zbroj ne prijeđe 150 (poredak ostaje isti). */
+function najvise150(c: SeedCategory): SeedCategory {
+  const list = parseSeedAnswers(c.answers);
+  const k = 150 / list.reduce((s, a) => s + a.share, 0);
+  if (k >= 1) return c;
+  const answers = list.map((a) => `${[a.canonical, ...a.variants].join("/")}=${+(a.share * k).toPrecision(2)}${a.rare ? "!" : ""}`).join("; ");
+  return { ...c, answers };
+}
