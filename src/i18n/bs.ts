@@ -20,5 +20,7 @@ export const bs: Record<string, string> = {
   "Spremljeno.": "Sačuvano.",
   "Nešto je pošlo krivo. Osvježi stranicu.": "Nešto nije u redu. Osvježi stranicu.",
   "Kopirano, zalijepi gdje želiš.": "Kopirano, zalijepi gdje hoćeš.",
+  "Siguran si da je točan?": "Siguran si da je tačan?",
+  "Ako je točan, km ti dodajemo naknadno i javimo ti kad ga prihvatimo.": "Ako je tačan, km ti dodajemo naknadno i javimo ti kad ga prihvatimo.",
   "Uđi u moju ligu \"{x}\" na {igra}": "Uđi u moju ligu \"{x}\" na {igra}",
 };

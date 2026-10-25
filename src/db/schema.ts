@@ -140,6 +140,12 @@ export const rounds = pgTable(
     share: real("share"), // % igrača u trenutku odgovora
     km: integer("km"),
     tier: text("tier"),
+    // igrač je prijavio da mu točan odgovor fali na popisu; admin ga prihvati (rescoredAt) ili odbije (rejectedAt)
+    reportedAt: timestamp("reported_at", { withTimezone: true }),
+    rejectedAt: timestamp("rejected_at", { withTimezone: true }),
+    // naknadno bodovano iz admina; dok igrač ne vidi obavijest, rescoreSeenAt je prazan
+    rescoredAt: timestamp("rescored_at", { withTimezone: true }),
+    rescoreSeenAt: timestamp("rescore_seen_at", { withTimezone: true }),
   },
   (t) => [primaryKey({ columns: [t.gameId, t.position] }), index("rounds_category_answer").on(t.categoryId, t.answerId)],
 );

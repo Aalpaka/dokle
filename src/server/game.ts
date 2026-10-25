@@ -10,6 +10,7 @@ import {
   games,
   players,
   puzzleCategories,
+  reviewDecisions,
   rounds,
   skins,
 } from "@/db/schema";
@@ -219,6 +220,8 @@ export type RoundView = {
   emoji: string;
   icon?: string;
   speed: { multiplier: number; emoji: string; name: string } | null; // samo kad je brzina promijenila km
+  // promašaj s upisom: "open" se još može prijaviti, "pending" čeka admina, "rejected" admin nije prihvatio
+  report?: "open" | "pending" | "rejected";
 };
 
 export type GameState = {
@@ -235,6 +238,15 @@ export type GameState = {
 };
 
 export type Reveal = { top: { canonical: string; share: number }[]; rare: { canonical: string; share: number }[] };
+
+// prijavljen promašaj dok ga admin ne pogleda: ne prikazuje se kao radovi na cesti
+export const PENDING = { emoji: "⏳", name: "Na provjeri" };
+
+function reportState(r: { raw: string | null; answerId: number | null; reportedAt: Date | null; rejectedAt: Date | null }): RoundView["report"] {
+  if (!r.raw || r.answerId !== null) return undefined;
+  if (r.rejectedAt) return "rejected";
+  return r.reportedAt ? "pending" : "open";
+}
 
 // stari nazivi tierova (prije Bajsa i Motora) se prepoznaju po udjelu
 function baseTier(cfg: SkinConfig, tier: string, share: number | null) {
@@ -270,6 +282,7 @@ export async function getState(skin: Skin, playerId: string | null): Promise<Gam
     if (r.answeredAt) {
       const base = r.answerId !== null ? baseTier(skin.config, r.tier ?? "", r.share) : null;
       const step = speedFor(skin.config, r.answeredAt.getTime() - r.startedAt.getTime());
+      const report = reportState(r);
       views.push({
         position: r.position,
         category,
@@ -277,10 +290,11 @@ export async function getState(skin: Skin, playerId: string | null): Promise<Gam
         canonical,
         share: r.share,
         km: r.km ?? 0,
-        tier: r.tier ?? skin.config.miss.name,
-        emoji: base?.emoji ?? skin.config.miss.emoji,
+        tier: report === "pending" ? PENDING.name : (r.tier ?? skin.config.miss.name),
+        emoji: report === "pending" ? PENDING.emoji : (base?.emoji ?? skin.config.miss.emoji),
         icon: base?.icon,
         speed: base && r.km !== base.km && step.multiplier !== 1 ? { multiplier: step.multiplier, emoji: step.emoji, name: step.name } : null,
+        ...(report && { report }),
       });
     } else {
       // startedAt je trenutak kad kreće vrijeme, može biti malo u budućnosti dok igrač čita pitanje
@@ -327,15 +341,16 @@ export async function startNext(skin: Skin, playerId: string, readMs = READ_MS):
 }
 
 export type AnswerResult =
-  | { status: "rejected"; normalized: string }
+  | { status: "rejected"; normalized: string; checked?: boolean }
   | { status: "scored"; state: GameState }
   | { status: "no-round" };
 
 /**
  * Upis odgovora za otvorenu kategoriju. Nepoznat odgovor se odbija dok ima vremena (igrač pokušava opet);
  * final=true (isteklo vrijeme na klijentu) ili isteklo vrijeme na serveru boduje kao promašaj.
+ * keep=true: igrač je siguran da je nepoznat odgovor točan, pa se runda odmah zatvara i odgovor ide na provjeru.
  */
-export async function submitAnswer(skin: Skin, playerId: string, raw: string, final: boolean): Promise<AnswerResult> {
+export async function submitAnswer(skin: Skin, playerId: string, raw: string, final: boolean, keep = false): Promise<AnswerResult> {
   const puzzle = await getOrCreatePuzzle(skin, localDate(skin.timezone));
   const found = await findOpenRound(playerId, puzzle.id);
   const open = found?.round;
@@ -363,11 +378,96 @@ export async function submitAnswer(skin: Skin, playerId: string, raw: string, fi
       elapsedMs,
     });
   }
-  if (!hit && !final && !timedOut) return { status: "rejected", normalized: fold(input) };
+  const decision = !hit && input ? await decisionFor(open.categoryId, fold(input)) : null;
+  // već odbijen odgovor se ne može ostaviti na provjeru
+  if (!hit && !final && !timedOut && (!keep || !input || decision === "reject"))
+    return { status: "rejected", normalized: fold(input), ...(decision === "reject" && { checked: true }) };
 
   // zakašnjeli upis je spremljen u attempts, ali se boduje kao isteklo vrijeme
-  await scoreRound(skin, puzzle, game.id, open.position, open.categoryId, timedOut ? null : input || null, hit?.id ?? null, elapsedMs);
+  const stored = timedOut ? null : input || null;
+  await scoreRound(skin, puzzle, game.id, open.position, open.categoryId, stored, hit?.id ?? null, elapsedMs);
+  if (!hit && stored && keep) await markReported(game.id, open.position, decision === "reject");
   return { status: "scored", state: await getState(skin, playerId) };
+}
+
+async function decisionFor(categoryId: number, normalized: string) {
+  const [d] = await db
+    .select({ decision: reviewDecisions.decision })
+    .from(reviewDecisions)
+    .where(and(eq(reviewDecisions.categoryId, categoryId), eq(reviewDecisions.normalized, normalized)));
+  return d?.decision ?? null;
+}
+
+async function markReported(gameId: number, position: number, rejected: boolean) {
+  const now = new Date();
+  await db
+    .update(rounds)
+    .set({ reportedAt: now, ...(rejected && { rejectedAt: now }) })
+    .where(and(eq(rounds.gameId, gameId), eq(rounds.position, position), isNull(rounds.answerId), isNotNull(rounds.raw), isNull(rounds.reportedAt)));
+}
+
+/** Igrač prijavljuje da mu odgovor iz današnje runde fali na popisu; admin ga vidi na vrhu reda za pregled. */
+export async function reportRound(skin: Skin, playerId: string, position: number): Promise<GameState | null> {
+  const puzzle = await getOrCreatePuzzle(skin, localDate(skin.timezone));
+  const game = await findGame(playerId, puzzle.id);
+  if (!game) return null;
+  const [r] = await db
+    .select()
+    .from(rounds)
+    .where(and(eq(rounds.gameId, game.id), eq(rounds.position, position), isNotNull(rounds.answeredAt)));
+  if (!r || reportState(r) !== "open") return null;
+  // odgovor koji je admin već odbio ostaje odbijen; prihvaćeni bi već bio bodovan
+  await markReported(game.id, position, (await decisionFor(r.categoryId, fold(r.raw!))) === "reject");
+  return getState(skin, playerId);
+}
+
+/** Admin je odbio odgovor: prijave koje su čekale prestaju biti "na provjeri". */
+export async function rejectReports(categoryId: number, normalized: string): Promise<number> {
+  const pending = await db
+    .select({ gameId: rounds.gameId, position: rounds.position, raw: rounds.raw })
+    .from(rounds)
+    .where(and(eq(rounds.categoryId, categoryId), isNull(rounds.answerId), isNotNull(rounds.reportedAt), isNull(rounds.rejectedAt)));
+  const hits = pending.filter((p) => p.raw && fold(p.raw) === normalized);
+  const now = new Date();
+  for (const h of hits)
+    await db.update(rounds).set({ rejectedAt: now }).where(and(eq(rounds.gameId, h.gameId), eq(rounds.position, h.position)));
+  return hits.length;
+}
+
+export type Notice = { gameId: number; position: number; date: string; category: string; canonical: string; km: number; totalKm: number };
+
+/** Naknadno bodovane runde igrača koje još nije vidio. */
+export async function rescoreNotices(skin: Skin, playerId: string): Promise<Notice[]> {
+  const rows = await db
+    .select({
+      gameId: rounds.gameId,
+      position: rounds.position,
+      date: dailyPuzzles.date,
+      category: categories.title,
+      canonical: answers.canonical,
+      km: rounds.km,
+      totalKm: games.totalKm,
+    })
+    .from(rounds)
+    .innerJoin(games, eq(games.id, rounds.gameId))
+    .innerJoin(dailyPuzzles, eq(dailyPuzzles.id, games.puzzleId))
+    .innerJoin(categories, eq(categories.id, rounds.categoryId))
+    .innerJoin(answers, eq(answers.id, rounds.answerId))
+    .where(and(eq(games.playerId, playerId), eq(dailyPuzzles.skinId, skin.id), isNotNull(rounds.rescoredAt), isNull(rounds.rescoreSeenAt)))
+    .orderBy(asc(dailyPuzzles.date), asc(rounds.position));
+  return rows.map((r) => ({ ...r, km: r.km ?? 0 }));
+}
+
+export async function dismissNotices(skin: Skin, playerId: string) {
+  const mine = db
+    .select({ id: games.id })
+    .from(games)
+    .innerJoin(dailyPuzzles, eq(dailyPuzzles.id, games.puzzleId))
+    .where(and(eq(games.playerId, playerId), eq(dailyPuzzles.skinId, skin.id)));
+  await db
+    .update(rounds)
+    .set({ rescoreSeenAt: new Date() })
+    .where(and(inArray(rounds.gameId, mine), isNotNull(rounds.rescoredAt), isNull(rounds.rescoreSeenAt)));
 }
 
 /** "Šalje se:" pregled; radi samo za kategoriju koja je igraču trenutno otvorena. */
@@ -577,7 +677,7 @@ export async function rescoreMisses(skin: Skin, categoryId: number, normalized: 
         const t = kmFor(skin.config, tier, h.answeredAt!.getTime() - h.startedAt.getTime());
         await tx
           .update(rounds)
-          .set({ share, km: t.km, tier: t.tier.name })
+          .set({ share, km: t.km, tier: t.tier.name, rescoredAt: new Date(), rescoreSeenAt: null })
           .where(and(eq(rounds.gameId, h.gameId), eq(rounds.position, h.position)));
         await tx
           .update(games)

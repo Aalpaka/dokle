@@ -93,6 +93,21 @@ button:disabled { opacity: .5; cursor: default; }
 .sending b { color: var(--ink); }
 .sending.nope { color: var(--stop); font-weight: 700; }
 .sending.changed b { background: var(--signal); color: #1b1b1b; padding: 0 5px; border-radius: 4px; }
+.sending.keep { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+.sending.keep button { color: var(--ink); }
+.report { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.report.compact { padding: 0 0 10px 44px; }
+.report.compact .small-btn { padding: 5px 10px; font-size: 13px; }
+button.small-btn.ghost { font-weight: 700; }
+/* obavijest o naknadno prihvaćenom odgovoru, preko igre i početnog ekrana */
+.notice {
+  position: fixed; z-index: 60; left: 50%; bottom: 16px; transform: translateX(-50%); width: min(520px, calc(100% - 32px));
+  background: var(--card); color: var(--ink); border-radius: 14px; padding: 14px 16px; display: grid; gap: 8px;
+  box-shadow: 0 0 0 3px var(--signal), 0 18px 40px -12px #000c; animation: notice-in .35s cubic-bezier(.2, .9, .3, 1.2) both;
+}
+.notice ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; font-size: 14px; }
+.notice button { justify-self: end; }
+@keyframes notice-in { from { opacity: 0; transform: translate(-50%, 16px); } }
 .result { border-radius: 12px; padding: 14px 16px; background: var(--card); display: flex; flex-direction: column; gap: 6px; }
 .result .big { display: flex; align-items: center; gap: 12px; }
 .result .emo { font-size: 34px; line-height: 1; }

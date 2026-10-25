@@ -78,6 +78,13 @@
       "when": 1792810000000,
       "tag": "0010_jasniji_naslovi",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1792820000000,
+      "tag": "0011_prijave",
+      "breakpoints": true
     }
   ]
 }

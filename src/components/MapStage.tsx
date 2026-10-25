@@ -293,7 +293,9 @@ export default function MapStage({ skinId, cfg, map, rounds, perDay, ended = fal
     if (!tier) {
       sfx.miss();
       setVehicle(null);
-      setToast({ color: MISS_COLOR, icon: vehicleIcons.miss, logo: false, title: cfg.miss.name, sub: r.raw ? t("„{x}” nije na popisu", { x: r.raw }) : t("Vrijeme je isteklo"), km: "+0 km", id });
+      // prijavljen odgovor nije promašaj nego čeka provjeru
+      const sub = !r.raw ? t("Vrijeme je isteklo") : r.report === "pending" ? t("„{x}” je na provjeri", { x: r.raw }) : t("„{x}” nije na popisu", { x: r.raw });
+      setToast({ color: MISS_COLOR, icon: vehicleIcons.miss, logo: false, title: r.report === "pending" ? `${r.emoji} ${t(r.tier)}` : cfg.miss.name, sub, km: "+0 km", id });
       badgeRef.current?.animate([{ translate: "0" }, { translate: "-5px" }, { translate: "5px" }, { translate: "0" }], { duration: 300, iterations: 2 });
       return;
     }
