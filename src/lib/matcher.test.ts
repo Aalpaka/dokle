@@ -19,7 +19,9 @@ describe("match", () => {
     ["otok Krk", "Krk"],
     ["Brioni", "Brijuni"],
     ["Korčulu", "Korčula"],
-    ["Hvra", null], // kratke riječi bez tipfelera
+    ["Hvra", "Hvar"], // 4–5 slova: samo zamjena susjednih
+    ["Hvat", null], // 4–5 slova: ostali tipfeleri ne
+    ["Kr", null],
     ["Lastvo", "Lastovo"], // 1 tipfeler za 6+ slova
     ["Đakovo", null],
   ])("otok: %s -> %s", (input, expected) => {
@@ -36,6 +38,33 @@ describe("match", () => {
     expect(match(jelo, "Ћевапи")?.canonical).toBe("Ćevapi");
     expect(match(rijeka, "Сава")?.canonical).toBe("Sava");
     expect(match(jelo, "Сарма")?.canonical).toBe("Sarma");
+  });
+
+  it("tipfeleri: zamjena susjednih slova, strani pravopis, redoslijed riječi", () => {
+    const idx = buildIndex(
+      [
+        "Washington", "Mississippi", "Vatroslav Lisinski", "Mali Lošinj", "Veli Lošinj", "Gornja Stubica",
+        "Michael Jordan", "Luj XIV", "Peugeot 208", "Capri", "Branka", "Ranka", "SDS", "Zagreb",
+      ].map((canonical, id) => ({ id, canonical, variants: [] })),
+    );
+    const m = (s: string) => match(idx, s)?.canonical ?? null;
+    expect(m("Wahsington")).toBe("Washington");
+    expect(m("Vašington")).toBe("Washington");
+    expect(m("Misisipi")).toBe("Mississippi");
+    expect(m("Lisinski Vatroslav")).toBe("Vatroslav Lisinski");
+    expect(m("Vatroslav Lisniski")).toBe("Vatroslav Lisinski");
+    expect(m("Vatrsolav Lisniski")).toBe("Vatroslav Lisinski"); // po jedan tipfeler u svakoj riječi
+    expect(m("Malilošinj")).toBe("Mali Lošinj");
+    expect(m("Zgareb")).toBe("Zagreb");
+    expect(m("Cpari")).toBe("Capri");
+    expect(m("Acpri")).toBeNull(); // 4–5 slova: prvo slovo mora stajati
+    expect(m("Carpi")).toBe("Capri");
+    expect(m("Donja Stubica")).toBeNull(); // svaka riječ za sebe, Donja/Gornja su dvije greške
+    expect(m("Michael Norman")).toBeNull();
+    expect(m("Luj XVI")).toBeNull(); // rimski brojevi moraju biti točni
+    expect(m("Peugeot 2008")).toBeNull(); // brojevi moraju biti točni
+    expect(m("Franka")).toBeNull(); // blizu i Branki i Ranki, ne pogađamo
+    expect(m("SDSS")).toBeNull();
   });
 
   it("prazan unos", () => {
