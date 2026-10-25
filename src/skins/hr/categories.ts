@@ -47,7 +47,7 @@ export const hrCategories: SeedCategory[] = [
   ...zaigranoKategorije,
   ...kvizKategorije,
   ...nove3,
-].map(withDodaci).map(withAliasi).map(withWiki).map(withRare);
+].map(withDodaci).map(withWiki).map(withRare).map(withAliasi);
 
 function format(list: ReturnType<typeof parseSeedAnswers>) {
   return list.map((a) => `${[a.canonical, ...a.variants].join("/")}=${a.share}${a.rare ? "!" : ""}`).join(";");
@@ -58,7 +58,7 @@ function withDodaci(c: SeedCategory): SeedCategory {
   return dodaci[c.slug] ? { ...c, answers: `${c.answers};${dodaci[c.slug]}` } : c;
 }
 
-/** Dodatni aliasi iz aliasi.ts za postojeće odgovore. */
+/** Dodatni aliasi iz aliasi.ts za postojeće odgovore (zadnji, da ih dobiju i odgovori dodani tek u helikopter.ts). */
 function withAliasi(c: SeedCategory): SeedCategory {
   const m = aliasi[c.slug];
   if (!m) return c;
