@@ -868,7 +868,7 @@ export const opceKategorije: SeedCategory[] = [
   {
     slug: "svjetsko-jelo",
     group: "opce",
-    title: "Jelo iz svjetske kuhinje",
+    title: "Jelo koje nije iz hrvatske kuhinje",
     hint: "Jelo, prilog ili desert iz bilo koje kuhinje osim hrvatske",
     strip: [],
     answers: `Pizza/Pica=10; Sushi=5; Lazanje/Lasagne=4; Hamburger/Burger=4; Špageti/Špageti bolonjez/Bolonjez=3.5;
@@ -987,7 +987,7 @@ export const opceKategorije: SeedCategory[] = [
   {
     slug: "svjetska-znamenitost",
     group: "opce",
-    title: "Svjetska znamenitost ili građevina",
+    title: "Znamenitost ili građevina izvan Hrvatske",
     hint: "Izvan Hrvatske: građevina, spomenik ili poznata prirodna atrakcija",
     strip: [],
     answers: `Eiffelov toranj/Eiffel=9.5; Kip slobode=5; Koloseum/Kolosej=5; Kineski zid=5;
@@ -1064,7 +1064,7 @@ export const opceKategorije: SeedCategory[] = [
   {
     slug: "svjetski-brend",
     group: "opce",
-    title: "Svjetska tvrtka ili brend",
+    title: "Strana tvrtka ili brend",
     hint: "Strana tvrtka ili marka bilo čega",
     strip: [],
     answers: `Apple=6; Coca-Cola/Coca=5; Nike=4; Google=4; Samsung=3; Microsoft=3; Adidas=3; Amazon=2.5;
@@ -1149,7 +1149,7 @@ export const opceKategorije: SeedCategory[] = [
   {
     slug: "sportas-svijet",
     group: "opce",
-    title: "Svjetski sportaš ili sportašica, bez nogometa i tenisa",
+    title: "Sportaš ili sportašica izvan Hrvatske, bez nogometa i tenisa",
     hint: "Nije iz Hrvatske; bilo koji sport osim nogometa i tenisa, i šah",
     strip: [],
     answers: `Usain Bolt/Bolt=9; Michael Phelps/Phelps=6; Muhammad Ali=4.5; Michael Jordan=4.5;
@@ -1206,7 +1206,7 @@ export const opceKategorije: SeedCategory[] = [
   {
     slug: "politicar-svijet",
     group: "opce",
-    title: "Svjetski političar ili državnik",
+    title: "Političar ili državnik izvan Hrvatske",
     hint: "Strani političar, vladar ili državnik, danas ili kroz povijest (ne iz Hrvatske)",
     strip: [],
     answers: `Donald Trump/Trump=7; Vladimir Putin/Putin=6; Barack Obama/Obama=5; Joe Biden/Biden=3.5;
@@ -1248,7 +1248,7 @@ export const opceKategorije: SeedCategory[] = [
   {
     slug: "strani-pisac",
     group: "opce",
-    title: "Strani pisac ili pjesnik",
+    title: "Pisac ili pjesnik izvan Hrvatske",
     hint: "Pisac ili pjesnik koji nije iz Hrvatske, bilo kojeg doba",
     strip: [],
     answers: `William Shakespeare/Shakespeare=7.5; Fjodor Dostojevski/Dostojevski=3.5; Lav Tolstoj/Tolstoj=3.5;
@@ -1291,7 +1291,7 @@ export const opceKategorije: SeedCategory[] = [
   {
     slug: "strani-znanstvenik",
     group: "opce",
-    title: "Strani znanstvenik ili izumitelj",
+    title: "Znanstvenik ili izumitelj izvan Hrvatske",
     hint: "Nije rođen u Hrvatskoj; bilo koje doba",
     strip: [],
     answers: `Albert Einstein/Einstein=15.5; Isaac Newton/Newton=8; Thomas Edison/Edison=4.5;

@@ -614,7 +614,7 @@ export const zaigranoKategorije: SeedCategory[] = [
   {
     slug: "strani-izvodjac",
     group: "zaigrano",
-    title: "Strani pjevač ili bend",
+    title: "Pjevač ili bend izvan bivše Jugoslavije",
     hint: "Izvan bivše Jugoslavije",
     strip: ["bend", "grupa"],
     answers: `Beatles=6; Michael Jackson=6; Queen=5; Madonna=4; Elvis Presley/Elvis=4; ABBA=3; Rolling Stones=3;

@@ -35,7 +35,7 @@ export const rsContent: Country = {
         "Branislav Ivanović", "Nemanja Matić", "Filip Kostić"],
     },
     "svjetsko-jelo": {
-      title: "Jelo iz svetske kuhinje",
+      title: "Jelo koje nije iz srpske kuhinje",
       hint: "Jelo, prilog ili desert iz bilo koje kuhinje osim srpske",
       addFrom: "jelo",
       remove: ["Ćevapi", "Pljeskavica", "Karađorđeva šnicla", "Burek"],
@@ -60,7 +60,7 @@ export const rsContent: Country = {
         "Nemanja Bjelica", "Vasilije Micić"],
     },
     "sportas-svijet": {
-      title: "Svetski sportista ili sportistkinja, bez fudbala i tenisa",
+      title: "Sportista ili sportistkinja van Srbije, bez fudbala i tenisa",
       hint: "Nije iz Srbije; bilo koji sport osim fudbala i tenisa, i šah",
       add: svijetSport,
     },

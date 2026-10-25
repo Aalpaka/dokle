@@ -36,7 +36,7 @@ export const baContent: Country = {
         "Mehmed Baždarević", "Faruk Hadžibegić", "Elvir Bolić", "Asmir Begović", "Sead Kolašinac", "Ermedin Demirović"],
     },
     "svjetsko-jelo": {
-      title: "Jelo iz svjetske kuhinje",
+      title: "Jelo koje nije iz bosanske kuhinje",
       hint: "Jelo, prilog ili desert iz bilo koje kuhinje osim bosanske",
       addFrom: "jelo",
       remove: ["Ćevapi", "Burek", "Bosanski lonac", "Begova čorba", "Tufahija", "Pljeskavica"],
@@ -60,7 +60,7 @@ export const baContent: Country = {
       remove: ["Mirza Delibašić", "Jusuf Nurkić", "Mirza Teletović", "Razija Mujanović"],
     },
     "sportas-svijet": {
-      title: "Svjetski sportaš ili sportašica, bez nogometa i tenisa",
+      title: "Sportaš ili sportašica izvan BiH, bez nogometa i tenisa",
       hint: "Nije iz BiH; bilo koji sport osim nogometa i tenisa, i šah",
       add: svijetSport,
     },
