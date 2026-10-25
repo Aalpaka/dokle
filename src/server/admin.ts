@@ -24,7 +24,7 @@ import { addDays, dailyAverages, weekDays } from "@/lib/league";
 import { placeAt } from "@/skins/mjesta";
 import { isAdminEmail } from "./accounts";
 import { resolveIdentity } from "./player";
-import { categoryShares, clearCategoryCache, clearPuzzleCache, followersOf, getOrCreatePuzzle, pairedSlugs, rescoreMisses, type Skin } from "./game";
+import { categoryShares, clearCategoryCache, clearPuzzleCache, followersOf, getOrCreatePuzzle, pairedSlugs, rejectReports, rescoreMisses, type Skin } from "./game";
 
 /** Id admina ili null. Lokalno se može uključiti ADMIN_DEV_BYPASS=1 (nikad u produkciji). */
 export async function requireAdmin(): Promise<{ playerId: string | null } | null> {
@@ -258,18 +258,28 @@ export async function reviewQueue(skin: Skin, limit = 200) {
       category: categories.title,
       normalized: attempts.normalized,
       n: sql<number>`count(distinct ${attempts.gameId})::int`,
+      // igrači koji su prijavili da odgovor fali (ostavili su ga kao konačan)
+      reports: sql<number>`count(distinct ${rounds.gameId}) filter (where ${rounds.reportedAt} is not null)::int`,
       examples: sql<string[]>`(array_agg(distinct ${attempts.raw}))[1:5]`,
       last: sql<string>`max(${attempts.createdAt})`,
     })
     .from(attempts)
     .innerJoin(categories, eq(categories.id, attempts.categoryId))
     .leftJoin(
+      rounds,
+      and(eq(rounds.gameId, attempts.gameId), eq(rounds.position, attempts.position), eq(rounds.raw, attempts.raw), isNull(rounds.answerId)),
+    )
+    .leftJoin(
       reviewDecisions,
       and(eq(reviewDecisions.categoryId, attempts.categoryId), eq(reviewDecisions.normalized, attempts.normalized)),
     )
     .where(and(eq(categories.skinId, skin.id), eq(attempts.accepted, false), isNull(reviewDecisions.id), sql`${attempts.normalized} <> ''`))
     .groupBy(attempts.categoryId, categories.title, attempts.normalized)
-    .orderBy(desc(sql`count(distinct ${attempts.gameId})`), desc(sql`max(${attempts.createdAt})`))
+    .orderBy(
+      desc(sql`count(distinct ${rounds.gameId}) filter (where ${rounds.reportedAt} is not null)`),
+      desc(sql`count(distinct ${attempts.gameId})`),
+      desc(sql`max(${attempts.createdAt})`),
+    )
     .limit(limit);
   return rows;
 }
@@ -298,6 +308,7 @@ export async function decide(skin: Skin, adminId: string | null, a: ReviewAction
     await db.insert(answerAliases).values({ answerId, alias: a.alias.trim() || a.normalized }).onConflictDoNothing();
   }
   const rescored = answerId ? await rescoreMisses(skin, a.categoryId, a.normalized, answerId) : 0;
+  if (a.action === "reject") await rejectReports(a.categoryId, a.normalized);
   clearCategoryCache(a.categoryId);
   await db
     .insert(reviewDecisions)

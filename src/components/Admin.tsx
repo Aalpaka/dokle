@@ -402,7 +402,7 @@ function Stat({ v, l }: { v: string | number; l: string }) {
 
 // ---------- Za pregled ----------
 
-type ReviewRow = { categoryId: number; category: string; normalized: string; n: number; examples: string[] };
+type ReviewRow = { categoryId: number; category: string; normalized: string; n: number; reports: number; examples: string[] };
 type AnswerRow = { id: number; canonical: string; priorShare: number; rare: boolean; source: string; seedCanonical: string | null; edited: boolean; aliases: string[] };
 type CatDetail = { id: number; title: string; active: boolean; hint: string | null; answers: AnswerRow[] };
 const asOthers = (list: AnswerRow[], except?: number) => list.filter((a) => a.id !== except).map((a) => ({ share: a.priorShare, rare: a.rare }));
@@ -423,8 +423,9 @@ function Review() {
     <div className="stack">
       <h2>Odbijeni odgovori</h2>
       <p className="small">
-        Upisi koje sustav nije prepoznao, grupirani po kategoriji i obliku, sortirani po broju igrača. Kad prihvatiš odgovor,
-        igrači koji su ga upisali kao zadnji odgovor dobiju bodove naknadno.
+        Upisi koje sustav nije prepoznao, grupirani po kategoriji i obliku. Na vrhu su oni koje su igrači prijavili 🚩 (siguran sam da
+        je točno), pa ostali po broju igrača. Kad prihvatiš odgovor, igrači koji su ga upisali kao zadnji odgovor dobiju bodove
+        naknadno i obavijest kod sljedećeg dolaska; kad ga odbiješ, prijavljenima prestaje stajati „na provjeri”.
       </p>
       <Err msg={error} />
       {msg && <p className="small"><b>{msg}</b></p>}
@@ -439,6 +440,7 @@ function Review() {
                 <b>{r.examples[0]}</b>{r.examples.length > 1 && <span className="small"> · {r.examples.slice(1).join(", ")}</span>}
               </div>
               <div className="row">
+                {r.reports > 0 && <span className="chip" title="igrači koji su prijavili da odgovor fali">🚩 {r.reports}</span>}
                 <span className="chip">{r.n} {r.n === 1 ? "igrač" : "igrača"}</span>
                 <button className="ghost small-btn" onClick={() => setOpen(open === key ? null : key)}>{open === key ? "Zatvori" : "Odluči"}</button>
                 <button className="danger small-btn" onClick={() => reject(r)} aria-label="Nije točno" title="Nije točno">✕</button>

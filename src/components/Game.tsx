@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { AnswerList, GameState, RoundView } from "@/server/game";
+import type { AnswerList, GameState, Notice, RoundView } from "@/server/game";
 import { BUCKET_KM, type DayCompare } from "@/lib/compare";
 import type { SkinConfig } from "@/skins/types";
 import { formatShare, landingAt } from "@/lib/scoring";
@@ -26,7 +26,7 @@ async function api<T>(path: string, body?: unknown): Promise<T> {
   return res.json() as Promise<T>;
 }
 
-type AnswerResponse = { status: "rejected" } | { status: "scored"; state: GameState } | { status: "no-round" };
+type AnswerResponse = { status: "rejected"; checked?: boolean } | { status: "scored"; state: GameState } | { status: "no-round" };
 
 export default function Game() {
   const t = useT();
@@ -53,6 +53,17 @@ export default function Game() {
     api<GameState>("/api/game").then(setState, () => setError(true));
   }, []);
   useEffect(load, [load]);
+  // naknadno prihvaćeni odgovori iz prijašnjih partija
+  const [notices, setNotices] = useState<Notice[]>([]);
+  useEffect(() => {
+    api<Notice[]>("/api/game/notices").then((n) => setNotices(Array.isArray(n) ? n : []), () => {});
+  }, []);
+  const dismiss = () => {
+    setNotices([]);
+    api("/api/game/notices", {}).catch(() => {});
+    // današnja partija je možda dobila km
+    load();
+  };
   // kraj počinje s kartom na vrhu, gdje ide replay
   useEffect(() => {
     if (showEnd) window.scrollTo(0, 0);
@@ -79,7 +90,8 @@ export default function Game() {
   const phase = state.phase === "reveal" && showEnd ? "end" : state.phase;
 
   const map = maps[state.skin.id] ?? maps.hr;
-  if (phase === "intro") return <Landing state={state} cfg={cfg} me={me} onStart={start} />;
+  const notice = notices.length > 0 && <Notices list={notices} skinId={state.skin.id} cfg={cfg} onClose={dismiss} />;
+  if (phase === "intro") return <>{notice}<Landing state={state} cfg={cfg} me={me} onStart={start} /></>;
 
   // igra stane na jedan ekran (karta + pitanje), kraj je obična stranica koja se skrola
   return (
@@ -93,10 +105,12 @@ export default function Game() {
           <Reveal
             state={vstate}
             onNext={() => (state.rounds.length >= state.perDay ? setShowEnd(true) : start())}
+            onState={setState}
           />
         )}
-        {phase === "end" && <End state={vstate} me={me} />}
+        {phase === "end" && <End state={vstate} me={me} onState={setState} />}
       </section>
+      {notice}
       {phase === "end" && <p className="credit">{map.credit} {t("Zvukovi su sintetizirani u pregledniku.")}</p>}
     </Shell>
   );
@@ -228,21 +242,21 @@ function Play({ state, onScored, onLost }: { state: GameState; onScored: (s: Gam
   const waiting = wait > 0;
   const inputRef = useRef<HTMLInputElement>(null);
   const barRef = useRef<HTMLElement>(null);
-  const [sending, setSending] = useState<{ kind: "idle" | "preview" | "nope"; canonical?: string | null }>({ kind: "idle" });
+  const [sending, setSending] = useState<{ kind: "idle" | "preview" | "nope"; canonical?: string | null; raw?: string; checked?: boolean }>({ kind: "idle" });
   const busy = useRef(false);
   const valueRef = useRef(value);
   valueRef.current = value;
 
   const send = useCallback(
-    async (raw: string, final: boolean) => {
+    async (raw: string, final: boolean, keep = false) => {
       if (busy.current) return;
       busy.current = true;
       try {
-        const r = await api<AnswerResponse>("/api/game/answer", { raw, final });
+        const r = await api<AnswerResponse>("/api/game/answer", { raw, final, keep });
         if (r.status === "scored") onScored(r.state);
         else if (r.status === "rejected") {
           sfx.wrong();
-          setSending({ kind: "nope" });
+          setSending({ kind: "nope", raw: raw.trim(), checked: r.checked });
         }
         else onLost();
       } finally {
@@ -300,14 +314,16 @@ function Play({ state, onScored, onLost }: { state: GameState; onScored: (s: Gam
     const q = value.trim();
     if (!q) return setSending({ kind: "idle" });
     const key = `${cur.position}|${q.toLowerCase()}`;
-    if (previews.current.has(key)) return setSending({ kind: "preview", canonical: previews.current.get(key)! });
+    // pregled koji stigne nakon slanja ne briše poruku o odbijenom odgovoru (ni gumb za provjeru)
+    const show = (canonical: string | null) => setSending((s) => (s.kind === "nope" && s.raw === q ? s : { kind: "preview", canonical }));
+    if (previews.current.has(key)) return show(previews.current.get(key)!);
     const ctrl = new AbortController();
     const timer = setTimeout(() => {
       skinFetch("/api/game/preview?q=" + encodeURIComponent(q), { signal: ctrl.signal })
         .then((r) => r.json())
         .then((r: { canonical: string | null }) => {
           previews.current.set(key, r.canonical);
-          setSending({ kind: "preview", canonical: r.canonical });
+          show(r.canonical);
         })
         .catch(() => {});
     }, 300);
@@ -363,7 +379,15 @@ function Play({ state, onScored, onLost }: { state: GameState; onScored: (s: Gam
         <button type="submit" disabled={waiting}>{t("Pošalji")}</button>
       </form>
       {sending.kind === "nope" ? (
-        <div className="sending nope">{t("Nema tog odgovora na popisu. Probaj nešto drugo.")}</div>
+        sending.checked ? (
+          <div className="sending nope">{t("„{x}” smo već provjerili i nije prihvaćen. Probaj nešto drugo.", { x: sending.raw ?? "" })}</div>
+        ) : (
+          <div className="sending nope keep">
+            <span>{t("„{x}” još nemamo na popisu. Probaj nešto drugo ili ga ostavi na provjeru.", { x: sending.raw ?? "" })}</span>
+            {/* igrač koji zna da je u pravu ne mora tražiti drugi odgovor: runda se zatvara, a km stižu kad ga prihvatimo */}
+            <button type="button" className="ghost small-btn" onClick={() => send(sending.raw ?? value, false, true)}>{t("Siguran sam, provjerite")}</button>
+          </div>
+        )
       ) : sending.kind === "preview" ? (
         <div className={"sending" + (changed ? " changed" : "")}>{t("Šalje se:")} <b>{shown}</b></div>
       ) : (
@@ -373,7 +397,7 @@ function Play({ state, onScored, onLost }: { state: GameState; onScored: (s: Gam
   );
 }
 
-function Reveal({ state, onNext }: { state: GameState; onNext: () => void }) {
+function Reveal({ state, onNext, onState }: { state: GameState; onNext: () => void; onState: (s: GameState) => void }) {
   const cfg = withVisuals(state.skin.id, state.skin.config);
   const r = state.rounds[state.rounds.length - 1];
   const before = landingAt(cfg, state.totalKm - r.km);
@@ -392,10 +416,11 @@ function Reveal({ state, onNext }: { state: GameState; onNext: () => void }) {
           <span className="emo"><TierIcon emoji={r.emoji} icon={iconFor(cfg, r)} /></span>
           <div>
             <div>{what(r, t)}</div>
-            <div className="small">{r.tier}{r.speed && <> · {r.speed.emoji} {r.speed.name} ×{String(r.speed.multiplier).replace(".", ",")}</>}</div>
+            <div className="small">{t(r.tier)}{r.speed && <> · {r.speed.emoji} {r.speed.name} ×{String(r.speed.multiplier).replace(".", ",")}</>}</div>
           </div>
           <span className="km">+{r.km}</span>
         </div>
+        {r.report && <ReportLine r={r} onState={onState} />}
         {after !== before && (
           <p className="small">{after === cfg.overshoot?.station ? `Preletio si ${cfg.stations[cfg.stations.length - 1].name} i završio u` : t("Prošao si")}: <b>{after.name}</b></p>
         )}
@@ -421,11 +446,65 @@ function iconFor(cfg: SkinConfig, r: RoundView) {
 
 function what(r: RoundView, t: T) {
   if (r.canonical) return <><b>{r.canonical}</b> · {formatShare(r.share ?? 0)} {t("igrača")}</>;
+  if (r.report === "pending") return <>{t("„{x}” je na provjeri.", { x: r.raw ?? "" })}</>;
+  if (r.report === "open") return <>{t("„{x}” još nemamo na popisu.", { x: r.raw ?? "" })}</>;
   if (r.raw) return <>{t("„{x}” nije na našem popisu.", { x: r.raw })}</>;
   return <>{t("Nisi stigao odgovoriti.")}</>;
 }
 
-function End({ state, me }: { state: GameState; me: Me | null }) {
+/** Promašaj s upisom: prijava da odgovor fali, ili gdje je prijava. */
+function ReportLine({ r, onState, compact = false }: { r: RoundView; onState: (s: GameState) => void; compact?: boolean }) {
+  const t = useT();
+  const [busy, setBusy] = useState(false);
+  const [failed, setFailed] = useState(false);
+  if (r.report === "pending")
+    return compact ? null : <p className="small report">{t("Ako je točan, km ti dodajemo naknadno i javimo ti kad ga prihvatimo.")}</p>;
+  if (r.report !== "open") return null;
+  const report = () => {
+    setBusy(true);
+    api<GameState | null>("/api/game/report", { position: r.position }).then(
+      (s) => (s ? onState(s) : setFailed(true)),
+      () => setFailed(true),
+    ).finally(() => setBusy(false));
+  };
+  return (
+    <p className={"small report" + (compact ? " compact" : "")}>
+      {!compact && <span>{t("Siguran si da je točan?")} </span>}
+      <button type="button" className="ghost small-btn" disabled={busy} onClick={report}>{t("Prijavi da fali")}</button>
+      {failed && <span> {t("Prijava nije uspjela.")}</span>}
+    </p>
+  );
+}
+
+/** Odgovori koje je admin naknadno prihvatio: km su već dodani, igrač to sad saznaje. */
+function Notices({ list, skinId, cfg, onClose }: { list: Notice[]; skinId: string; cfg: SkinConfig; onClose: () => void }) {
+  const t = useT();
+  return (
+    <div className="notice" role="status">
+      <b>{list.length === 1 ? t("Prihvatili smo tvoj odgovor! 🎉") : t("Prihvatili smo tvoje odgovore! 🎉")}</b>
+      <ul>
+        {list.map((n) => {
+          const [, m, d] = n.date.split("-");
+          return (
+            <li key={`${n.gameId}:${n.position}`}>
+              {t("„{x}” ({kategorija}, {datum}): +{km} km, partija sad ima {ukupno} km ({mjesto}).", {
+                x: n.canonical,
+                kategorija: n.category,
+                datum: `${+d}. ${+m}.`,
+                km: n.km,
+                ukupno: n.totalKm,
+                mjesto: placeAt(skinId, cfg, n.totalKm),
+              })}
+            </li>
+          );
+        })}
+      </ul>
+      <button type="button" onClick={onClose}>{t("Super")}</button>
+    </div>
+  );
+}
+
+function End({ state, me, onState }: { state: GameState; me: Me | null; onState: (s: GameState) => void }) {
   const cfg = withVisuals(state.skin.id, state.skin.config);
   const km = state.totalKm;
   // ime je najbliže stvarno mjesto, a šala iz poruke samo od postaje do koje je igrač blizu (cilj tek kad je stigao)
@@ -472,7 +551,7 @@ function End({ state, me }: { state: GameState; me: Me | null }) {
       <span className="small">{t("Klikni kategoriju za sve moguće odgovore i koliko je koji vrijedio.")}</span>
       <ul className="recap">
         {state.rounds.map((r) => (
-          <RecapRow key={r.position} r={r} cfg={cfg} />
+          <RecapRow key={r.position} r={r} cfg={cfg} onState={onState} />
         ))}
       </ul>
       <pre className="share">{share}</pre>
@@ -583,7 +662,8 @@ function CompareChart({ c, cfg, skinId }: { c: Compare; cfg: SkinConfig; skinId:
   );
 }
 
-function RecapRow({ r, cfg }: { r: RoundView; cfg: SkinConfig }) {
+function RecapRow({ r, cfg, onState }: { r: RoundView; cfg: SkinConfig; onState: (s: GameState) => void }) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   return (
     <li className={open ? "open" : ""}>
@@ -592,10 +672,12 @@ function RecapRow({ r, cfg }: { r: RoundView; cfg: SkinConfig }) {
         <span>
           <span className="c">{r.category.title}</span><br />
           <span className="a">{r.canonical ?? (r.raw ? `„${r.raw}”` : "—")}</span>
+          {r.report === "pending" && <span className="c"> · {t("na provjeri")}</span>}
         </span>
         <span className="k">+{r.km}</span>
         <span className="chev" aria-hidden="true">{open ? "▴" : "▾"}</span>
       </button>
+      {r.report === "open" && <ReportLine r={r} onState={onState} compact />}
       {open && <AllAnswers position={r.position} cfg={cfg} />}
     </li>
   );

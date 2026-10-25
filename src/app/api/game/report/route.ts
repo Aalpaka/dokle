@@ -1,0 +1,14 @@
+import { NextResponse } from "next/server";
+import { reportRound } from "@/server/game";
+import { resolveIdentity } from "@/server/player";
+import { currentSkin } from "@/server/skin";
+
+// prijava da točan odgovor iz današnje runde fali na popisu
+export async function POST(req: Request) {
+  const body = (await req.json().catch(() => null)) as { position?: unknown } | null;
+  const position = Number(body?.position);
+  const { playerId } = await resolveIdentity();
+  if (!playerId || !Number.isInteger(position) || position < 0) return NextResponse.json(null, { status: 404 });
+  const state = await reportRound(await currentSkin(), playerId, position);
+  return NextResponse.json(state, { status: state ? 200 : 404 });
+}

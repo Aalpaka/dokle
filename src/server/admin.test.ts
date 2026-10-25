@@ -2,13 +2,15 @@ import { afterAll, describe, expect, it } from "vitest";
 import { and, eq, inArray } from "drizzle-orm";
 import { db, sql } from "@/db";
 import { answerAliases, answers, categories, dailyPuzzles, games, players, removedAliases, reviewDecisions, rounds } from "@/db/schema";
-import { ensurePlayer, getOrCreatePuzzle, getSkin, startNext, submitAnswer } from "./game";
+import { dismissNotices, ensurePlayer, getOrCreatePuzzle, getSkin, getState, reportRound, rescoreNotices, startNext, submitAnswer } from "./game";
 import { decide, generalStats, listCategories, playerDetail, playersOverview, reviewQueue, searchAttempts, setSchedule, updateAnswer, weekAverages } from "./admin";
 import { localDate } from "@/lib/day";
 import { periodStart } from "@/lib/league";
 
 // Integracijski testovi nad lokalnom bazom (npm run db:migrate && npm run db:seed).
 const WEIRD = "zzqx odgovor";
+const KEPT = "zzqx prijava";
+const NOPE = "zzqx nije";
 const ids: string[] = [];
 
 async function playAllWith(raw: string) {
@@ -29,8 +31,8 @@ describe.skipIf(!process.env.DATABASE_URL)("admin", () => {
   afterAll(async () => {
     await db.delete(games).where(inArray(games.playerId, ids));
     await db.delete(players).where(inArray(players.id, ids));
-    await db.delete(reviewDecisions).where(eq(reviewDecisions.normalized, WEIRD));
-    await db.delete(answers).where(eq(answers.canonical, "Zzqx odgovor"));
+    await db.delete(reviewDecisions).where(inArray(reviewDecisions.normalized, [WEIRD, KEPT, NOPE]));
+    await db.delete(answers).where(inArray(answers.canonical, ["Zzqx odgovor", "Zzqx prijava"]));
     await sql.end();
   });
 
@@ -140,6 +142,56 @@ describe.skipIf(!process.env.DATABASE_URL)("admin", () => {
     expect((await reviewQueue(skin)).some((g) => g.normalized === WEIRD && g.categoryId === group.categoryId)).toBe(false);
     const found = await searchAttempts(skin, { q: "zzqx", limit: 50 });
     expect(found.length).toBeGreaterThan(0);
+  });
+
+  it("prijava: siguran sam ide na provjeru i na vrh reda, prihvaćanje javlja igraču, odbijanje skida provjeru", async () => {
+    const skin = await getSkin("hr");
+    const id = crypto.randomUUID();
+    ids.push(id);
+    await ensurePlayer(id);
+    await startNext(skin, id, 0);
+    // prvi upis se odbija, drugi s keep zatvara rundu kao "na provjeri"
+    expect((await submitAnswer(skin, id, KEPT, false)).status).toBe("rejected");
+    const kept = await submitAnswer(skin, id, KEPT, false, true);
+    if (kept.status !== "scored") throw new Error(kept.status);
+    expect(kept.state.rounds[0]).toMatchObject({ raw: KEPT, km: 0, report: "pending", emoji: "⏳", tier: "Na provjeri" });
+    // druga runda: istekne vrijeme s nepoznatim upisom, pa igrač prijavi s ekrana rezultata
+    await startNext(skin, id, 0);
+    const missed = await submitAnswer(skin, id, NOPE, true);
+    if (missed.status !== "scored") throw new Error(missed.status);
+    expect(missed.state.rounds[1].report).toBe("open");
+    expect((await reportRound(skin, id, 1))!.rounds[1].report).toBe("pending");
+    expect(await reportRound(skin, id, 1)).toBeNull(); // već prijavljeno
+    expect(await reportRound(skin, id, 5)).toBeNull(); // ta runda ne postoji
+
+    const queue = await reviewQueue(skin);
+    expect(queue[0].reports).toBeGreaterThan(0);
+    const keptGroup = queue.find((g) => g.normalized === KEPT)!;
+    expect(keptGroup.reports).toBe(1);
+
+    const { rescored } = await decide(skin, null, { action: "answer", categoryId: keptGroup.categoryId, normalized: KEPT, canonical: "Zzqx prijava", priorShare: 0.1 });
+    expect(rescored).toBe(1);
+    const notices = await rescoreNotices(skin, id);
+    expect(notices).toHaveLength(1);
+    expect(notices[0]).toMatchObject({ canonical: "Zzqx prijava", position: 0 });
+    expect(notices[0].km).toBeGreaterThan(0);
+    expect((await getState(skin, id)).rounds[0].report).toBeUndefined();
+    await dismissNotices(skin, id);
+    expect(await rescoreNotices(skin, id)).toHaveLength(0);
+
+    const nope = queue.find((g) => g.normalized === NOPE)!;
+    await decide(skin, null, { action: "reject", categoryId: nope.categoryId, normalized: NOPE });
+    const st = await getState(skin, id);
+    expect(st.rounds[1]).toMatchObject({ report: "rejected", emoji: "🚧" });
+
+    // odbijeni odgovor se više ne može ostaviti na provjeru
+    const other = crypto.randomUUID();
+    ids.push(other);
+    await ensurePlayer(other);
+    await startNext(skin, other, 0);
+    await submitAnswer(skin, other, KEPT + " x", true);
+    await startNext(skin, other, 0);
+    expect(await submitAnswer(skin, other, NOPE, false, true)).toMatchObject({ status: "rejected", checked: true });
   });
 
   it("raspored se slaže u hrvatskom adminu i vrijedi za sve tri države", async () => {
