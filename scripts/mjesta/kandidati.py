@@ -2,11 +2,11 @@
 
 python3 scripts/mjesta/kandidati.py <wiki> <kategorije> <sjedišta> <dump-mapa> <izlaz.json> <prag> [pregledi.tsv.gz]
 Poznatost je godišnji broj pregleda članka (ako je dana datoteka pregleda), inače broj jezika na kojima članak
-postoji (langlinks). Ostaju naselja s poznatošću >= prag i sva iz kategorija sjedišta (gradovi i općine).
+postoji (langlinks). Ostaju naselja s poznatošću >= prag i sva iz kategorija sjedišta (za hr gradovi).
   hr: hrwiki "Naselje u popisu 2021.,Općina i naselje u popisu 2021.,Grad i naselje u popisu 2021." \
-      "Općina i naselje u popisu 2021.,Grad i naselje u popisu 2021." dump/hr kandidati-hr.json 3000 pv12-hr.tsv.gz
-  ba: bswiki "Naselja u Bosni i Hercegovini" "" dump/bs kandidati-ba.json 12
-  rs: srwiki "Википројект географија/Насеља у Србији" "" dump/sr kandidati-rs.json 16
+      "Grad i naselje u popisu 2021." dump/hr kandidati-hr.json 8000 pv12-hr.tsv.gz
+  ba: bswiki "Naselja u Bosni i Hercegovini" "" dump/bs kandidati-ba.json 15
+  rs: srwiki "Википројект географија/Насеља у Србији" "" dump/sr kandidati-rs.json 20
       (ćirilica se prebacuje u latinicu, Kosovo izostavljeno)
 Dumpovi (https://dumps.wikimedia.org/<wiki>/latest/): geo_tags, page, categorylinks, linktarget, langlinks.
 """

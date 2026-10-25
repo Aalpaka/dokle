@@ -12,7 +12,7 @@ describe("placeAt", () => {
   });
   it("pred Zadrom nije Gospić", () => {
     expect(placeAt("hr", hrConfig, 705)).toBe("Zadar");
-    expect(placeAt("hr", hrConfig, 680)).toBe("Posedarje");
+    expect(placeAt("hr", hrConfig, 690)).not.toBe("Gospić");
   });
   it("tablica pokriva cijelu rutu, od starta", () => {
     expect(hr[0][0]).toBe(0);

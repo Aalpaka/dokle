@@ -8,9 +8,9 @@ poznatija mjesta, da većina igrača ima šansu čuti za njih:
 
 | skin | wiki | kategorija | poznatost | mjesta |
 |---|---|---|---|---|
-| hr | hrwiki | Naselje / Općina i naselje / Grad i naselje u popisu 2021. | svi gradovi i općine + 3000+ pregleda godišnje | ~610 |
-| ba | bswiki | Naselja u Bosni i Hercegovini | članak na 12+ jezika | ~320 |
-| rs | srwiki | Википројект географија/Насеља у Србији (bez Kosova, u latinici) | članak na 16+ jezika | ~430 |
+| hr | hrwiki | Naselje / Općina i naselje / Grad i naselje u popisu 2021. | svi gradovi + 8000+ pregleda godišnje | ~150 |
+| ba | bswiki | Naselja u Bosni i Hercegovini | članak na 15+ jezika | ~160 |
+| rs | srwiki | Википројект географија/Насеља у Србији (bez Kosova, u latinici) | članak na 20+ jezika | ~180 |
 
 Pregledi za hr su iz `dokle/wiki/skripta/podaci/pv12-hr.tsv.gz` u projektnim datotekama. Poznatija mjesta se i među
 ostalima blago preferiraju, pa manje mjesto pobijedi veće samo kad je osjetno bliže.
@@ -19,7 +19,7 @@ Ponovno generirati treba kad se promijene postaje ili `via` rute:
 
 ```sh
 python3 scripts/mjesta/kandidati.py hrwiki "Naselje u popisu 2021.,Općina i naselje u popisu 2021.,Grad i naselje u popisu 2021." \
-  "Općina i naselje u popisu 2021.,Grad i naselje u popisu 2021." dump/hr kandidati-hr.json 3000 pv12-hr.tsv.gz
+  "Grad i naselje u popisu 2021." dump/hr kandidati-hr.json 8000 pv12-hr.tsv.gz
 npx tsx scripts/mjesta/gen.ts hr kandidati-hr.json hr.wikipedije
 ```
 
