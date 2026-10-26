@@ -9,6 +9,9 @@ import { Route, project, type Pt } from "@/lib/route";
 import { sfx } from "@/lib/sound";
 import { MISS_COLOR, crashSign, vehicleIcons } from "./vehicleIcons";
 import { useT } from "./skin";
+import { kmAfter } from "@/lib/league";
+import type { RaceLeague, RaceRunner } from "@/server/leagues";
+import { RacePanel, useRaceChoice } from "./Race";
 
 // trajanje vožnje po vozilu (s); pješak je najsporiji, a prijeđe i najmanje km
 const DURATION: Record<Vehicle, number> = { walk: 3.4, bike: 3.0, train: 2.9, bus: 2.9, car: 2.6, plane: 2.8, heli: 3.2 };
@@ -45,7 +48,7 @@ function badgeHtml(t: Tier | null): { html: string; logo: boolean } {
 }
 
 /** Karta s vozilom. S `ended` na kraju igre automatski jednom pusti replay cijelog puta. */
-export default function MapStage({ skinId, cfg, map, rounds, perDay, ended = false, inset = 0 }: { skinId: string; cfg: SkinConfig; map: SkinMap; rounds: RoundView[]; perDay: number; ended?: boolean; inset?: number }) {
+export default function MapStage({ skinId, cfg, map, rounds, perDay, ended = false, inset = 0, race = null }: { skinId: string; cfg: SkinConfig; map: SkinMap; rounds: RoundView[]; perDay: number; ended?: boolean; inset?: number; race?: RaceLeague[] | null }) {
   // ruta ide i do postaje produžetka (easter egg), ali cesta se do nje ne crta dok je netko ne prijeđe
   const allStations = useMemo(() => routeStations(cfg), [cfg]);
   const route = useMemo(() => new Route(allStations, [...map.via, map.overshootVia ?? []]), [allStations, map.via, map.overshootVia]);
@@ -77,6 +80,16 @@ export default function MapStage({ skinId, cfg, map, rounds, perDay, ended = fal
   const [toast, setToast] = useState<Toast | null>(null);
   const [arrival, setArrival] = useState<{ name: string; km: number; message: string; egg: boolean; pass?: boolean; id: number } | null>(null);
   const [replaying, setReplaying] = useState(false);
+
+  // utrka lige: kružići članova stoje gdje su oni bili nakon jednakog broja kategorija kao igrač (step);
+  // na kraju (Infinity) gdje su završili, a replay ih vozi kategoriju po kategoriju uz igrača
+  const { league, pick } = useRaceChoice(race);
+  const runners = league?.runners ?? [];
+  const [raceStep, setStep] = useState(ended ? Infinity : rounds.length);
+  const raceRef = useRef({ runners: [] as RaceRunner[], step: raceStep, v: 0 });
+  if (raceRef.current.runners !== runners || raceRef.current.step !== raceStep) raceRef.current = { runners, step: raceStep, v: raceRef.current.v + 1 };
+  const ghostEls = useRef(new Map<number, HTMLDivElement>());
+  const ghostKm = useRef(new Map<number, number>());
 
   // stanje simulacije; mijenja se u petlji animacije, ne kroz React
   const sim = useRef({
@@ -290,6 +303,7 @@ export default function MapStage({ skinId, cfg, map, rounds, perDay, ended = fal
     const tier = tierOf(cfg, r);
     const id = performance.now();
     const isLast = rounds.length >= perDay;
+    setStep(rounds.length);
     if (!tier) {
       sfx.miss();
       setVehicle(null);
@@ -322,15 +336,18 @@ export default function MapStage({ skinId, cfg, map, rounds, perDay, ended = fal
     setHudKm(0);
     setVehicle(cfg.tiers[0]);
     setReplaying(true);
+    setStep(0);
     let i = 0, km = 0;
     const next = () => {
       if (S.replay !== id) return;
       if (i >= rounds.length) {
         setReplaying(false);
+        setStep(Infinity);
         sfx.finish();
         return;
       }
       const r = rounds[i++], t = tierOf(cfg, r), from = km;
+      setStep(i);
       km += r.km;
       const b = badgeHtml(t);
       setToast({
@@ -377,7 +394,7 @@ export default function MapStage({ skinId, cfg, map, rounds, perDay, ended = fal
 
   // petlja kamere i animacije
   useEffect(() => {
-    let raf = 0, last = performance.now(), lastBox = "", lastVeh = "";
+    let raf = 0, last = performance.now(), lastBox = "", lastVeh = "", lastGhostBox = "", lastGhostV = -1;
     const { overview } = map;
     const bounds = map.backdrop ?? map.image;
     const xmin = bounds.x, xmax = bounds.x + bounds.width, ymin = bounds.y, ymax = bounds.y + bounds.height;
@@ -430,6 +447,44 @@ export default function MapStage({ skinId, cfg, map, rounds, perDay, ended = fal
           pin.el.style.transform = `translate(${x.toFixed(1)}px,${y.toFixed(1)}px)${pin.center ? " translate(-50%,-50%)" : ""}`;
           if (pin.fade) pin.el.classList.toggle("far", !near);
         }
+      }
+      // kružići lige klize do svog km; blizu jedni drugima slože se u red iznad jednog štapića
+      const R = raceRef.current;
+      let moving = false;
+      const gs: { el: HTMLDivElement; km: number; x: number; y: number }[] = [];
+      for (const r of R.runners) {
+        const el = ghostEls.current.get(r.memberId);
+        if (!el) continue;
+        const target = routeKm(cfg, kmAfter(r.kms, R.step));
+        let km = ghostKm.current.get(r.memberId) ?? target;
+        if (Math.abs(target - km) > 0.5) {
+          km += (target - km) * (1 - Math.exp(-dt * 1.8));
+          moving = true;
+        } else km = target;
+        ghostKm.current.set(r.memberId, km);
+        gs.push({ el, km, x: 0, y: 0 });
+      }
+      if (moving || box !== lastGhostBox || R.v !== lastGhostV) {
+        lastGhostBox = box;
+        lastGhostV = R.v;
+        gs.sort((a, b) => b.km - a.km);
+        const groups: (typeof gs)[] = [];
+        for (const g of gs) {
+          const p = route.at(g.km);
+          g.x = (p.x - x0) * sc;
+          g.y = (p.y - y0) * sc;
+          const near = groups.find((c) => Math.hypot(c[0].x - g.x, c[0].y - g.y) < 22);
+          if (near) near.push(g);
+          else groups.push([g]);
+        }
+        const gap = cw < 700 ? 15 : 18;
+        for (const c of groups)
+          c.forEach((g, j) => {
+            g.el.style.transform = `translate(${c[0].x.toFixed(1)}px,${c[0].y.toFixed(1)}px)`;
+            g.el.style.setProperty("--dx", `${((j - (c.length - 1) / 2) * gap).toFixed(1)}px`);
+            g.el.style.zIndex = String(100 - j);
+            g.el.classList.toggle("stacked", j > 0);
+          });
       }
       const v = vehRef.current, b = badgeRef.current, sh = shadowRef.current;
       const veh = `${box} ${S.pos.x} ${S.pos.y} ${S.lift} ${S.bob} ${S.rot} ${S.flip} ${b?.classList.contains("logo")}`;
@@ -517,6 +572,20 @@ export default function MapStage({ skinId, cfg, map, rounds, perDay, ended = fal
             <i /><span>{s.name}</span>
           </div>
         ))}
+        {runners.map((r) => (
+          <div
+            key={r.memberId}
+            className="ghost"
+            title={r.nickname}
+            ref={(el) => {
+              if (el) ghostEls.current.set(r.memberId, el);
+              else ghostEls.current.delete(r.memberId);
+            }}
+          >
+            <i />
+            <span className="ghost-chip" style={{ background: r.color }}>{r.tag}</span>
+          </div>
+        ))}
         <div className="veh" ref={vehRef}>
           <div className="shadow" ref={shadowRef} />
           <div className="badge" ref={badgeRef} />
@@ -528,6 +597,7 @@ export default function MapStage({ skinId, cfg, map, rounds, perDay, ended = fal
           {placeAt(skinId, cfg, hudKm)}
           <small>{t("{n} km od {mjesta}", { n: hudKm > cfg.maxKm ? rounds.reduce((a, r) => a + r.km, 0) : hudKm, mjesta: cfg.stations[0].genitive ?? cfg.stations[0].name })}</small>
         </div>
+        {!!race?.length && <RacePanel race={race} league={league} pick={pick} myKms={rounds.map((r) => r.km)} step={raceStep} perDay={perDay} />}
       </div>
       <div className="hud tr">
         <div className="signboard">

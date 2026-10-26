@@ -17,6 +17,7 @@ import { SkinPicker } from "./SkinPicker";
 import { SKIN_META, type SkinId } from "@/skins/meta";
 import { skinFetch, useSkin, useT, type T } from "./skin";
 import { LeaguesBox } from "./Leagues";
+import { useLeagueRace } from "./Race";
 
 async function api<T>(path: string, body?: unknown): Promise<T> {
   const res = await skinFetch(path, {
@@ -39,6 +40,8 @@ export default function Game() {
   const [starting, setStarting] = useState(false);
   // profil (streak) se osvježava kad partija završi
   const me = useMe(state?.phase === "end" || showEnd);
+  // utrka lige na karti: osvježi se nakon svake kategorije, a na kraju svake minute dok ekipa igra
+  const race = useLeagueRace(!!me?.user && !!state?.ranked && state.phase !== "intro", state?.rounds.length, state?.phase === "end" || showEnd);
   // na mobitelu je panel donja ploča preko karte; karta zna koliko joj je dna pokriveno
   const [sheet, setSheet] = useState(0);
   const sheetObs = useRef<ResizeObserver | null>(null);
@@ -98,7 +101,7 @@ export default function Game() {
   // igra stane na jedan ekran (karta + pitanje), kraj je obična stranica koja se skrola
   return (
     <Shell state={state} me={me} fit={phase !== "end"}>
-      <MapStage skinId={state.skin.id} cfg={cfg} map={map} rounds={state.rounds} perDay={state.perDay} ended={phase === "end"} inset={phase === "end" ? 0 : sheet} />
+      <MapStage skinId={state.skin.id} cfg={cfg} map={map} rounds={state.rounds} perDay={state.perDay} ended={phase === "end"} inset={phase === "end" ? 0 : sheet} race={race} />
       <section className="panel" aria-live="polite" ref={panelRef}>
         {phase === "play" && state.current && (
           <Play key={state.current.position} state={vstate} onScored={setState} onLost={load} />

@@ -10,6 +10,8 @@ import {
   dailyAverages,
   newLeagueCode,
   periodStart,
+  RACE_COLORS,
+  raceTags,
   weekDays,
   type DayAvg,
   type Member,
@@ -335,4 +337,61 @@ export async function memberDay(skin: Skin, league: League, viewerId: string, me
       return { title: c.title, answer: a?.answer ?? null, km: a?.km ?? 0, emoji: a?.emoji ?? skin.config.miss.emoji };
     }),
   };
+}
+
+// ---------- Utrka na karti ----------
+
+export type RaceRunner = { memberId: number; nickname: string; tag: string; color: string; kms: number[]; done: boolean };
+export type RaceLeague = { code: string; name: string; members: number; me: { tag: string; color: string }; runners: RaceRunner[] };
+
+/**
+ * Današnja utrka u svim ligama igrača: km po kategoriji svakog člana koji je danas igrao (i onih koji još igraju,
+ * do zadnje bodovane kategorije). Odgovori se ne šalju, samo km, pa se utrka vidi i dok igrač još igra.
+ */
+export async function leagueRace(skin: Skin, playerId: string): Promise<RaceLeague[]> {
+  const mine = await db
+    .select({ l: leagues })
+    .from(leagueMembers)
+    .innerJoin(leagues, eq(leagues.id, leagueMembers.leagueId))
+    .where(and(eq(leagueMembers.playerId, playerId), eq(leagues.skinId, skin.id)))
+    .orderBy(asc(leagueMembers.joinedAt));
+  if (!mine.length) return [];
+  const [puzzle] = await db
+    .select()
+    .from(dailyPuzzles)
+    .where(and(eq(dailyPuzzles.skinId, skin.id), eq(dailyPuzzles.date, localDate(skin.timezone))));
+  const rosters = await Promise.all(mine.map(({ l }) => membersOf(l.id)));
+  const ids = [...new Set(rosters.flat().map((m) => m.playerId))].filter((id) => id !== playerId);
+  const todays =
+    puzzle && ids.length
+      ? await db
+          .select({ id: games.id, playerId: games.playerId, finishedAt: games.finishedAt })
+          .from(games)
+          .where(and(eq(games.puzzleId, puzzle.id), eq(games.ranked, true), inArray(games.playerId, ids)))
+      : [];
+  const rows = todays.length
+    ? await db
+        .select({ gameId: rounds.gameId, position: rounds.position, km: rounds.km })
+        .from(rounds)
+        .where(and(inArray(rounds.gameId, todays.map((g) => g.id)), isNotNull(rounds.km)))
+        .orderBy(asc(rounds.position))
+    : [];
+  const kmsOf = new Map(todays.map((g) => [g.playerId, { kms: rows.filter((r) => r.gameId === g.id).map((r) => r.km ?? 0), done: !!g.finishedAt }]));
+
+  return mine.map(({ l }, i) => {
+    const members = rosters[i];
+    // oznake i boje po redu ulaska u ligu, pa član u istoj ligi uvijek ima istu boju
+    const tags = raceTags(members.map((m) => m.nickname));
+    const look = members.map((m, j) => ({ m, tag: tags[j], color: RACE_COLORS[j % RACE_COLORS.length] }));
+    const me = look.find((x) => x.m.playerId === playerId)!;
+    return {
+      code: l.code,
+      name: l.name,
+      members: members.length,
+      me: { tag: me.tag, color: me.color },
+      runners: look
+        .filter((x) => x.m.playerId !== playerId && kmsOf.get(x.m.playerId)?.kms.length)
+        .map((x) => ({ memberId: x.m.memberId, nickname: x.m.nickname, tag: x.tag, color: x.color, ...kmsOf.get(x.m.playerId)! })),
+    };
+  });
 }
