@@ -85,12 +85,12 @@ export function rareCount(answers: number): number {
   return answers >= 60 ? 2 : 1;
 }
 
-// označeni helikopter gubi titulu tek kad ga taj dan da puno igrača
-export const RARE_LOSE = { minPlayers: 10, minShare: 2 };
+// helikopter gubi titulu kad ga taj dan da 3 igrača (uz ~30 igrača dnevno Estonija je za NATO ostala helikopter sa 6 od 32)
+export const RARE_LOSE = { minPlayers: 3 };
 
 /**
  * Tierovi za sve odgovore kategorije (sortirane od najčešćeg; `n` = koliko ih je taj dan dalo).
- * - Helikopter: označeni najrjeđi odgovori, osim ako ga je taj dan dalo puno igrača (RARE_LOSE). Uvijek ih je
+ * - Helikopter: označeni najrjeđi odgovori, osim ako ga je taj dan dalo bar 3 igrača (RARE_LOSE). Uvijek ih je
  *   bar rareCount; što fali, popune najrjeđi ostali odgovori.
  * - Ostali po rangu: prvih nekoliko pješice, pa Bajs, HŽ... koliko kojih, kaže tierSizes; avion dobiva ostatak.
  */
@@ -101,7 +101,7 @@ export function assignTiers<T extends TierLike>(cfg: { tiers: T[] }, answers: { 
   const out: (T | undefined)[] = answers.map(() => undefined);
   if (heli) {
     const top = sizes[0];
-    const lost = (a: { share: number; n?: number }) => (a.n ?? 0) >= RARE_LOSE.minPlayers && a.share >= RARE_LOSE.minShare;
+    const lost = (a: { n?: number }) => (a.n ?? 0) >= RARE_LOSE.minPlayers;
     answers.forEach((a, i) => {
       if (a.rare && i >= top && !lost(a)) out[i] = heli;
     });
