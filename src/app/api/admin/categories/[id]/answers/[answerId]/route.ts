@@ -3,7 +3,7 @@ import { updateAnswer } from "@/server/admin";
 
 type P = { id: string; answerId: string };
 export const PATCH = adminRoute<P>(async (req, _ctx, { id, answerId }) => {
-  const b = await body<{ canonical?: string; priorShare?: number; rare?: boolean; keepOld?: boolean; addAliases?: string[]; removeAliases?: string[] }>(req);
+  const b = await body<{ canonical?: string; priorShare?: number; rare?: boolean; keepOld?: boolean; addAliases?: string[]; removeAliases?: string[]; fact?: string }>(req);
   return updateAnswer(Number(id), Number(answerId), {
     canonical: b.canonical,
     priorShare: b.priorShare === undefined ? undefined : Number(b.priorShare),
@@ -11,5 +11,6 @@ export const PATCH = adminRoute<P>(async (req, _ctx, { id, answerId }) => {
     keepOld: b.keepOld,
     addAliases: b.addAliases,
     removeAliases: b.removeAliases,
+    fact: b.fact,
   });
 });

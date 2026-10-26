@@ -407,7 +407,7 @@ function Stat({ v, l }: { v: string | number; l: string }) {
 // ---------- Za pregled ----------
 
 type ReviewRow = { categoryId: number; category: string; normalized: string; n: number; reports: number; examples: string[] };
-type AnswerRow = { id: number; canonical: string; priorShare: number; rare: boolean; source: string; seedCanonical: string | null; edited: boolean; aliases: string[] };
+type AnswerRow = { id: number; canonical: string; priorShare: number; rare: boolean; source: string; seedCanonical: string | null; fact: string | null; edited: boolean; aliases: string[] };
 type CatDetail = { id: number; title: string; active: boolean; hint: string | null; answers: AnswerRow[] };
 const asOthers = (list: AnswerRow[], except?: number) => list.filter((a) => a.id !== except).map((a) => ({ share: a.priorShare, rare: a.rare }));
 
@@ -961,6 +961,7 @@ function AnswerEdit({ catId, answer, others, onSaved, onCancel }: { catId: numbe
   const [keepOld, setKeepOld] = useState(true);
   const [removed, setRemoved] = useState<string[]>([]);
   const [newAliases, setNewAliases] = useState("");
+  const [fact, setFact] = useState(answer.fact ?? "");
   const [err, setErr] = useState("");
   const added = newAliases.split(",").map((a) => a.trim()).filter(Boolean);
   const value = Number(share.replace(",", "."));
@@ -974,7 +975,7 @@ function AnswerEdit({ catId, answer, others, onSaved, onCancel }: { catId: numbe
   };
   const renamed = name.trim() && name.trim() !== answer.canonical;
   const save = () =>
-    api(`/api/admin/categories/${catId}/answers/${answer.id}`, "PATCH", { canonical: name, priorShare: value, rare, keepOld, addAliases: added, removeAliases: removed }).then(
+    api(`/api/admin/categories/${catId}/answers/${answer.id}`, "PATCH", { canonical: name, priorShare: value, rare, keepOld, addAliases: added, removeAliases: removed, fact }).then(
       () => onSaved(`Spremljeno: „${upperFirst(name.trim())}”${added.length ? `, dodano varijanti: ${added.length}` : ""}${removed.length ? `, obrisano: ${removed.length}` : ""}.`),
       (e: Error) => setErr(e.message),
     );
@@ -1021,6 +1022,10 @@ function AnswerEdit({ catId, answer, others, onSaved, onCancel }: { catId: numbe
         <input className="field" placeholder="Nove varijante, odvojene zarezom (npr. otok Krk, Krčki otok)" value={newAliases} onChange={(e) => setNewAliases(e.target.value)} />
         <p className="small">Velika slova, kvačice i sitni tipfeleri se ionako prepoznaju; varijanta treba za drugi naziv ili kraticu.</p>
       </div>
+      <label className="small stack" style={{ gap: 4 }}>
+        zanimljivost (igrač je vidi kad pogodi ovaj odgovor i u popisu svih odgovora)
+        <textarea className="field" rows={2} maxLength={300} value={fact} placeholder="npr. Križ je u grbu, na štitu u sredini zastave." onChange={(e) => setFact(e.target.value)} />
+      </label>
       {answer.seedCanonical && <p className="small">Izvorni naziv iz seeda: {answer.seedCanonical}</p>}
       <div className="row">
         <button className="small-btn" disabled={!valid || !name.trim()} onClick={save}>Spremi</button>

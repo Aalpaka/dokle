@@ -54,6 +54,27 @@ const zastave: Nova[] = [
     hint: "Sunce, mjesec ili polumjesec, i krug koji ih predstavlja (Japan, Palau)",
     answers: `Turska/Turkiye/Turkey; Japan/Nippon/Nihon; Argentina; Pakistan; Tunis; Alžir/Algeria/Alžirija; Urugvaj/Uruguay; Kazahstan; Malezija/Malaysia; Azerbajdžan/Azerbaijan; Filipini/Filipine/Philippines; Sjeverna Makedonija/Makedonija/North Macedonia; Bangladeš/Banglades/Bangladesh; Kirgistan/Kirgizija/Kirgiska; Singapur/Singapore; Uzbekistan; Turkmenistan/Turkmenija; Libija/Libya; Mauritanija; Maldivi/Maldives/Maldivski otoci/Maldivska Republika; Nepal; Tajvan/Taiwan/Republika Kina; Ruanda/Rwanda; Namibija; Malavi/Malawi; Niger; Komori/Komorski Otoci/Comoros; Palau; Laos/Lao; Kiribati; Antigva i Barbuda/Antigua i Barbuda`,
   },
+  {
+    slug: "zastava-kriz",
+    group: "kviz",
+    title: "Država s križem na zastavi",
+    hint: "Bilo kakav križ na zastavi: i kosi, u Union Jacku, u grbu i zviježđe Južni križ; križ na vrhu krune se ne računa",
+    answers: `Danska/Denmark; Norveška/Norway; Švedska/Sweden/Sverige; Finska/Finland/Suomi; Island/Iceland; Švicarska/Švajcarska/Switzerland/Švica/Schweiz; Grčka/Greece/Hellas/Elada; Ujedinjeno Kraljevstvo/UK/Velika Britanija/Engleska/Ujedinjena Kraljevina/Britanija/Škotska/Wales/Sjeverna Irska/United Kingdom/Great Britain/GB; Australija; Novi Zeland/New Zealand; Fidži/Fidzi; Tuvalu; Tonga; Gruzija/Georgia/Sakartvelo; Dominikanska Republika/Dominikana; Malta; Slovačka/Slovakia; Jamajka/Jamaica; Burundi; Dominika; Srbija/Serbia; Moldavija/Moldova; Brazil; Samoa; Papua Nova Gvineja`,
+  },
+  {
+    slug: "zastava-zivotinja",
+    group: "kviz",
+    title: "Država sa životinjom na zastavi",
+    hint: "Bilo koja životinja, i u grbu na zastavi, i mitološka (zmaj); računa se i službena državna inačica zastave i stražnja strana",
+    answers: `Albanija; Meksiko/Mexico; Srbija/Serbia; Crna Gora/Montenegro; Hrvatska/Croatia; Egipat/Egipt; Moldavija/Moldova; Kazahstan; Španjolska/Španija; Šri Lanka/Cejlon/Sri Lanka; Butan/Bhutan; Uganda; Zambija; Zimbabve/Zimbabwe; Papua Nova Gvineja; Dominika; Kiribati; Gvatemala/Guatemala; Ekvador/Ecuador; Fidži/Fidzi; Andora/Andorra; Paragvaj/Paraguay; Njemačka/Germany/Deutschland; Austrija/Österreich; Peru; Venezuela; Bolivija`,
+  },
+  {
+    slug: "zastava-dvije-boje",
+    group: "kviz",
+    title: "Država čija zastava ima točno dvije boje",
+    hint: "Točno dvije boje, računajući sve znakove i grbove na zastavi",
+    answers: `Poljska/Poland; Indonezija/Indonesia; Monako/Monaco/Monte Carlo; Japan/Nippon/Nihon; Kanada/Canada; Švicarska/Švajcarska/Switzerland/Švica/Schweiz; Danska/Denmark; Austrija/Österreich; Latvija/Letonija; Ukrajina/Ukraine; Grčka/Greece/Hellas/Elada; Finska/Finland/Suomi; Švedska/Sweden/Sverige; Turska/Turkiye/Turkey; Tunis; Bahrein/Bahrain; Katar/Qatar; Peru; Nigerija/Nigeria; Pakistan; Saudijska Arabija/Saudi Arabija/Saudijska/Saudi Arabia; Somalija; Izrael; Gruzija/Georgia/Sakartvelo; Singapur/Singapore; Sjeverna Makedonija/Makedonija/North Macedonia; Kirgistan/Kirgizija/Kirgiska; Kazahstan; Vijetnam/Vietnam; Kina/NR Kina/Narodna Republika Kina/China; Albanija; Honduras; Mikronezija; Palau; Tonga; Bangladeš/Banglades/Bangladesh; Maroko/Morocco`,
+  },
 ];
 
 export const zastaveKategorije: SeedCategory[] = zastave.map(rang);

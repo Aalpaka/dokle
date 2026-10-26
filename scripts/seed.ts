@@ -13,6 +13,7 @@ import { regionalCategories } from "../src/skins/regional";
 import { baContent } from "../src/skins/ba/kategorije";
 import { rsContent } from "../src/skins/rs/kategorije";
 import { OTVORENA } from "../src/skins/otvorena";
+import { zanimljivosti } from "../src/skins/hr/kategorije/zanimljivosti";
 
 // BiH i Srbija imaju svoje kopije općih kategorija (svoja statistika odgovora), s domaćim parovima hrvatskih tema
 const SKINS = [
@@ -80,6 +81,12 @@ for (const { skin, categories: cats } of SKINS) {
       for (const alias of a.variants) if (!removed.has(`${ans.id}:${alias}`)) aliases.push({ answerId: ans.id, alias });
     }
     if (aliases.length) await db.insert(answerAliases).values(aliases).onConflictDoNothing();
+    // zanimljivosti su na hrvatskom (i za BiH), upisuju se samo gdje ih još nema; "" znači da ju je admin obrisao
+    const facts = skin.id === "rs" ? undefined : zanimljivosti[c.slug];
+    for (const [canonical, fact] of Object.entries(facts ?? {})) {
+      const ans = known.get(canonical);
+      if (ans && ans.fact === null) await db.update(answers).set({ fact }).where(eq(answers.id, ans.id));
+    }
   }
   console.log(`${skin.id}: ${cats.length} kategorija, ${added} novih odgovora, ${marked} označeno za helikopter`);
 }

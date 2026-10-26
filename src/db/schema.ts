@@ -53,6 +53,8 @@ export const answers = pgTable(
     source: text("source").notNull().default("seed"), // seed | review
     // admin je preimenovao odgovor: izvorni naziv iz seeda, da ga seed ne doda ponovno kao novi odgovor
     seedCanonical: text("seed_canonical"),
+    // zanimljivost uz odgovor (helikopteri), prikazuje se igraču nakon runde; "" = admin ju je obrisao, seed je ne vraća
+    fact: text("fact"),
     // admin je ručno mijenjao procjenu ili helikopter; seed to više ne dira
     editedAt: timestamp("edited_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
