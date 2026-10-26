@@ -14,6 +14,9 @@ import type { RaceLeague, RaceRunner } from "@/server/leagues";
 import { RacePanel, useRaceChoice } from "./Race";
 
 // trajanje vožnje po vozilu (s); pješak je najsporiji, a prijeđe i najmanje km
+// koliko kružić lige klizi do novog km (ms)
+const GHOST_MS = 2200;
+
 const DURATION: Record<Vehicle, number> = { walk: 3.4, bike: 3.0, train: 2.9, bus: 2.9, car: 2.6, plane: 2.8, heli: 3.2 };
 
 const EASE: Record<Vehicle, (t: number) => number> = {
@@ -89,7 +92,8 @@ export default function MapStage({ skinId, cfg, map, rounds, perDay, ended = fal
   const raceRef = useRef({ runners: [] as RaceRunner[], step: raceStep, v: 0 });
   if (raceRef.current.runners !== runners || raceRef.current.step !== raceStep) raceRef.current = { runners, step: raceStep, v: raceRef.current.v + 1 };
   const ghostEls = useRef(new Map<number, HTMLDivElement>());
-  const ghostKm = useRef(new Map<number, number>());
+  // vožnja kružića: od-do km i početak, da klize mirno kao vozilo
+  const ghostKm = useRef(new Map<number, { from: number; to: number; start: number }>());
 
   // stanje simulacije; mijenja se u petlji animacije, ne kroz React
   const sim = useRef({
@@ -191,7 +195,7 @@ export default function MapStage({ skinId, cfg, map, rounds, perDay, ended = fal
     S.segments.push(seg);
     setVehicle(tier);
     // replay vozi brže i bez zvuka vozila
-    const dur = (reduce ? 0.6 : DURATION[tier.vehicle] * (quiet ? 0.5 : 1)) * 1000;
+    const dur = (reduce ? 0.6 : DURATION[tier.vehicle] * (quiet ? 0.75 : 1)) * 1000;
     const a = route.at(from), b = route.at(to);
     S.anim = { tier, from, to, start: performance.now(), dur, seg, p0: [a.x, a.y], p1: [b.x, b.y], quiet, onDone };
     if (!quiet) sfx.vehicle(tier.vehicle, dur / 1000, !!map.heliClip);
@@ -331,6 +335,8 @@ export default function MapStage({ skinId, cfg, map, rounds, perDay, ended = fal
     S.km = 0;
     S.lift = S.bob = S.rot = 0;
     S.pos = route.at(0);
+    // kamera skoči na start umjesto da preleti cijelu državu unatrag
+    if (modeRef.current === "follow") S.cam = { ...S.cam, x: S.pos.x, y: S.pos.y };
     trailRef.current?.setAttribute("d", "");
     drawSegments();
     setHudKm(0);
@@ -356,12 +362,12 @@ export default function MapStage({ skinId, cfg, map, rounds, perDay, ended = fal
       });
       if (!t) {
         setVehicle(null);
-        setTimeout(next, 900);
+        setTimeout(next, 1200);
         return;
       }
-      driveVia(t, routeKm(cfg, from), routeKm(cfg, km), () => setTimeout(next, 250), true);
+      driveVia(t, routeKm(cfg, from), routeKm(cfg, km), () => setTimeout(next, 600), true);
     };
-    setTimeout(next, 700);
+    setTimeout(next, 1200);
   }
 
   useEffect(() => {
@@ -448,7 +454,8 @@ export default function MapStage({ skinId, cfg, map, rounds, perDay, ended = fal
           if (pin.fade) pin.el.classList.toggle("far", !near);
         }
       }
-      // kružići lige klize do svog km; blizu jedni drugima slože se u red iznad jednog štapića
+      // kružići lige klize do svog km, a unatrag (početak replaya) samo se vrate na start;
+      // blizu jedni drugima slože se u red iznad jednog štapića
       const R = raceRef.current;
       let moving = false;
       const gs: { el: HTMLDivElement; km: number; x: number; y: number }[] = [];
@@ -456,12 +463,16 @@ export default function MapStage({ skinId, cfg, map, rounds, perDay, ended = fal
         const el = ghostEls.current.get(r.memberId);
         if (!el) continue;
         const target = routeKm(cfg, kmAfter(r.kms, R.step));
-        let km = ghostKm.current.get(r.memberId) ?? target;
-        if (Math.abs(target - km) > 0.5) {
-          km += (target - km) * (1 - Math.exp(-dt * 1.8));
-          moving = true;
-        } else km = target;
-        ghostKm.current.set(r.memberId, km);
+        let g = ghostKm.current.get(r.memberId);
+        const at = (x: NonNullable<typeof g>) => {
+          const u = Math.min(1, (now - x.start) / GHOST_MS), e = u < 0.5 ? 2 * u * u : 1 - (-2 * u + 2) ** 2 / 2;
+          return x.from + (x.to - x.from) * e;
+        };
+        if (!g || target < g.to) g = { from: target, to: target, start: 0 };
+        else if (target > g.to) g = { from: at(g), to: target, start: now };
+        ghostKm.current.set(r.memberId, g);
+        const km = at(g);
+        if (km !== g.to) moving = true;
         gs.push({ el, km, x: 0, y: 0 });
       }
       if (moving || box !== lastGhostBox || R.v !== lastGhostV) {
