@@ -421,6 +421,7 @@ function Reveal({ state, onNext, onState }: { state: GameState; onNext: () => vo
           <span className="km">+{r.km}</span>
         </div>
         {r.report && <ReportLine r={r} onState={onState} />}
+        {r.fact && <p className="small fact">💡 {r.fact}</p>}
         {after !== before && (
           <p className="small">{after === cfg.overshoot?.station ? `Preletio si ${cfg.stations[cfg.stations.length - 1].name} i završio u` : t("Prošao si")}: <b>{after.name}</b></p>
         )}
@@ -716,6 +717,7 @@ function AllAnswers({ position, cfg }: { position: number; cfg: SkinConfig }) {
               <span className="n">{a.canonical}{a.canonical === list.mine && <em> · {t("tvoj")}</em>}</span>
               <span className="s">{formatShare(a.share)}</span>
               <span className="k">+{a.km}</span>
+              {a.fact && <span className="fact small">💡 {a.fact}</span>}
             </li>
           );
         })}

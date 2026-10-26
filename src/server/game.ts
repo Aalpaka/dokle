@@ -43,7 +43,16 @@ export async function getSkin(id: string): Promise<Skin> {
   return skin;
 }
 
-type CategoryData = { id: number; title: string; hint: string | null; group: string; index: MatchIndex; prior: Map<number, number>; rare: Set<number> };
+type CategoryData = {
+  id: number;
+  title: string;
+  hint: string | null;
+  group: string;
+  index: MatchIndex;
+  prior: Map<number, number>;
+  rare: Set<number>;
+  facts: Map<number, string>;
+};
 const categoryCache = new Map<number, { at: number; data: CategoryData }>();
 
 async function getCategory(id: number): Promise<CategoryData> {
@@ -51,7 +60,7 @@ async function getCategory(id: number): Promise<CategoryData> {
   if (hit && Date.now() - hit.at < LONG_CACHE_MS) return hit.data;
   const [cat] = await db.select().from(categories).where(eq(categories.id, id));
   const rows = await db
-    .select({ id: answers.id, canonical: answers.canonical, prior: answers.priorShare, rare: answers.rare, alias: answerAliases.alias })
+    .select({ id: answers.id, canonical: answers.canonical, prior: answers.priorShare, rare: answers.rare, fact: answers.fact, alias: answerAliases.alias })
     .from(answers)
     .leftJoin(answerAliases, eq(answerAliases.answerId, answers.id))
     .where(eq(answers.categoryId, id))
@@ -59,13 +68,15 @@ async function getCategory(id: number): Promise<CategoryData> {
   const byId = new Map<number, { id: number; canonical: string; variants: string[] }>();
   const prior = new Map<number, number>();
   const rare = new Set<number>();
+  const facts = new Map<number, string>();
   for (const r of rows) {
     if (r.rare) rare.add(r.id);
+    if (r.fact) facts.set(r.id, r.fact);
     if (!byId.has(r.id)) byId.set(r.id, { id: r.id, canonical: r.canonical, variants: [] });
     if (r.alias) byId.get(r.id)!.variants.push(r.alias);
     prior.set(r.id, r.prior);
   }
-  const data = { id, title: cat.title, hint: cat.hint, group: cat.group, index: buildIndex([...byId.values()], cat.strip), prior, rare };
+  const data = { id, title: cat.title, hint: cat.hint, group: cat.group, index: buildIndex([...byId.values()], cat.strip), prior, rare, facts };
   categoryCache.set(id, { at: Date.now(), data });
   return data;
 }
@@ -216,6 +227,7 @@ export type RoundView = {
   speed: { multiplier: number; emoji: string; name: string } | null; // samo kad je brzina promijenila km
   // promašaj s upisom: "open" se još može prijaviti, "pending" čeka admina, "rejected" admin nije prihvatio
   report?: "open" | "pending" | "rejected";
+  fact?: string; // zanimljivost uz pogođeni odgovor
 };
 
 export type GameState = {
@@ -262,7 +274,7 @@ export async function getState(skin: Skin, playerId: string | null): Promise<Gam
 
   await expireOpenRound(skin, puzzle, game.id);
   const rows = await db
-    .select({ r: rounds, canonical: answers.canonical })
+    .select({ r: rounds, canonical: answers.canonical, fact: answers.fact })
     .from(rounds)
     .leftJoin(answers, eq(answers.id, rounds.answerId))
     .where(eq(rounds.gameId, game.id))
@@ -270,7 +282,7 @@ export async function getState(skin: Skin, playerId: string | null): Promise<Gam
 
   const views: RoundView[] = [];
   let current: GameState["current"];
-  for (const { r, canonical } of rows) {
+  for (const { r, canonical, fact } of rows) {
     const cat = await getCategory(r.categoryId);
     const category = { title: cat.title, hint: cat.hint, group: cat.group };
     if (r.answeredAt) {
@@ -289,6 +301,7 @@ export async function getState(skin: Skin, playerId: string | null): Promise<Gam
         icon: base?.icon,
         speed: base && r.km !== base.km && step.multiplier !== 1 ? { multiplier: step.multiplier, emoji: step.emoji, name: step.name } : null,
         ...(report && { report }),
+        ...(fact && { fact }),
       });
     } else {
       // startedAt je trenutak kad kreće vrijeme, može biti malo u budućnosti dok igrač čita pitanje
@@ -552,7 +565,7 @@ export async function categoryShares(skin: Skin, puzzleId: number, categoryId: n
   const byId = new Map(counts.map((c) => [c.answerId!, c.n]));
   const total = counts.reduce((a, c) => a + c.n, 0);
   const list = cat.index.answers
-    .map((a) => ({ id: a.id, canonical: a.canonical, rare: cat.rare.has(a.id), n: byId.get(a.id) ?? 0, share: blendedShare(cat.prior.get(a.id) ?? 0, byId.get(a.id) ?? 0, total, skin.config.priorWeight) }))
+    .map((a) => ({ id: a.id, canonical: a.canonical, fact: cat.facts.get(a.id), rare: cat.rare.has(a.id), n: byId.get(a.id) ?? 0, share: blendedShare(cat.prior.get(a.id) ?? 0, byId.get(a.id) ?? 0, total, skin.config.priorWeight) }))
     .sort((a, b) => b.share - a.share);
   const tiers = assignTiers(skin.config, list);
   return list.map((a, i) => ({ ...a, tier: tiers[i] }));
@@ -577,7 +590,7 @@ export type AnswerList = {
   position: number;
   title: string;
   mine: string | null;
-  answers: { canonical: string; share: number; tier: string; km: number }[];
+  answers: { canonical: string; share: number; tier: string; km: number; fact?: string }[];
 };
 
 /** Umeće igračev odgovor među odgovore istog prijevoza (po udjelu); ako ih nema, na granicu prema rjeđem prijevozu. */
@@ -613,7 +626,7 @@ export async function answerList(skin: Skin, playerId: string, position: number)
     position,
     title: cat.title,
     mine: mine?.canonical ?? null,
-    answers: rows.map((a) => ({ canonical: a.canonical, share: a.share, tier: a.tier.name, km: a.tier.km })),
+    answers: rows.map((a) => ({ canonical: a.canonical, share: a.share, tier: a.tier.name, km: a.tier.km, ...(a.fact && { fact: a.fact }) })),
   };
 }
 

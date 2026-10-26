@@ -517,6 +517,7 @@ export async function categoryDetail(id: number) {
       rare: answers.rare,
       source: answers.source,
       seedCanonical: answers.seedCanonical,
+      fact: answers.fact,
       edited: sql<boolean>`${answers.editedAt} is not null`,
       alias: answerAliases.alias,
     })
@@ -603,7 +604,7 @@ export async function addAnswer(categoryId: number, input: { canonical: string; 
 export async function updateAnswer(
   categoryId: number,
   answerId: number,
-  patch: { canonical?: string; priorShare?: number; rare?: boolean; keepOld?: boolean; addAliases?: string[]; removeAliases?: string[] },
+  patch: { canonical?: string; priorShare?: number; rare?: boolean; keepOld?: boolean; addAliases?: string[]; removeAliases?: string[]; fact?: string },
 ) {
   const [ans] = await db.select().from(answers).where(and(eq(answers.id, answerId), eq(answers.categoryId, categoryId)));
   if (!ans) throw new Error("Odgovor ne pripada kategoriji");
@@ -621,6 +622,8 @@ export async function updateAnswer(
   }
   if (typeof patch.rare === "boolean" && patch.rare !== ans.rare) set.rare = patch.rare;
   if (set.priorShare !== undefined || set.rare !== undefined) set.editedAt = new Date();
+  // prazna zanimljivost ostaje "" (ne null), da je seed ne vrati
+  if (typeof patch.fact === "string" && patch.fact.trim() !== (ans.fact ?? "")) set.fact = patch.fact.trim();
   const add = [...new Set((patch.addAliases ?? []).map((a) => a.trim()).filter(Boolean))];
   const remove = (patch.removeAliases ?? []).filter(Boolean);
   if (add.length) {

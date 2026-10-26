@@ -95,6 +95,7 @@ button:disabled { opacity: .5; cursor: default; }
 .sending.changed b { background: var(--signal); color: #1b1b1b; padding: 0 5px; border-radius: 4px; }
 .sending.keep { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
 .sending.keep button { color: var(--ink); }
+.result .fact { margin-top: 8px; color: var(--muted); }
 .report { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
 .report.compact { padding: 0 0 10px 44px; }
 .report.compact .small-btn { padding: 5px 10px; font-size: 13px; }
@@ -237,6 +238,7 @@ button.small-btn.ghost { font-weight: 700; }
 .allans .n em { color: var(--signal); font-style: normal; font-weight: 700; }
 .allans .s, .allans .k { font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--muted); text-align: right; }
 .allans .k { color: var(--ink); font-weight: 700; }
+.allans .fact { grid-column: 2 / -1; color: var(--muted); }
 @media (max-width: 520px) { .allans { padding-left: 0; } }
 .recap .c { font-size: 12px; color: var(--muted); }
 .recap .a { font-weight: 700; overflow-wrap: anywhere; }
