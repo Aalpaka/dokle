@@ -12,6 +12,7 @@ import { nove3, nove3Hr } from "./kategorije/nove-3";
 import { nove4 } from "./kategorije/nove-4";
 import { nove4Hr } from "./kategorije/nove-4-hr";
 import { opceKategorije } from "./kategorije/opce";
+import { zastaveKategorije } from "./kategorije/zastave";
 import { prosirenja } from "./kategorije/prosirenja";
 import { wikipedija } from "./kategorije/wikipedija";
 import { wikipedijaDodaci } from "./kategorije/wikipedija-dodaci";
@@ -50,6 +51,7 @@ export const hrCategories: SeedCategory[] = [
   ...kvizKategorije,
   ...nove3,
   ...nove4,
+  ...zastaveKategorije,
   ...nove3Hr,
   ...nove4Hr,
 ].map(withDodaci).map(withWiki).map(withRare).map(withAliasi);
