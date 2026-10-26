@@ -12,6 +12,7 @@ import { rsSkin } from "../src/skins/rs/config";
 import { regionalCategories } from "../src/skins/regional";
 import { baContent } from "../src/skins/ba/kategorije";
 import { rsContent } from "../src/skins/rs/kategorije";
+import { OTVORENA } from "../src/skins/otvorena";
 
 // BiH i Srbija imaju svoje kopije općih kategorija (svoja statistika odgovora), s domaćim parovima hrvatskih tema
 const SKINS = [
@@ -33,7 +34,7 @@ for (const { skin, categories: cats } of SKINS) {
     // postojeće kategorije se ne diraju (admin ih je možda uredio), dodaju se samo nove
     let [cat] = await db
       .insert(categories)
-      .values({ skinId: skin.id, slug: c.slug, title: c.title, hint: c.hint ?? null, group: c.group, strip: c.strip })
+      .values({ skinId: skin.id, slug: c.slug, title: c.title, hint: c.hint ?? null, group: c.group, strip: c.strip, open: OTVORENA.has(c.slug) })
       .onConflictDoNothing()
       .returning();
     if (!cat) [cat] = await db.select().from(categories).where(and(eq(categories.skinId, skin.id), eq(categories.slug, c.slug)));

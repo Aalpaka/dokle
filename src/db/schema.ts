@@ -35,6 +35,8 @@ export const categories = pgTable(
     group: text("group").notNull(), // grupe su definirane u configu skina
     strip: text("strip").array().notNull().default([]), // riječi koje se smiju izostaviti ("otok Krk")
     active: boolean("active").notNull().default(true),
+    // jako otvoreno pitanje (odgovor može biti skoro bilo što); dan ih ima najviše jedno
+    open: boolean("open").notNull().default(false),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [uniqueIndex("categories_skin_slug").on(t.skinId, t.slug)],

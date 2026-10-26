@@ -1,0 +1,4 @@
+-- Oznaka jako otvorenih pitanja (src/skins/otvorena.ts); dnevni izbor uzima najviše jedno takvo.
+-- Seed označava samo nove kategorije, pa se postojeće označe ovdje; poslije se oznaka mijenja u adminu.
+ALTER TABLE "categories" ADD COLUMN "open" boolean DEFAULT false NOT NULL;--> statement-breakpoint
+UPDATE "categories" SET "open" = true WHERE "slug" IN ('plaza', 'frizider', 'psovka', 'dijalekt', 'zuto', 'crveno', 'okruglo', 'rupe', 'na-glavi', 'ladica', 'kotaci', 'skupljaju', 'novcanik', 'kupaonica', 'rima-kava', 'plavo', 'zeleno', 'bijelo', 'krila', 'ostro', 'kofer', 'skola', 'auto-unutra', 'bozic', 'svadba', 'drvo', 'strah', 'ime-ljubimca', 'poznata-zivotinja', 'zlikovac', 'izam', 'logija', 'fobija', 'anglizam', 'turcizam', 'germanizam', 'galicizam', 'kemijski-spoj', 'zanimanje', 'bolest', 'izum');

@@ -85,6 +85,13 @@
       "when": 1792820000000,
       "tag": "0011_prijave",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1792830000000,
+      "tag": "0012_otvorena_pitanja",
+      "breakpoints": true
     }
   ]
 }

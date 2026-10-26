@@ -15,6 +15,7 @@ import {
   skins,
 } from "@/db/schema";
 import { buildIndex, fold, match, type MatchIndex } from "@/lib/matcher";
+import { pickCategories } from "@/lib/pick";
 import { assignTiers, blendedShare, kmFor, speedFor, tierFor } from "@/lib/scoring";
 import { dayNumber, localDate } from "@/lib/day";
 import { compareDay, type DayCompare } from "@/lib/compare";
@@ -90,7 +91,7 @@ export async function getOrCreatePuzzle(skin: Skin, date: string) {
     .groupBy(puzzleCategories.categoryId)
     .as("last_used");
   let pool = await db
-    .select({ id: categories.id, group: categories.group, slug: categories.slug })
+    .select({ id: categories.id, group: categories.group, slug: categories.slug, open: categories.open })
     .from(categories)
     .leftJoin(lastUsed, eq(lastUsed.categoryId, categories.id))
     .where(and(eq(categories.skinId, skin.id), eq(categories.active, true)))
@@ -99,14 +100,7 @@ export async function getOrCreatePuzzle(skin: Skin, date: string) {
   const ready = await pairedSlugs(skin.id);
   if (ready) pool = pool.filter((p) => ready.has(p.slug));
 
-  const picked: number[] = [];
-  for (const [i, group] of pattern.entries()) {
-    // bez para (ne bi se smjelo dogoditi) bira se iz iste grupe nešto što taj dan nije ni u jednoj državi
-    const c =
-      pool.find((p) => p.slug === wanted[i] && !picked.includes(p.id)) ?? pool.find((p) => p.group === group && !picked.includes(p.id) && !wanted.includes(p.slug));
-    if (!c) throw new Error(`Nema dovoljno aktivnih kategorija u grupi ${group}`);
-    picked.push(c.id);
-  }
+  const picked = pickCategories(pattern, pool, wanted);
 
   await db.transaction(async (tx) => {
     const [p] = await tx

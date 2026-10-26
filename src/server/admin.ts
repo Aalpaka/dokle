@@ -322,6 +322,41 @@ export async function decide(skin: Skin, adminId: string | null, a: ReviewAction
   return { rescored };
 }
 
+/**
+ * Sve odigrane runde skina za analizu izvan admina (CSV): pitanje, upis, prepoznati odgovor, procjena i udio, prijevoz,
+ * km i vrijeme. Igrači su samo broj partije.
+ */
+export async function exportRounds(skin: Skin) {
+  return db
+    .select({
+      date: dailyPuzzles.date,
+      game: games.id,
+      ranked: games.ranked,
+      position: rounds.position,
+      slug: categories.slug,
+      category: categories.title,
+      group: categories.group,
+      open: categories.open,
+      raw: rounds.raw,
+      answer: answers.canonical,
+      prior: answers.priorShare,
+      rare: answers.rare,
+      share: rounds.share,
+      tier: rounds.tier,
+      km: rounds.km,
+      elapsedMs: sql<number>`round(extract(epoch from (${rounds.answeredAt} - ${rounds.startedAt})) * 1000)::int`,
+      reported: sql<boolean>`${rounds.reportedAt} is not null`,
+      rescored: sql<boolean>`${rounds.rescoredAt} is not null`,
+    })
+    .from(rounds)
+    .innerJoin(games, eq(games.id, rounds.gameId))
+    .innerJoin(dailyPuzzles, eq(dailyPuzzles.id, games.puzzleId))
+    .innerJoin(categories, eq(categories.id, rounds.categoryId))
+    .leftJoin(answers, eq(answers.id, rounds.answerId))
+    .where(and(eq(dailyPuzzles.skinId, skin.id), isNotNull(rounds.answeredAt)))
+    .orderBy(asc(dailyPuzzles.date), asc(games.id), asc(rounds.position));
+}
+
 // ---------- Igrači ----------
 
 export async function playersOverview(skin: Skin) {
@@ -443,7 +478,11 @@ export async function listCategories(skin: Skin) {
       hint: categories.hint,
       group: categories.group,
       active: categories.active,
+      open: categories.open,
       answers: sql<number>`(select count(*)::int from ${answers} where ${answers.categoryId} = ${categories.id})`,
+      // upisi s tekstom i oni koje nismo prepoznali: koliko je pitanje otvoreno (naknadno odobreni se broje kao pogodak)
+      typed: sql<number>`(select count(*)::int from ${rounds} where ${rounds.categoryId} = ${categories.id} and ${rounds.raw} is not null)`,
+      missed: sql<number>`(select count(*)::int from ${rounds} where ${rounds.categoryId} = ${categories.id} and ${rounds.raw} is not null and ${rounds.answerId} is null)`,
       lastUsed: sql<string | null>`(select max(${dailyPuzzles.date}) from ${puzzleCategories} join ${dailyPuzzles} on ${dailyPuzzles.id} = ${puzzleCategories.puzzleId} where ${puzzleCategories.categoryId} = ${categories.id})`,
     })
     .from(categories)
@@ -533,9 +572,10 @@ export async function createCategory(skin: Skin, input: { title: string; group: 
   });
 }
 
-export async function updateCategory(id: number, patch: { active?: boolean; title?: string; hint?: string | null }) {
+export async function updateCategory(id: number, patch: { active?: boolean; open?: boolean; title?: string; hint?: string | null }) {
   const set: Partial<typeof categories.$inferInsert> = {};
   if (typeof patch.active === "boolean") set.active = patch.active;
+  if (typeof patch.open === "boolean") set.open = patch.open;
   if (typeof patch.title === "string" && patch.title.trim()) set.title = patch.title.trim();
   if (patch.hint !== undefined) set.hint = patch.hint?.trim() || null;
   if (Object.keys(set).length) await db.update(categories).set(set).where(eq(categories.id, id));
