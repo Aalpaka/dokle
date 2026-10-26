@@ -12,7 +12,7 @@ export function adminRoute<P = unknown>(fn: (req: Request, ctx: Ctx, params: P) 
     const admin = await requireAdmin();
     if (!admin) return NextResponse.json({ error: "Samo za admina." }, { status: 403 });
     try {
-      const out = await fn(req, { skin: await currentSkin(), adminId: admin.playerId }, await route.params);
+      const out = await fn(req, { skin: await currentSkin(new URL(req.url).searchParams.get("skin")), adminId: admin.playerId }, await route.params);
       return out instanceof Response ? out : NextResponse.json(out);
     } catch (e) {
       return NextResponse.json({ error: e instanceof Error ? e.message : "Greška" }, { status: 400 });

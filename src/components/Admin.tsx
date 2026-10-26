@@ -270,9 +270,13 @@ function GeneralStats({ today }: { today: string }) {
   const { data, error } = useLoad<StatsData>("/api/admin/stats");
   const t = data?.totals;
   const hmax = Math.max(1, ...(data?.histogram ?? []).map((h) => h.n));
+  const { id } = useSkin();
   return (
     <div className="stack">
-      <h2>Statistika</h2>
+      <div className="row" style={{ justifyContent: "space-between" }}>
+        <h2>Statistika</h2>
+        <a href={`/api/admin/export?skin=${id}`} className="small">Izvoz svih rundi (CSV)</a>
+      </div>
       <Err msg={error} />
       {data && t && (
         <div className="kpis">
@@ -722,7 +726,7 @@ const fmtDate = (d: string) => {
 
 // ---------- Sadržaj ----------
 
-type CatRow = { id: number; title: string; hint: string | null; group: string; active: boolean; answers: number; lastUsed: string | null; missing: SkinId[] };
+type CatRow = { id: number; title: string; hint: string | null; group: string; active: boolean; open: boolean; answers: number; typed: number; missed: number; lastUsed: string | null; missing: SkinId[] };
 type Unpaired = { slug: string; title: string; group: string };
 const skinShort = (ids: SkinId[]) => ids.map((id) => SKIN_META[id]?.short ?? id).join(", ");
 
@@ -744,19 +748,29 @@ function Content({ groups, mirror }: { groups: Record<string, string>; mirror: s
           : "BiH i Srbija svaki dan dobiju par istih kategorija. Hrvatska kategorija ulazi u raspored tek kad ima aktivan par u obje države."}
         {mirror && !!open.data?.length && <> Bez para ovdje: <b>{open.data.length}</b> hrvatskih kategorija (Hrvatska ih zato ne bira).</>}
         {!mirror && lone > 0 && <> Čeka par: <b>{lone}</b>.</>}
+        {!mirror && <> Dan ima najviše jedno pitanje označeno kao jako otvoreno. Promašaji su upisi koje nismo prepoznali, od svih upisa s tekstom.</>}
       </p>
       {adding && <NewCategory groups={groups} unpaired={mirror ? open.data ?? [] : null} onDone={() => { setAdding(false); reload(); open.reload(); }} />}
       <Err msg={error} />
       <table className="tbl">
-        <thead><tr><th>Kategorija</th><th>Grupa</th><th>Odgovora</th><th>Zadnje korištena</th><th>Par</th><th>Aktivna</th><th></th></tr></thead>
+        <thead><tr><th>Kategorija</th><th>Grupa</th><th>Odgovora</th><th title="Upisi koje nismo prepoznali, od svih upisa s tekstom">Promašaji</th><th>Zadnje korištena</th><th>Par</th><th title="Jako otvoreno pitanje: dan ih ima najviše jedno">Otvorena</th><th>Aktivna</th><th></th></tr></thead>
         <tbody>
           {data?.map((c) => (
             <tr key={c.id} className={c.active ? "" : "off"}>
               <td>{c.title}</td>
               <td>{groups[c.group] ?? c.group}</td>
               <td>{c.answers}</td>
+              <td title={`${c.missed} od ${c.typed} upisa`}>{c.typed ? `${Math.round((100 * c.missed) / c.typed)} %` : "—"}</td>
               <td>{c.lastUsed ? fmtDate(c.lastUsed) : "—"}</td>
               <td>{c.missing.length ? <span className="chip">nema: {skinShort(c.missing)}</span> : "✓"}</td>
+              <td>
+                <input
+                  type="checkbox"
+                  checked={c.open}
+                  aria-label="Jako otvorena"
+                  onChange={() => api(`/api/admin/categories/${c.id}`, "PATCH", { open: !c.open }).then(reload)}
+                />
+              </td>
               <td>
                 <input
                   type="checkbox"
@@ -1080,6 +1094,7 @@ function Schedule({ perDay, mirror }: { perDay: number; mirror: string | null })
 type AttemptRow = { createdAt: string; date: string; category: string; raw: string; answer: string | null; accepted: boolean; timedOut: boolean; elapsedMs: number; player: string; registered: boolean };
 
 function Attempts({ today }: { today: string }) {
+  const { id } = useSkin();
   const [date, setDate] = useState(today);
   const [q, setQ] = useState("");
   const [rejected, setRejected] = useState(false);
@@ -1092,7 +1107,7 @@ function Attempts({ today }: { today: string }) {
         <input type="date" className="field" value={date} onChange={(e) => setDate(e.target.value)} />
         <input className="field" placeholder="Traži tekst" value={q} onChange={(e) => setQ(e.target.value)} />
         <label className="small"><input type="checkbox" checked={rejected} onChange={(e) => setRejected(e.target.checked)} /> samo odbijeni</label>
-        <a href={`/api/admin/attempts?${qs}&format=csv`}>Izvoz CSV</a>
+        <a href={`/api/admin/attempts?${qs}&format=csv&skin=${id}`}>Izvoz CSV</a>
       </div>
       <Err msg={error} />
       <table className="tbl">
