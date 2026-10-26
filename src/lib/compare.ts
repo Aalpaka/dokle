@@ -14,6 +14,22 @@ export type DayCompare = {
   mineBin: number; // igračev stupac
 };
 
+export type RouteLabel = { name: string; km: number };
+
+/** Broj partija po 100 km, od starta do cilja (ili dalje ako je netko otišao preko). */
+export function routeHistogram(cfg: SkinConfig, kms: number[]): number[] {
+  const bestKm = kms.length ? Math.max(...kms) : 0;
+  const hist = Array.from({ length: Math.floor(Math.max(cfg.maxKm, bestKm) / BUCKET_KM) + 1 }, () => 0);
+  for (const k of kms) hist[Math.floor(k / BUCKET_KM)]++;
+  return hist;
+}
+
+/** Glavni gradovi ispod osi; postaja produžetka (Budva) tek kad je netko stigao do nje. */
+export function routeLabels(cfg: SkinConfig, bestKm: number): RouteLabel[] {
+  const o = cfg.overshoot;
+  return [...cfg.stations.filter((s) => s.alwaysLabel), ...(o && bestKm > o.overKm ? [o.station] : [])].map((s) => ({ name: s.name, km: s.km }));
+}
+
 /** Usporedba igračevih km sa svim završenim partijama dana (kms uključuje i igračevu). */
 export function compareDay(skinId: string, cfg: SkinConfig, kms: number[], mine: number): DayCompare {
   const others = [...kms];
@@ -21,8 +37,7 @@ export function compareDay(skinId: string, cfg: SkinConfig, kms: number[], mine:
   if (me >= 0) others.splice(me, 1);
   const below = others.filter((k) => k < mine).length;
   const bestKm = kms.length ? Math.max(...kms) : 0;
-  const hist = Array.from({ length: Math.floor(Math.max(cfg.maxKm, bestKm) / BUCKET_KM) + 1 }, () => 0);
-  for (const k of kms) hist[Math.floor(k / BUCKET_KM)]++;
+  const hist = routeHistogram(cfg, kms);
   return {
     players: kms.length,
     ahead: others.length > 0 ? Math.round((100 * below) / others.length) : null,

@@ -19,6 +19,7 @@ import { pickCategories } from "@/lib/pick";
 import { assignTiers, blendedShare, kmFor, speedFor, tierFor } from "@/lib/scoring";
 import { dayNumber, localDate } from "@/lib/day";
 import { compareDay, type DayCompare } from "@/lib/compare";
+import type { Origin } from "./origin";
 import type { SkinConfig, Tier } from "@/skins/types";
 import { codeConfigs } from "@/skins/maps";
 
@@ -175,11 +176,16 @@ export async function pairedSlugs(skinId: string): Promise<Set<string> | null> {
   return new Set(rows.filter((r) => r.n === followers.length + 1).map((r) => r.slug));
 }
 
-export async function ensurePlayer(id: string) {
+/** S origin: lokacija i uređaj se osvježavaju, a izvor dolaska ostaje prvi poznati. */
+export async function ensurePlayer(id: string, origin?: Origin) {
+  const seen = origin ? { country: origin.country, city: origin.city, device: origin.device } : {};
   await db
     .insert(players)
-    .values({ id })
-    .onConflictDoUpdate({ target: players.id, set: { lastSeenAt: new Date() } });
+    .values({ id, ...seen, referrer: origin?.referrer })
+    .onConflictDoUpdate({
+      target: players.id,
+      set: { lastSeenAt: new Date(), ...seen, ...(origin?.referrer && { referrer: sql`coalesce(${players.referrer}, ${origin.referrer})` }) },
+    });
 }
 
 /** Je li igrač taj dan već igrao neku drugu državu; onda se ova partija ne natječe (prva partija dana se broji). */
@@ -324,12 +330,12 @@ export async function getState(skin: Skin, playerId: string | null): Promise<Gam
  * Počinje sljedeću kategoriju (ili vraća već otvorenu). Server pamti vrijeme početka: pitanje se vidi odmah,
  * a vrijeme kreće nakon readMs.
  */
-export async function startNext(skin: Skin, playerId: string, readMs = READ_MS): Promise<GameState> {
+export async function startNext(skin: Skin, playerId: string, readMs = READ_MS, origin?: Origin): Promise<GameState> {
   const date = localDate(skin.timezone);
   const puzzle = await getOrCreatePuzzle(skin, date);
   let game = await findGame(playerId, puzzle.id);
   if (!game) {
-    await ensurePlayer(playerId);
+    await ensurePlayer(playerId, origin);
     await db.insert(games).values({ playerId, puzzleId: puzzle.id, ranked: !(await playedElsewhere(skin, playerId, date)) }).onConflictDoNothing();
     game = (await findGame(playerId, puzzle.id))!;
   }

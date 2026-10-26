@@ -252,8 +252,8 @@ button.small-btn.ghost { font-weight: 700; }
 .history .w { display: grid; gap: 2px; }
 .recap .k { font-family: var(--font-mono); font-weight: 700; font-variant-numeric: tabular-nums; }
 /* usporedba s ostalima: postotak na žutoj ploči, ispod stupci po 100 km uz rutu, igračev žut */
-.compare { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px 12px; display: grid; gap: 8px;
-  --cmp-behind: #4f8f6a; --cmp-front: #4a5d61; }
+.compare { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px 12px; display: grid; gap: 8px; }
+.compare, .cmp-chart { --cmp-behind: #4f8f6a; --cmp-front: #4a5d61; }
 .cmp-head { font-weight: 700; font-size: 17px; }
 .cmp-pct {
   display: inline-block; background: var(--town-sign); color: #111; border-radius: 3px; padding: 0 8px; margin-inline: 2px;
@@ -696,3 +696,61 @@ details.answers[open] > summary { margin-bottom: 14px; }
 .alias-chip { background: transparent; color: var(--ink); font-weight: 400; cursor: pointer; }
 .alias-chip:hover span { color: var(--stop); }
 .alias-chip.off { text-decoration: line-through; color: var(--muted); }
+/* admin: odgovori (svi upisi) */
+.att-filters { display: grid; grid-template-columns: auto minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
+.att-bar { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.seg-n { font-family: var(--font-mono); font-size: 11px; opacity: .75; margin-left: 2px; }
+.att-tbl td { vertical-align: middle; }
+.att-time, .att-s { font-family: var(--font-mono); font-size: 13px; color: var(--muted); white-space: nowrap; }
+.att-pos { display: inline-grid; place-items: center; min-width: 1.5em; height: 1.5em; margin-right: 6px; border-radius: 50%; background: var(--bg); font-family: var(--font-mono); font-size: 11px; font-weight: 700; color: var(--muted); }
+.att-raw { font-weight: 700; }
+.att-out { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 13px; white-space: nowrap; }
+.att-out.ok { background: #4f8f6a26; color: var(--ink); }
+.att-out.no { background: #d9483b22; color: var(--stop); }
+.att-out.late { background: var(--bg); color: var(--muted); }
+.att-player { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.att-player .avatar { width: 24px; height: 24px; font-size: 12px; }
+.att-badge { font-size: 11px; padding: 1px 6px; border-radius: 999px; background: #4f8f6a33; color: var(--ink); }
+.att-badge.guest { background: var(--bg); color: var(--muted); }
+.att-games { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 12px; align-items: start; }
+.att-game { display: grid; }
+.att-game header { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.att-game ol { list-style: none; margin: 0; padding: 0; display: grid; }
+.att-game li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; column-gap: 8px; row-gap: 2px; align-items: center; padding: 6px 0; border-top: 1px solid var(--line); font-size: 14px; }
+.att-game li .att-pos { grid-row: span 2; margin: 0; }
+.att-game li .att-cat { font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.att-game li .att-s { text-align: right; }
+.att-game li .att-raw { grid-column: 2; }
+.att-game li .att-out { grid-column: 3; grid-row: 2; justify-self: end; }
+.att-game li .att-s { grid-column: 3; grid-row: 1; }
+@media (max-width: 640px) {
+  .att-filters { grid-template-columns: 1fr 1fr; }
+  .att-filters select { grid-column: 1 / -1; grid-row: 2; }
+  .att-games { grid-template-columns: minmax(0, 1fr); }
+  .att-tbl { display: block; }
+  .att-tbl thead { display: none; }
+  .att-tbl tbody, .att-tbl tr { display: block; }
+  .att-tbl tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 8px; padding: 10px 2px; border-bottom: 1px solid var(--line); }
+  .att-tbl td { padding: 0; border: 0; }
+  .att-tbl .att-cat { grid-column: 1; font-size: 12px; color: var(--muted); }
+  .att-tbl .att-time { grid-column: 2; grid-row: 1; text-align: right; }
+  .att-tbl .att-raw { grid-column: 1; }
+  .att-tbl td:nth-child(4) { grid-column: 2; grid-row: 2; text-align: right; }
+  .att-tbl .att-s { display: none; }
+  .att-tbl td:last-child { grid-column: 1 / -1; }
+}
+@media (min-width: 641px) { .att-tbl { display: table; } }
+.seg button { white-space: nowrap; }
+.day-answers { display: grid; gap: 6px; }
+.day-answers .decide { background: var(--bg); }
+/* isti graf u uskom panelu admina: pravila za mobitel prema širini panela */
+.route-stops { container-type: inline-size; }
+@container (max-width: 520px) {
+  .cmp-tick.odd { color: transparent; }
+  .cmp-axis { height: 48px; }
+  .cmp-city.low { top: 21px; }
+}
+button.att-player { background: none; padding: 2px 4px; margin: -2px -4px; border-radius: 8px; color: var(--ink); font: inherit; font-weight: 400; text-align: left; box-shadow: none; }
+button.att-player:hover { background: var(--bg); }
+.att-who { display: grid; line-height: 1.25; }
+.att-where { font-size: 12px; color: var(--muted); }

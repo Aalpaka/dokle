@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { AnswerList, GameState, Notice, RoundView } from "@/server/game";
-import { BUCKET_KM, type DayCompare } from "@/lib/compare";
+import { routeLabels, type DayCompare } from "@/lib/compare";
+import RouteHist from "./RouteHist";
 import type { SkinConfig } from "@/skins/types";
 import { formatShare, landingAt } from "@/lib/scoring";
 import { maps, withVisuals } from "@/skins/maps";
@@ -71,7 +72,7 @@ export default function Game() {
 
   useEffect(() => {
     if (!starting) return;
-    api<GameState>("/api/game/start", {}).then(
+    api<GameState>("/api/game/start", { ref: document.referrer }).then(
       (s) => {
         setState(s);
         setStarting(false);
@@ -607,51 +608,14 @@ function CompareChart({ c, cfg, skinId }: { c: Compare; cfg: SkinConfig; skinId:
         <p className="cmp-head">{t("Prvi si danas završio partiju. Navrati kasnije i vidi gdje su stali ostali.")}</p>
       </div>
     );
-  const end = c.hist.length * BUCKET_KM;
-  const pct = (km: number) => `${(100 * Math.min(km, end)) / end}%`;
-  const top = Math.max(1, ...c.hist);
   const avgAt = placeAt(skinId, cfg, c.avgKm);
-  // glavne stanice od starta do cilja, plus Budva (easter egg) ako je netko stigao do nje
-  const o = cfg.overshoot;
-  const labels = [...cfg.stations.filter((s) => s.alwaysLabel), ...(o && c.bestKm > o.overKm ? [o.station] : [])];
   return (
     <div className="compare">
       <p className="cmp-head">
         {t("Stigao si dalje od")} <span className="cmp-pct">{c.ahead} %</span> {t("igrača")}
       </p>
       <span className="cmp-sub">{t("Gdje su danas stali igrači")}</span>
-      <div className="cmp-chart" role="img" aria-label={`${t("Gdje su danas stali igrači")}. ${t("Ti si na {n} km.", { n: c.mine })}`}>
-        <div className="cmp-bars">
-          {c.hist.map((n, i) => (
-            <div
-              key={i}
-              className={"cmp-col" + (i === c.mineBin ? " mine" : i > c.mineBin ? " front" : "")}
-              style={{ animationDelay: `${i * 40}ms` }}
-            >
-              {i === c.mineBin && <span className="cmp-ti">{t("TI")}</span>}
-              {n > 0 && <span className="cmp-bar" style={{ height: `${(100 * n) / top}%` }} />}
-            </div>
-          ))}
-        </div>
-        <div className="cmp-ticks">
-          {c.hist.map((_, i) => (
-            <span key={i} className={"cmp-tick" + (i % 2 ? " odd" : "")} style={{ left: pct(i * BUCKET_KM) }}>
-              {i * BUCKET_KM}
-            </span>
-          ))}
-        </div>
-        <div className="cmp-axis">
-          {labels.map((s, i) => (
-            <span
-              key={s.name}
-              className={"cmp-city" + (s.km === 0 ? " first" : s.km / end > 0.9 ? " last" : "") + (i % 2 ? " low" : "")}
-              style={{ left: pct(s.km) }}
-            >
-              {s.name}
-            </span>
-          ))}
-        </div>
-      </div>
+      <RouteHist hist={c.hist} labels={routeLabels(cfg, c.bestKm)} mineBin={c.mineBin} label={`${t("Gdje su danas stali igrači")}. ${t("Ti si na {n} km.", { n: c.mine })}`} />
       <p className="cmp-key">
         <span><i className="behind" />{c.behind} {t("iza tebe")}</span>
         <span><i className="front" />{c.players - 1 - c.behind} {t("ispred tebe")}</span>

@@ -69,7 +69,7 @@ export async function setNickname(id: string, nickname: string) {
 
 /** Brisanje računa: veza s Googleom, email i nadimak se brišu; anonimne partije ostaju u statistici. */
 export async function anonymize(id: string) {
-  await db.update(players).set({ authUserId: null, email: null, nickname: null, role: "player" }).where(eq(players.id, id));
+  await db.update(players).set({ authUserId: null, email: null, nickname: null, role: "player", country: null, city: null, device: null, referrer: null }).where(eq(players.id, id));
 }
 
 export async function profileFor(skin: Skin, playerId: string) {

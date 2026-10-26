@@ -23,11 +23,15 @@ export default function Privatnost() {
         <ul>
           <li>Tvoje odgovore i rezultate partija, za bodovanje, ljestvice i statistiku odgovora.</li>
           <li>Nasumični identifikator u kolačiću, da igra zna da si to ti i da ne igraš isti dan dvaput.</li>
+          <li>
+            Grubu lokaciju (državu i grad) koju poslužitelj procijeni iz tvoje IP adrese, vrstu uređaja (mobitel, tablet ili
+            računalo) i domenu stranice s koje si došao (npr. google), za statistiku o tome odakle se igra. Samu IP adresu ne spremamo.
+          </li>
           <li>Ako se prijaviš s Googleom: Googleov identifikator računa, email adresu i nadimak koji sam odabereš, da tvoja povijest, streak i lige rade na svakom uređaju.</li>
         </ul>
         <p>
           Pravna osnova je izvršenje usluge koju tražiš, tj. igranje i korisnički račun (čl. 6. st. 1. b GDPR-a). Anonimnu statistiku
-          odgovora vodimo na temelju legitimnog interesa da igra bude poštena i zanimljiva (čl. 6. st. 1. f).
+          odgovora i grubu lokaciju vodimo na temelju legitimnog interesa da igra bude poštena i zanimljiva (čl. 6. st. 1. f).
         </p>
         <h2>Kolačići</h2>
         <p>
@@ -44,7 +48,7 @@ export default function Privatnost() {
         <p>Ne prodajemo i ne dijelimo podatke nikome drugome.</p>
         <h2>Koliko dugo</h2>
         <p>
-          Podatke računa čuvamo dok ga ne obrišeš. Odgovori i rezultati ostaju trajno, ali nakon brisanja računa samo kao anonimna
+          Podatke računa čuvamo dok ga ne obrišeš; tada brišemo i lokaciju, uređaj i izvor dolaska. Odgovori i rezultati ostaju trajno, ali nakon brisanja računa samo kao anonimna
           statistika koja se ne može povezati s tobom.
         </p>
         <h2>Tvoja prava</h2>
@@ -55,7 +59,7 @@ export default function Privatnost() {
           zaštitu osobnih podataka (<a href="https://azop.hr">azop.hr</a>).
         </p>
         <p>Pravila igre su u <a href="/uvjeti">uvjetima korištenja</a>.</p>
-        <p className="small">Zadnja izmjena: 23. listopada 2026.</p>
+        <p className="small">Zadnja izmjena: 26. listopada 2026.</p>
       </section>
     </div>
   );

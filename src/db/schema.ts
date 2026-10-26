@@ -113,6 +113,11 @@ export const players = pgTable("players", {
   role: text("role").notNull().default("player"), // player | admin
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   lastSeenAt: timestamp("last_seen_at", { withTimezone: true }).notNull().defaultNow(),
+  // gruba lokacija i uređaj zadnje partije (Vercel geo zaglavlja, IP se ne sprema); referrer = domena s koje je prvi put došao
+  country: text("country"),
+  city: text("city"),
+  device: text("device"),
+  referrer: text("referrer"),
 });
 
 export const games = pgTable(
