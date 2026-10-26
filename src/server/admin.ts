@@ -285,7 +285,8 @@ export async function reviewQueue(skin: Skin, limit = 200) {
 }
 
 export type ReviewAction =
-  | { action: "answer"; categoryId: number; normalized: string; canonical: string; priorShare: number; rare?: boolean }
+  // tier: prijevoz koji je admin odabrao; igrači koji se sad naknadno boduju dobiju baš njega
+  | { action: "answer"; categoryId: number; normalized: string; canonical: string; priorShare: number; rare?: boolean; tier?: string }
   | { action: "alias"; categoryId: number; normalized: string; answerId: number; alias: string }
   | { action: "reject"; categoryId: number; normalized: string };
 
@@ -307,7 +308,8 @@ export async function decide(skin: Skin, adminId: string | null, a: ReviewAction
     answerId = ans.id;
     await db.insert(answerAliases).values({ answerId, alias: a.alias.trim() || a.normalized }).onConflictDoNothing();
   }
-  const rescored = answerId ? await rescoreMisses(skin, a.categoryId, a.normalized, answerId) : 0;
+  const chosen = a.action === "answer" && a.tier ? skin.config.tiers.find((t) => t.name === a.tier) : undefined;
+  const rescored = answerId ? await rescoreMisses(skin, a.categoryId, a.normalized, answerId, chosen) : 0;
   if (a.action === "reject") await rejectReports(a.categoryId, a.normalized);
   clearCategoryCache(a.categoryId);
   await db

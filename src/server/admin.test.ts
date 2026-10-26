@@ -6,11 +6,13 @@ import { dismissNotices, ensurePlayer, getOrCreatePuzzle, getSkin, getState, rep
 import { decide, generalStats, listCategories, playerDetail, playersOverview, reviewQueue, searchAttempts, setSchedule, updateAnswer, weekAverages } from "./admin";
 import { localDate } from "@/lib/day";
 import { periodStart } from "@/lib/league";
+import { priorForRank } from "@/lib/scoring";
 
 // Integracijski testovi nad lokalnom bazom (npm run db:migrate && npm run db:seed).
 const WEIRD = "zzqx odgovor";
 const KEPT = "zzqx prijava";
 const NOPE = "zzqx nije";
+const PLANE = "zzqx avion";
 const ids: string[] = [];
 
 async function playAllWith(raw: string) {
@@ -31,8 +33,8 @@ describe.skipIf(!process.env.DATABASE_URL)("admin", () => {
   afterAll(async () => {
     await db.delete(games).where(inArray(games.playerId, ids));
     await db.delete(players).where(inArray(players.id, ids));
-    await db.delete(reviewDecisions).where(inArray(reviewDecisions.normalized, [WEIRD, KEPT, NOPE]));
-    await db.delete(answers).where(inArray(answers.canonical, ["Zzqx odgovor", "Zzqx prijava"]));
+    await db.delete(reviewDecisions).where(inArray(reviewDecisions.normalized, [WEIRD, KEPT, NOPE, PLANE]));
+    await db.delete(answers).where(inArray(answers.canonical, ["Zzqx odgovor", "Zzqx prijava", "Zzqx avion"]));
     await sql.end();
   });
 
@@ -192,6 +194,28 @@ describe.skipIf(!process.env.DATABASE_URL)("admin", () => {
     await submitAnswer(skin, other, KEPT + " x", true);
     await startNext(skin, other, 0);
     expect(await submitAnswer(skin, other, NOPE, false, true)).toMatchObject({ status: "rejected", checked: true });
+  });
+
+  it("odobreni odgovor naknadno vozi baš prijevoz koji je admin odabrao", async () => {
+    const skin = await getSkin("hr");
+    const a = await playAllWith(PLANE);
+    const [game] = await db.select().from(games).where(eq(games.playerId, a));
+    const [r0] = await db.select().from(rounds).where(and(eq(rounds.gameId, game.id), eq(rounds.position, 0)));
+    const others = await db.select({ share: answers.priorShare, rare: answers.rare }).from(answers).where(eq(answers.categoryId, r0.categoryId));
+    const tiers = skin.config.tiers;
+    // najbrži obični prijevoz (avion)
+    const plane = tiers.findLastIndex((t) => !t.rare);
+    await decide(skin, null, {
+      action: "answer",
+      categoryId: r0.categoryId,
+      normalized: PLANE,
+      canonical: "Zzqx avion",
+      priorShare: priorForRank(tiers, plane, others),
+      tier: tiers[plane].name,
+    });
+    const [after] = await db.select().from(rounds).where(and(eq(rounds.gameId, game.id), eq(rounds.position, 0)));
+    expect(after.tier).toBe(tiers[plane].name);
+    expect(after.km).toBe(tiers[plane].km); // bez bonusa za brzinu
   });
 
   it("raspored se slaže u hrvatskom adminu i vrijedi za sve tri države", async () => {

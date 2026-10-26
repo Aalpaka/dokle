@@ -75,7 +75,7 @@ function useTierPrior(others?: { share: number; rare?: boolean }[]) {
     </label>
   );
   const prior = !tiers.length ? 0.1 : others ? priorForRank(tiers, index, others) : priorForTier(tiers, index);
-  return { select, prior, rare: !!tiers[index]?.rare };
+  return { select, prior, rare: !!tiers[index]?.rare, name: tiers[index]?.name };
 }
 
 const TABS = ["Dan", "Statistika", "Za pregled", "Igrači", "Sadržaj", "Raspored", "Odgovori"] as const;
@@ -481,7 +481,7 @@ function Decide({ row, onDone }: { row: ReviewRow; onDone: (msg: string) => void
         <div className="row">
           <input className="field" value={canonical} onChange={(e) => setCanonical(upperFirst(e.target.value))} aria-label="Kanonski oblik" />
           {tier.select}
-          <button className="small-btn" onClick={() => send({ action: "answer", canonical, priorShare: tier.prior, rare: tier.rare }, "Dodan odgovor")}>Dodaj</button>
+          <button className="small-btn" onClick={() => send({ action: "answer", canonical, priorShare: tier.prior, rare: tier.rare, tier: tier.name }, "Dodan odgovor")}>Dodaj</button>
         </div>
       </div>
       <div className="decide">
