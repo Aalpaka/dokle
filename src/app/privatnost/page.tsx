@@ -41,8 +41,8 @@ export default function Privatnost() {
         <h2>Tko još vidi podatke</h2>
         <ul>
           <li>Drugi igrači vide samo tvoj nadimak, kilometre i odgovore (u ligama kojima se pridružiš). Ne vide tvoje ime ni email.</li>
-          <li>Supabase (baza i prijava, poslužitelji u Frankfurtu, EU).</li>
-          <li>Vercel (poslužuje stranicu, poslužitelji u Frankfurtu; tvrtka je iz SAD-a i prenosi podatke prema EU-US Data Privacy Frameworku).</li>
+          <li>Supabase (baza i prijava, poslužitelji u Irskoj, EU).</li>
+          <li>Vercel (poslužuje stranicu, poslužitelji u Dublinu, Irska; tvrtka je iz SAD-a i prenosi podatke prema EU-US Data Privacy Frameworku).</li>
           <li>Google, kad se prikaže ili koristi Googleov gumb za prijavu (učitava se s Googleovih poslužitelja).</li>
         </ul>
         <p>Ne prodajemo i ne dijelimo podatke nikome drugome.</p>
