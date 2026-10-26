@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { CODE_RE, addDays, cleanLeagueName, computeStandings, dailyAverages, newLeagueCode, periodStart, weekDays } from "./league";
+import { CODE_RE, addDays, cleanLeagueName, computeStandings, dailyAverages, kmAfter, newLeagueCode, periodStart, raceTags, weekDays } from "./league";
 
 const members = [
   { memberId: 1, playerId: "a", nickname: "Ana" },
@@ -88,5 +88,21 @@ describe("prosjek po danu", () => {
     expect(avg[1]).toEqual({ date: "2026-10-20", avgKm: null, players: 0 });
     expect(avg[2]).toEqual({ date: "2026-10-21", avgKm: 0, players: 1 });
     expect(avg).toHaveLength(7);
+  });
+});
+
+describe("oznake za utrku", () => {
+  it("prvo slovo dok je jedinstveno", () => {
+    expect(raceTags(["Ana", "marko", "Željko"])).toEqual(["A", "M", "Ž"]);
+  });
+  it("isto prvo slovo: inicijali ili dva slova", () => {
+    expect(raceTags(["Marko Horvat", "Mia", "Ivan"])).toEqual(["MH", "Mi", "I"]);
+  });
+  it("i dalje isto: slovo i broj", () => {
+    expect(raceTags(["Putnik", "Putnik", "Petra"])).toEqual(["P1", "P2", "Pe"]);
+  });
+  it("km do koraka", () => {
+    expect(kmAfter([100, 50, 0, 30], 2)).toBe(150);
+    expect(kmAfter([100, 50], Infinity)).toBe(150);
   });
 });

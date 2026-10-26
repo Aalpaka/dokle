@@ -218,4 +218,8 @@ export const sr: Record<string, string> = {
   "Nisi prijavljen.": "Nisi prijavljen.",
   "Sri": "Sre",
   "Prosjek km po danu": "Prosek km po danu",
+  // utrka lige na karti
+  "Utrka lige": "Trka lige",
+  "Sakrij utrku": "Sakrij trku",
+  "Danas još nitko iz lige nije igrao.": "Danas još niko iz lige nije igrao.",
 };

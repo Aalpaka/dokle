@@ -23,4 +23,5 @@ export const bs: Record<string, string> = {
   "Siguran si da je točan?": "Siguran si da je tačan?",
   "Ako je točan, km ti dodajemo naknadno i javimo ti kad ga prihvatimo.": "Ako je tačan, km ti dodajemo naknadno i javimo ti kad ga prihvatimo.",
   "Uđi u moju ligu \"{x}\" na {igra}": "Uđi u moju ligu \"{x}\" na {igra}",
+  "Danas još nitko iz lige nije igrao.": "Danas još niko iz lige nije igrao.",
 };

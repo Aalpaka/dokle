@@ -142,7 +142,7 @@ button.small-btn.ghost { font-weight: 700; }
 .map .ferry { fill: none; stroke: #fff; stroke-width: 3; stroke-dasharray: 3 5; stroke-linecap: round; vector-effect: non-scaling-stroke; }
 .map .seg { fill: none; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
 .map .contrail { fill: none; stroke: #fff; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 8 7; vector-effect: non-scaling-stroke; opacity: .9; }
-.overlay { position: absolute; inset: 0; pointer-events: none; }
+.overlay { position: absolute; inset: 0; pointer-events: none; isolation: isolate; }
 .overlay > * { position: absolute; left: 0; top: 0; will-change: transform; }
 .halo { text-shadow: 0 0 3px #fff, 0 0 3px #fff, 0 0 6px #fff; }
 .cname { font-weight: 800; font-size: 12px; letter-spacing: .32em; text-transform: uppercase; color: #6b6a62; opacity: .7; white-space: nowrap; }
@@ -760,3 +760,41 @@ button.att-player { background: none; padding: 2px 4px; margin: -2px -4px; borde
 button.att-player:hover { background: var(--bg); }
 .att-who { display: grid; line-height: 1.25; }
 .att-where { font-size: 12px; color: var(--muted); }
+
+/* utrka lige: kružići članova na karti i popis u kutu */
+.ghost { width: 0; height: 0; }
+.ghost i { position: absolute; left: -1px; top: -26px; width: 2px; height: 26px; background: var(--map-ink); opacity: .55; }
+.ghost i::after { content: ""; position: absolute; left: -2.5px; bottom: -3px; width: 7px; height: 7px; border-radius: 50%; background: var(--map-ink); }
+.ghost.stacked i { display: none; }
+.ghost .ghost-chip { position: absolute; left: -13px; top: -52px; translate: var(--dx, 0) 0; transition: translate .25s; }
+.ghost-chip {
+  display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; flex: none;
+  color: #fff; font-weight: 800; font-size: 11.5px; letter-spacing: -.02em; line-height: 1;
+  box-shadow: 0 0 0 2px #fff, 0 3px 8px -2px #0009;
+}
+.hud.tl { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.race { pointer-events: auto; background: #ffffffeb; color: var(--map-ink); border-radius: 10px; box-shadow: 0 4px 14px -6px #0006; min-width: 210px; max-width: 250px; }
+.race-head { display: flex; align-items: center; gap: 6px; width: 100%; font: inherit; font-weight: 800; font-size: 13px; padding: 7px 10px; background: none; color: inherit; text-align: left; }
+.race-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.race-rank { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.race-caret { font-size: 11px; opacity: .6; }
+.race-sub { font-size: 11px; font-weight: 600; color: #55625f; padding: 0 10px 4px; margin-top: -4px; }
+.race-list { list-style: none; margin: 0; padding: 0 6px 4px; }
+.race-list li { display: flex; align-items: center; gap: 7px; padding: 3px 4px; border-radius: 7px; font-size: 13px; font-weight: 600; }
+.race-list li.me { background: #f2b20033; font-weight: 800; }
+.race-list .ghost-chip { width: 20px; height: 20px; font-size: 9.5px; box-shadow: none; }
+.race-pos { width: 18px; text-align: right; font-family: var(--font-mono); font-size: 12px; color: #55625f; }
+.race-who { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.race-who small { font-weight: 600; color: #55625f; }
+.race-km { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 12px; }
+.race-note { margin: 0; padding: 2px 10px 4px; font-size: 11.5px; color: #55625f; }
+.race-pick { display: block; margin: 2px 10px 8px; width: calc(100% - 20px); font: inherit; font-size: 12px; padding: 3px 6px; border-radius: 7px; border: 1px solid #c9d0ce; background: #fff; color: inherit; }
+.mapbtn.race-on { pointer-events: auto; padding: 6px 10px; font-size: 12px; }
+@media (max-width: 700px) {
+  .race { min-width: 0; max-width: 200px; }
+  .race:not(.open) .race-name { max-width: 90px; }
+  .race-head { padding: 4px 9px; font-size: 12px; }
+  .race-list li { font-size: 12px; padding: 2px 3px; }
+  .ghost .ghost-chip { width: 22px; height: 22px; left: -11px; top: -44px; font-size: 10px; }
+  .ghost i { top: -22px; height: 22px; }
+}

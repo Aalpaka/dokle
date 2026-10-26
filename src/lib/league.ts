@@ -108,3 +108,38 @@ export function dailyAverages(games: { date: string; km: number }[], days: strin
     return { date, avgKm: kms.length ? Math.round(kms.reduce((a, k) => a + k, 0) / kms.length) : null, players: kms.length };
   });
 }
+
+// ---------- Utrka na karti ----------
+
+// boje kružića članova na karti; dovoljno različite od boja prijevoza i od karte
+export const RACE_COLORS = ["#e4572e", "#2e86de", "#8e44ad", "#16a085", "#d81b60", "#f39c12", "#3d5a80", "#6d4c41", "#00897b", "#c0392b"];
+
+const letters = (s: string) => [...s.normalize("NFC")].filter((c) => /\p{L}|\p{N}/u.test(c));
+
+/**
+ * Kratke oznake članova za kružiće na karti: prvo slovo nadimka, a kad dvoje počinje istim slovom
+ * inicijali dviju riječi ("MH") ili prva dva slova ("Ma", "Mi"); ako ni to ne pomaže, slovo i broj.
+ */
+export function raceTags(nicknames: string[]): string[] {
+  const first = (n: string) => (letters(n)[0] ?? "?").toLocaleUpperCase("hr");
+  const second = (n: string) => {
+    const words = n.trim().split(/\s+/).map(letters).filter((w) => w.length);
+    if (words.length >= 2) return (words[0][0] + words[1][0]).toLocaleUpperCase("hr");
+    const w = words[0] ?? ["?"];
+    return w[0].toLocaleUpperCase("hr") + (w[1] ?? "").toLocaleLowerCase("hr");
+  };
+  const count = (tags: string[]) => tags.reduce((m, t) => m.set(t, (m.get(t) ?? 0) + 1), new Map<string, number>());
+  let tags = nicknames.map(first);
+  const c1 = count(tags);
+  tags = tags.map((t, i) => (c1.get(t)! > 1 ? second(nicknames[i]) : t));
+  const c2 = count(tags), seen = new Map<string, number>();
+  return tags.map((t) => {
+    if (c2.get(t)! === 1) return t;
+    const k = (seen.get(t) ?? 0) + 1;
+    seen.set(t, k);
+    return t[0] + k;
+  });
+}
+
+/** Km nakon prvih `step` kategorija (Infinity = sve odigrane). */
+export const kmAfter = (kms: number[], step: number) => kms.slice(0, step).reduce((a, k) => a + k, 0);
