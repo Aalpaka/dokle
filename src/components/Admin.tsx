@@ -6,6 +6,8 @@ import { fold } from "@/lib/matcher";
 import { addDays, type DayAvg } from "@/lib/league";
 import Modal from "./Modal";
 import WeekChart from "./WeekChart";
+import RouteHist from "./RouteHist";
+import type { RouteLabel } from "@/lib/compare";
 import { AccountLink, useMe } from "./account";
 import { SkinProvider, skinFetch, useSkin } from "./skin";
 import { SKIN_IDS, SKIN_META, type SkinId } from "@/skins/meta";
@@ -165,6 +167,7 @@ type DayData = {
   puzzle: { number: number } | null;
   totals?: { started: number; finished: number; registered: number; avgKm: number; unranked: number };
   stations?: { name: string; n: number }[];
+  route?: RouteData;
   categories?: {
     position: number;
     id: number;
@@ -176,6 +179,29 @@ type DayData = {
     answers: { canonical: string; n: number; share: number; tier: string }[];
   }[];
 };
+
+type RouteData = { hist: number[]; labels: RouteLabel[]; avgKm: number; avgAt: string; bestKm: number; bestAt: string };
+
+/** Gdje su igrači stali, isti graf kao "Usporedba s ostalima" na kraju igre (bez igračeva stupca). */
+function RouteStops({ route, title, note }: { route: RouteData; title: string; note?: React.ReactNode }) {
+  const n = route.hist.reduce((a, b) => a + b, 0);
+  return (
+    <section className="stack panel-sub route-stops">
+      <span className="eyebrow">{title}</span>
+      {n ? (
+        <>
+          <RouteHist hist={route.hist} labels={route.labels} label={title} unit="partija" />
+          <p className="small">
+            Završenih partija: <b>{n}</b>{" · "}prosjek {route.avgKm} km ({route.avgAt}){" · "}najdalje {route.bestKm} km ({route.bestAt})
+          </p>
+          {note}
+        </>
+      ) : (
+        <p className="small">Još nitko nije završio partiju.</p>
+      )}
+    </section>
+  );
+}
 
 /** Svi odgovori jedne današnje kategorije, grupirani po prijevozu koji taj dan vrijedi. */
 function DayAnswers({ answers }: { answers: { canonical: string; n: number; share: number; tier: string }[] }) {
@@ -241,7 +267,7 @@ type StatsData = {
   totals: { days: number; games: number; finished: number; players: number; avgKm: number; answered: number; hit: number; avgMs: number };
   best: { km: number; date: string; player: string } | null;
   tiers: { name: string; emoji: string; n: number }[];
-  histogram: { from: number; n: number }[];
+  route: RouteData;
   loyalty: { label: string; n: number }[];
   hardest: { title: string; date: string; answered: number; missPct: number }[];
   easiest: { title: string; date: string; answered: number; missPct: number }[];
@@ -269,7 +295,6 @@ function Bars({ rows }: { rows: { label: string; n: number }[] }) {
 function GeneralStats({ today }: { today: string }) {
   const { data, error } = useLoad<StatsData>("/api/admin/stats");
   const t = data?.totals;
-  const hmax = Math.max(1, ...(data?.histogram ?? []).map((h) => h.n));
   const { id } = useSkin();
   return (
     <div className="stack">
@@ -297,20 +322,7 @@ function GeneralStats({ today }: { today: string }) {
             <Kpi v={(t.avgMs / 1000).toFixed(1).replace(".", ",")} l="s prosječno do točnog odgovora" />
           </div>
           <div className="stat-grid">
-            <section className="stack panel-sub">
-              <span className="eyebrow">Koliko daleko igrači stignu</span>
-              <div className="histo">
-                {data.histogram.map((h) => (
-                  <div key={h.from} className="histo-slot" title={`${h.from}–${h.from + 99} km: ${h.n} partija`}>
-                    <span style={{ height: `${(100 * h.n) / hmax}%` }} />
-                  </div>
-                ))}
-              </div>
-              <div className="histo-x">
-                {data.histogram.map((h, i) => <span key={h.from}>{i % 3 === 0 ? h.from : ""}</span>)}
-              </div>
-              <p className="small">Broj završenih partija po 100 km.</p>
-            </section>
+            <RouteStops route={data.route} title="Koliko daleko igrači stignu" />
             <section className="stack panel-sub">
               <span className="eyebrow">Prijevoz za točne odgovore</span>
               <Bars rows={data.tiers.map((x) => ({ label: `${x.emoji} ${x.name}`, n: x.n }))} />
@@ -340,7 +352,6 @@ function GeneralStats({ today }: { today: string }) {
 function Day({ today }: { today: string }) {
   const [date, setDate] = useState(today);
   const { data, error } = useLoad<DayData>(`/api/admin/day?date=${date}`);
-  const maxStation = Math.max(1, ...(data?.stations ?? []).map((s) => s.n));
   return (
     <div className="stack">
       <div className="row">
@@ -359,17 +370,14 @@ function Day({ today }: { today: string }) {
             <Stat v={data.totals.avgKm} l="prosjek km" />
             <Stat v={data.totals.unranked} l="za gušt (ne broji se)" />
           </div>
-          {!!data.stations?.length && (
-            <div className="stack" style={{ gap: 4 }}>
-              <span className="eyebrow">Gdje su stali</span>
-              {data.stations.map((s) => (
-                <div key={s.name} className="bar">
-                  <span>{s.name}</span>
-                  <i style={{ width: `${(s.n / maxStation) * 100}%` }} />
-                  <b>{s.n}</b>
-                </div>
-              ))}
-            </div>
+          {data.route && (
+            <RouteStops
+              route={data.route}
+              title="Gdje su stali"
+              note={!!data.stations?.length && (
+                <p className="small">Po zadnjoj stanici: {data.stations.map((st) => `${st.name} ${st.n}`).join(" · ")}</p>
+              )}
+            />
           )}
           <span className="eyebrow">Kategorije</span>
           <table className="tbl">
@@ -388,12 +396,14 @@ function Day({ today }: { today: string }) {
           </table>
           <span className="eyebrow">Svi odgovori po prijevozu</span>
           <p className="small">Udio igrača danas (procjena pomiješana sa stvarnim odgovorima) i koliko ih je taj odgovor dalo.</p>
+          <div className="day-answers">
           {data.categories!.map((c) => (
             <details key={c.position} className="decide">
               <summary><b>{c.position + 1}. {c.title}</b> <span className="small">· {c.answers.length} odgovora</span></summary>
               <DayAnswers answers={c.answers} />
             </details>
           ))}
+          </div>
         </>
       )}
     </div>
@@ -513,8 +523,10 @@ function Decide({ row, onDone }: { row: ReviewRow; onDone: (msg: string) => void
 type PlayerStats = { played: number; currentStreak: number; longestStreak: number; avgKm: number; bestKm: number };
 type PlayerRow = { id: string; nickname: string | null; email: string | null; role: string; createdAt: string; lastSeenAt: string; lastPlayed: string | null; stats: PlayerStats };
 type DailyRow = { date: string; players: number; registered: number; finished: number };
+type Tally = { label: string; n: number }[];
 type PlayersData = {
   today: string;
+  origins: { players: number; known: number; countries: Tally; cities: Tally; devices: Tally; referrers: Tally };
   counts: { total: number; registered: number; newRegistered: number; activeToday: number; active7: number; active30: number };
   daily: DailyRow[];
   players: PlayerRow[];
@@ -579,6 +591,42 @@ function ActivityChart({ daily, today }: { daily: DailyRow[]; today: string }) {
   );
 }
 
+/** Zastava iz dvoslovnog koda države (HR -> 🇭🇷). */
+const flag = (cc: string) => (/^[A-Z]{2}$/.test(cc) ? String.fromCodePoint(...[...cc].map((c) => 0x1f1a5 + c.charCodeAt(0))) : "");
+let regionNames: Intl.DisplayNames | null = null;
+const countryName = (cc: string) => {
+  try {
+    regionNames ??= new Intl.DisplayNames(["hr"], { type: "region" });
+    return regionNames.of(cc) ?? cc;
+  } catch {
+    return cc;
+  }
+};
+/** "🇭🇷 Split" ili "🇩🇪 Njemačka" kad grad nije poznat. */
+const placeLabel = (country: string | null, city: string | null) =>
+  country ? `${flag(country)} ${city || countryName(country)}` : city ?? "";
+
+/** Odakle igraju igrači zadnjih 30 dana: država, grad, uređaj, izvor dolaska. */
+function Origins({ o }: { o: PlayersData["origins"] }) {
+  const rows = (t: Tally, label: (l: string) => string, unknown = "nepoznato") => t.map((r) => ({ label: r.label ? label(r.label) : unknown, n: r.n }));
+  return (
+    <section className="stack panel-sub">
+      <span className="eyebrow">Odakle igraju · 30 dana</span>
+      <p className="small">
+        Svi igrači (i bez računa) koji su igrali zadnjih 30 dana, po zadnjoj partiji. Lokacija je gruba procjena iz IP adrese
+        (Vercel), a sam IP ne spremamo. Bilježi se od 27. 10. 2026., pa stariji igrači ostaju „nepoznato” dok ne odigraju novu partiju.
+        {" "}Poznato za {o.known} od {o.players}.
+      </p>
+      <div className="stat-grid">
+        <div className="stack" style={{ gap: 6 }}><b className="small">Država</b><Bars rows={rows(o.countries, (c) => `${flag(c)} ${countryName(c)}`)} /></div>
+        <div className="stack" style={{ gap: 6 }}><b className="small">Grad</b><Bars rows={rows(o.cities, (l) => { const [city, cc] = l.split("|"); return placeLabel(cc || null, city); })} /></div>
+        <div className="stack" style={{ gap: 6 }}><b className="small">Uređaj</b><Bars rows={rows(o.devices, (d) => d)} /></div>
+        <div className="stack" style={{ gap: 6 }}><b className="small">Došli s</b><Bars rows={rows(o.referrers, (r) => r, "direktno / nepoznato")} /></div>
+      </div>
+    </section>
+  );
+}
+
 function Players() {
   const { data, error } = useLoad<PlayersData>("/api/admin/players");
   const [q, setQ] = useState("");
@@ -608,6 +656,7 @@ function Players() {
         <span className="eyebrow">Igrači po danu · 30 dana</span>
         <ActivityChart daily={data.daily} today={data.today} />
       </section>
+      <Origins o={data.origins} />
       <section className="stack panel-sub">
         <div className="row" style={{ justifyContent: "space-between" }}>
           <span className="eyebrow">Prijavljeni igrači · {list.length}</span>
@@ -662,6 +711,11 @@ type PlayerDetail = {
   email: string | null;
   createdAt: string;
   lastSeenAt: string;
+  registered: boolean;
+  country: string | null;
+  city: string | null;
+  device: string | null;
+  referrer: string | null;
   stats: PlayerStats;
   games: { date: string; number: number; km: number; finished: boolean; ranked: boolean; station: string | null }[];
   leagues: { name: string; code: string; members: number }[];
@@ -669,7 +723,7 @@ type PlayerDetail = {
 
 function PlayerModal({ id, onClose }: { id: string; onClose: () => void }) {
   const { data, error } = useLoad<PlayerDetail>(`/api/admin/players/${id}`);
-  const name = data ? data.nickname || data.email || "bez imena" : "Igrač";
+  const name = data ? data.nickname || data.email || (data.registered ? "bez imena" : `Gost ${data.id.slice(0, 8)}`) : "Igrač";
   const recent = (data?.games ?? []).filter((g) => g.finished).slice(0, 30).reverse();
   const max = Math.max(1, ...recent.map((g) => g.km));
   return (
@@ -677,7 +731,15 @@ function PlayerModal({ id, onClose }: { id: string; onClose: () => void }) {
       <Err msg={error} />
       {data && (
         <>
-          <p className="small">{data.email} · račun od {new Date(data.createdAt).toLocaleDateString("hr-HR")} · zadnji put na stranici {ago(data.lastSeenAt)}</p>
+          <p className="small">
+            {data.registered ? `${data.email} · račun od` : "Bez računa · prvi put"} {new Date(data.createdAt).toLocaleDateString("hr-HR")}
+            {" · "}zadnji put na stranici {ago(data.lastSeenAt)}
+          </p>
+          {(data.country || data.device || data.referrer) && (
+            <p className="small">
+              {[data.country && placeLabel(data.country, data.city), data.device, data.referrer && `došao s ${data.referrer}`].filter(Boolean).join(" · ")}
+            </p>
+          )}
           <div className="stats">
             <Stat v={data.stats.played} l="odigranih dana" />
             <Stat v={data.stats.currentStreak} l="trenutni streak" />
@@ -1096,41 +1158,141 @@ function Schedule({ perDay, mirror }: { perDay: number; mirror: string | null })
 
 // ---------- Odgovori ----------
 
-type AttemptRow = { createdAt: string; date: string; category: string; raw: string; answer: string | null; accepted: boolean; timedOut: boolean; elapsedMs: number; player: string; registered: boolean };
+type AttemptRow = {
+  createdAt: string; date: string; position: number; category: string; raw: string; answer: string | null; accepted: boolean; timedOut: boolean; elapsedMs: number;
+  gameId: number; gameKm: number; finished: boolean; ranked: boolean; playerId: string; player: string; registered: boolean;
+  country: string | null; city: string | null; device: string | null;
+};
+type AttemptsData = {
+  rows: AttemptRow[];
+  summary: { total: number; ok: number; rejected: number; late: number; players: number; categories: { id: number; position: number; title: string }[] };
+};
+
+const STATUS_TABS = [
+  { id: "", label: "Svi", key: "total" },
+  { id: "ok", label: "Prepoznati", key: "ok" },
+  { id: "rejected", label: "Odbijeni", key: "rejected" },
+  { id: "late", label: "Kasno", key: "late" },
+] as const;
+
+const hhmm = (iso: string) => new Date(iso).toLocaleTimeString("hr-HR", { hour: "2-digit", minute: "2-digit" });
+const secs = (ms: number) => (ms / 1000).toFixed(1).replace(".", ",");
+
+/** Ishod upisa: zeleno prepoznato, crveno odbijeno, sivo kasno. */
+function Outcome({ a }: { a: AttemptRow }) {
+  if (a.accepted) return <span className="att-out ok">✓ {a.answer}</span>;
+  if (a.timedOut) return <span className="att-out late">⏱ kasno</span>;
+  return <span className="att-out no">✗ nije prepoznato</span>;
+}
+
+/** Igrač upisa; klik otvara njegove partije, kao na kartici Igrači. */
+function PlayerTag({ a, onOpen }: { a: AttemptRow; onOpen: (id: string) => void }) {
+  const where = [placeLabel(a.country, a.city), a.device].filter(Boolean).join(" · ");
+  return (
+    <button type="button" className="att-player" onClick={() => onOpen(a.playerId)} title="Otvori igrača">
+      <Avatar id={a.playerId.replace(/-/g, "")} name={a.player} />
+      <span className="att-who">
+        <span>{a.player} {a.registered ? <span className="att-badge">račun</span> : <span className="att-badge guest">gost</span>}</span>
+        {where && <span className="att-where">{where}</span>}
+      </span>
+    </button>
+  );
+}
+
+/** Upisi igrača grupirani po partiji, kategorije redom kako su igrane. */
+function AttemptsByGame({ rows, onOpen }: { rows: AttemptRow[]; onOpen: (id: string) => void }) {
+  const games = new Map<number, AttemptRow[]>();
+  for (const r of rows) games.set(r.gameId, [...(games.get(r.gameId) ?? []), r]);
+  return (
+    <div className="att-games">
+      {[...games.values()].map((list) => {
+        const g = list[0];
+        const sorted = [...list].sort((x, y) => x.createdAt.localeCompare(y.createdAt));
+        return (
+          <section key={g.gameId} className="att-game panel-sub">
+            <header>
+              <PlayerTag a={g} onOpen={onOpen} />
+              <span className="small">
+                {hhmm(sorted[0].createdAt)}{" · "}{g.finished ? `${g.gameKm} km` : "nije završio"}{!g.ranked && " · za gušt"}
+              </span>
+            </header>
+            <ol>
+              {sorted.map((a, i) => (
+                <li key={i}>
+                  <span className="att-pos">{a.position + 1}</span>
+                  <span className="att-cat">{a.category}</span>
+                  <span className="att-raw">{a.raw || "—"}</span>
+                  <Outcome a={a} />
+                  <span className="att-s">{secs(a.elapsedMs)} s</span>
+                </li>
+              ))}
+            </ol>
+          </section>
+        );
+      })}
+    </div>
+  );
+}
 
 function Attempts({ today }: { today: string }) {
   const { id } = useSkin();
   const [date, setDate] = useState(today);
   const [q, setQ] = useState("");
-  const [rejected, setRejected] = useState(false);
-  const qs = new URLSearchParams({ date, q, rejected: rejected ? "1" : "" }).toString();
-  const { data, error } = useLoad<AttemptRow[]>(`/api/admin/attempts?${qs}`);
+  const [status, setStatus] = useState("");
+  const [cat, setCat] = useState("");
+  const [byGame, setByGame] = useState(false);
+  const [openId, setOpenId] = useState<string | null>(null);
+  const qs = new URLSearchParams({ date, q, status, categoryId: cat }).toString();
+  const { data, error } = useLoad<AttemptsData>(`/api/admin/attempts?${qs}`);
+  const sum = data?.summary;
   return (
     <div className="stack">
-      <div className="row">
+      <div className="row" style={{ justifyContent: "space-between" }}>
         <h2>Svi upisi</h2>
-        <input type="date" className="field" value={date} onChange={(e) => setDate(e.target.value)} />
-        <input className="field" placeholder="Traži tekst" value={q} onChange={(e) => setQ(e.target.value)} />
-        <label className="small"><input type="checkbox" checked={rejected} onChange={(e) => setRejected(e.target.checked)} /> samo odbijeni</label>
-        <a href={`/api/admin/attempts?${qs}&format=csv&skin=${id}`}>Izvoz CSV</a>
+        <a href={`/api/admin/attempts?${qs}&format=csv&skin=${id}`} className="small">Izvoz CSV</a>
       </div>
+      <div className="att-filters">
+        <input type="date" className="field" value={date} onChange={(e) => { setDate(e.target.value); setCat(""); }} />
+        <select className="field" value={cat} onChange={(e) => setCat(e.target.value)}>
+          <option value="">Sve kategorije</option>
+          {sum?.categories.map((c) => <option key={c.id} value={c.id}>{c.position + 1}. {c.title}</option>)}
+        </select>
+        <input className="field" placeholder="Traži upis" value={q} onChange={(e) => setQ(e.target.value)} />
+      </div>
+      {sum && (
+        <div className="att-bar">
+          <div className="seg" role="tablist">
+            {STATUS_TABS.map((t) => (
+              <button key={t.id} role="tab" aria-selected={status === t.id} className={status === t.id ? "" : "ghost"} onClick={() => setStatus(t.id)}>
+                {t.label} <span className="seg-n">{sum[t.key]}</span>
+              </button>
+            ))}
+          </div>
+          <label className="small"><input type="checkbox" checked={byGame} onChange={(e) => setByGame(e.target.checked)} /> po igraču</label>
+        </div>
+      )}
+      {sum && <p className="small">{sum.players} igrača taj dan{" · "}{sum.total ? Math.round((100 * sum.ok) / sum.total) : 0} % upisa prepoznato</p>}
       <Err msg={error} />
-      <table className="tbl">
-        <thead><tr><th>Vrijeme</th><th>Kategorija</th><th>Upis</th><th>Prepoznato</th><th>s</th><th>Igrač</th></tr></thead>
-        <tbody>
-          {data?.map((a, i) => (
-            <tr key={i} className={a.accepted ? "" : "off"}>
-              <td>{new Date(a.createdAt).toLocaleTimeString("hr-HR")}</td>
-              <td>{a.category}</td>
-              <td>{a.raw}</td>
-              <td>{a.answer ?? (a.timedOut ? "kasno" : "—")}</td>
-              <td>{(a.elapsedMs / 1000).toFixed(1)}</td>
-              <td>{a.player}{a.registered && " ●"}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      {data?.length === 500 && <p className="small">Prikazano prvih 500; za sve koristi CSV.</p>}
+      {data && !data.rows.length && <p className="small">Nema upisa za ovaj odabir.</p>}
+      {data && !!data.rows.length && (byGame ? <AttemptsByGame rows={data.rows} onOpen={setOpenId} /> : (
+        <table className="tbl att-tbl">
+          <thead><tr><th>Vrijeme</th><th>Kategorija</th><th>Upis</th><th>Ishod</th><th className="num">s</th><th>Igrač</th></tr></thead>
+          <tbody>
+            {data.rows.map((a, i) => (
+              <tr key={i} className={a.accepted ? "" : "off"}>
+                <td className="att-time">{hhmm(a.createdAt)}</td>
+                <td className="att-cat"><span className="att-pos">{a.position + 1}</span>{a.category}</td>
+                <td className="att-raw">{a.raw || "—"}</td>
+                <td><Outcome a={a} /></td>
+                <td className="num att-s">{secs(a.elapsedMs)}</td>
+                <td><PlayerTag a={a} onOpen={setOpenId} /></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ))}
+      {data?.rows.length === 500 && <p className="small">Prikazano zadnjih 500; za sve koristi CSV.</p>}
+      {openId && <PlayerModal id={openId} onClose={() => setOpenId(null)} />}
     </div>
   );
 }

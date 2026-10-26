@@ -107,8 +107,9 @@ describe.skipIf(!process.env.DATABASE_URL)("admin", () => {
     await playAllWith("zzqx stat");
     const st = await generalStats(skin);
     expect(st.totals.games).toBeGreaterThanOrEqual(1);
-    expect(st.histogram[0].from).toBe(0);
-    expect(st.histogram.reduce((a, h) => a + h.n, 0)).toBeGreaterThanOrEqual(1);
+    expect(st.route.hist.length).toBeGreaterThanOrEqual(Math.floor(skin.config.maxKm / 100) + 1);
+    expect(st.route.hist.reduce((a, n) => a + n, 0)).toBeGreaterThanOrEqual(1);
+    expect(st.route.labels[0].km).toBe(0);
     expect(st.tiers.map((t) => t.name)).toEqual(skin.config.tiers.map((t) => t.name));
     expect(st.loyalty.reduce((a, b) => a + b.n, 0)).toBeGreaterThanOrEqual(1);
   });

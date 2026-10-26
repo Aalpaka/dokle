@@ -22,6 +22,7 @@ import { computeStats } from "@/lib/stats";
 import { dayNumber, localDate } from "@/lib/day";
 import { addDays, dailyAverages, weekDays } from "@/lib/league";
 import { placeAt } from "@/skins/mjesta";
+import { routeHistogram, routeLabels } from "@/lib/compare";
 import { isAdminEmail } from "./accounts";
 import { resolveIdentity } from "./player";
 import { categoryShares, clearCategoryCache, clearPuzzleCache, followersOf, getOrCreatePuzzle, pairedSlugs, rejectReports, rescoreMisses, type Skin } from "./game";
@@ -34,6 +35,20 @@ export async function requireAdmin(): Promise<{ playerId: string | null } | null
 }
 
 // ---------- Pregled dana ----------
+
+/** Stupci "gdje su stali" kao na kraju igre, s gradovima ispod osi, prosjekom i najdaljim. */
+function routeOf(skin: Skin, kms: number[]) {
+  const best = kms.length ? Math.max(...kms) : 0;
+  const avg = kms.length ? Math.round(kms.reduce((a, b) => a + b, 0) / kms.length) : 0;
+  return {
+    hist: routeHistogram(skin.config, kms),
+    labels: routeLabels(skin.config, best),
+    avgKm: avg,
+    avgAt: placeAt(skin.id, skin.config, avg),
+    bestKm: best,
+    bestAt: placeAt(skin.id, skin.config, best),
+  };
+}
 
 export async function dayOverview(skin: Skin, date: string) {
   const [puzzle] = await db
@@ -118,6 +133,7 @@ export async function dayOverview(skin: Skin, date: string) {
     puzzle: { number: puzzle.number },
     totals: { ...totals, unranked },
     stations: skin.config.stations.map((s) => ({ name: s.name, n: stations.get(s.name) ?? 0 })).filter((s) => s.n > 0),
+    route: routeOf(skin, kms.map((k) => k.km)),
     categories: cats.map((c) => {
       const a = att.find((x) => x.categoryId === c.id);
       return {
@@ -202,10 +218,7 @@ export async function generalStats(skin: Skin) {
     .from(games)
     .innerJoin(dailyPuzzles, eq(dailyPuzzles.id, games.puzzleId))
     .where(and(recent, isNotNull(games.finishedAt)));
-  const step = 100;
-  const top = Math.max(skin.config.maxKm, ...kms.map((k) => k.km));
-  const histogram = Array.from({ length: Math.ceil((top + 1) / step) }, (_, i) => ({ from: i * step, n: 0 }));
-  for (const { km } of kms) histogram[Math.floor(km / step)].n++;
+  const route = routeOf(skin, kms.map((k) => k.km));
   // koliko se igrači vraćaju: broj odigranih dana po igraču (svi dani)
   const perPlayer = await db
     .select({ n: sql<number>`count(*)::int` })
@@ -242,7 +255,7 @@ export async function generalStats(skin: Skin) {
     totals: { ...totals, ...answersRow },
     best: best ?? null,
     tiers: skin.config.tiers.map((t) => ({ name: t.name, emoji: t.emoji, n: tierRows.find((r) => r.tier === t.name)?.n ?? 0 })),
-    histogram,
+    route,
     loyalty,
     hardest: byMiss.slice(0, 5),
     easiest: byMiss.slice(Math.max(5, byMiss.length - 5)).reverse(),
@@ -420,8 +433,35 @@ export async function playersOverview(skin: Skin) {
       .innerJoin(dailyPuzzles, eq(dailyPuzzles.id, games.puzzleId))
       .where(and(eq(dailyPuzzles.skinId, skin.id), gte(dailyPuzzles.date, from)))
       .then(([r]) => r.n);
+  // odakle igraju svi igrači (i bez računa) koji su igrali zadnjih 30 dana; lokacija je zadnja poznata
+  const seen = await db
+    .selectDistinct({ id: players.id, country: players.country, city: players.city, device: players.device, referrer: players.referrer })
+    .from(games)
+    .innerJoin(dailyPuzzles, eq(dailyPuzzles.id, games.puzzleId))
+    .innerJoin(players, eq(players.id, games.playerId))
+    .where(and(eq(dailyPuzzles.skinId, skin.id), gte(dailyPuzzles.date, since)));
+  const tally = (key: (p: (typeof seen)[number]) => string | null, top: number) => {
+    const m = new Map<string, number>();
+    for (const p of seen) {
+      const k = key(p) ?? "";
+      m.set(k, (m.get(k) ?? 0) + 1);
+    }
+    const rows = [...m].map(([label, n]) => ({ label, n })).sort((a, b) => b.n - a.n);
+    const known = rows.filter((r) => r.label).slice(0, top);
+    const rest = seen.length - known.reduce((a, r) => a + r.n, 0);
+    return rest ? [...known, { label: "", n: rest }] : known;
+  };
+  const origins = {
+    players: seen.length,
+    known: seen.filter((p) => p.country).length,
+    countries: tally((p) => p.country, 8),
+    cities: tally((p) => (p.city ? `${p.city}|${p.country ?? ""}` : null), 10),
+    devices: tally((p) => p.device, 4),
+    referrers: tally((p) => p.referrer, 8),
+  };
   return {
     today,
+    origins,
     counts: { ...counts, activeToday: await active(today), active7: await active(addDays(today, -6)), active30: await active(since) },
     daily,
     players: list.map((p) => {
@@ -434,7 +474,10 @@ export async function playersOverview(skin: Skin) {
 /** Jedan igrač za admin: zadnje partije u ovom skinu i lige. */
 export async function playerDetail(skin: Skin, id: string) {
   const [p] = await db
-    .select({ id: players.id, nickname: players.nickname, email: players.email, role: players.role, createdAt: players.createdAt, lastSeenAt: players.lastSeenAt })
+    .select({
+      id: players.id, nickname: players.nickname, email: players.email, role: players.role, createdAt: players.createdAt, lastSeenAt: players.lastSeenAt,
+      registered: sql<boolean>`${players.authUserId} is not null`, country: players.country, city: players.city, device: players.device, referrer: players.referrer,
+    })
     .from(players)
     .where(eq(players.id, id));
   if (!p) throw new Error("Nema igrača");
@@ -727,16 +770,21 @@ export async function setSchedule(skin: Skin, date: string, categoryIds: number[
 
 // ---------- Svi odgovori ----------
 
-export async function searchAttempts(skin: Skin, f: { date?: string; categoryId?: number; q?: string; onlyRejected?: boolean; limit?: number }) {
+export type AttemptStatus = "ok" | "rejected" | "late";
+
+export async function searchAttempts(skin: Skin, f: { date?: string; categoryId?: number; q?: string; status?: AttemptStatus; limit?: number }) {
   const conds = [eq(dailyPuzzles.skinId, skin.id)];
   if (f.date) conds.push(eq(dailyPuzzles.date, f.date));
   if (f.categoryId) conds.push(eq(attempts.categoryId, f.categoryId));
   if (f.q) conds.push(ilike(attempts.raw, `%${f.q}%`));
-  if (f.onlyRejected) conds.push(eq(attempts.accepted, false));
+  if (f.status === "ok") conds.push(eq(attempts.accepted, true));
+  if (f.status === "rejected") conds.push(eq(attempts.accepted, false), eq(attempts.timedOut, false));
+  if (f.status === "late") conds.push(eq(attempts.timedOut, true));
   return db
     .select({
       createdAt: attempts.createdAt,
       date: dailyPuzzles.date,
+      position: attempts.position,
       category: categories.title,
       raw: attempts.raw,
       normalized: attempts.normalized,
@@ -744,8 +792,16 @@ export async function searchAttempts(skin: Skin, f: { date?: string; categoryId?
       accepted: attempts.accepted,
       timedOut: attempts.timedOut,
       elapsedMs: attempts.elapsedMs,
+      gameId: attempts.gameId,
+      gameKm: games.totalKm,
+      finished: sql<boolean>`${games.finishedAt} is not null`,
+      ranked: games.ranked,
+      playerId: players.id,
       player: sql<string>`coalesce(${players.nickname}, left(${players.id}::text, 8))`,
       registered: sql<boolean>`${players.authUserId} is not null`,
+      country: players.country,
+      city: players.city,
+      device: players.device,
     })
     .from(attempts)
     .innerJoin(games, eq(games.id, attempts.gameId))
@@ -756,4 +812,28 @@ export async function searchAttempts(skin: Skin, f: { date?: string; categoryId?
     .where(and(...conds))
     .orderBy(desc(attempts.createdAt))
     .limit(f.limit ?? 500);
+}
+
+/** Zbroj upisa jednog dana po ishodu i kategorije tog dana, za zaglavlje i filtar u adminu. */
+export async function attemptsSummary(skin: Skin, date: string) {
+  const day = and(eq(dailyPuzzles.skinId, skin.id), eq(dailyPuzzles.date, date));
+  const [totals] = await db
+    .select({
+      total: sql<number>`count(*)::int`,
+      ok: sql<number>`count(*) filter (where ${attempts.accepted})::int`,
+      late: sql<number>`count(*) filter (where ${attempts.timedOut})::int`,
+      players: sql<number>`count(distinct ${games.playerId})::int`,
+    })
+    .from(attempts)
+    .innerJoin(games, eq(games.id, attempts.gameId))
+    .innerJoin(dailyPuzzles, eq(dailyPuzzles.id, games.puzzleId))
+    .where(day);
+  const cats = await db
+    .select({ id: categories.id, position: puzzleCategories.position, title: categories.title })
+    .from(puzzleCategories)
+    .innerJoin(dailyPuzzles, eq(dailyPuzzles.id, puzzleCategories.puzzleId))
+    .innerJoin(categories, eq(categories.id, puzzleCategories.categoryId))
+    .where(day)
+    .orderBy(asc(puzzleCategories.position));
+  return { ...totals, rejected: totals.total - totals.ok - totals.late, categories: cats };
 }
