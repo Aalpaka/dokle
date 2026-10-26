@@ -9,6 +9,7 @@ import { formatShare, landingAt } from "@/lib/scoring";
 import { maps, withVisuals } from "@/skins/maps";
 import { nearestStation, placeAt } from "@/skins/mjesta";
 import { setMuted, sfx, useMuted } from "@/lib/sound";
+import { fold } from "@/lib/matcher";
 import MapStage from "./MapStage";
 import { vehicleIcons } from "./vehicleIcons";
 import { AccountLink, GoogleButton, useMe, type Me } from "./account";
@@ -311,28 +312,51 @@ function Play({ state, onScored, onLost }: { state: GameState; onScored: (s: Gam
 
   // "Šalje se:" pregled sa servera; pita tek kad igrač zastane, a već viđeni upis (brisanje unatrag) ne pita opet
   const previews = useRef(new Map<string, string | null>());
+  const lookup = useCallback(
+    async (q: string, signal?: AbortSignal) => {
+      const key = `${cur.position}|${q.toLowerCase()}`;
+      if (previews.current.has(key)) return previews.current.get(key)!;
+      const r: { canonical: string | null } = await skinFetch("/api/game/preview?q=" + encodeURIComponent(q), { signal }).then((r) => r.json());
+      previews.current.set(key, r.canonical);
+      return r.canonical;
+    },
+    [cur.position],
+  );
   useEffect(() => {
     const q = value.trim();
     if (!q) return setSending({ kind: "idle" });
-    const key = `${cur.position}|${q.toLowerCase()}`;
     // pregled koji stigne nakon slanja ne briše poruku o odbijenom odgovoru (ni gumb za provjeru)
     const show = (canonical: string | null) => setSending((s) => (s.kind === "nope" && s.raw === q ? s : { kind: "preview", canonical }));
-    if (previews.current.has(key)) return show(previews.current.get(key)!);
+    const cached = previews.current.get(`${cur.position}|${q.toLowerCase()}`);
+    if (cached !== undefined) return show(cached);
     const ctrl = new AbortController();
-    const timer = setTimeout(() => {
-      skinFetch("/api/game/preview?q=" + encodeURIComponent(q), { signal: ctrl.signal })
-        .then((r) => r.json())
-        .then((r: { canonical: string | null }) => {
-          previews.current.set(key, r.canonical);
-          show(r.canonical);
-        })
-        .catch(() => {});
-    }, 300);
+    const timer = setTimeout(() => lookup(q, ctrl.signal).then(show).catch(() => {}), 300);
     return () => { clearTimeout(timer); ctrl.abort(); };
-  }, [value, cur.position]);
+  }, [value, cur.position, lookup]);
+
+  // alias ili tipfeler (ne samo dijakritici i velika slova) traži potvrdu: prvi Enter pokaže što će se poslati, drugi šalje
+  const [confirm, setConfirm] = useState<string | null>(null);
+  const differs = (q: string, canonical: string | null | undefined) => !!canonical && fold(q) !== fold(canonical);
+  const submit = async () => {
+    const q = value.trim();
+    if (!q || waiting || busy.current) return;
+    if (confirm === q) return send(value, false);
+    let canonical: string | null = null;
+    try {
+      canonical = await lookup(q);
+    } catch {
+      // bez pregleda šaljemo odmah, server ionako provjerava
+    }
+    if (valueRef.current.trim() !== q) return;
+    if (differs(q, canonical)) {
+      setSending({ kind: "preview", canonical });
+      setConfirm(q);
+    } else send(value, false);
+  };
 
   const shown = sending.kind === "preview" ? (sending.canonical ?? value.trim()) : "";
-  const changed = sending.kind === "preview" && !!sending.canonical && value.trim().toLowerCase() !== sending.canonical.toLowerCase();
+  const changed = sending.kind === "preview" && differs(value.trim(), sending.canonical);
+  const confirming = changed && confirm === value.trim();
 
   return (
     <div className="stack">
@@ -355,7 +379,7 @@ function Play({ state, onScored, onLost }: { state: GameState; onScored: (s: Gam
         autoComplete="off"
         onSubmit={(e) => {
           e.preventDefault();
-          if (value.trim() && !waiting) send(value, false);
+          submit();
         }}
       >
         <input
@@ -377,7 +401,7 @@ function Play({ state, onScored, onLost }: { state: GameState; onScored: (s: Gam
             sfx.type();
           }}
         />
-        <button type="submit" disabled={waiting}>{t("Pošalji")}</button>
+        <button type="submit" disabled={waiting} className={confirming ? "confirm" : undefined}>{confirming ? t("Potvrdi") : t("Pošalji")}</button>
       </form>
       {sending.kind === "nope" ? (
         sending.checked ? (
@@ -389,6 +413,11 @@ function Play({ state, onScored, onLost }: { state: GameState; onScored: (s: Gam
             <button type="button" className="ghost small-btn" onClick={() => send(sending.raw ?? value, false, true)}>{t("Siguran sam, provjerite")}</button>
           </div>
         )
+      ) : confirming ? (
+        <div className="sending ask" role="status">
+          <span>{t("Misliš na")} <b>{shown}</b>?</span>
+          <small>{t("Stisni Enter ili Potvrdi za slanje, ili ispravi odgovor.")}</small>
+        </div>
       ) : sending.kind === "preview" ? (
         <div className={"sending" + (changed ? " changed" : "")}>{t("Šalje se:")} <b>{shown}</b></div>
       ) : (

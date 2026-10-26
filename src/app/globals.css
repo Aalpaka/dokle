@@ -95,6 +95,12 @@ button:disabled { opacity: .5; cursor: default; }
 .sending.changed b { background: var(--signal); color: #1b1b1b; padding: 0 5px; border-radius: 4px; }
 .sending.keep { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
 .sending.keep button { color: var(--ink); }
+/* prepoznat alias ili tipfeler čeka potvrdu */
+.sending.ask { display: grid; gap: 2px; padding: 10px 12px; border: 2px solid var(--signal); border-radius: 12px; color: var(--ink); font-size: 16px; animation: ask-in .18s ease-out; }
+.sending.ask b { background: var(--signal); color: #1b1b1b; padding: 0 6px; border-radius: 4px; }
+.sending.ask small { color: var(--muted); font-size: 13px; }
+.answer button.confirm { background: var(--signal); color: #1b1b1b; }
+@keyframes ask-in { from { transform: translateY(-4px); opacity: 0; } }
 .result .fact { margin-top: 8px; color: var(--muted); }
 .report { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
 .report.compact { padding: 0 0 10px 44px; }
