@@ -8,8 +8,9 @@ import { dodaci } from "./kategorije/dodaci";
 import { helikopter } from "./kategorije/helikopter";
 import { hrKategorije } from "./kategorije/hr";
 import { kvizKategorije } from "./kategorije/kviz";
-import { nove3 } from "./kategorije/nove-3";
+import { nove3, nove3Hr } from "./kategorije/nove-3";
 import { nove4 } from "./kategorije/nove-4";
+import { nove4Hr } from "./kategorije/nove-4-hr";
 import { opceKategorije } from "./kategorije/opce";
 import { prosirenja } from "./kategorije/prosirenja";
 import { wikipedija } from "./kategorije/wikipedija";
@@ -49,6 +50,8 @@ export const hrCategories: SeedCategory[] = [
   ...kvizKategorije,
   ...nove3,
   ...nove4,
+  ...nove3Hr,
+  ...nove4Hr,
 ].map(withDodaci).map(withWiki).map(withRare).map(withAliasi);
 
 function format(list: ReturnType<typeof parseSeedAnswers>) {
