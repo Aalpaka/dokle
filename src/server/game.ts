@@ -646,7 +646,7 @@ export function clearCategoryCache(id?: number) {
 /**
  * Naknadno bodovanje: runde koje su završile promašajem s upisom koji se normalizira u `normalized`
  * dobivaju odgovor `answerId`, udio, tier i km; ukupni km završenih partija se preračunava.
- * `tier` je prijevoz koji je admin odabrao za novi odgovor: dobiju ga baš taj, jer bi po rangu tog dana (u kojem
+ * Km su osnovni km prijevoza, bez bonusa za brzinu. `tier` je prijevoz koji je admin odabrao za novi odgovor: dobiju ga baš taj, jer bi po rangu tog dana (u kojem
  * odgovor sad ima i stvarne igrače) mogao ispasti sporiji.
  */
 export async function rescoreMisses(skin: Skin, categoryId: number, normalized: string, answerId: number, tier?: Tier): Promise<number> {
@@ -657,8 +657,6 @@ export async function rescoreMisses(skin: Skin, categoryId: number, normalized: 
       position: rounds.position,
       raw: rounds.raw,
       puzzleId: games.puzzleId,
-      startedAt: rounds.startedAt,
-      answeredAt: rounds.answeredAt,
     })
     .from(rounds)
     .innerJoin(games, eq(games.id, rounds.gameId))
@@ -677,10 +675,11 @@ export async function rescoreMisses(skin: Skin, categoryId: number, normalized: 
     const share = standing.share;
     await db.transaction(async (tx) => {
       for (const h of list) {
-        const t = kmFor(skin.config, tier ?? standing.tier, h.answeredAt!.getTime() - h.startedAt.getTime());
+        // naknadno bodovanje daje osnovne km prijevoza, bez bonusa za brzinu
+        const t = tier ?? standing.tier;
         await tx
           .update(rounds)
-          .set({ share, km: t.km, tier: t.tier.name, rescoredAt: new Date(), rescoreSeenAt: null })
+          .set({ share, km: t.km, tier: t.name, rescoredAt: new Date(), rescoreSeenAt: null })
           .where(and(eq(rounds.gameId, h.gameId), eq(rounds.position, h.position)));
         await tx
           .update(games)

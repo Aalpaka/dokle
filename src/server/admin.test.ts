@@ -215,7 +215,7 @@ describe.skipIf(!process.env.DATABASE_URL)("admin", () => {
     });
     const [after] = await db.select().from(rounds).where(and(eq(rounds.gameId, game.id), eq(rounds.position, 0)));
     expect(after.tier).toBe(tiers[plane].name);
-    expect(after.km).toBeGreaterThanOrEqual(Math.round(tiers[plane].km * 0.9));
+    expect(after.km).toBe(tiers[plane].km); // bez bonusa za brzinu
   });
 
   it("raspored se slaže u hrvatskom adminu i vrijedi za sve tri države", async () => {
