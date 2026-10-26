@@ -586,7 +586,7 @@ export default function MapStage({ skinId, cfg, map, rounds, perDay, ended = fal
         {runners.map((r) => (
           <div
             key={r.memberId}
-            className="ghost"
+            className="race-ghost"
             title={r.nickname}
             ref={(el) => {
               if (el) ghostEls.current.set(r.memberId, el);
