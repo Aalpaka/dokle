@@ -176,6 +176,8 @@ export const attempts = pgTable(
     timedOut: boolean("timed_out").notNull().default(false),
     elapsedMs: integer("elapsed_ms").notNull(),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    // igrač je na kraju partije prijavio da ovaj odgovor fali na popisu (bez utjecaja na km; to je rounds.reportedRaw)
+    reportedAt: timestamp("reported_at", { withTimezone: true }),
   },
   (t) => [index("attempts_category_normalized").on(t.categoryId, t.normalized), index("attempts_game").on(t.gameId)],
 );

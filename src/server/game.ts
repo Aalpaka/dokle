@@ -238,10 +238,16 @@ export type RoundView = {
   misses?: Miss[]; // odbijeni pokušaji runde, tek na kraju partije
 };
 
-// Odbijeni pokušaj: "open" se može prijaviti (dok runda nema prijavu), "pending" čeka admina, "rejected" admin nije
-// prihvatio, "accepted" admin je prihvatio i sad se računa, "kept" prihvaćen, ali odgovor koji je igrač već imao vrijedi
-// više km; bez stanja: prijavljen je drugi pokušaj.
-export type Miss = { raw: string; state?: "open" | "pending" | "rejected" | "accepted" | "kept" };
+// Odbijeni pokušaj. `state` je "želim da se ovaj računa" (jedan po rundi): "open" se može odabrati, "pending" čeka admina,
+// "rejected" admin nije prihvatio, "accepted" admin je prihvatio i sad se računa, "kept" prihvaćen, ali odgovor koji je
+// igrač već imao vrijedi više km; bez stanja: odabran je drugi pokušaj ili je odgovor već odbijen.
+// `flag` je samo "fali na popisu" (bez utjecaja na km, može ih biti više): "open" se može prijaviti, "pending" prijavljen,
+// "accepted" admin ga je dodao, "rejected" admin ga je odbio. Odabrani pokušaj nema `flag`, njegov je `state`.
+export type Miss = {
+  raw: string;
+  state?: "open" | "pending" | "rejected" | "accepted" | "kept";
+  flag?: "open" | "pending" | "rejected" | "accepted";
+};
 
 export type GameState = {
   skin: { id: string; timezone: string; config: SkinConfig };
@@ -271,28 +277,39 @@ function reportState(r: { raw: string | null; answerId: number | null; reportedA
 /** Odbijeni pokušaji završenih rundi (bez zakašnjelih i bez ponavljanja istog upisa) sa stanjem prijave. */
 async function roundMisses(gameId: number, list: (typeof rounds.$inferSelect)[]): Promise<Map<number, Miss[]>> {
   const rows = await db
-    .select({ position: attempts.position, categoryId: attempts.categoryId, raw: attempts.raw, normalized: attempts.normalized })
+    .select({ position: attempts.position, categoryId: attempts.categoryId, raw: attempts.raw, normalized: attempts.normalized, flagged: attempts.reportedAt })
     .from(attempts)
     .where(and(eq(attempts.gameId, gameId), eq(attempts.accepted, false), eq(attempts.timedOut, false), ne(attempts.normalized, "")))
     .orderBy(asc(attempts.id));
   const out = new Map<number, Miss[]>();
   if (!rows.length) return out;
   const decided = await db
-    .select({ categoryId: reviewDecisions.categoryId, normalized: reviewDecisions.normalized })
+    .select({ categoryId: reviewDecisions.categoryId, normalized: reviewDecisions.normalized, decision: reviewDecisions.decision })
     .from(reviewDecisions)
-    .where(and(inArray(reviewDecisions.categoryId, [...new Set(rows.map((a) => a.categoryId))]), eq(reviewDecisions.decision, "reject")));
-  const rejected = new Set(decided.map((d) => `${d.categoryId}|${d.normalized}`));
+    .where(inArray(reviewDecisions.categoryId, [...new Set(rows.map((a) => a.categoryId))]));
+  const decision = new Map(decided.map((d) => [`${d.categoryId}|${d.normalized}`, d.decision]));
   const byPos = new Map(list.map((r) => [r.position, r]));
-  const seen = new Set<string>();
+  // isti upis više puta: jedan redak, prijavljen ako je ijedan od njih prijavljen
+  const groups = new Map<string, { a: (typeof rows)[number]; flagged: boolean }>();
   for (const a of rows) {
+    const key = `${a.position}|${a.normalized}`;
+    const g = groups.get(key);
+    if (g) g.flagged ||= !!a.flagged;
+    else groups.set(key, { a, flagged: !!a.flagged });
+  }
+  for (const { a, flagged } of groups.values()) {
     const r = byPos.get(a.position);
-    if (!r?.answeredAt || seen.has(`${a.position}|${a.normalized}`)) continue;
-    seen.add(`${a.position}|${a.normalized}`);
+    if (!r?.answeredAt) continue;
+    const d = decision.get(`${a.categoryId}|${a.normalized}`);
     const mine = r.reportedRaw !== null && fold(r.reportedRaw) === a.normalized;
-    const state: Miss["state"] = mine
-      ? r.rejectedAt ? "rejected" : !r.rescoredAt ? "pending" : r.rescoreSeenAt?.getTime() === r.rescoredAt.getTime() ? "kept" : "accepted"
-      : r.reportedAt ? undefined : rejected.has(`${a.categoryId}|${a.normalized}`) ? "rejected" : "open";
-    out.set(a.position, [...(out.get(a.position) ?? []), { raw: a.raw, ...(state && { state }) }]);
+    const miss: Miss = { raw: a.raw };
+    if (mine)
+      miss.state = r.rejectedAt ? "rejected" : !r.rescoredAt ? "pending" : r.rescoreSeenAt?.getTime() === r.rescoredAt.getTime() ? "kept" : "accepted";
+    else {
+      if (!r.reportedAt && d !== "reject") miss.state = "open";
+      miss.flag = d === "reject" ? "rejected" : d ? "accepted" : flagged ? "pending" : "open";
+    }
+    out.set(a.position, [...(out.get(a.position) ?? []), miss]);
   }
   return out;
 }
@@ -497,6 +514,28 @@ export async function reportRound(skin: Skin, playerId: string, position: number
   // admin ga je u međuvremenu prihvatio (pokušaj iz runde koja je onda pogođena drugim odgovorom): odmah se boduje
   if (d && d.decision !== "reject" && d.answerId !== null) await rescoreReported(skin, r.categoryId, normalized, d.answerId);
   return getState(skin, playerId);
+}
+
+/** "Fali na popisu" za odbijeni pokušaj iz današnje runde: samo javlja adminu, km se ne mijenjaju. Može ih biti više. */
+export async function flagAttempt(skin: Skin, playerId: string, position: number, raw: string): Promise<GameState | null> {
+  const puzzle = await getOrCreatePuzzle(skin, localDate(skin.timezone));
+  const game = await findGame(playerId, puzzle.id);
+  if (!game) return null;
+  const flagged = await db
+    .update(attempts)
+    .set({ reportedAt: new Date() })
+    .where(
+      and(
+        eq(attempts.gameId, game.id),
+        eq(attempts.position, position),
+        eq(attempts.accepted, false),
+        eq(attempts.timedOut, false),
+        eq(attempts.normalized, fold(raw)),
+        isNull(attempts.reportedAt),
+      ),
+    )
+    .returning({ id: attempts.id });
+  return flagged.length ? getState(skin, playerId) : null;
 }
 
 /** Admin je odbio odgovor: prijave koje su čekale prestaju biti "na provjeri". */

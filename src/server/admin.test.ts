@@ -2,7 +2,7 @@ import { afterAll, describe, expect, it } from "vitest";
 import { and, desc, eq, inArray } from "drizzle-orm";
 import { db, sql } from "@/db";
 import { answerAliases, answers, categories, dailyPuzzles, games, players, removedAliases, reviewDecisions, rounds } from "@/db/schema";
-import { dismissNotices, ensurePlayer, getOrCreatePuzzle, getSkin, getState, reportRound, rescoreNotices, startNext, submitAnswer } from "./game";
+import { dismissNotices, ensurePlayer, flagAttempt, getOrCreatePuzzle, getSkin, getState, reportRound, rescoreNotices, startNext, submitAnswer } from "./game";
 import { decide, generalStats, listCategories, playerDetail, playersOverview, reviewQueue, searchAttempts, setSchedule, updateAnswer, weekAverages } from "./admin";
 import { localDate } from "@/lib/day";
 import { periodStart } from "@/lib/league";
@@ -249,12 +249,20 @@ describe.skipIf(!process.env.DATABASE_URL)("admin", () => {
       if (r.status !== "scored") throw new Error(r.status);
       state = r.state.phase === "end" ? r.state : await startNext(skin, id, 0);
     }
-    expect(state.rounds[0].misses).toEqual([{ raw: EARLY, state: "open" }]);
-    expect(state.rounds[2].misses).toEqual([{ raw: "zzqx nema", state: "open" }]);
+    expect(state.rounds[0].misses).toEqual([{ raw: EARLY, state: "open", flag: "open" }]);
+    expect(state.rounds[2].misses).toEqual([{ raw: "zzqx nema", state: "open", flag: "open" }]);
     const before = state.rounds[0];
     expect(before.canonical).not.toBeNull();
 
-    // pokušaj koji nije iz te runde se ne može prijaviti; jedan po rundi
+    // "fali na popisu" ne mijenja km i ne troši odabir; može ih biti više (ovdje runda 2)
+    let fl = (await flagAttempt(skin, id, 2, "ZZQX NEMA"))!;
+    expect(fl.rounds[2]).toMatchObject({ km: 0, misses: [{ raw: "zzqx nema", state: "open", flag: "pending" }] });
+    expect(await flagAttempt(skin, id, 2, "zzqx nema")).toBeNull(); // već prijavljeno
+    expect(await flagAttempt(skin, id, 2, EARLY)).toBeNull(); // nije iz te runde
+    fl = (await flagAttempt(skin, id, 0, EARLY))!;
+    expect(fl.rounds[0].misses).toEqual([{ raw: EARLY, state: "open", flag: "pending" }]);
+
+    // pokušaj koji nije iz te runde se ne može odabrati da se računa; jedan po rundi
     expect(await reportRound(skin, id, 0, "zzqx nema")).toBeNull();
     let st = (await reportRound(skin, id, 0, EARLY))!;
     expect(st.rounds[0]).toMatchObject({ km: before.km, tier: before.tier, reported: EARLY, misses: [{ raw: EARLY, state: "pending" }] });

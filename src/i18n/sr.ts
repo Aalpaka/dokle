@@ -33,10 +33,14 @@ export const sr: Record<string, string> = {
   "Prijavi da fali": "Prijavi da fali",
   "Prijava nije uspjela.": "Prijava nije uspela.",
   "Nepriznato:": "Nepriznato:",
-  "Nepriznato. Ako je neki od ovih točan, prijavi jedan; ako ga prihvatimo, računa se onaj koji vrijedi više km.":
-    "Nepriznato. Ako je neki od ovih tačan, prijavi jedan; ako ga prihvatimo, računa se onaj koji vredi više km.",
-  "Nepriznato. Ako je neki od ovih točan, prijavi jedan; ako ga prihvatimo, km ti dodajemo naknadno.":
-    "Nepriznato. Ako je neki od ovih tačan, prijavi jedan; ako ga prihvatimo, km ti dodajemo naknadno.",
+  "„Prijavi da fali” nam samo javlja da odgovora nema na popisu. Jedan možeš odabrati da se računa: ako ga prihvatimo, računa se onaj koji vrijedi više km.":
+    "„Prijavi da fali” nam samo javlja da odgovora nema na spisku. Jedan možeš da izabereš da se računa: ako ga prihvatimo, računa se onaj koji vredi više km.",
+  "„Prijavi da fali” nam samo javlja da odgovora nema na popisu. Jedan možeš odabrati da se računa: ako ga prihvatimo, km ti dodajemo naknadno.":
+    "„Prijavi da fali” nam samo javlja da odgovora nema na spisku. Jedan možeš da izabereš da se računa: ako ga prihvatimo, km ti dodajemo naknadno.",
+  "Želim da se ovaj računa": "Želim da se ovaj računa",
+  "želiš da se računa, na provjeri": "želiš da se računa, na proveri",
+  "prijavljeno da fali": "prijavljeno da fali",
+  "dodan na popis": "dodat na spisak",
   "nije prihvaćen": "nije prihvaćen",
   "prihvaćen, računa se": "prihvaćen, računa se",
   "prihvaćen, ali ostaje odgovor koji vrijedi više": "prihvaćen, ali ostaje odgovor koji vredi više",

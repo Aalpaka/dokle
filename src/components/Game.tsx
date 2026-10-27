@@ -688,40 +688,49 @@ function MissList({ r, misses, onState }: { r: RoundView; misses: Miss[]; onStat
   const t = useT();
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState(false);
-  const canReport = misses.some((m) => m.state === "open");
-  const report = (raw: string) => {
+  const canCount = misses.some((m) => m.state === "open");
+  const send = (raw: string, count: boolean) => {
     setBusy(true);
     setFailed(false);
-    api<GameState | null>("/api/game/report", { position: r.position, raw }).then(
+    api<GameState | null>("/api/game/report", { position: r.position, raw, count }).then(
       (s) => (s ? onState(s) : setFailed(true)),
       () => setFailed(true),
     ).finally(() => setBusy(false));
   };
-  const label: Record<NonNullable<Miss["state"]>, string> = {
+  const counted: Record<NonNullable<Miss["state"]>, string> = {
     open: "",
-    pending: "⏳ " + t("na provjeri"),
+    pending: "⏳ " + t("želiš da se računa, na provjeri"),
     rejected: "🚧 " + t("nije prihvaćen"),
     accepted: "✅ " + t("prihvaćen, računa se"),
     kept: "✅ " + t("prihvaćen, ali ostaje odgovor koji vrijedi više"),
   };
+  const flagged: Record<NonNullable<Miss["flag"]>, string> = {
+    open: "",
+    pending: "⏳ " + t("prijavljeno da fali"),
+    rejected: "🚧 " + t("nije prihvaćen"),
+    accepted: "✅ " + t("dodan na popis"),
+  };
   return (
     <div className="misses small">
       <span className="c">
-        {canReport
-          ? r.canonical
-            ? t("Nepriznato. Ako je neki od ovih točan, prijavi jedan; ako ga prihvatimo, računa se onaj koji vrijedi više km.")
-            : t("Nepriznato. Ako je neki od ovih točan, prijavi jedan; ako ga prihvatimo, km ti dodajemo naknadno.")
-          : t("Nepriznato:")}
+        {t("Nepriznato:")}{" "}
+        {canCount &&
+          (r.canonical
+            ? t("„Prijavi da fali” nam samo javlja da odgovora nema na popisu. Jedan možeš odabrati da se računa: ako ga prihvatimo, računa se onaj koji vrijedi više km.")
+            : t("„Prijavi da fali” nam samo javlja da odgovora nema na popisu. Jedan možeš odabrati da se računa: ako ga prihvatimo, km ti dodajemo naknadno."))}
       </span>
       <ul>
         {misses.map((m) => (
           <li key={m.raw}>
             <span className="a">„{m.raw}”</span>
-            {m.state === "open" ? (
-              <button type="button" className="ghost small-btn" disabled={busy} onClick={() => report(m.raw)}>{t("Prijavi da fali")}</button>
-            ) : m.state ? (
-              <span className={"st " + m.state}>{label[m.state]}</span>
-            ) : null}
+            {m.state === "open" && (
+              <button type="button" className="small-btn" disabled={busy} onClick={() => send(m.raw, true)}>{t("Želim da se ovaj računa")}</button>
+            )}
+            {m.state && m.state !== "open" && <span className={"st " + m.state}>{counted[m.state]}</span>}
+            {m.flag === "open" && (
+              <button type="button" className="ghost small-btn" disabled={busy} onClick={() => send(m.raw, false)}>{t("Prijavi da fali")}</button>
+            )}
+            {m.flag && m.flag !== "open" && <span className={"st " + m.flag}>{flagged[m.flag]}</span>}
           </li>
         ))}
       </ul>

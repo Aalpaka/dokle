@@ -271,8 +271,8 @@ export async function reviewQueue(skin: Skin, limit = 200) {
       category: categories.title,
       normalized: attempts.normalized,
       n: sql<number>`count(distinct ${attempts.gameId})::int`,
-      // igrači koji su prijavili da odgovor fali (ostavili su ga kao konačan ili ga prijavili na kraju partije)
-      reports: sql<number>`count(distinct ${rounds.gameId}) filter (where ${rounds.reportedAt} is not null)::int`,
+      // igrači koji su prijavili da odgovor fali (ostavili su ga kao konačan, žele da se računa ili samo javljaju da fali)
+      reports: sql<number>`count(distinct ${attempts.gameId}) filter (where ${rounds.reportedAt} is not null or ${attempts.reportedAt} is not null)::int`,
       examples: sql<string[]>`(array_agg(distinct ${attempts.raw}))[1:5]`,
       last: sql<string>`max(${attempts.createdAt})`,
     })
@@ -289,7 +289,7 @@ export async function reviewQueue(skin: Skin, limit = 200) {
     .where(and(eq(categories.skinId, skin.id), eq(attempts.accepted, false), isNull(reviewDecisions.id), sql`${attempts.normalized} <> ''`))
     .groupBy(attempts.categoryId, categories.title, attempts.normalized)
     .orderBy(
-      desc(sql`count(distinct ${rounds.gameId}) filter (where ${rounds.reportedAt} is not null)`),
+      desc(sql`count(distinct ${attempts.gameId}) filter (where ${rounds.reportedAt} is not null or ${attempts.reportedAt} is not null)`),
       desc(sql`count(distinct ${attempts.gameId})`),
       desc(sql`max(${attempts.createdAt})`),
     )
