@@ -1,5 +1,5 @@
 import "server-only";
-import { and, asc, desc, eq, gte, ilike, inArray, isNotNull, isNull, sql } from "drizzle-orm";
+import { and, asc, desc, eq, gte, ilike, inArray, isNotNull, isNull, or, sql } from "drizzle-orm";
 import { db } from "@/db";
 import {
   answerAliases,
@@ -436,13 +436,14 @@ export async function playersOverview(skin: Skin) {
       .innerJoin(dailyPuzzles, eq(dailyPuzzles.id, games.puzzleId))
       .where(and(eq(dailyPuzzles.skinId, skin.id), gte(dailyPuzzles.date, from)))
       .then(([r]) => r.n);
-  // odakle igraju svi igrači (i bez računa) koji su igrali zadnjih 30 dana; lokacija je zadnja poznata
+  // odakle igraju svi igrači (i bez računa) koji su igrali zadnjih 30 dana; lokacija je zadnja poznata.
+  // Igrači bez ijednog podatka (zadnja partija prije nego što smo počeli bilježiti) se ne broje, da ne kvare postotke.
   const seen = await db
     .selectDistinct({ id: players.id, country: players.country, city: players.city, device: players.device, referrer: players.referrer })
     .from(games)
     .innerJoin(dailyPuzzles, eq(dailyPuzzles.id, games.puzzleId))
     .innerJoin(players, eq(players.id, games.playerId))
-    .where(and(eq(dailyPuzzles.skinId, skin.id), gte(dailyPuzzles.date, since)));
+    .where(and(eq(dailyPuzzles.skinId, skin.id), gte(dailyPuzzles.date, since), or(isNotNull(players.country), isNotNull(players.device))));
   const tally = (key: (p: (typeof seen)[number]) => string | null, top: number) => {
     const m = new Map<string, number>();
     for (const p of seen) {

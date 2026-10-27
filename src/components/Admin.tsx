@@ -614,8 +614,8 @@ function Origins({ o }: { o: PlayersData["origins"] }) {
       <span className="eyebrow">Odakle igraju · 30 dana</span>
       <p className="small">
         Svi igrači (i bez računa) koji su igrali zadnjih 30 dana, po zadnjoj partiji. Lokacija je gruba procjena iz IP adrese
-        (Vercel), a sam IP ne spremamo. Bilježi se od 27. 10. 2026., pa stariji igrači ostaju „nepoznato” dok ne odigraju novu partiju.
-        {" "}Poznato za {o.known} od {o.players}.
+        (Vercel), a sam IP ne spremamo. Bilježi se od 27. 10. 2026.; igrači koji od tada nisu odigrali partiju se ne broje.
+        {" "}Lokacija poznata za {o.known} od {o.players}.
       </p>
       <div className="stat-grid">
         <div className="stack" style={{ gap: 6 }}><b className="small">Država</b><Bars rows={rows(o.countries, (c) => `${flag(c)} ${countryName(c)}`)} /></div>
