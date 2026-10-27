@@ -419,9 +419,8 @@ export type AnswerResult =
 /**
  * Upis odgovora za otvorenu kategoriju. Nepoznat odgovor se odbija dok ima vremena (igrač pokušava opet);
  * final=true (isteklo vrijeme na klijentu) ili isteklo vrijeme na serveru boduje kao promašaj.
- * keep=true: igrač je siguran da je nepoznat odgovor točan, pa se runda odmah zatvara i odgovor ide na provjeru.
  */
-export async function submitAnswer(skin: Skin, playerId: string, raw: string, final: boolean, keep = false): Promise<AnswerResult> {
+export async function submitAnswer(skin: Skin, playerId: string, raw: string, final: boolean): Promise<AnswerResult> {
   const puzzle = await getOrCreatePuzzle(skin, localDate(skin.timezone));
   const found = await findOpenRound(playerId, puzzle.id);
   const open = found?.round;
@@ -449,15 +448,15 @@ export async function submitAnswer(skin: Skin, playerId: string, raw: string, fi
       elapsedMs,
     });
   }
-  const decision = !hit && input ? await decisionFor(open.categoryId, fold(input)) : null;
-  // već odbijen odgovor se ne može ostaviti na provjeru
-  if (!hit && !final && !timedOut && (!keep || !input || decision === "reject"))
+  // prijava (da fali ili da se računa) je tek na kraju partije; ovdje igrač samo sazna je li odgovor već odbijen
+  if (!hit && !final && !timedOut) {
+    const decision = input ? await decisionFor(open.categoryId, fold(input)) : null;
     return { status: "rejected", normalized: fold(input), ...(decision === "reject" && { checked: true }) };
+  }
 
   // zakašnjeli upis je spremljen u attempts, ali se boduje kao isteklo vrijeme
   const stored = timedOut ? null : input || null;
   await scoreRound(skin, puzzle, game.id, open.position, open.categoryId, stored, hit?.id ?? null, elapsedMs);
-  if (!hit && stored && keep) await markReported(game.id, open.position, stored, decision === "reject");
   return { status: "scored", state: await getState(skin, playerId) };
 }
 
@@ -765,6 +764,7 @@ export function clearCategoryCache(id?: number) {
  * dobivaju odgovor `answerId`, udio, tier i km; ukupni km završenih partija se preračunava.
  * Km su osnovni km prijevoza, bez bonusa za brzinu. `tier` je prijevoz koji je admin odabrao za novi odgovor: dobiju ga baš taj, jer bi po rangu tog dana (u kojem
  * odgovor sad ima i stvarne igrače) mogao ispasti sporiji.
+ * Preskače runde u kojima je igrač na kraju partije odabrao da mu se računa neki drugi pokušaj.
  */
 export async function rescoreMisses(skin: Skin, categoryId: number, normalized: string, answerId: number, tier?: Tier): Promise<number> {
   clearCategoryCache(categoryId);
@@ -773,12 +773,13 @@ export async function rescoreMisses(skin: Skin, categoryId: number, normalized: 
       gameId: rounds.gameId,
       position: rounds.position,
       raw: rounds.raw,
+      reportedRaw: rounds.reportedRaw,
       puzzleId: games.puzzleId,
     })
     .from(rounds)
     .innerJoin(games, eq(games.id, rounds.gameId))
     .where(and(eq(rounds.categoryId, categoryId), isNull(rounds.answerId), isNotNull(rounds.raw), isNotNull(rounds.answeredAt)));
-  const hits = misses.filter((m) => fold(m.raw!) === normalized);
+  const hits = misses.filter((m) => fold(m.raw!) === normalized && (!m.reportedRaw || fold(m.reportedRaw) === normalized));
   if (!hits.length) return 0;
 
   const byPuzzle = new Map<number, typeof hits>();

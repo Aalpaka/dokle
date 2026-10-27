@@ -149,30 +149,33 @@ describe.skipIf(!process.env.DATABASE_URL)("admin", () => {
     expect(found.length).toBeGreaterThan(0);
   });
 
-  it("prijava: siguran sam ide na provjeru i na vrh reda, prihvaćanje javlja igraču, odbijanje skida provjeru", async () => {
+  it("prijava na kraju: računa se i fali odvojeno u redu, prihvaćanje javlja igraču, odbijanje skida provjeru", async () => {
     const skin = await getSkin("hr");
     const id = crypto.randomUUID();
     ids.push(id);
     await ensurePlayer(id);
     await startNext(skin, id, 0);
-    // prvi upis se odbija, drugi s keep zatvara rundu kao "na provjeri"
+    // usred igre nepoznat odgovor se samo odbija; nema ostavljanja na provjeru
     expect((await submitAnswer(skin, id, KEPT, false)).status).toBe("rejected");
-    const kept = await submitAnswer(skin, id, KEPT, false, true);
+    const kept = await submitAnswer(skin, id, KEPT, true);
     if (kept.status !== "scored") throw new Error(kept.status);
-    expect(kept.state.rounds[0]).toMatchObject({ raw: KEPT, km: 0, report: "pending", emoji: "⏳", tier: "Na provjeri" });
-    // druga runda: istekne vrijeme s nepoznatim upisom, pa igrač prijavi s ekrana rezultata
+    expect(kept.state.rounds[0]).toMatchObject({ raw: KEPT, km: 0, report: "open" });
+    // druga runda: istekne vrijeme s nepoznatim upisom
     await startNext(skin, id, 0);
     const missed = await submitAnswer(skin, id, NOPE, true);
     if (missed.status !== "scored") throw new Error(missed.status);
-    expect(missed.state.rounds[1].report).toBe("open");
-    expect((await reportRound(skin, id, 1))!.rounds[1].report).toBe("pending");
-    expect(await reportRound(skin, id, 1)).toBeNull(); // već prijavljeno
+    // prva runda: želi da se računa; druga: samo javlja da fali
+    expect((await reportRound(skin, id, 0, KEPT))!.rounds[0]).toMatchObject({ report: "pending", emoji: "⏳", tier: "Na provjeri" });
+    expect(await reportRound(skin, id, 0)).toBeNull(); // već prijavljeno
     expect(await reportRound(skin, id, 5)).toBeNull(); // ta runda ne postoji
+    expect((await flagAttempt(skin, id, 1, NOPE))!.rounds[1].report).toBe("open"); // "fali" ne troši odabir
 
     const queue = await reviewQueue(skin);
-    expect(queue[0].reports).toBeGreaterThan(0);
+    expect(queue[0].claims).toBeGreaterThan(0);
     const keptGroup = queue.find((g) => g.normalized === KEPT)!;
-    expect(keptGroup.reports).toBe(1);
+    expect(keptGroup).toMatchObject({ claims: 1, flags: 0 });
+    const nope = queue.find((g) => g.normalized === NOPE)!;
+    expect(nope).toMatchObject({ claims: 0, flags: 1 });
 
     const { rescored } = await decide(skin, null, { action: "answer", categoryId: keptGroup.categoryId, normalized: KEPT, canonical: "Zzqx prijava", priorShare: 0.1 });
     expect(rescored).toBe(1);
@@ -184,19 +187,15 @@ describe.skipIf(!process.env.DATABASE_URL)("admin", () => {
     await dismissNotices(skin, id);
     expect(await rescoreNotices(skin, id)).toHaveLength(0);
 
-    const nope = queue.find((g) => g.normalized === NOPE)!;
     await decide(skin, null, { action: "reject", categoryId: nope.categoryId, normalized: NOPE });
-    const st = await getState(skin, id);
-    expect(st.rounds[1]).toMatchObject({ report: "rejected", emoji: "🚧" });
-
-    // odbijeni odgovor se više ne može ostaviti na provjeru
     const other = crypto.randomUUID();
     ids.push(other);
     await ensurePlayer(other);
     await startNext(skin, other, 0);
     await submitAnswer(skin, other, KEPT + " x", true);
     await startNext(skin, other, 0);
-    expect(await submitAnswer(skin, other, NOPE, false, true)).toMatchObject({ status: "rejected", checked: true });
+    // odbijeni odgovor: igrač odmah vidi da je već provjeren
+    expect(await submitAnswer(skin, other, NOPE, false)).toMatchObject({ status: "rejected", checked: true });
   });
 
   it("odobreni odgovor naknadno vozi baš prijevoz koji je admin odabrao", async () => {
@@ -271,7 +270,7 @@ describe.skipIf(!process.env.DATABASE_URL)("admin", () => {
     expect(st.rounds[1].misses).toEqual([{ raw: SLOW, state: "pending" }]);
     const queue = await reviewQueue(skin);
     const early = queue.find((g) => g.normalized === EARLY)!;
-    expect(early.reports).toBe(1);
+    expect(early).toMatchObject({ claims: 1, flags: 0 });
 
     // avion vrijedi više od pješačenja: runda dobiva novi odgovor, osnovne km aviona i obavijest
     const tiers = skin.config.tiers;
