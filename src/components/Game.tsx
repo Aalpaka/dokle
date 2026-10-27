@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { AnswerList, GameState, Notice, RoundView } from "@/server/game";
+import type { AnswerList, GameState, Miss, Notice, RoundView } from "@/server/game";
 import { routeLabels, type DayCompare } from "@/lib/compare";
 import RouteHist from "./RouteHist";
 import type { SkinConfig } from "@/skins/types";
@@ -480,7 +480,7 @@ function iconFor(cfg: SkinConfig, r: RoundView) {
 
 function what(r: RoundView, t: T) {
   if (r.canonical) return <><b>{r.canonical}</b> · {formatShare(r.share ?? 0)} {t("igrača")}</>;
-  if (r.report === "pending") return <>{t("„{x}” je na provjeri.", { x: r.raw ?? "" })}</>;
+  if (r.report === "pending") return <>{t("„{x}” je na provjeri.", { x: r.reported ?? r.raw ?? "" })}</>;
   if (r.report === "open") return <>{t("„{x}” još nemamo na popisu.", { x: r.raw ?? "" })}</>;
   if (r.raw) return <>{t("„{x}” nije na našem popisu.", { x: r.raw })}</>;
   return <>{t("Nisi stigao odgovoriti.")}</>;
@@ -674,9 +674,68 @@ function RecapRow({ r, cfg, onState }: { r: RoundView; cfg: SkinConfig; onState:
         <span className="k">+{r.km}</span>
         <span className="chev" aria-hidden="true">{open ? "▴" : "▾"}</span>
       </button>
-      {r.report === "open" && <ReportLine r={r} onState={onState} compact />}
+      {/* promašaj kojem je jedini odbijeni upis onaj konačni ima samo gumb, popis tek kad ima više pokušaja ili je runda pogođena */}
+      {r.misses?.some((m) => m.raw.toLowerCase() !== r.raw?.toLowerCase())
+        ? <MissList r={r} misses={r.misses} onState={onState} />
+        : r.report === "open" && <ReportLine r={r} onState={onState} compact />}
       {open && <AllAnswers position={r.position} cfg={cfg} />}
     </li>
+  );
+}
+
+/** Odbijeni pokušaji runde; jedan se može prijaviti, i kad je igrač poslije pogodio. */
+function MissList({ r, misses, onState }: { r: RoundView; misses: Miss[]; onState: (s: GameState) => void }) {
+  const t = useT();
+  const [busy, setBusy] = useState(false);
+  const [failed, setFailed] = useState(false);
+  const canCount = misses.some((m) => m.state === "open");
+  const send = (raw: string, count: boolean) => {
+    setBusy(true);
+    setFailed(false);
+    api<GameState | null>("/api/game/report", { position: r.position, raw, count }).then(
+      (s) => (s ? onState(s) : setFailed(true)),
+      () => setFailed(true),
+    ).finally(() => setBusy(false));
+  };
+  const counted: Record<NonNullable<Miss["state"]>, string> = {
+    open: "",
+    pending: "⏳ " + t("želiš da se računa, na provjeri"),
+    rejected: "🚧 " + t("nije prihvaćen"),
+    accepted: "✅ " + t("prihvaćen, računa se"),
+    kept: "✅ " + t("prihvaćen, ali ostaje odgovor koji vrijedi više"),
+  };
+  const flagged: Record<NonNullable<Miss["flag"]>, string> = {
+    open: "",
+    pending: "⏳ " + t("prijavljeno da fali"),
+    rejected: "🚧 " + t("nije prihvaćen"),
+    accepted: "✅ " + t("dodan na popis"),
+  };
+  return (
+    <div className="misses small">
+      <span className="c">
+        {t("Nepriznato:")}{" "}
+        {canCount &&
+          (r.canonical
+            ? t("„Prijavi da fali” nam samo javlja da odgovora nema na popisu. Jedan možeš odabrati da se računa: ako ga prihvatimo, računa se onaj koji vrijedi više km.")
+            : t("„Prijavi da fali” nam samo javlja da odgovora nema na popisu. Jedan možeš odabrati da se računa: ako ga prihvatimo, km ti dodajemo naknadno."))}
+      </span>
+      <ul>
+        {misses.map((m) => (
+          <li key={m.raw}>
+            <span className="a">„{m.raw}”</span>
+            {m.state === "open" && (
+              <button type="button" className="small-btn" disabled={busy} onClick={() => send(m.raw, true)}>{t("Želim da se ovaj računa")}</button>
+            )}
+            {m.state && m.state !== "open" && <span className={"st " + m.state}>{counted[m.state]}</span>}
+            {m.flag === "open" && (
+              <button type="button" className="ghost small-btn" disabled={busy} onClick={() => send(m.raw, false)}>{t("Prijavi da fali")}</button>
+            )}
+            {m.flag && m.flag !== "open" && <span className={"st " + m.flag}>{flagged[m.flag]}</span>}
+          </li>
+        ))}
+      </ul>
+      {failed && <span>{t("Prijava nije uspjela.")}</span>}
+    </div>
   );
 }
 

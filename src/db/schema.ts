@@ -151,6 +151,8 @@ export const rounds = pgTable(
     tier: text("tier"),
     // igrač je prijavio da mu točan odgovor fali na popisu; admin ga prihvati (rescoredAt) ili odbije (rejectedAt)
     reportedAt: timestamp("reported_at", { withTimezone: true }),
+    // prijavljeni upis: konačni promašaj ili neki od ranijih odbijenih pokušaja (i kad je runda kasnije pogođena)
+    reportedRaw: text("reported_raw"),
     rejectedAt: timestamp("rejected_at", { withTimezone: true }),
     // naknadno bodovano iz admina; dok igrač ne vidi obavijest, rescoreSeenAt je prazan
     rescoredAt: timestamp("rescored_at", { withTimezone: true }),
@@ -174,6 +176,8 @@ export const attempts = pgTable(
     timedOut: boolean("timed_out").notNull().default(false),
     elapsedMs: integer("elapsed_ms").notNull(),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    // igrač je na kraju partije prijavio da ovaj odgovor fali na popisu (bez utjecaja na km; to je rounds.reportedRaw)
+    reportedAt: timestamp("reported_at", { withTimezone: true }),
   },
   (t) => [index("attempts_category_normalized").on(t.categoryId, t.normalized), index("attempts_game").on(t.gameId)],
 );
