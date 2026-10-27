@@ -347,7 +347,9 @@ export async function getState(skin: Skin, playerId: string | null): Promise<Gam
     const category = { title: cat.title, hint: cat.hint, group: cat.group };
     if (r.answeredAt) {
       const base = r.answerId !== null ? baseTier(skin.config, r.tier ?? "", r.share) : null;
-      const step = speedFor(skin.config, r.answeredAt.getTime() - r.startedAt.getTime());
+      // naknadno bodovan raniji pokušaj ima množitelj po vremenu tog pokušaja, ne po kraju runde: prepozna se po km
+      const step = (r.rescoredAt && base && skin.config.speed?.find((x) => Math.round(base.km * x.multiplier) === r.km)) ||
+        speedFor(skin.config, r.answeredAt.getTime() - r.startedAt.getTime());
       const report = reportState(r);
       views.push({
         position: r.position,
@@ -762,7 +764,7 @@ export function clearCategoryCache(id?: number) {
 /**
  * Naknadno bodovanje: runde koje su završile promašajem s upisom koji se normalizira u `normalized`
  * dobivaju odgovor `answerId`, udio, tier i km; ukupni km završenih partija se preračunava.
- * Km su osnovni km prijevoza, bez bonusa za brzinu. `tier` je prijevoz koji je admin odabrao za novi odgovor: dobiju ga baš taj, jer bi po rangu tog dana (u kojem
+ * Km su km prijevoza puta množitelj brzine prema vremenu kad je upis poslan. `tier` je prijevoz koji je admin odabrao za novi odgovor: dobiju ga baš taj, jer bi po rangu tog dana (u kojem
  * odgovor sad ima i stvarne igrače) mogao ispasti sporiji.
  * Preskače runde u kojima je igrač na kraju partije odabrao da mu se računa neki drugi pokušaj.
  */
@@ -774,6 +776,8 @@ export async function rescoreMisses(skin: Skin, categoryId: number, normalized: 
       position: rounds.position,
       raw: rounds.raw,
       reportedRaw: rounds.reportedRaw,
+      startedAt: rounds.startedAt,
+      answeredAt: rounds.answeredAt,
       puzzleId: games.puzzleId,
     })
     .from(rounds)
@@ -793,11 +797,11 @@ export async function rescoreMisses(skin: Skin, categoryId: number, normalized: 
     const share = standing.share;
     await db.transaction(async (tx) => {
       for (const h of list) {
-        // naknadno bodovanje daje osnovne km prijevoza, bez bonusa za brzinu
-        const t = tier ?? standing.tier;
+        // množitelj brzine kao da je odgovor bio prihvaćen kad ga je igrač poslao
+        const scored = kmFor(skin.config, tier ?? standing.tier, h.answeredAt!.getTime() - h.startedAt.getTime());
         await tx
           .update(rounds)
-          .set({ share, km: t.km, tier: t.name, rescoredAt: new Date(), rescoreSeenAt: null })
+          .set({ share, km: scored.km, tier: scored.tier.name, rescoredAt: new Date(), rescoreSeenAt: null })
           .where(and(eq(rounds.gameId, h.gameId), eq(rounds.position, h.position)));
         await tx
           .update(games)
@@ -811,8 +815,9 @@ export async function rescoreMisses(skin: Skin, categoryId: number, normalized: 
 
 /**
  * Naknadno bodovanje prijavljenih pokušaja koje rescoreMisses ne pokriva (pokušaj nije bio konačni upis runde, npr. igrač
- * je poslije pogodio drugi odgovor). Računa se bolje za igrača: novi odgovor s osnovnim km prijevoza (`tier` kao u
- * rescoreMisses) samo ako donosi više km od onoga što runda već ima; inače je prijava prihvaćena bez promjene i bez obavijesti.
+ * je poslije pogodio drugi odgovor). Računa se bolje za igrača: novi odgovor s km prijevoza (`tier` kao u rescoreMisses)
+ * puta množitelj brzine prema vremenu prvog takvog pokušaja, samo ako donosi više km od onoga što runda već ima; inače je
+ * prijava prihvaćena bez promjene i bez obavijesti.
  */
 export async function rescoreReported(skin: Skin, categoryId: number, normalized: string, answerId: number, tier?: Tier): Promise<number> {
   const reported = await db
@@ -830,23 +835,31 @@ export async function rescoreReported(skin: Skin, categoryId: number, normalized
     );
   const hits = reported.filter((h) => h.reportedRaw && fold(h.reportedRaw) === normalized);
   if (!hits.length) return 0;
+  // kad je igrač prvi put poslao taj odgovor u rundi (za množitelj brzine)
+  const sent = await db
+    .select({ gameId: attempts.gameId, position: attempts.position, ms: sql<number>`min(${attempts.elapsedMs})::int` })
+    .from(attempts)
+    .where(and(inArray(attempts.gameId, [...new Set(hits.map((h) => h.gameId))]), eq(attempts.categoryId, categoryId), eq(attempts.normalized, normalized), eq(attempts.timedOut, false)))
+    .groupBy(attempts.gameId, attempts.position);
+  const elapsed = new Map(sent.map((x) => [`${x.gameId}|${x.position}`, x.ms]));
   clearCategoryCache(categoryId);
   let better = 0;
   for (const puzzleId of new Set(hits.map((h) => h.puzzleId))) {
     const standing = await answerStanding(skin, puzzleId, categoryId, answerId, true);
-    const t = tier ?? standing.tier;
     await db.transaction(async (tx) => {
       for (const h of hits.filter((x) => x.puzzleId === puzzleId)) {
         const now = new Date();
         const where = and(eq(rounds.gameId, h.gameId), eq(rounds.position, h.position));
-        if (t.km <= (h.km ?? 0)) {
+        // bez zapisa pokušaja (ne bi se trebalo dogoditi) računa se najsporiji množitelj
+        const scored = kmFor(skin.config, tier ?? standing.tier, elapsed.get(`${h.gameId}|${h.position}`) ?? Number.MAX_SAFE_INTEGER);
+        if (scored.km <= (h.km ?? 0)) {
           // prihvaćeno, ali stari odgovor vrijedi više: ništa se ne mijenja, igrač to vidi u popisu pokušaja
           // (isto vrijeme u rescoredAt i rescoreSeenAt je oznaka za to, vidi roundMisses)
           await tx.update(rounds).set({ rescoredAt: now, rescoreSeenAt: now }).where(where);
           continue;
         }
         better++;
-        await tx.update(rounds).set({ answerId, share: standing.share, km: t.km, tier: t.name, rescoredAt: now, rescoreSeenAt: null }).where(where);
+        await tx.update(rounds).set({ answerId, share: standing.share, km: scored.km, tier: scored.tier.name, rescoredAt: now, rescoreSeenAt: null }).where(where);
         await tx
           .update(games)
           .set({ totalKm: sql`(select coalesce(sum(${rounds.km}), 0) from ${rounds} where ${rounds.gameId} = ${h.gameId})` })
