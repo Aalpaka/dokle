@@ -25,7 +25,7 @@ import { placeAt } from "@/skins/mjesta";
 import { routeHistogram, routeLabels } from "@/lib/compare";
 import { isAdminEmail } from "./accounts";
 import { resolveIdentity } from "./player";
-import { categoryShares, clearCategoryCache, clearPuzzleCache, followersOf, getOrCreatePuzzle, getSkin, pairedSlugs, rejectReports, rescoreMisses, rescoreReported, type Skin } from "./game";
+import { categoryShares, clearCategoryCache, clearPuzzleCache, followersOf, getOrCreatePuzzle, pairedSlugs, rejectReports, rescoreMisses, rescoreReported, type Skin } from "./game";
 
 /** Id admina ili null. Lokalno se može uključiti ADMIN_DEV_BYPASS=1 (nikad u produkciji). */
 export async function requireAdmin(): Promise<{ playerId: string | null } | null> {
@@ -701,11 +701,6 @@ export async function updateAnswer(
     return tx.update(answers).set(set).where(eq(answers.id, answerId)).returning();
   });
   clearCategoryCache(categoryId);
-  // nova varijanta ili naziv: tko je to već upisao i dobio promašaj, sad dobije odgovor
-  if (add.length || set.canonical) {
-    const [cat] = await db.select({ skinId: categories.skinId }).from(categories).where(eq(categories.id, categoryId));
-    await rescoreMisses(await getSkin(cat.skinId), categoryId, null, answerId);
-  }
   return row;
 }
 

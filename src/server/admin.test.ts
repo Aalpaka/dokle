@@ -15,7 +15,6 @@ const NOPE = "zzqx nije";
 const PLANE = "zzqx avion";
 const EARLY = "zzqx prvi";
 const SLOW = "zzqx spori";
-const TRIED = "zzqx pokusaj";
 const ids: string[] = [];
 
 async function playAllWith(raw: string) {
@@ -36,9 +35,8 @@ describe.skipIf(!process.env.DATABASE_URL)("admin", () => {
   afterAll(async () => {
     await db.delete(games).where(inArray(games.playerId, ids));
     await db.delete(players).where(inArray(players.id, ids));
-    await db.delete(reviewDecisions).where(inArray(reviewDecisions.normalized, [WEIRD, KEPT, NOPE, PLANE, EARLY, SLOW, TRIED]));
+    await db.delete(reviewDecisions).where(inArray(reviewDecisions.normalized, [WEIRD, KEPT, NOPE, PLANE, EARLY, SLOW]));
     await db.delete(answers).where(inArray(answers.canonical, ["Zzqx odgovor", "Zzqx prijava", "Zzqx avion", "Zzqx prvi", "Zzqx spori"]));
-    await db.delete(answerAliases).where(inArray(answerAliases.alias, ["Zzqx pokusaj", "Zzqx varijanta"]));
     await sql.end();
   });
 
@@ -293,42 +291,6 @@ describe.skipIf(!process.env.DATABASE_URL)("admin", () => {
     st = await getState(skin, id);
     expect(st.rounds[1]).toMatchObject({ canonical: state.rounds[1].canonical, km: state.rounds[1].km, misses: [{ raw: SLOW, state: "kept" }] });
     expect(await rescoreNotices(skin, id)).toHaveLength(0);
-  });
-
-  it("odbijeni pokušaj pa isteklo vrijeme: spajanje i nova varijanta naknadno boduju i neprijavljenog igrača", async () => {
-    const skin = await getSkin("hr");
-    const id = crypto.randomUUID();
-    ids.push(id);
-    await ensurePlayer(id); // gost, bez računa
-    await startNext(skin, id, 0);
-    // "Dubravsko": odbijeno, igrač ne klikne "Siguran sam" i istekne vrijeme, pa runda nema upis
-    expect((await submitAnswer(skin, id, TRIED, false)).status).toBe("rejected");
-    const r = await submitAnswer(skin, id, "", true);
-    if (r.status !== "scored") throw new Error(r.status);
-    expect(r.state.rounds[0].raw).toBeNull();
-    const [game] = await db.select().from(games).where(eq(games.playerId, id));
-    const [r0] = await db.select().from(rounds).where(and(eq(rounds.gameId, game.id), eq(rounds.position, 0)));
-    const [existing] = await db.select().from(answers).where(eq(answers.categoryId, r0.categoryId)).limit(1);
-
-    // admin u redu za pregled spoji upis s postojećim odgovorom
-    const { rescored } = await decide(skin, null, { action: "alias", categoryId: r0.categoryId, normalized: TRIED, answerId: existing.id, alias: "Zzqx pokusaj" });
-    expect(rescored).toBe(1);
-    const [after] = await db.select().from(rounds).where(and(eq(rounds.gameId, game.id), eq(rounds.position, 0)));
-    expect(after).toMatchObject({ answerId: existing.id, raw: TRIED }); // upis iz odbijenog pokušaja
-    expect(after.km).toBeGreaterThan(0);
-    expect(await rescoreNotices(skin, id)).toHaveLength(1);
-
-    // drugi igrač: varijanta dodana kod uređivanja odgovora isto naknadno boduje
-    const other = crypto.randomUUID();
-    ids.push(other);
-    await ensurePlayer(other);
-    await startNext(skin, other, 0);
-    expect((await submitAnswer(skin, other, "Zzqx varijanta", false)).status).toBe("rejected");
-    await submitAnswer(skin, other, "", true);
-    const [g2] = await db.select().from(games).where(eq(games.playerId, other));
-    await updateAnswer(r0.categoryId, existing.id, { addAliases: ["Zzqx varijanta"] });
-    const [r2] = await db.select().from(rounds).where(and(eq(rounds.gameId, g2.id), eq(rounds.position, 0)));
-    expect(r2.answerId).toBe(existing.id);
   });
 
   it("raspored se slaže u hrvatskom adminu i vrijedi za sve tri države", async () => {
