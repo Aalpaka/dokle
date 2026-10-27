@@ -248,6 +248,15 @@ button.small-btn.ghost { font-weight: 700; }
 @media (max-width: 520px) { .allans { padding-left: 0; } }
 .recap .c { font-size: 12px; color: var(--muted); }
 .recap .a { font-weight: 700; overflow-wrap: anywhere; }
+/* odbijeni pokušaji runde na kraju partije, jedan se može prijaviti */
+.misses { display: grid; gap: 6px; padding: 0 4px 10px 2.6em; }
+.misses ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.misses li { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; }
+.misses .a { font-weight: 600; }
+.misses .small-btn { padding: 4px 10px; font-size: 13px; }
+.misses .st { color: var(--muted); }
+.misses .st.accepted { color: var(--ink); }
+@media (max-width: 520px) { .misses { padding-left: 4px; } }
 .history > li { display: grid; grid-template-columns: 3em minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 10px 4px; }
 .hist-head { justify-content: space-between; }
 /* dva-tri gumba kao jedan prekidač (npr. poredak povijesti) */

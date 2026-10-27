@@ -151,6 +151,8 @@ export const rounds = pgTable(
     tier: text("tier"),
     // igrač je prijavio da mu točan odgovor fali na popisu; admin ga prihvati (rescoredAt) ili odbije (rejectedAt)
     reportedAt: timestamp("reported_at", { withTimezone: true }),
+    // prijavljeni upis: konačni promašaj ili neki od ranijih odbijenih pokušaja (i kad je runda kasnije pogođena)
+    reportedRaw: text("reported_raw"),
     rejectedAt: timestamp("rejected_at", { withTimezone: true }),
     // naknadno bodovano iz admina; dok igrač ne vidi obavijest, rescoreSeenAt je prazan
     rescoredAt: timestamp("rescored_at", { withTimezone: true }),

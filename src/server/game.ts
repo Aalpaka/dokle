@@ -233,8 +233,15 @@ export type RoundView = {
   speed: { multiplier: number; emoji: string; name: string } | null; // samo kad je brzina promijenila km
   // promašaj s upisom: "open" se još može prijaviti, "pending" čeka admina, "rejected" admin nije prihvatio
   report?: "open" | "pending" | "rejected";
+  reported?: string; // prijavljeni upis (može biti i raniji pokušaj, ne samo konačni)
   fact?: string; // zanimljivost uz pogođeni odgovor
+  misses?: Miss[]; // odbijeni pokušaji runde, tek na kraju partije
 };
+
+// Odbijeni pokušaj: "open" se može prijaviti (dok runda nema prijavu), "pending" čeka admina, "rejected" admin nije
+// prihvatio, "accepted" admin je prihvatio i sad se računa, "kept" prihvaćen, ali odgovor koji je igrač već imao vrijedi
+// više km; bez stanja: prijavljen je drugi pokušaj.
+export type Miss = { raw: string; state?: "open" | "pending" | "rejected" | "accepted" | "kept" };
 
 export type GameState = {
   skin: { id: string; timezone: string; config: SkinConfig };
@@ -254,10 +261,40 @@ export type Reveal = { top: { canonical: string; share: number }[]; rare: { cano
 // prijavljen promašaj dok ga admin ne pogleda: ne prikazuje se kao radovi na cesti
 export const PENDING = { emoji: "⏳", name: "Na provjeri" };
 
+/** Stanje promašene runde; pogođena runda ima prijavu samo uz pokušaj (vidi Miss). */
 function reportState(r: { raw: string | null; answerId: number | null; reportedAt: Date | null; rejectedAt: Date | null }): RoundView["report"] {
-  if (!r.raw || r.answerId !== null) return undefined;
-  if (r.rejectedAt) return "rejected";
-  return r.reportedAt ? "pending" : "open";
+  if (r.answerId !== null) return undefined;
+  if (r.reportedAt) return r.rejectedAt ? "rejected" : "pending";
+  return r.raw ? "open" : undefined;
+}
+
+/** Odbijeni pokušaji završenih rundi (bez zakašnjelih i bez ponavljanja istog upisa) sa stanjem prijave. */
+async function roundMisses(gameId: number, list: (typeof rounds.$inferSelect)[]): Promise<Map<number, Miss[]>> {
+  const rows = await db
+    .select({ position: attempts.position, categoryId: attempts.categoryId, raw: attempts.raw, normalized: attempts.normalized })
+    .from(attempts)
+    .where(and(eq(attempts.gameId, gameId), eq(attempts.accepted, false), eq(attempts.timedOut, false), ne(attempts.normalized, "")))
+    .orderBy(asc(attempts.id));
+  const out = new Map<number, Miss[]>();
+  if (!rows.length) return out;
+  const decided = await db
+    .select({ categoryId: reviewDecisions.categoryId, normalized: reviewDecisions.normalized })
+    .from(reviewDecisions)
+    .where(and(inArray(reviewDecisions.categoryId, [...new Set(rows.map((a) => a.categoryId))]), eq(reviewDecisions.decision, "reject")));
+  const rejected = new Set(decided.map((d) => `${d.categoryId}|${d.normalized}`));
+  const byPos = new Map(list.map((r) => [r.position, r]));
+  const seen = new Set<string>();
+  for (const a of rows) {
+    const r = byPos.get(a.position);
+    if (!r?.answeredAt || seen.has(`${a.position}|${a.normalized}`)) continue;
+    seen.add(`${a.position}|${a.normalized}`);
+    const mine = r.reportedRaw !== null && fold(r.reportedRaw) === a.normalized;
+    const state: Miss["state"] = mine
+      ? r.rejectedAt ? "rejected" : !r.rescoredAt ? "pending" : r.rescoreSeenAt?.getTime() === r.rescoredAt.getTime() ? "kept" : "accepted"
+      : r.reportedAt ? undefined : rejected.has(`${a.categoryId}|${a.normalized}`) ? "rejected" : "open";
+    out.set(a.position, [...(out.get(a.position) ?? []), { raw: a.raw, ...(state && { state }) }]);
+  }
+  return out;
 }
 
 // stari nazivi tierova (prije Bajsa i Motora) se prepoznaju po udjelu
@@ -307,6 +344,7 @@ export async function getState(skin: Skin, playerId: string | null): Promise<Gam
         icon: base?.icon,
         speed: base && r.km !== base.km && step.multiplier !== 1 ? { multiplier: step.multiplier, emoji: step.emoji, name: step.name } : null,
         ...(report && { report }),
+        ...(r.reportedRaw && { reported: r.reportedRaw }),
         ...(fact && { fact }),
       });
     } else {
@@ -318,7 +356,10 @@ export async function getState(skin: Skin, playerId: string | null): Promise<Gam
   }
   const totalKm = views.reduce((a, v) => a + v.km, 0);
   if (current) return { ...base, phase: "play", totalKm, rounds: views, current };
-  if (views.length >= base.perDay) return { ...base, phase: "end", totalKm, rounds: views };
+  if (views.length >= base.perDay) {
+    const misses = await roundMisses(game.id, rows.map((x) => x.r));
+    return { ...base, phase: "end", totalKm, rounds: views.map((v) => (misses.has(v.position) ? { ...v, misses: misses.get(v.position) } : v)) };
+  }
   if (!views.length) return { ...base, phase: "intro", totalKm, rounds: views };
   const last = views[views.length - 1];
   return { ...base, phase: "reveal", totalKm, rounds: views, reveal: await buildReveal(skin, puzzle, rows[last.position].r.categoryId, last.canonical) };
@@ -399,7 +440,7 @@ export async function submitAnswer(skin: Skin, playerId: string, raw: string, fi
   // zakašnjeli upis je spremljen u attempts, ali se boduje kao isteklo vrijeme
   const stored = timedOut ? null : input || null;
   await scoreRound(skin, puzzle, game.id, open.position, open.categoryId, stored, hit?.id ?? null, elapsedMs);
-  if (!hit && stored && keep) await markReported(game.id, open.position, decision === "reject");
+  if (!hit && stored && keep) await markReported(game.id, open.position, stored, decision === "reject");
   return { status: "scored", state: await getState(skin, playerId) };
 }
 
@@ -411,16 +452,20 @@ async function decisionFor(categoryId: number, normalized: string) {
   return d?.decision ?? null;
 }
 
-async function markReported(gameId: number, position: number, rejected: boolean) {
+/** Runda ima najviše jednu prijavu: konačni promašaj ili jedan od odbijenih pokušaja. */
+async function markReported(gameId: number, position: number, raw: string, rejected: boolean) {
   const now = new Date();
   await db
     .update(rounds)
-    .set({ reportedAt: now, ...(rejected && { rejectedAt: now }) })
-    .where(and(eq(rounds.gameId, gameId), eq(rounds.position, position), isNull(rounds.answerId), isNotNull(rounds.raw), isNull(rounds.reportedAt)));
+    .set({ reportedAt: now, reportedRaw: raw, ...(rejected && { rejectedAt: now }) })
+    .where(and(eq(rounds.gameId, gameId), eq(rounds.position, position), isNotNull(rounds.answeredAt), isNull(rounds.reportedAt)));
 }
 
-/** Igrač prijavljuje da mu odgovor iz današnje runde fali na popisu; admin ga vidi na vrhu reda za pregled. */
-export async function reportRound(skin: Skin, playerId: string, position: number): Promise<GameState | null> {
+/**
+ * Igrač prijavljuje da mu odgovor iz današnje runde fali na popisu; admin ga vidi na vrhu reda za pregled.
+ * Bez `raw` se prijavljuje konačni promašaj, s `raw` bilo koji odbijeni pokušaj te runde, i kad je runda kasnije pogođena.
+ */
+export async function reportRound(skin: Skin, playerId: string, position: number, raw?: string): Promise<GameState | null> {
   const puzzle = await getOrCreatePuzzle(skin, localDate(skin.timezone));
   const game = await findGame(playerId, puzzle.id);
   if (!game) return null;
@@ -428,18 +473,38 @@ export async function reportRound(skin: Skin, playerId: string, position: number
     .select()
     .from(rounds)
     .where(and(eq(rounds.gameId, game.id), eq(rounds.position, position), isNotNull(rounds.answeredAt)));
-  if (!r || reportState(r) !== "open") return null;
-  // odgovor koji je admin već odbio ostaje odbijen; prihvaćeni bi već bio bodovan
-  await markReported(game.id, position, (await decisionFor(r.categoryId, fold(r.raw!))) === "reject");
+  if (!r || r.reportedAt) return null;
+  let text: string;
+  if (raw === undefined) {
+    if (reportState(r) !== "open") return null;
+    text = r.raw!;
+  } else {
+    const [a] = await db
+      .select({ raw: attempts.raw })
+      .from(attempts)
+      .where(and(eq(attempts.gameId, game.id), eq(attempts.position, position), eq(attempts.accepted, false), eq(attempts.timedOut, false), eq(attempts.normalized, fold(raw))))
+      .limit(1);
+    if (!a) return null;
+    text = a.raw;
+  }
+  const normalized = fold(text);
+  const [d] = await db
+    .select({ decision: reviewDecisions.decision, answerId: reviewDecisions.answerId })
+    .from(reviewDecisions)
+    .where(and(eq(reviewDecisions.categoryId, r.categoryId), eq(reviewDecisions.normalized, normalized)));
+  // odgovor koji je admin već odbio ostaje odbijen
+  await markReported(game.id, position, text, d?.decision === "reject");
+  // admin ga je u međuvremenu prihvatio (pokušaj iz runde koja je onda pogođena drugim odgovorom): odmah se boduje
+  if (d && d.decision !== "reject" && d.answerId !== null) await rescoreReported(skin, r.categoryId, normalized, d.answerId);
   return getState(skin, playerId);
 }
 
 /** Admin je odbio odgovor: prijave koje su čekale prestaju biti "na provjeri". */
 export async function rejectReports(categoryId: number, normalized: string): Promise<number> {
   const pending = await db
-    .select({ gameId: rounds.gameId, position: rounds.position, raw: rounds.raw })
+    .select({ gameId: rounds.gameId, position: rounds.position, raw: rounds.reportedRaw })
     .from(rounds)
-    .where(and(eq(rounds.categoryId, categoryId), isNull(rounds.answerId), isNotNull(rounds.reportedAt), isNull(rounds.rejectedAt)));
+    .where(and(eq(rounds.categoryId, categoryId), isNotNull(rounds.reportedAt), isNull(rounds.rejectedAt), isNull(rounds.rescoredAt)));
   const hits = pending.filter((p) => p.raw && fold(p.raw) === normalized);
   const now = new Date();
   for (const h of hits)
@@ -702,4 +767,52 @@ export async function rescoreMisses(skin: Skin, categoryId: number, normalized: 
     });
   }
   return hits.length;
+}
+
+/**
+ * Naknadno bodovanje prijavljenih pokušaja koje rescoreMisses ne pokriva (pokušaj nije bio konačni upis runde, npr. igrač
+ * je poslije pogodio drugi odgovor). Računa se bolje za igrača: novi odgovor s osnovnim km prijevoza (`tier` kao u
+ * rescoreMisses) samo ako donosi više km od onoga što runda već ima; inače je prijava prihvaćena bez promjene i bez obavijesti.
+ */
+export async function rescoreReported(skin: Skin, categoryId: number, normalized: string, answerId: number, tier?: Tier): Promise<number> {
+  const reported = await db
+    .select({ gameId: rounds.gameId, position: rounds.position, reportedRaw: rounds.reportedRaw, km: rounds.km, puzzleId: games.puzzleId })
+    .from(rounds)
+    .innerJoin(games, eq(games.id, rounds.gameId))
+    .where(
+      and(
+        eq(rounds.categoryId, categoryId),
+        isNotNull(rounds.answeredAt),
+        isNotNull(rounds.reportedAt),
+        isNull(rounds.rejectedAt),
+        isNull(rounds.rescoredAt),
+      ),
+    );
+  const hits = reported.filter((h) => h.reportedRaw && fold(h.reportedRaw) === normalized);
+  if (!hits.length) return 0;
+  clearCategoryCache(categoryId);
+  let better = 0;
+  for (const puzzleId of new Set(hits.map((h) => h.puzzleId))) {
+    const standing = await answerStanding(skin, puzzleId, categoryId, answerId, true);
+    const t = tier ?? standing.tier;
+    await db.transaction(async (tx) => {
+      for (const h of hits.filter((x) => x.puzzleId === puzzleId)) {
+        const now = new Date();
+        const where = and(eq(rounds.gameId, h.gameId), eq(rounds.position, h.position));
+        if (t.km <= (h.km ?? 0)) {
+          // prihvaćeno, ali stari odgovor vrijedi više: ništa se ne mijenja, igrač to vidi u popisu pokušaja
+          // (isto vrijeme u rescoredAt i rescoreSeenAt je oznaka za to, vidi roundMisses)
+          await tx.update(rounds).set({ rescoredAt: now, rescoreSeenAt: now }).where(where);
+          continue;
+        }
+        better++;
+        await tx.update(rounds).set({ answerId, share: standing.share, km: t.km, tier: t.name, rescoredAt: now, rescoreSeenAt: null }).where(where);
+        await tx
+          .update(games)
+          .set({ totalKm: sql`(select coalesce(sum(${rounds.km}), 0) from ${rounds} where ${rounds.gameId} = ${h.gameId})` })
+          .where(and(eq(games.id, h.gameId), isNotNull(games.finishedAt)));
+      }
+    });
+  }
+  return better;
 }

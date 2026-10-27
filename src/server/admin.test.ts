@@ -1,5 +1,5 @@
 import { afterAll, describe, expect, it } from "vitest";
-import { and, eq, inArray } from "drizzle-orm";
+import { and, desc, eq, inArray } from "drizzle-orm";
 import { db, sql } from "@/db";
 import { answerAliases, answers, categories, dailyPuzzles, games, players, removedAliases, reviewDecisions, rounds } from "@/db/schema";
 import { dismissNotices, ensurePlayer, getOrCreatePuzzle, getSkin, getState, reportRound, rescoreNotices, startNext, submitAnswer } from "./game";
@@ -13,6 +13,8 @@ const WEIRD = "zzqx odgovor";
 const KEPT = "zzqx prijava";
 const NOPE = "zzqx nije";
 const PLANE = "zzqx avion";
+const EARLY = "zzqx prvi";
+const SLOW = "zzqx spori";
 const ids: string[] = [];
 
 async function playAllWith(raw: string) {
@@ -33,8 +35,8 @@ describe.skipIf(!process.env.DATABASE_URL)("admin", () => {
   afterAll(async () => {
     await db.delete(games).where(inArray(games.playerId, ids));
     await db.delete(players).where(inArray(players.id, ids));
-    await db.delete(reviewDecisions).where(inArray(reviewDecisions.normalized, [WEIRD, KEPT, NOPE, PLANE]));
-    await db.delete(answers).where(inArray(answers.canonical, ["Zzqx odgovor", "Zzqx prijava", "Zzqx avion"]));
+    await db.delete(reviewDecisions).where(inArray(reviewDecisions.normalized, [WEIRD, KEPT, NOPE, PLANE, EARLY, SLOW]));
+    await db.delete(answers).where(inArray(answers.canonical, ["Zzqx odgovor", "Zzqx prijava", "Zzqx avion", "Zzqx prvi", "Zzqx spori"]));
     await sql.end();
   });
 
@@ -217,6 +219,70 @@ describe.skipIf(!process.env.DATABASE_URL)("admin", () => {
     const [after] = await db.select().from(rounds).where(and(eq(rounds.gameId, game.id), eq(rounds.position, 0)));
     expect(after.tier).toBe(tiers[plane].name);
     expect(after.km).toBe(tiers[plane].km); // bez bonusa za brzinu
+  });
+
+  it("na kraju se može prijaviti odbijeni pokušaj i kad je runda pogođena; računa se bolji odgovor", async () => {
+    const skin = await getSkin("hr");
+    const id = crypto.randomUUID();
+    ids.push(id);
+    await ensurePlayer(id);
+    let state = await startNext(skin, id, 0);
+    const top = async (title: string) => {
+      const [a] = await db
+        .select({ canonical: answers.canonical })
+        .from(answers)
+        .innerJoin(categories, eq(categories.id, answers.categoryId))
+        .where(and(eq(categories.skinId, "hr"), eq(categories.title, title)))
+        .orderBy(desc(answers.priorShare))
+        .limit(1);
+      return a.canonical;
+    };
+    // prve dvije runde: odbijeni pokušaj (dvaput isti), pa najčešći odgovor; ostale promašaj
+    while (state.phase !== "end") {
+      const pos = state.current!.position;
+      if (pos < 2) {
+        const miss = pos === 0 ? EARLY : SLOW;
+        expect((await submitAnswer(skin, id, miss, false)).status).toBe("rejected");
+        expect((await submitAnswer(skin, id, miss.toUpperCase(), false)).status).toBe("rejected");
+      }
+      const r = await submitAnswer(skin, id, pos < 2 ? await top(state.current!.category.title) : "zzqx nema", true);
+      if (r.status !== "scored") throw new Error(r.status);
+      state = r.state.phase === "end" ? r.state : await startNext(skin, id, 0);
+    }
+    expect(state.rounds[0].misses).toEqual([{ raw: EARLY, state: "open" }]);
+    expect(state.rounds[2].misses).toEqual([{ raw: "zzqx nema", state: "open" }]);
+    const before = state.rounds[0];
+    expect(before.canonical).not.toBeNull();
+
+    // pokušaj koji nije iz te runde se ne može prijaviti; jedan po rundi
+    expect(await reportRound(skin, id, 0, "zzqx nema")).toBeNull();
+    let st = (await reportRound(skin, id, 0, EARLY))!;
+    expect(st.rounds[0]).toMatchObject({ km: before.km, tier: before.tier, reported: EARLY, misses: [{ raw: EARLY, state: "pending" }] });
+    expect(await reportRound(skin, id, 0, EARLY)).toBeNull();
+    st = (await reportRound(skin, id, 1, SLOW))!;
+    expect(st.rounds[1].misses).toEqual([{ raw: SLOW, state: "pending" }]);
+    const queue = await reviewQueue(skin);
+    const early = queue.find((g) => g.normalized === EARLY)!;
+    expect(early.reports).toBe(1);
+
+    // avion vrijedi više od pješačenja: runda dobiva novi odgovor, osnovne km aviona i obavijest
+    const tiers = skin.config.tiers;
+    const plane = tiers.findLastIndex((t) => !t.rare);
+    const res = await decide(skin, null, { action: "answer", categoryId: early.categoryId, normalized: EARLY, canonical: "Zzqx prvi", priorShare: 0.0001, tier: tiers[plane].name });
+    expect(res.rescored).toBe(1);
+    st = await getState(skin, id);
+    expect(st.rounds[0]).toMatchObject({ canonical: "Zzqx prvi", km: tiers[plane].km, misses: [{ raw: EARLY, state: "accepted" }] });
+    expect(st.totalKm).toBe(state.totalKm - before.km + tiers[plane].km);
+    expect((await rescoreNotices(skin, id)).map((n) => n.canonical)).toContain("Zzqx prvi");
+
+    // pješice ne vrijedi više od onoga što je već imao: ostaje stari odgovor, bez obavijesti
+    const slow = queue.find((g) => g.normalized === SLOW)!;
+    await dismissNotices(skin, id);
+    const res2 = await decide(skin, null, { action: "answer", categoryId: slow.categoryId, normalized: SLOW, canonical: "Zzqx spori", priorShare: 0.0001, tier: tiers[0].name });
+    expect(res2.rescored).toBe(0);
+    st = await getState(skin, id);
+    expect(st.rounds[1]).toMatchObject({ canonical: state.rounds[1].canonical, km: state.rounds[1].km, misses: [{ raw: SLOW, state: "kept" }] });
+    expect(await rescoreNotices(skin, id)).toHaveLength(0);
   });
 
   it("raspored se slaže u hrvatskom adminu i vrijedi za sve tri države", async () => {
