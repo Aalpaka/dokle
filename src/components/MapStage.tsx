@@ -11,7 +11,7 @@ import { MISS_COLOR, crashSign, vehicleIcons } from "./vehicleIcons";
 import { useT } from "./skin";
 import { kmAfter } from "@/lib/league";
 import type { RaceLeague, RaceRunner } from "@/server/leagues";
-import { RacePanel, useRaceChoice } from "./Race";
+import { RacePanel, RaceStrip, useNarrow, useRaceChoice } from "./Race";
 
 // trajanje vožnje po vozilu (s); pješak je najsporiji, a prijeđe i najmanje km
 // koliko kružić lige klizi do novog km (ms)
@@ -87,6 +87,7 @@ export default function MapStage({ skinId, cfg, map, rounds, perDay, ended = fal
   // utrka lige: kružići članova stoje gdje su oni bili nakon jednakog broja kategorija kao igrač (step);
   // na kraju (Infinity) gdje su završili, a replay ih vozi kategoriju po kategoriju uz igrača
   const { league, pick } = useRaceChoice(race);
+  const narrow = useNarrow();
   const runners = league?.runners ?? [];
   const [raceStep, setStep] = useState(ended ? Infinity : rounds.length);
   const raceRef = useRef({ runners: [] as RaceRunner[], step: raceStep, v: 0 });
@@ -548,113 +549,120 @@ export default function MapStage({ skinId, cfg, map, rounds, perDay, ended = fal
   const ahead = cfg.stations.filter((s) => s.km > hudKm).slice(0, 3);
   const last = cfg.stations[cfg.stations.length - 1];
 
-  return (
-    <div className="stage" ref={stageRef} style={{ "--inset": `${inset}px` } as React.CSSProperties}>
-      <svg className="map" ref={svgRef} viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-        {map.backdrop && (
-          <image href={map.backdrop.href} x={map.backdrop.x} y={map.backdrop.y} width={map.backdrop.width} height={map.backdrop.height} preserveAspectRatio="none" />
-        )}
-        {/* rub prema okolici je upečen u alfa kanal slike (scripts/map/feather.py); SVG maska sa zamućenjem
-            se računala u svakom okviru i na mobitelu rušila igru */}
-        <image href={map.image.href} x={map.image.x} y={map.image.y} width={map.image.width} height={map.image.height} preserveAspectRatio="none" />
-        {map.rivers.map((r) => <path key={r.name} className="river" d={r.d} />)}
-        <path className="border" d={map.border} />
-        {map.dashedBorder && <path className="border dashed" d={map.dashedBorder} />}
-        <path className="road-casing" d={fullRoad} />
-        <path className="road" d={fullRoad} />
-        {map.ferries.map((f) => {
-          const a = project(...f.from), b = project(...f.to);
-          return <path key={f.name} className="ferry" d={`M${a[0]},${a[1]}L${b[0]},${b[1]}`} />;
-        })}
-        <g ref={segsRef} />
-        <path className="contrail" ref={trailRef} />
-      </svg>
-      <div className="overlay">
-        {decor}
-        {allStations.map((s, i) => (
-          <div
-            key={s.name}
-            className={"stn" + (hudKm >= s.km ? " reached" : "") + (s === ahead[0] ? " next" : "") + (s === cfg.overshoot?.station ? " egg" : "")}
-            ref={(el) => {
-              if (el) stationEls.current[i] = el;
-              pin(stations[i])(el);
-            }}
-          >
-            <i /><span>{s.name}</span>
-          </div>
-        ))}
-        {runners.map((r) => (
-          <div
-            key={r.memberId}
-            className="race-ghost"
-            title={r.nickname}
-            ref={(el) => {
-              if (el) ghostEls.current.set(r.memberId, el);
-              else ghostEls.current.delete(r.memberId);
-            }}
-          >
-            <i />
-            <span className="ghost-chip" style={{ background: r.color }}>{r.tag}</span>
-          </div>
-        ))}
-        <div className="veh" ref={vehRef}>
-          <div className="shadow" ref={shadowRef} />
-          <div className="badge" ref={badgeRef} />
-        </div>
-      </div>
+  const raceProps = { race: race ?? [], league, pick, myKms: rounds.map((r) => r.km), step: raceStep, perDay };
 
-      <div className="hud tl">
-        <div className="now">
-          {placeAt(skinId, cfg, hudKm)}
-          <small>{t("{n} km od {mjesta}", { n: hudKm > cfg.maxKm ? rounds.reduce((a, r) => a + r.km, 0) : hudKm, mjesta: cfg.stations[0].genitive ?? cfg.stations[0].name })}</small>
-        </div>
-        {!!race?.length && <RacePanel race={race} league={league} pick={pick} myKms={rounds.map((r) => r.km)} step={raceStep} perDay={perDay} />}
-      </div>
-      <div className="hud tr">
-        <div className="signboard">
-          {egg ? (
-            <div><span>Cilj! <s>{last.name}</s></span><span>🙃</span></div>
-          ) : ahead.length ? (
-            ahead.map((s) => (
-              <div key={s.name}><span>{s.name}</span><span>{s.km - hudKm} km</span></div>
-            ))
-          ) : (
-            <div><span>{t("Cilj!")} {last.name}</span><span>{map.finishEmoji ?? "⛵"}</span></div>
+  return (
+    <>
+      <div className="stage" ref={stageRef} style={{ "--inset": `${inset}px` } as React.CSSProperties}>
+        <svg className="map" ref={svgRef} viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          {map.backdrop && (
+            <image href={map.backdrop.href} x={map.backdrop.x} y={map.backdrop.y} width={map.backdrop.width} height={map.backdrop.height} preserveAspectRatio="none" />
           )}
+          {/* rub prema okolici je upečen u alfa kanal slike (scripts/map/feather.py); SVG maska sa zamućenjem
+              se računala u svakom okviru i na mobitelu rušila igru */}
+          <image href={map.image.href} x={map.image.x} y={map.image.y} width={map.image.width} height={map.image.height} preserveAspectRatio="none" />
+          {map.rivers.map((r) => <path key={r.name} className="river" d={r.d} />)}
+          <path className="border" d={map.border} />
+          {map.dashedBorder && <path className="border dashed" d={map.dashedBorder} />}
+          <path className="road-casing" d={fullRoad} />
+          <path className="road" d={fullRoad} />
+          {map.ferries.map((f) => {
+            const a = project(...f.from), b = project(...f.to);
+            return <path key={f.name} className="ferry" d={`M${a[0]},${a[1]}L${b[0]},${b[1]}`} />;
+          })}
+          <g ref={segsRef} />
+          <path className="contrail" ref={trailRef} />
+        </svg>
+        <div className="overlay">
+          {decor}
+          {allStations.map((s, i) => (
+            <div
+              key={s.name}
+              className={"stn" + (hudKm >= s.km ? " reached" : "") + (s === ahead[0] ? " next" : "") + (s === cfg.overshoot?.station ? " egg" : "")}
+              ref={(el) => {
+                if (el) stationEls.current[i] = el;
+                pin(stations[i])(el);
+              }}
+            >
+              <i /><span>{s.name}</span>
+            </div>
+          ))}
+          {runners.map((r) => (
+            <div
+              key={r.memberId}
+              className="race-ghost"
+              title={r.nickname}
+              ref={(el) => {
+                if (el) ghostEls.current.set(r.memberId, el);
+                else ghostEls.current.delete(r.memberId);
+              }}
+            >
+              <i />
+              <span className="ghost-chip" style={{ background: r.color }}>{r.tag}</span>
+            </div>
+          ))}
+          <div className="veh" ref={vehRef}>
+            <div className="shadow" ref={shadowRef} />
+            <div className="badge" ref={badgeRef} />
+          </div>
         </div>
+
+        <div className="hud tl">
+          <div className="now">
+            {placeAt(skinId, cfg, hudKm)}
+            <small>{t("{n} km od {mjesta}", { n: hudKm > cfg.maxKm ? rounds.reduce((a, r) => a + r.km, 0) : hudKm, mjesta: cfg.stations[0].genitive ?? cfg.stations[0].name })}</small>
+          </div>
+          {!!race?.length && !narrow && <RacePanel {...raceProps} />}
+          {!!race?.length && narrow && !ended && <RaceStrip {...raceProps} maxKm={cfg.maxKm} />}
+        </div>
+        <div className="hud tr">
+          <div className="signboard">
+            {egg ? (
+              <div><span>Cilj! <s>{last.name}</s></span><span>🙃</span></div>
+            ) : ahead.length ? (
+              ahead.map((s) => (
+                <div key={s.name}><span>{s.name}</span><span>{s.km - hudKm} km</span></div>
+              ))
+            ) : (
+              <div><span>{t("Cilj!")} {last.name}</span><span>{map.finishEmoji ?? "⛵"}</span></div>
+            )}
+          </div>
+        </div>
+        {ended && (
+          <div className="hud bl">
+            <button type="button" className="mapbtn solo" disabled={replaying} onClick={replay}>{replaying ? "Replay…" : `↻ ${t("Ponovi put")}`}</button>
+          </div>
+        )}
+        <div className="hud br">
+          <div className="camseg" role="radiogroup" aria-label={t("Kamera")}>
+            <button type="button" className="mapbtn" role="radio" aria-checked={mode === "follow"} onClick={() => setMode("follow")}>{t("Kamera prati")}</button>
+            <button type="button" className="mapbtn" role="radio" aria-checked={mode === "whole"} onClick={() => setMode("whole")}>{t("Cijela ruta")}</button>
+          </div>
+          <button
+            type="button"
+            className="camtoggle"
+            aria-label={mode === "follow" ? t("Kamera prati, prebaci na cijelu rutu") : t("Cijela ruta, prebaci na praćenje")}
+            onClick={() => setMode(mode === "follow" ? "whole" : "follow")}
+            dangerouslySetInnerHTML={{ __html: mode === "follow" ? WHOLE_ICON : FOLLOW_ICON }}
+          />
+        </div>
+        {arrival && (
+          <div className="stationmsg" key={arrival.id}>
+            <small>{arrival.egg ? `Preletio si ${last.name}` : arrival.pass ? t("Prolaziš · {n} km", { n: arrival.km }) : t("Stigao si · {n} km", { n: arrival.km })}</small>
+            <b>{arrival.name}</b>
+            <p>{arrival.message}</p>
+          </div>
+        )}
+        {toast && (
+          <div className="maptoast" key={toast.id} style={{ "--vc": toast.color } as React.CSSProperties}>
+            <div className={"tbadge" + (toast.logo ? " logo" : "")} dangerouslySetInnerHTML={{ __html: toast.icon }} />
+            <div className="txt"><b>{toast.title}</b><div className="sub">{toast.sub}</div></div>
+            <div className="km">{toast.km}</div>
+          </div>
+        )}
       </div>
-      {ended && (
-        <div className="hud bl">
-          <button type="button" className="mapbtn solo" disabled={replaying} onClick={replay}>{replaying ? "Replay…" : `↻ ${t("Ponovi put")}`}</button>
-        </div>
-      )}
-      <div className="hud br">
-        <div className="camseg" role="radiogroup" aria-label={t("Kamera")}>
-          <button type="button" className="mapbtn" role="radio" aria-checked={mode === "follow"} onClick={() => setMode("follow")}>{t("Kamera prati")}</button>
-          <button type="button" className="mapbtn" role="radio" aria-checked={mode === "whole"} onClick={() => setMode("whole")}>{t("Cijela ruta")}</button>
-        </div>
-        <button
-          type="button"
-          className="camtoggle"
-          aria-label={mode === "follow" ? t("Kamera prati, prebaci na cijelu rutu") : t("Cijela ruta, prebaci na praćenje")}
-          onClick={() => setMode(mode === "follow" ? "whole" : "follow")}
-          dangerouslySetInnerHTML={{ __html: mode === "follow" ? WHOLE_ICON : FOLLOW_ICON }}
-        />
-      </div>
-      {arrival && (
-        <div className="stationmsg" key={arrival.id}>
-          <small>{arrival.egg ? `Preletio si ${last.name}` : arrival.pass ? t("Prolaziš · {n} km", { n: arrival.km }) : t("Stigao si · {n} km", { n: arrival.km })}</small>
-          <b>{arrival.name}</b>
-          <p>{arrival.message}</p>
-        </div>
-      )}
-      {toast && (
-        <div className="maptoast" key={toast.id} style={{ "--vc": toast.color } as React.CSSProperties}>
-          <div className={"tbadge" + (toast.logo ? " logo" : "")} dangerouslySetInnerHTML={{ __html: toast.icon }} />
-          <div className="txt"><b>{toast.title}</b><div className="sub">{toast.sub}</div></div>
-          <div className="km">{toast.km}</div>
-        </div>
-      )}
-    </div>
+      {/* mobitel na kraju: utrka ispod male karte, da je karta čista */}
+      {!!race?.length && narrow && ended && <RaceStrip {...raceProps} maxKm={cfg.maxKm} card />}
+    </>
   );
 }

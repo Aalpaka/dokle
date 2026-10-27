@@ -43,37 +43,20 @@ export function useRaceChoice(race: RaceLeague[] | null) {
   return { league, off: choice === "off", pick };
 }
 
-export function RacePanel({
-  race,
-  league,
-  pick,
-  myKms,
-  step,
-  perDay,
-}: {
+type RaceProps = {
   race: RaceLeague[];
   league: RaceLeague | null;
   pick: (c: string) => void;
   myKms: number[];
   step: number;
   perDay: number;
-}) {
-  const t = useT();
-  // na mobitelu je karta mala, pa je popis u početku sklopljen
-  const [open, setOpen] = useState(true);
-  useEffect(() => {
-    if (matchMedia("(max-width: 700px)").matches) setOpen(false);
-  }, []);
+};
 
-  if (!league)
-    return (
-      <button type="button" className="mapbtn solo race-on" onClick={() => pick(race[0].code)}>
-        🏁 {t("Utrka lige")}
-      </button>
-    );
+type Row = { id: number; tag: string; color: string; name: string; km: number; playing: boolean; me: boolean };
 
-  const rows = [
-    { id: 0, tag: league.me.tag, color: league.me.color, name: t("Ti"), km: kmAfter(myKms, step), playing: false, me: true },
+function raceRows(league: RaceLeague, myKms: number[], step: number, perDay: number, me: string): Row[] {
+  return [
+    { id: 0, tag: league.me.tag, color: league.me.color, name: me, km: kmAfter(myKms, step), playing: false, me: true },
     ...league.runners.map((r) => ({
       id: r.memberId,
       tag: r.tag,
@@ -85,43 +68,136 @@ export function RacePanel({
       me: false,
     })),
   ].sort((a, b) => b.km - a.km || +b.me - +a.me);
-  const myRank = rows.findIndex((r) => r.me) + 1;
+}
+
+/** Mobitel: karta je mala, pa utrka ide u traku (start → cilj) i popis umjesto kružića s imenima na karti. */
+export function useNarrow() {
+  const [narrow, setNarrow] = useState(false);
+  useEffect(() => {
+    const m = matchMedia("(max-width: 700px)");
+    const sync = () => setNarrow(m.matches);
+    sync();
+    m.addEventListener("change", sync);
+    return () => m.removeEventListener("change", sync);
+  }, []);
+  return narrow;
+}
+
+function RaceOff({ race, pick }: Pick<RaceProps, "race" | "pick">) {
+  const t = useT();
+  return (
+    <button type="button" className="mapbtn solo race-on" onClick={() => pick(race[0].code)}>
+      🏁 {t("Utrka lige")}
+    </button>
+  );
+}
+
+function RaceHead({ league, rows, open, onToggle }: { league: RaceLeague; rows: Row[]; open: boolean; onToggle: () => void }) {
+  return (
+    <button type="button" className="race-head" aria-expanded={open} onClick={onToggle}>
+      <span className="race-flag">🏁</span>
+      <span className="race-name">{league.name}</span>
+      <span className="race-rank">{rows.findIndex((r) => r.me) + 1}. / {rows.length}</span>
+      <span className="race-caret" aria-hidden="true">{open ? "▴" : "▾"}</span>
+    </button>
+  );
+}
+
+/** Popis utrke: mjesto, oznaka, ime i km, pa napomene i izbor lige. */
+function RaceBody({ race, league, pick, rows, step, perDay }: Omit<RaceProps, "myKms"> & { league: RaceLeague; rows: Row[] }) {
+  const t = useT();
   // dugačka liga: prvih pet i ja
   const shown = rows.filter((r, i) => i < 5 || r.me);
   const missing = league.members - 1 - league.runners.length;
   const after = step < perDay ? t("nakon {n}. kategorije", { n: step }) : t("danas");
+  return (
+    <>
+      <div className="race-sub">{step === 0 ? t("na startu") : after}</div>
+      <ol className="race-list">
+        {shown.map((r) => (
+          <li key={r.id} className={r.me ? "me" : undefined}>
+            <span className="race-pos">{rows.indexOf(r) + 1}.</span>
+            <span className={"ghost-chip" + (r.me ? " me" : "")} style={{ background: r.me ? undefined : r.color }}>{r.me ? "TI" : r.tag}</span>
+            <span className="race-who">{r.name}{r.playing && <small> · {t("igra")}</small>}</span>
+            <span className="race-km">{r.km} km</span>
+          </li>
+        ))}
+      </ol>
+      {league.runners.length === 0 && <p className="race-note">{t("Danas još nitko iz lige nije igrao.")}</p>}
+      {league.runners.length > 0 && missing > 0 && <p className="race-note">{t("Još nisu igrali: {n}", { n: missing })}</p>}
+      <select className="race-pick" value={league.code} onChange={(e) => pick(e.target.value)} aria-label={t("Liga na karti")}>
+        {race.map((l) => (
+          <option key={l.code} value={l.code}>{l.name}</option>
+        ))}
+        <option value="off">{t("Sakrij utrku")}</option>
+      </select>
+    </>
+  );
+}
 
+/** Računalo: popis u kutu karte. */
+export function RacePanel({ race, league, pick, myKms, step, perDay }: RaceProps) {
+  const t = useT();
+  const [open, setOpen] = useState(true);
+  if (!league) return <RaceOff race={race} pick={pick} />;
+  const rows = raceRows(league, myKms, step, perDay, t("Ti"));
   return (
     <div className={"race" + (open ? " open" : "")}>
-      <button type="button" className="race-head" aria-expanded={open} onClick={() => setOpen(!open)}>
-        <span className="race-flag">🏁</span>
-        <span className="race-name">{league.name}</span>
-        <span className="race-rank">{myRank}. / {rows.length}</span>
-        <span className="race-caret" aria-hidden="true">{open ? "▴" : "▾"}</span>
-      </button>
-      {open && (
-        <>
-          <div className="race-sub">{step === 0 ? t("na startu") : after}</div>
-          <ol className="race-list">
-            {shown.map((r) => (
-              <li key={r.id} className={r.me ? "me" : undefined}>
-                <span className="race-pos">{rows.indexOf(r) + 1}.</span>
-                <span className="ghost-chip" style={{ background: r.color }}>{r.tag}</span>
-                <span className="race-who">{r.name}{r.playing && <small> · {t("igra")}</small>}</span>
-                <span className="race-km">{r.km} km</span>
-              </li>
-            ))}
-          </ol>
-          {league.runners.length === 0 && <p className="race-note">{t("Danas još nitko iz lige nije igrao.")}</p>}
-          {league.runners.length > 0 && missing > 0 && <p className="race-note">{t("Još nisu igrali: {n}", { n: missing })}</p>}
-          <select className="race-pick" value={league.code} onChange={(e) => pick(e.target.value)} aria-label={t("Liga na karti")}>
-            {race.map((l) => (
-              <option key={l.code} value={l.code}>{l.name}</option>
-            ))}
-            <option value="off">{t("Sakrij utrku")}</option>
-          </select>
-        </>
-      )}
+      <RaceHead league={league} rows={rows} open={open} onToggle={() => setOpen(!open)} />
+      {open && <RaceBody race={race} league={league} pick={pick} rows={rows} step={step} perDay={perDay} />}
+    </div>
+  );
+}
+
+const CHIP = 24; // širina oznake u traci (px), za razmak kad su blizu
+
+/**
+ * Mobitel: traka od starta do cilja s oznakama svih, a popis se otvara dodirom. Za vrijeme igre je na vrhu karte,
+ * na kraju (`card`) ispod karte, s otvorenim popisom.
+ */
+export function RaceStrip({ race, league, pick, myKms, step, perDay, maxKm, card = false }: RaceProps & { maxKm: number; card?: boolean }) {
+  const t = useT();
+  const [open, setOpen] = useState(card);
+  const [width, setWidth] = useState(300);
+  const [track, setTrack] = useState<HTMLDivElement | null>(null);
+  useEffect(() => {
+    if (!track) return;
+    const ro = new ResizeObserver(() => setWidth(track.clientWidth || 300));
+    ro.observe(track);
+    return () => ro.disconnect();
+  }, [track]);
+  if (!league) return card ? null : <RaceOff race={race} pick={pick} />;
+  const rows = raceRows(league, myKms, step, perDay, t("Ti"));
+
+  // na početku su svi blizu, pa traka ide do 300, 600 ili 900 km dok vodeći ne prijeđe više (rijetko se mijenja)
+  const end = [300, 600, 900].find((k) => k < maxKm && rows[0].km <= k * 0.92) ?? maxKm;
+  // jedan red: oznaka preblizu prethodnoj odmakne se udesno (a uz kraj trake ulijevo), pa se ništa ne prekriva,
+  // a poredak ostaje kao na cesti
+  const span = Math.max(1, width - CHIP);
+  const gap = CHIP + 1;
+  const placed = [...rows].reverse().map((r) => ({ r, x: (Math.min(r.km, end) / end) * span }));
+  for (let i = 1; i < placed.length; i++) placed[i].x = Math.max(placed[i].x, placed[i - 1].x + gap);
+  for (let i = placed.length - 1; i >= 0; i--) placed[i].x = Math.min(placed[i].x, i === placed.length - 1 ? span : placed[i + 1].x - gap);
+  const height = CHIP + 8;
+
+  return (
+    <div className={"rstrip" + (card ? " card" : "") + (open ? " open" : "")}>
+      <RaceHead league={league} rows={rows} open={open} onToggle={() => setOpen(!open)} />
+      <div className="rtrack" ref={setTrack} style={{ height }} onClick={() => setOpen(!open)}>
+        <i className={"rline" + (end < maxKm ? " part" : "")} />
+        {end < maxKm && <span className="rend">{end} km</span>}
+        {placed.map(({ r, x }) => (
+          <span
+            key={r.id}
+            className={"ghost-chip" + (r.me ? " me" : "")}
+            title={r.name}
+            style={{ background: r.me ? undefined : r.color, transform: `translateX(${x.toFixed(1)}px)`, zIndex: r.me ? 9 : 1 }}
+          >
+            {r.me ? "TI" : r.tag}
+          </span>
+        ))}
+      </div>
+      {open && <RaceBody race={race} league={league} pick={pick} rows={rows} step={step} perDay={perDay} />}
     </div>
   );
 }
