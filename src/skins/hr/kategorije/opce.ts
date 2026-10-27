@@ -47,7 +47,7 @@ export const opceKategorije: SeedCategory[] = [
     slug: "svjetska-planina",
     group: "opce",
     title: "Planina ili vrh izvan Hrvatske",
-    strip: ["planina", "planine", "vrh"],
+    strip: ["planina", "planine", "vrh", "mount", "monte", "pico", "mont", "peak"],
     answers: `Mount Everest/Everest=20; Alpe=6; Himalaja=5; Kilimanjaro=5; Mont Blanc=5; Triglav=4; K2=3; Andi=2;
       Matterhorn=2; Olimp=2; Fuji/Fudži=2; Etna=2; Vezuv=2; Stjenjak/Stjenovite planine=1.5; Dolomiti=1.5;
       Durmitor=1.5; Elbrus=1; Aconcagua=1; Kavkaz=1; Pireneji=1; Karpati=1; Ural=1; Jahorina=1; Kopaonik=1;
@@ -98,7 +98,7 @@ export const opceKategorije: SeedCategory[] = [
     slug: "pas",
     group: "opce",
     title: "Pasmina psa",
-    strip: ["pas"],
+    strip: ["pas", "terijer"],
     answers: `Labrador=10; Njemački ovčar/Vučjak=10; Dalmatiner=8; Zlatni retriver/Golden retriver=6; Pudla=4;
       Čivava/Chihuahua=4; Haski/Sibirski haski=4; Engleski buldog/Buldog/Bulldog=3; Francuski buldog=3;
       Rottweiler/Rotvajler=3; Jazavčar=3; Doberman=2.5; Pitbull/Pit bull=2.5; Bigl/Beagle=2; Tornjak=2;
@@ -374,7 +374,7 @@ export const opceKategorije: SeedCategory[] = [
     slug: "bolest",
     group: "opce",
     title: "Bolest ili zdravstvena tegoba",
-    strip: [],
+    strip: ["bolest", "sindrom"],
     answers: `Gripa=15; Prehlada=10; Korona/COVID/Covid-19/Koronavirus=8; Rak/Karcinom=6;
       Dijabetes/Šećerna bolest/Šećer=5; Upala pluća/Pneumonija=3; Angina=3; Vodene kozice/Kozice=3; Ospice=2; Astma=2;
       Alergija=2; Migrena/Glavobolja=2; Visoki tlak/Hipertenzija/Tlak=2; Infarkt/Srčani udar=2; Zaušnjaci=1.5;
@@ -1016,7 +1016,7 @@ export const opceKategorije: SeedCategory[] = [
     group: "opce",
     title: "More, ocean, zaljev ili tjesnac",
     hint: "Bilo gdje na svijetu, i kanali između otoka",
-    strip: [],
+    strip: ["more", "ocean", "zaljev", "tjesnac", "kanal"],
     answers: `Jadransko more/Jadran=15; Tihi ocean/Pacifik=10; Atlantski ocean/Atlantik=10; Indijski ocean=6;
       Sredozemno more/Mediteran=6; Crno more=5; Crveno more=4; Mrtvo more=4; Sjeverno more=3; Baltičko more/Baltik=3;
       Karipsko more/Karibi=3; Arktički ocean/Sjeverni ledeni ocean=3; Kaspijsko jezero/Kaspijsko more=2;
@@ -1044,7 +1044,7 @@ export const opceKategorije: SeedCategory[] = [
     group: "opce",
     title: "Jezero izvan Hrvatske",
     hint: "Prirodno ili umjetno jezero bilo gdje osim u Hrvatskoj",
-    strip: ["jezero"],
+    strip: ["jezero", "lago", "lac", "lake", "loch", "lough"],
     answers: `Bajkalsko jezero/Bajkal=8; Gardsko jezero/Garda=8; Blatno jezero/Balaton=8; Bledsko jezero/Bled=8;
       Ohridsko jezero/Ohrid=5; Kaspijsko jezero=5; Ženevsko jezero=4; Viktorijino jezero=4; Komsko jezero/Como=4;
       Loch Ness=4; Bodensko jezero/Bodensee=3; Titicaca=3; Skadarsko jezero=3; Michigan=2; Gornje jezero/Superior=2;
@@ -1185,7 +1185,7 @@ export const opceKategorije: SeedCategory[] = [
     group: "opce",
     title: "Nogometni stadion",
     hint: "U Hrvatskoj ili bilo gdje u svijetu, danas ili nekad",
-    strip: ["stadion"],
+    strip: ["stadion", "stadium", "arena", "estadio", "stadio", "stade"],
     answers: `Maksimir=10; Poljud=8.5; Camp Nou=7; Santiago Bernabéu/Bernabeu=7; Old Trafford=5; Wembley=5;
       San Siro/Giuseppe Meazza=4.5; Anfield=4.5; Allianz Arena=3.5; Signal Iduna Park/Westfalenstadion=2.5; Rujevica=2.5;
       Stamford Bridge=2.5; Maracanã=2.5; Opus Arena=1.5; Gradski vrt=1.5; Kantrida=1.5; Emirates=1.5; Etihad=1.5; Stade de France=1.5;

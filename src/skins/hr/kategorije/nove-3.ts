@@ -31,7 +31,7 @@ const sve: SeedCategory[] = ([
     group: "kviz",
     title: "Država u kojoj je službeni jezik španjolski, portugalski ili francuski",
     hint: "Vrijede i bivše francuske kolonije gdje je francuski i dalje glavni jezik države",
-    strip: [],
+    strip: ["republika"],
     answers: `Španjolska=14; Francuska=13; Portugal=11; Brazil=10; Meksiko=8; Argentina=7; Belgija=5; Švicarska=4; Kanada=4;
       Kolumbija=3; Čile=3; Peru=3; Kuba=3; Venezuela=2.5; Urugvaj=2; Luksemburg=2; Monako=2; Bolivija=1.5; Ekvador=1.5;
       Paragvaj=1.5; Angola=1.5; Mozambik=1.2; Senegal=1.2; Haiti=1.2; Kostarika=1; Panama=1; Dominikanska Republika=1;
@@ -256,7 +256,7 @@ const sve: SeedCategory[] = ([
     group: "kviz",
     title: "Kemijski spoj ili tvar",
     hint: "Spoj, smjesa ili tvar, npr. voda, ozon, kofein; ne čisti elementi",
-    strip: [],
+    strip: ["kiselina"],
     answers: `Voda/H2O=20; Sol/Kuhinjska sol/Natrijev klorid/NaCl=10; Ugljikov dioksid/CO2/Ugljični dioksid=8; Alkohol/Etanol=5;
       Šećer/Saharoza=4; Ugljikov monoksid/CO=3; Metan=3; Amonijak=3; Sumporna kiselina=3; Klorovodična kiselina/Solna kiselina=2.5;
       Ocat/Octena kiselina=2.5; Kofein=2.5; Glukoza=2.5; Ozon=2; Soda bikarbona/Natrijev hidrogenkarbonat=2;

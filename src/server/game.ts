@@ -761,24 +761,47 @@ export function clearCategoryCache(id?: number) {
 }
 
 /**
- * Naknadno bodovanje: runde koje su završile promašajem s upisom koji se normalizira u `normalized`
- * dobivaju odgovor `answerId`, udio, tier i km; ukupni km završenih partija se preračunava.
+ * Naknadno bodovanje: runde koje su završile promašajem, a u kojima je igrač na vrijeme upisao `normalized` ili nešto što
+ * sad prepoznaje `answerId` (nova varijanta, skraćeni oblik), dobivaju taj odgovor, udio, tier i km; ukupni km završenih
+ * partija se preračunava. Broje se i odbijeni pokušaji, ne samo zadnji upis: igrač koji je upisao "Dubravsko", dobio
+ * odbijenicu i pustio da istekne vrijeme runde ima zapisan samo pokušaj.
  * Km su osnovni km prijevoza, bez bonusa za brzinu. `tier` je prijevoz koji je admin odabrao za novi odgovor: dobiju ga baš taj, jer bi po rangu tog dana (u kojem
  * odgovor sad ima i stvarne igrače) mogao ispasti sporiji.
  */
-export async function rescoreMisses(skin: Skin, categoryId: number, normalized: string, answerId: number, tier?: Tier): Promise<number> {
+export async function rescoreMisses(skin: Skin, categoryId: number, normalized: string | null, answerId: number, tier?: Tier): Promise<number> {
   clearCategoryCache(categoryId);
-  const misses = await db
+  const { index } = await getCategory(categoryId);
+  const rows = await db
     .select({
       gameId: rounds.gameId,
       position: rounds.position,
       raw: rounds.raw,
+      tried: attempts.raw,
       puzzleId: games.puzzleId,
     })
     .from(rounds)
     .innerJoin(games, eq(games.id, rounds.gameId))
-    .where(and(eq(rounds.categoryId, categoryId), isNull(rounds.answerId), isNotNull(rounds.raw), isNotNull(rounds.answeredAt)));
-  const hits = misses.filter((m) => fold(m.raw!) === normalized);
+    .leftJoin(
+      attempts,
+      and(eq(attempts.gameId, rounds.gameId), eq(attempts.position, rounds.position), eq(attempts.accepted, false), eq(attempts.timedOut, false)),
+    )
+    .where(and(eq(rounds.categoryId, categoryId), isNull(rounds.answerId), isNotNull(rounds.answeredAt)));
+  // isti upis se provjerava jednom, i kad ga je upisalo puno igrača
+  const known = new Map<string, boolean>();
+  const fits = (raw: string | null) => {
+    if (!raw) return false;
+    const f = fold(raw);
+    if (!known.has(f)) known.set(f, f === normalized || match(index, raw)?.id === answerId);
+    return known.get(f)!;
+  };
+  const byRound = new Map<string, { gameId: number; position: number; puzzleId: number; raw: string }>();
+  for (const r of rows) {
+    const key = `${r.gameId}:${r.position}`;
+    if (byRound.has(key)) continue;
+    const raw = fits(r.raw) ? r.raw : fits(r.tried) ? r.tried : null;
+    if (raw) byRound.set(key, { gameId: r.gameId, position: r.position, puzzleId: r.puzzleId, raw });
+  }
+  const hits = [...byRound.values()];
   if (!hits.length) return 0;
 
   const byPuzzle = new Map<number, typeof hits>();
@@ -786,7 +809,7 @@ export async function rescoreMisses(skin: Skin, categoryId: number, normalized: 
   for (const [puzzleId, list] of byPuzzle) {
     await db.transaction(async (tx) => {
       for (const h of list)
-        await tx.update(rounds).set({ answerId }).where(and(eq(rounds.gameId, h.gameId), eq(rounds.position, h.position)));
+        await tx.update(rounds).set({ answerId, raw: h.raw }).where(and(eq(rounds.gameId, h.gameId), eq(rounds.position, h.position)));
     });
     const standing = await answerStanding(skin, puzzleId, categoryId, answerId, true);
     const share = standing.share;

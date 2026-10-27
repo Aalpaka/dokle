@@ -174,7 +174,7 @@ export const kvizKategorije: SeedCategory[] = [
     slug: "svemir",
     group: "kviz",
     title: "Planet, mjesec, zvijezda ili drugo nebesko tijelo",
-    strip: ["planet", "planeta", "zvijezda"],
+    strip: ["planet", "planeta", "zvijezda", "maglica", "galaksija"],
     answers: `Mars=12; Jupiter=8; Saturn=7; Venera/Danica/Zornica/Večernjača=6; Zemlja=5; Sunce=5; Merkur=4; Mjesec=4;
       Neptun=3; Uran=3; Pluton=3; Sjevernjača/Polaris=2; Sirius=1; Titan=1; Mliječna staza/Mliječni put=1; Europa=0.8;
       Betelgeuse=0.5; Alfa Kentaura/Alpha Centauri=0.5; Io=0.5; Ganimed=0.5; Fobos=0.5; Halleyev komet=0.5;
@@ -1252,7 +1252,7 @@ export const kvizKategorije: SeedCategory[] = [
     group: "kviz",
     title: "Država ili carstvo koje više ne postoji",
     hint: "Bilo koje doba; i države kojih je Hrvatska bila dio",
-    strip: [],
+    strip: ["carstvo", "kraljevstvo"],
     answers: `Jugoslavija/SFRJ/SFR Jugoslavija/FNRJ=10; SSSR/Sovjetski Savez=8.5; Austro-Ugarska/Austrougarska=7;
       Rimsko Carstvo/Zapadno Rimsko Carstvo/Rim=7; Osmansko Carstvo/Otomansko Carstvo=5;
       NDH/Nezavisna Država Hrvatska=4.5; Čehoslovačka=4.5; Dubrovačka Republika=4.5;
