@@ -6,7 +6,7 @@ import { dismissNotices, ensurePlayer, flagAttempt, getOrCreatePuzzle, getSkin, 
 import { decide, generalStats, listCategories, playerDetail, playersOverview, reviewQueue, searchAttempts, setSchedule, updateAnswer, weekAverages } from "./admin";
 import { localDate } from "@/lib/day";
 import { periodStart } from "@/lib/league";
-import { priorForRank } from "@/lib/scoring";
+import { kmFor, priorForRank } from "@/lib/scoring";
 
 // Integracijski testovi nad lokalnom bazom (npm run db:migrate && npm run db:seed).
 const WEIRD = "zzqx odgovor";
@@ -217,7 +217,7 @@ describe.skipIf(!process.env.DATABASE_URL)("admin", () => {
     });
     const [after] = await db.select().from(rounds).where(and(eq(rounds.gameId, game.id), eq(rounds.position, 0)));
     expect(after.tier).toBe(tiers[plane].name);
-    expect(after.km).toBe(tiers[plane].km); // bez bonusa za brzinu
+    expect(after.km).toBe(kmFor(skin.config, tiers[plane], 0).km); // s množiteljem brzine prema vremenu upisa (ovdje odmah)
   });
 
   it("na kraju se može prijaviti odbijeni pokušaj i kad je runda pogođena; računa se bolji odgovor", async () => {
@@ -278,8 +278,10 @@ describe.skipIf(!process.env.DATABASE_URL)("admin", () => {
     const res = await decide(skin, null, { action: "answer", categoryId: early.categoryId, normalized: EARLY, canonical: "Zzqx prvi", priorShare: 0.0001, tier: tiers[plane].name });
     expect(res.rescored).toBe(1);
     st = await getState(skin, id);
-    expect(st.rounds[0]).toMatchObject({ canonical: "Zzqx prvi", km: tiers[plane].km, misses: [{ raw: EARLY, state: "accepted" }] });
-    expect(st.totalKm).toBe(state.totalKm - before.km + tiers[plane].km);
+    expect(st.rounds[0]).toMatchObject({ canonical: "Zzqx prvi", km: kmFor(skin.config, tiers[plane], 0).km, misses: [{ raw: EARLY, state: "accepted" }] });
+    expect(st.totalKm).toBe(state.totalKm - before.km + kmFor(skin.config, tiers[plane], 0).km);
+    // oznaka brzine je po vremenu prijavljenog pokušaja, ne po kraju runde
+    expect(st.rounds[0].speed?.multiplier).toBe(kmFor(skin.config, tiers[plane], 0).speed.multiplier);
     expect((await rescoreNotices(skin, id)).map((n) => n.canonical)).toContain("Zzqx prvi");
 
     // pješice ne vrijedi više od onoga što je već imao: ostaje stari odgovor, bez obavijesti
