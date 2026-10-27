@@ -39,6 +39,9 @@ for (const { skin, categories: cats } of SKINS) {
       .onConflictDoNothing()
       .returning();
     if (!cat) [cat] = await db.select().from(categories).where(and(eq(categories.skinId, skin.id), eq(categories.slug, c.slug)));
+    // nove opće riječi ("jezero", "republika") se dodaju i postojećim kategorijama; admin ih ne uređuje
+    const strip = [...new Set([...cat.strip, ...c.strip])];
+    if (strip.length !== cat.strip.length) [cat] = await db.update(categories).set({ strip }).where(eq(categories.id, cat.id)).returning();
     // odgovori i aliasi idu skupno po kategoriji: upit po odgovoru je za desetke tisuća odgovora predug za build
     const seeded = parseSeedAnswers(c.answers);
     // odgovor koji je admin preimenovao prepoznaje se po izvornom nazivu (seedCanonical), da se ne vrati kao novi

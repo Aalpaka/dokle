@@ -126,16 +126,39 @@ export type MatchIndex = {
   phon: Map<string, Set<number>>;
   stem: Map<string, Set<number>>;
   words: Map<string, Set<number>>;
+  short: Map<string, Set<number>>;
 };
 
+// riječ iz strip popisa u bilo kojem padežu ili broju: "jezero" skida i "jezera", "jezeru"
+const stripWord = (w: string, strip: string[]) => strip.some((s) => s === w || (!s.includes(" ") && stem(s) === stem(w)));
+
+/** Odgovor bez opće riječi s početka ili kraja: "Dubravsko jezero" -> "dubravsko", "Plitvička jezera" -> "plitvicka". */
+function shorten(f: string, strip: string[]): string[] {
+  const out: string[] = [];
+  for (const s of strip) {
+    if (s.includes(" ") && f.startsWith(s + " ")) out.push(f.slice(s.length + 1));
+    if (s.includes(" ") && f.endsWith(" " + s)) out.push(f.slice(0, -s.length - 1));
+  }
+  const w = f.split(" ");
+  if (w.length > 1 && stripWord(w[0], strip)) out.push(w.slice(1).join(" "));
+  if (w.length > 1 && stripWord(w[w.length - 1], strip)) out.push(w.slice(0, -1).join(" "));
+  return out.filter((x) => keyOf(x).length >= 3);
+}
+
 export function buildIndex(answers: MatchAnswer[], strip: string[] = []): MatchIndex {
-  const idx: MatchIndex = { answers: [], strip, exact: new Map(), eka: new Map(), phon: new Map(), stem: new Map(), words: new Map() };
+  strip = [...new Set(strip.map(fold).filter(Boolean))];
+  const idx: MatchIndex = { answers: [], strip, exact: new Map(), eka: new Map(), phon: new Map(), stem: new Map(), words: new Map(), short: new Map() };
   const add = (map: Map<string, Set<number>>, k: string, i: number) => {
     if (!map.has(k)) map.set(k, new Set());
     map.get(k)!.add(i);
   };
+  const named = answers.map((a) => [a.canonical, ...a.variants].map(fold));
+  const exactKeys = new Set(named.flat().map(keyOf));
   answers.forEach((a, i) => {
-    const folded = [a.canonical, ...a.variants].map(fold);
+    // skraćeni oblici ("Dubravsko" za "Dubravsko jezero") vrijede samo točno upisani, ako nisu nečiji puni naziv i ako su jedinstveni
+    const shorts = [...new Set(named[i].flatMap((f) => shorten(f, strip)))].filter((x) => !exactKeys.has(keyOf(x)) && !named[i].includes(x));
+    for (const x of shorts) add(idx.short, keyOf(x), i);
+    const folded = named[i];
     const keys = folded.map(keyOf);
     idx.answers.push({ ...a, keys, folded });
     for (const f of folded) if (f.includes(" ")) add(idx.words, sorted(f), i);
@@ -155,8 +178,8 @@ function candidates(input: string, strip: string[]): string[] {
   if (!f) return [];
   const out = [f];
   const w = f.split(" ");
-  if (w.length > 1 && strip.includes(w[0])) out.push(w.slice(1).join(" "));
-  if (w.length > 1 && strip.includes(w[w.length - 1])) out.push(w.slice(0, -1).join(" "));
+  if (w.length > 1 && stripWord(w[0], strip)) out.push(w.slice(1).join(" "));
+  if (w.length > 1 && stripWord(w[w.length - 1], strip)) out.push(w.slice(0, -1).join(" "));
   return out;
 }
 
@@ -176,6 +199,9 @@ function matchIndex(idx: MatchIndex, input: string): number | null {
     const s = idx.exact.get(k);
     if (s) return [...s][0];
   }
+  // skraćeni oblik samo za upis kakav jest: "Hudsonov tjesnac" ne smije preko "Hudsonov" u Hudsonov zaljev
+  const short = pick(idx.short.get(cands[0]));
+  if (short !== null) return short;
   for (const k of cands) {
     const i = pick(idx.eka.get(eka(k)));
     if (i !== null) return i;

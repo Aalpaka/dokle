@@ -67,6 +67,21 @@ describe("match", () => {
     expect(m("SDSS")).toBeNull();
   });
 
+  it("odgovor bez opće riječi: Dubravsko = Dubravsko jezero", () => {
+    const jezero = indexFor("jezero");
+    expect(match(jezero, "Dubravsko")?.canonical).toBe("Dubravsko jezero");
+    expect(match(jezero, "Plitvička")?.canonical).toBe("Plitvička jezera");
+    expect(match(jezero, "jezera Plitvička")?.canonical).toBe("Plitvička jezera"); // i padež/množina opće riječi u upisu
+    expect(match(jezero, "Jarun")?.canonical).toBe("Jarun");
+    const more = indexFor("more-ocean");
+    expect(match(more, "Jadransko")?.canonical).toBe("Jadransko more");
+    expect(match(more, "Hudsonov")).toBeNull(); // zaljev i tjesnac: ne pogađamo
+    // skraćeni oblik samo kako je upisan, ne preko druge opće riječi
+    const idx = buildIndex([{ id: 1, canonical: "Hudsonov zaljev", variants: [] }], ["zaljev", "tjesnac"]);
+    expect(match(idx, "Hudsonov")?.canonical).toBe("Hudsonov zaljev");
+    expect(match(idx, "Hudsonov tjesnac")).toBeNull();
+  });
+
   it("prazan unos", () => {
     expect(match(otok, "   ")).toBeNull();
   });

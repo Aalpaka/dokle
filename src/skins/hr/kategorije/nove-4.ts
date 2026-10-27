@@ -262,6 +262,7 @@ const opce: Nova[] = [
   {
     slug: "nacionalni-park-svijet",
     group: "opce",
+    strip: ["nacionalni park", "national park", "np", "park"],
     title: "Nacionalni park u svijetu",
     hint: "Bilo gdje, i hrvatski; vrijede i poznati rezervati poput Masai Mare",
     answers: `Grand Canyon/Veliki kanjon; Serengeti; Mljet; Brijuni/Brioni; Death Valley/Dolina smrti; Uluru-Kata Tjuta/Uluru; Zion;
@@ -319,6 +320,7 @@ const opce: Nova[] = [
   {
     slug: "poluotok-rt",
     group: "opce",
+    strip: ["poluotok", "rt", "cape", "peninsula", "cabo", "cap"],
     title: "Poluotok ili rt",
     hint: "Bilo gdje u svijetu, i hrvatski",
     answers: `Istra; Pelješac/Peljesac; Balkanski poluotok/Balkan; Apeninski poluotok/Apenini; Pirenejski poluotok/Iberski poluotok/Pireneji;
@@ -406,6 +408,7 @@ const opce: Nova[] = [
   {
     slug: "religija",
     group: "opce",
+    strip: ["crkva"],
     title: "Religija, vjera ili vjerska zajednica",
     hint: "Vrijede i ogranci, crkve i sekte",
     answers: `Kršćanstvo/Krscanstvo; Islam; Katoličanstvo/Katolicizam/Katolička crkva/Rimokatolici; Pravoslavlje/Pravoslavna crkva; Budizam;
@@ -453,6 +456,7 @@ const kviz: Nova[] = [
   {
     slug: "zastava-crvena",
     group: "kviz",
+    strip: ["republika"],
     title: "Država s crvenom bojom na zastavi",
     hint: "Crvena kao jedna od boja zastave; sitni detalji grba se ne računaju",
     answers: `Hrvatska; Japan; Kanada; Švicarska; SAD/Amerika; Turska; Kina; Danska; Austrija; Njemačka; Francuska; Italija; Španjolska;
