@@ -271,8 +271,10 @@ export async function reviewQueue(skin: Skin, limit = 200) {
       category: categories.title,
       normalized: attempts.normalized,
       n: sql<number>`count(distinct ${attempts.gameId})::int`,
-      // igrači koji su prijavili da odgovor fali (ostavili su ga kao konačan, žele da se računa ili samo javljaju da fali)
-      reports: sql<number>`count(distinct ${attempts.gameId}) filter (where ${rounds.reportedAt} is not null or ${attempts.reportedAt} is not null)::int`,
+      // igrači koji su na kraju partije odabrali da im se baš taj odgovor računa (prihvaćanje ih naknadno boduje)
+      claims: sql<number>`count(distinct ${attempts.gameId}) filter (where ${rounds.reportedAt} is not null)::int`,
+      // igrači koji su samo javili da odgovor fali na popisu (km im se ne mijenjaju)
+      flags: sql<number>`count(distinct ${attempts.gameId}) filter (where ${attempts.reportedAt} is not null and ${rounds.reportedAt} is null)::int`,
       examples: sql<string[]>`(array_agg(distinct ${attempts.raw}))[1:5]`,
       last: sql<string>`max(${attempts.createdAt})`,
     })
@@ -280,7 +282,12 @@ export async function reviewQueue(skin: Skin, limit = 200) {
     .innerJoin(categories, eq(categories.id, attempts.categoryId))
     .leftJoin(
       rounds,
-      and(eq(rounds.gameId, attempts.gameId), eq(rounds.position, attempts.position), eq(rounds.reportedRaw, attempts.raw)),
+      // runda u kojoj je igrač odabrao da mu se računa ovaj odgovor (u bilo kojem obliku upisa)
+      and(
+        eq(rounds.gameId, attempts.gameId),
+        eq(rounds.position, attempts.position),
+        sql`${rounds.reportedRaw} in (select a2.raw from ${attempts} a2 where a2.game_id = ${attempts.gameId} and a2.position = ${attempts.position} and a2.normalized = ${attempts.normalized})`,
+      ),
     )
     .leftJoin(
       reviewDecisions,
@@ -289,7 +296,8 @@ export async function reviewQueue(skin: Skin, limit = 200) {
     .where(and(eq(categories.skinId, skin.id), eq(attempts.accepted, false), isNull(reviewDecisions.id), sql`${attempts.normalized} <> ''`))
     .groupBy(attempts.categoryId, categories.title, attempts.normalized)
     .orderBy(
-      desc(sql`count(distinct ${attempts.gameId}) filter (where ${rounds.reportedAt} is not null or ${attempts.reportedAt} is not null)`),
+      desc(sql`count(distinct ${attempts.gameId}) filter (where ${rounds.reportedAt} is not null)`),
+      desc(sql`count(distinct ${attempts.gameId}) filter (where ${attempts.reportedAt} is not null and ${rounds.reportedAt} is null)`),
       desc(sql`count(distinct ${attempts.gameId})`),
       desc(sql`max(${attempts.createdAt})`),
     )

@@ -416,7 +416,29 @@ function Stat({ v, l }: { v: string | number; l: string }) {
 
 // ---------- Za pregled ----------
 
-type ReviewRow = { categoryId: number; category: string; normalized: string; n: number; reports: number; examples: string[] };
+type ReviewRow = { categoryId: number; category: string; normalized: string; n: number; claims: number; flags: number; examples: string[] };
+
+// tri vrste odbijenih odgovora: što je igrač tražio i što prihvaćanje radi
+const REVIEW_KINDS = [
+  {
+    key: "claims",
+    title: "⭐ Žele da se računa",
+    note: "Igrači su na kraju partije odabrali baš ovaj odgovor da im se računa. Kad ga prihvatiš, dobiju km (ako vrijedi više od onoga što su već imali u toj rundi) i obavijest.",
+    has: (r: ReviewRow) => r.claims > 0,
+  },
+  {
+    key: "flags",
+    title: "🚩 Prijavljeno da fali",
+    note: "Igrači su samo javili da odgovor fali na popisu. Prihvaćanje ga dodaje na popis; km dobiju samo oni kojima je to bio zadnji upis u promašenoj rundi.",
+    has: (r: ReviewRow) => r.claims === 0 && r.flags > 0,
+  },
+  {
+    key: "rest",
+    title: "Ostali odbijeni",
+    note: "Nitko nije ništa prijavio. Prihvaćanje dodaje odgovor na popis; km dobiju samo igrači kojima je to bio zadnji upis u rundi (promašaj).",
+    has: (r: ReviewRow) => r.claims === 0 && r.flags === 0,
+  },
+] as const;
 type AnswerRow = { id: number; canonical: string; priorShare: number; rare: boolean; source: string; seedCanonical: string | null; fact: string | null; edited: boolean; aliases: string[] };
 type CatDetail = { id: number; title: string; active: boolean; hint: string | null; answers: AnswerRow[] };
 const asOthers = (list: AnswerRow[], except?: number) => list.filter((a) => a.id !== except).map((a) => ({ share: a.priorShare, rare: a.rare }));
@@ -436,43 +458,51 @@ function Review() {
   return (
     <div className="stack">
       <h2>Odbijeni odgovori</h2>
-      <p className="small">
-        Upisi koje sustav nije prepoznao, grupirani po kategoriji i obliku. Na vrhu su oni koje su igrači prijavili 🚩 (siguran sam da
-        je točno), pa ostali po broju igrača. Kad prihvatiš odgovor, igrači koji su ga upisali kao zadnji odgovor dobiju bodove
-        naknadno i obavijest kod sljedećeg dolaska; kad ga odbiješ, prijavljenima prestaje stajati „na provjeri”.
-      </p>
+      <p className="small">Upisi koje sustav nije prepoznao, grupirani po kategoriji i obliku. Kad odgovor odbiješ, prijavljenima piše da nije prihvaćen.</p>
       <Err msg={error} />
       {msg && <p className="small"><b>{msg}</b></p>}
       {data && !data.length && <p className="small">Nema ništa za pregled.</p>}
-      {data?.map((r) => {
-        const key = `${r.categoryId}:${r.normalized}`;
-        return (
-          <div key={key} className="review">
-            <div className="row" style={{ justifyContent: "space-between" }}>
-              <div>
-                <span className="c small">{r.category}</span><br />
-                <b>{r.examples[0]}</b>{r.examples.length > 1 && <span className="small"> · {r.examples.slice(1).join(", ")}</span>}
-              </div>
-              <div className="row">
-                {r.reports > 0 && <span className="chip" title="igrači koji su prijavili da odgovor fali">🚩 {r.reports}</span>}
-                <span className="chip">{r.n} {r.n === 1 ? "igrač" : "igrača"}</span>
-                <button className="ghost small-btn" onClick={() => setOpen(open === key ? null : key)}>{open === key ? "Zatvori" : "Odluči"}</button>
-                <button className="danger small-btn" onClick={() => reject(r)} aria-label="Nije točno" title="Nije točno">✕</button>
-              </div>
-            </div>
-            {open === key && (
-              <Decide
-                row={r}
-                onDone={(text) => {
-                  setMsg(text);
-                  setOpen(null);
-                  reload();
-                }}
-              />
-            )}
-          </div>
-        );
-      })}
+      {data &&
+        REVIEW_KINDS.map((kind) => {
+          const rows = data.filter(kind.has);
+          if (!rows.length) return null;
+          return (
+            <section key={kind.key} className={"stack review-kind " + kind.key}>
+              <h3>{kind.title} <span className="small">({rows.length})</span></h3>
+              <p className="small">{kind.note}</p>
+              {rows.map((r) => {
+                const key = `${r.categoryId}:${r.normalized}`;
+                return (
+                  <div key={key} className="review">
+                    <div className="row" style={{ justifyContent: "space-between" }}>
+                      <div>
+                        <span className="c small">{r.category}</span><br />
+                        <b>{r.examples[0]}</b>{r.examples.length > 1 && <span className="small"> · {r.examples.slice(1).join(", ")}</span>}
+                      </div>
+                      <div className="row">
+                        {r.claims > 0 && <span className="chip claim" title="igrači koji žele da im se ovaj odgovor računa">⭐ {r.claims} računa se</span>}
+                        {r.flags > 0 && <span className="chip" title="igrači koji su samo javili da odgovor fali na popisu">🚩 {r.flags} fali</span>}
+                        <span className="chip" title="koliko je igrača upisalo ovaj odgovor">{r.n} {r.n === 1 ? "igrač" : "igrača"}</span>
+                        <button className="ghost small-btn" onClick={() => setOpen(open === key ? null : key)}>{open === key ? "Zatvori" : "Odluči"}</button>
+                        <button className="danger small-btn" onClick={() => reject(r)} aria-label="Nije točno" title="Nije točno">✕</button>
+                      </div>
+                    </div>
+                    {open === key && (
+                      <Decide
+                        row={r}
+                        onDone={(text) => {
+                          setMsg(text);
+                          setOpen(null);
+                          reload();
+                        }}
+                      />
+                    )}
+                  </div>
+                );
+              })}
+            </section>
+          );
+        })}
     </div>
   );
 }

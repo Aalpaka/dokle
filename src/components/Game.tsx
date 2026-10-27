@@ -110,7 +110,6 @@ export default function Game() {
           <Reveal
             state={vstate}
             onNext={() => (state.rounds.length >= state.perDay ? setShowEnd(true) : start())}
-            onState={setState}
           />
         )}
         {phase === "end" && <End state={vstate} me={me} onState={setState} />}
@@ -253,11 +252,11 @@ function Play({ state, onScored, onLost }: { state: GameState; onScored: (s: Gam
   valueRef.current = value;
 
   const send = useCallback(
-    async (raw: string, final: boolean, keep = false) => {
+    async (raw: string, final: boolean) => {
       if (busy.current) return;
       busy.current = true;
       try {
-        const r = await api<AnswerResponse>("/api/game/answer", { raw, final, keep });
+        const r = await api<AnswerResponse>("/api/game/answer", { raw, final });
         if (r.status === "scored") onScored(r.state);
         else if (r.status === "rejected") {
           sfx.wrong();
@@ -410,11 +409,8 @@ function Play({ state, onScored, onLost }: { state: GameState; onScored: (s: Gam
         sending.checked ? (
           <div className="sending nope">{t("„{x}” smo već provjerili i nije prihvaćen. Probaj nešto drugo.", { x: sending.raw ?? "" })}</div>
         ) : (
-          <div className="sending nope keep">
-            <span>{t("„{x}” još nemamo na popisu. Probaj nešto drugo ili ga ostavi na provjeru.", { x: sending.raw ?? "" })}</span>
-            {/* igrač koji zna da je u pravu ne mora tražiti drugi odgovor: runda se zatvara, a km stižu kad ga prihvatimo */}
-            <button type="button" className="ghost small-btn" onClick={() => send(sending.raw ?? value, false, true)}>{t("Siguran sam, provjerite")}</button>
-          </div>
+          // prijava (da fali ili da se računa) je tek na kraju partije, s popisom svih odbijenih pokušaja
+          <div className="sending nope">{t("„{x}” još nemamo na popisu. Probaj nešto drugo, a na kraju igre ga možeš prijaviti.", { x: sending.raw ?? "" })}</div>
         )
       ) : confirming ? (
         <div className="sending ask" role="status">
@@ -430,7 +426,7 @@ function Play({ state, onScored, onLost }: { state: GameState; onScored: (s: Gam
   );
 }
 
-function Reveal({ state, onNext, onState }: { state: GameState; onNext: () => void; onState: (s: GameState) => void }) {
+function Reveal({ state, onNext }: { state: GameState; onNext: () => void }) {
   const cfg = withVisuals(state.skin.id, state.skin.config);
   const r = state.rounds[state.rounds.length - 1];
   const before = landingAt(cfg, state.totalKm - r.km);
@@ -453,7 +449,7 @@ function Reveal({ state, onNext, onState }: { state: GameState; onNext: () => vo
           </div>
           <span className="km">+{r.km}</span>
         </div>
-        {r.report && <ReportLine r={r} onState={onState} />}
+        {r.report === "open" && <p className="small report">{t("Ako je točan, na kraju igre ga možeš prijaviti.")}</p>}
         {r.fact && <p className="small fact">💡 {r.fact}</p>}
         {after !== before && (
           <p className="small">{after === cfg.overshoot?.station ? `Preletio si ${cfg.stations[cfg.stations.length - 1].name} i završio u` : t("Prošao si")}: <b>{after.name}</b></p>
@@ -484,30 +480,6 @@ function what(r: RoundView, t: T) {
   if (r.report === "open") return <>{t("„{x}” još nemamo na popisu.", { x: r.raw ?? "" })}</>;
   if (r.raw) return <>{t("„{x}” nije na našem popisu.", { x: r.raw })}</>;
   return <>{t("Nisi stigao odgovoriti.")}</>;
-}
-
-/** Promašaj s upisom: prijava da odgovor fali, ili gdje je prijava. */
-function ReportLine({ r, onState, compact = false }: { r: RoundView; onState: (s: GameState) => void; compact?: boolean }) {
-  const t = useT();
-  const [busy, setBusy] = useState(false);
-  const [failed, setFailed] = useState(false);
-  if (r.report === "pending")
-    return compact ? null : <p className="small report">{t("Ako je točan, km ti dodajemo naknadno i javimo ti kad ga prihvatimo.")}</p>;
-  if (r.report !== "open") return null;
-  const report = () => {
-    setBusy(true);
-    api<GameState | null>("/api/game/report", { position: r.position }).then(
-      (s) => (s ? onState(s) : setFailed(true)),
-      () => setFailed(true),
-    ).finally(() => setBusy(false));
-  };
-  return (
-    <p className={"small report" + (compact ? " compact" : "")}>
-      {!compact && <span>{t("Siguran si da je točan?")} </span>}
-      <button type="button" className="ghost small-btn" disabled={busy} onClick={report}>{t("Prijavi da fali")}</button>
-      {failed && <span> {t("Prijava nije uspjela.")}</span>}
-    </p>
-  );
 }
 
 /** Odgovori koje je admin naknadno prihvatio: km su već dodani, igrač to sad saznaje. */
@@ -674,10 +646,7 @@ function RecapRow({ r, cfg, onState }: { r: RoundView; cfg: SkinConfig; onState:
         <span className="k">+{r.km}</span>
         <span className="chev" aria-hidden="true">{open ? "▴" : "▾"}</span>
       </button>
-      {/* promašaj kojem je jedini odbijeni upis onaj konačni ima samo gumb, popis tek kad ima više pokušaja ili je runda pogođena */}
-      {r.misses?.some((m) => m.raw.toLowerCase() !== r.raw?.toLowerCase())
-        ? <MissList r={r} misses={r.misses} onState={onState} />
-        : r.report === "open" && <ReportLine r={r} onState={onState} compact />}
+      {r.misses?.length ? <MissList r={r} misses={r.misses} onState={onState} /> : null}
       {open && <AllAnswers position={r.position} cfg={cfg} />}
     </li>
   );
