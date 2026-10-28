@@ -87,6 +87,26 @@ describe("skinovi", () => {
     expect(planina).toContain("Triglav");
     expect(planina).not.toContain(id === "ba" ? "Jahorina" : "Kopaonik");
     expect(planina).toContain("Velebit");
+    // remove vrijedi i za hrvatske odgovore iz addFrom: domaće jelo ili osoba se ne vraća iz hrvatske kategorije
+    const names = (slug: string) => parseSeedAnswers(cats.find((c) => c.slug === slug)!.answers).flatMap((a) => [a.canonical, ...a.variants]);
+    for (const x of ["Ćevapi", "Burek", "Sarma", "Grah", "Ćufte"]) expect(names("svjetsko-jelo")).not.toContain(x);
+    expect(names("svjetsko-jelo")).toContain("Pašticada");
+    expect(names("strani-pisac")).not.toContain("Ivo Andrić");
+    expect(names("strani-pisac")).toContain("Antun Gustav Matoš");
+    expect(names("politicar-svijet")).toContain("Franjo Tuđman");
+    if (id === "ba") {
+      for (const x of ["Dragan Čović", "Krešimir Zubak", "Mak Dizdar", "Miljenko Jergović"]) expect([...names("politicar-svijet"), ...names("strani-pisac")]).not.toContain(x);
+      expect(names("strani-znanstvenik")).not.toContain("Vladimir Prelog");
+      expect(names("kosarkas-svijet")).toContain("Bojan Bogdanović");
+    } else {
+      expect(names("strani-pisac")).not.toContain("Tomislav Žigmanov");
+      // maknuta samo varijanta: srpska gibanica ne vrijedi, Međimurska gibanica vrijedi
+      expect(names("svjetsko-jelo")).toContain("Međimurska gibanica");
+      expect(names("svjetsko-jelo")).not.toContain("Gibanica");
+      // kratko ime srpskog igrača ne pada na hrvatskog
+      expect(names("nogometas")).toContain("Franjo Ivanović");
+      expect(names("nogometas")).not.toContain("Ivanović");
+    }
     for (const c of cats) expect(parseSeedAnswers(c.answers).every((a) => a.share > 0 && !a.canonical.includes("/"))).toBe(true);
     expect(new Set(codeConfigs[id].dailyPattern)).toEqual(new Set(["opce", "kviz", "zaigrano", id]));
     expect(codeConfigs[id].dailyPattern).toEqual(codeConfigs.hr.dailyPattern.map((g) => (g === "hr" ? id : g)));

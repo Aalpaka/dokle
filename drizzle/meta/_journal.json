@@ -148,6 +148,13 @@
       "when": 1792910000000,
       "tag": "0020_upute_2026",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1792920000000,
+      "tag": "0021_izvan_bih_srbije",
+      "breakpoints": true
     }
   ]
 }

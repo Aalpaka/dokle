@@ -9,22 +9,26 @@ import { rsDomace5 } from "./domace5";
 import { rsDomace6 } from "./domace6";
 import { rsZamjene } from "./zamjene";
 import { dodaci } from "./dodaci";
-import { withDodaci } from "../../regional";
+import { withDodaci, withRemoved } from "../../regional";
+import { izSrbije } from "./iz-srbije";
 
 export const rsContent: Country = {
   lang: "srpski",
   domestic: withDodaci([...rsDomace1, ...rsDomace2, ...rsDomace3, ...rsDomace4, ...rsDomace5, ...rsDomace6], dodaci),
   replace: withDodaci(rsZamjene, dodaci),
-  abroad: {
+  abroad: withRemoved({
     "svjetska-planina": {
       title: "Planina ili vrh van Srbije",
       addFrom: "planina",
-      remove: ["Kopaonik", "Zlatibor", "Rtanj", "Fruška gora", "Tara", "Stara planina"],
+      remove: ["Kopaonik", "Zlatibor", "Rtanj", "Fruška gora", "Tara", "Stara planina", "Midžor", "Suva planina", "Besna kobila",
+        "Jadovnik", "Rudnik", "Avala", "Kosmaj", "Bukulja", "Golija", "Goč", "Kučaj", "Homolje", "Deli Jovan", "Miroč",
+        "Jastrebac", "Cer", "Povlen", "Maljen", "Bobija", "Medvednik", "Zlatar", "Ovčar", "Kablar", "Javor", "Mučanj"],
     },
     "strani-klub": {
       title: "Fudbalski klub van Srbije",
       addFrom: "klub",
-      remove: ["Crvena zvezda", "Partizan", "Vojvodina"],
+      remove: ["Crvena zvezda", "Partizan", "Vojvodina", "Radnički Niš", "OFK Beograd", "Javor", "Rad", "Spartak Subotica",
+        "Napredak", "Čukarički", "Mladost Lučani", "TSC Bačka Topola", "Radnički Kragujevac", "Novi Pazar"],
     },
     "otok-svijet": { title: "Ostrvo", hint: "Bilo koje ostrvo na svetu, i hrvatska", addFrom: "otok" },
     nogometas: {
@@ -50,7 +54,8 @@ export const rsContent: Country = {
       title: "Jezero van Srbije",
       hint: "Prirodno ili veštačko jezero bilo gde osim u Srbiji",
       addFrom: "jezero",
-      remove: ["Srebrno jezero", "Palić", "Zlatarsko jezero", "Vlasinsko jezero"],
+      remove: ["Srebrno jezero", "Palić", "Zlatarsko jezero", "Vlasinsko jezero", "Đerdapsko jezero", "Gružansko jezero",
+        "Perućačko jezero", "Uvačko jezero", "Ćelije", "Bovansko jezero"],
     },
     "kosarkas-svijet": {
       title: "Košarkaš van Srbije",
@@ -58,7 +63,8 @@ export const rsContent: Country = {
       addFrom: "kosarkas",
       remove: ["Nikola Jokić", "Vlade Divac", "Peja Stojaković", "Dejan Bodiroga", "Saša Đorđević", "Miloš Teodosić",
         "Predrag Danilović", "Radivoj Korać", "Dragan Kićanović", "Bogdan Bogdanović", "Boban Marjanović", "Zoran Slavnić",
-        "Nemanja Bjelica", "Vasilije Micić"],
+        "Nemanja Bjelica", "Vasilije Micić", "Dražen Dalipagić", "Darko Miličić", "Nenad Krstić", "Željko Rebrača",
+        "Igor Rakočević"],
     },
     "sportas-svijet": {
       title: "Sportista ili sportistkinja van Srbije, bez fudbala i tenisa",
@@ -70,7 +76,9 @@ export const rsContent: Country = {
       hint: "Političar, vladar ili državnik koji nije iz Srbije, danas ili kroz istoriju",
       addFrom: "politicar",
       remove: ["Aleksandar Vučić", "Slobodan Milošević", "Zoran Đinđić", "Boris Tadić", "Ivica Dačić", "Ana Brnabić",
-        "Vojislav Koštunica"],
+        "Vojislav Koštunica", "Kralj Aleksandar Karađorđević", "Kralj Petar II.", "Nikola Pašić", "Aleksandar Ranković",
+        "Draža Mihailović", "Vojislav Šešelj", "Tomislav Nikolić", "Zoran Lilić", "Vuk Drašković", "Čedomir Jovanović",
+        "Miloš Vučević", "Dragan Đilas"],
     },
     "strani-pisac": {
       title: "Pisac ili pesnik van Srbije",
@@ -103,7 +111,8 @@ export const rsContent: Country = {
         "Emina Jahović", "Nikolija", "Milica Pavlović", "Željko Samardžić", "Lola Novaković", "Olivera Katarina", "Miki Jevremović",
         "Ljiljana Petrović", "Sara Jovanović", "Bojana Stamenov", "Relja Popović", "Coby", "Devito", "Voyage", "Desingerica",
         "Lexington", "Ivana Selakov", "Tanja Savić", "Mira Škorić", "Goca Tržan", "Viki Miljković", "Tea Tairović",
-        "Mia Borisavljević", "Juice", "Gru", "Marčelo", "Nevena Božović", "Sloba Radanović"],
+        "Mia Borisavljević", "Juice", "Gru", "Marčelo", "Nevena Božović", "Sloba Radanović", "Zdravko Čolić", "Nada Topčagić",
+        "Bjesovi", "Bad Copy", "Moje 3", "Tropico Band"],
     },
     "strani-film": {
       title: "Strani film",
@@ -116,5 +125,5 @@ export const rsContent: Country = {
       hint: "Hrvatska, Crna Gora, Italija, Slovenija, BiH ili Albanija; mora biti na moru",
       addFrom: "obala",
     },
-  },
+  }, izSrbije),
 };
