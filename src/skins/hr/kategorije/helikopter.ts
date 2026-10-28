@@ -146,7 +146,7 @@ export const helikopter: Record<string, string[]> = {
   "rukomet-vaterpolo": ["Zdravko Miljak", "Ozren Bonačić"],
   hajduk: ["Leo Lemešić", "Šime Luketin"],
   dinamo: ["Mladen Ramljak", "Zlatko Škorić"],
-  trener: ["Vjekoslav Kobešćak", "Dražen Jerković"],
+  trener: ["Vjekoslav Kobešćak", "Dražan Jerković"],
   "klub-ostalo": ["Olimpija Karlovac", "Split 1700"],
   medij: ["Arkzin", "Kerempuh"],
   trgovina: ["Lonia", "Mikronis"],

@@ -443,7 +443,7 @@ export const hrKategorije: SeedCategory[] = [
       Petar Krešimir IV/Petar Krešimir=0.8; Zvonimir/Kralj Zvonimir=0.8; Eugen Kvaternik/Kvaternik=0.3;
       Vladko Maček/Maček=0.5; Savka Dabčević-Kučar=0.5; Mate Granić=0.5; Željko Reiner=0.5; Dražen Budiša=0.5;
       Davor Bernardić=0.5; Peđa Grbin=0.5; Siniša Hajdaš Dončić=0.5; Sandra Benčić=0.5; Ivan Penava=0.5;
-      Ruža Tomašić=0.5; Dalija Orešković=0.5; Dragan Primorac=0.5; Zdravko Marić=0.5; Mika Tripalo=0.3;
+      Ruža Tomašić=0.5; Dalija Orešković=0.5; Dragan Primorac=0.5; Zdravko Marić=0.5; Miko Tripalo=0.3;
       Andrija Hebrang=0.3; Hrvoje Šarinić=0.3; Nikica Valentić=0.3; Zlatko Mateša=0.3; Franjo Gregurić=0.3;
       Josip Manolić=0.3; Marijana Petir=0.3; Bruna Esih=0.3; Anka Mrak-Taritaš=0.3; Ivan Anušić=0.3;
       Gordan Grlić Radman=0.3; Nikola Grmoja=0.3; Davor Ivo Stier=0.3; Damir Kajin=0.3; Ljudevit Gaj=0.5;
@@ -1042,7 +1042,7 @@ export const hrKategorije: SeedCategory[] = [
       Zdravko Zovko=0.5; Ivo Trumbić=0.5; Vjekoslav Kobešćak=0.1; Luka Peruzović=0.5; Stanko Poklepović=0.5;
       Ante Miše=0.5; Damir Krznar=0.5; Zoran Vulić=0.5; Mario Cvitanović=0.5; Igor Cvitanović=0.5; Dragan Skočić=0.5;
       Zvonimir Soldo=0.5; Željko Krajan=0.5; Ilija Lončarević=0.3; Tomislav Ivković=0.3; Robert Jarni=0.3;
-      Dražen Anzulović=0.3; Damir Mulaomerović=0.3; Goran Perkovac=0.3; Velimir Kljaić=0.5; Dražen Jerković=0.1`,
+      Dražen Anzulović=0.3; Damir Mulaomerović=0.3; Goran Perkovac=0.3; Velimir Kljaić=0.5; Dražan Jerković=0.1`,
   },
   {
     slug: "klub-ostalo",
