@@ -10,7 +10,11 @@ export const LEAGUE_LIMITS = { leaguesPerPlayer: 10, membersPerLeague: 50 };
 const CODE_ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
 export const CODE_RE = /^[A-HJ-KM-NP-Z2-9]{6}$/;
 
-export function newLeagueCode(random = Math.random): string {
+// kod je pozivnica: tko ga zna, ulazi u ligu i vidi odgovore članova, pa slučajan iz kriptografskog izvora
+// (Math.random se da predvidjeti iz ranijih izlaza)
+const secureRandom = () => crypto.getRandomValues(new Uint32Array(1))[0] / 2 ** 32;
+
+export function newLeagueCode(random = secureRandom): string {
   let s = "";
   for (let i = 0; i < 6; i++) s += CODE_ALPHABET[Math.floor(random() * CODE_ALPHABET.length)];
   return s;
