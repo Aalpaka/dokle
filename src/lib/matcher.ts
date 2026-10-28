@@ -119,7 +119,8 @@ function typoScore(input: string, answer: string): number | null {
 export type MatchAnswer = { id: number; canonical: string; variants: string[] };
 
 export type MatchIndex = {
-  answers: (MatchAnswer & { keys: string[]; folded: string[] })[];
+  // ekaFolded/ekaKeys: isti oblici u ijekavici, unaprijed izračunati za tipfelere (tamo se inače računaju za svaki upis)
+  answers: (MatchAnswer & { keys: string[]; folded: string[]; ekaFolded: string[]; ekaKeys: string[] })[];
   strip: string[];
   exact: Map<string, Set<number>>;
   eka: Map<string, Set<number>>;
@@ -160,9 +161,10 @@ export function buildIndex(answers: MatchAnswer[], strip: string[] = []): MatchI
     for (const x of shorts) add(idx.short, keyOf(x), i);
     const folded = named[i];
     const keys = folded.map(keyOf);
-    idx.answers.push({ ...a, keys, folded });
+    const ekaFolded = folded.map(ekaWords);
+    idx.answers.push({ ...a, keys, folded, ekaFolded, ekaKeys: ekaFolded.map(keyOf) });
     for (const f of folded) if (f.includes(" ")) add(idx.words, sorted(f), i);
-    for (const f of folded) add(idx.phon, phon(ekaWords(f)), i);
+    for (const fe of ekaFolded) add(idx.phon, phon(fe), i);
     for (const k of keys) {
       add(idx.exact, k, i);
       add(idx.eka, eka(k), i);
@@ -230,15 +232,20 @@ function typoMatch(idx: MatchIndex, folded: string[]): number | null {
   for (const f of folded) {
     const fe = ekaWords(f);
     const k = keyOf(f), ke = keyOf(fe);
+    // tipfeler je najviše jedno slovo po riječi (ili jedno u cijelom nizu), pa se odgovor kojem duljina bez razmaka odstupa
+    // više od broja riječi upisa preskače bez računanja; inače dugačak upis prolazi tisuće odgovora velikih kategorija
+    const span = f.split(" ").length;
     idx.answers.forEach((a, i) => {
-      for (const af of a.folded) {
-        const ae = ekaWords(af);
-        if (typoDistance(k, keyOf(af), 1) <= 1 || typoDistance(ke, keyOf(ae), 1) <= 1) near.add(i);
-        const d = Math.min(typoScore(f, af) ?? Infinity, typoScore(fe, ae) ?? Infinity);
-        if (d === Infinity || d > best) continue;
+      a.folded.forEach((af, j) => {
+        const plain = Math.abs(k.length - a.keys[j].length) <= span;
+        const ekav = Math.abs(ke.length - a.ekaKeys[j].length) <= span;
+        if (!plain && !ekav) return;
+        if ((plain && typoDistance(k, a.keys[j], 1) <= 1) || (ekav && typoDistance(ke, a.ekaKeys[j], 1) <= 1)) near.add(i);
+        const d = Math.min((plain ? typoScore(f, af) : null) ?? Infinity, (ekav ? typoScore(fe, a.ekaFolded[j]) : null) ?? Infinity);
+        if (d === Infinity || d > best) return;
         if (d < best) { best = d; hit = new Set(); }
         hit.add(i);
-      }
+      });
     });
   }
   const i = pick(hit);

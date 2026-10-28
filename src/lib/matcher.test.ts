@@ -85,4 +85,12 @@ describe("match", () => {
   it("prazan unos", () => {
     expect(match(otok, "   ")).toBeNull();
   });
+
+  it("dugačak upis se odbije bez prolaska kroz sve odgovore, tipfeleri u velikoj kategoriji i dalje rade", () => {
+    const sportas = indexFor("sportas");
+    expect(match(sportas, "ab ".repeat(66))).toBeNull();
+    expect(match(sportas, "x".repeat(200))).toBeNull();
+    expect(match(sportas, "Dražen Petrovć")?.canonical).toBe("Dražen Petrović");
+    expect(match(sportas, "Petrovic Drazen")?.canonical).toBe("Dražen Petrović");
+  });
 });
