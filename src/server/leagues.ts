@@ -1,21 +1,37 @@
 import "server-only";
-import { and, asc, count, eq, gte, inArray, isNotNull } from "drizzle-orm";
+import { and, asc, count, eq, gte, inArray, isNotNull, sql } from "drizzle-orm";
 import { db } from "@/db";
-import { answers, categories, dailyPuzzles, games, leagueMembers, leagues, players, puzzleCategories, rounds } from "@/db/schema";
+import { answers, attempts, categories, dailyPuzzles, games, leagueMembers, leagueReactions, leagues, players, puzzleCategories, rounds } from "@/db/schema";
 import { localDate } from "@/lib/day";
 import { placeAt } from "@/skins/mjesta";
 import {
   LEAGUE_LIMITS,
+  LEGEND_DAYS,
+  addDays,
   computeStandings,
+  crowns,
   dailyAverages,
+  dayAwards,
+  duel,
+  groupLegends,
+  hallOfFame,
   newLeagueCode,
   periodStart,
   RACE_COLORS,
   raceTags,
+  rankMoves,
+  teamReach,
   weekDays,
+  type AwardRound,
   type DayAvg,
+  type DayAwards,
+  type Duel,
+  type GroupRound,
+  type HallWeek,
   type Member,
+  type MemberGame,
   type Period,
+  type Reaction,
   type StandingRow,
 } from "@/lib/league";
 import type { Skin } from "./game";
@@ -73,6 +89,7 @@ export async function joinLeague(league: League, playerId: string) {
 export async function leaveLeague(league: League, playerId: string) {
   await db.transaction(async (tx) => {
     await tx.delete(leagueMembers).where(and(eq(leagueMembers.leagueId, league.id), eq(leagueMembers.playerId, playerId)));
+    await tx.delete(leagueReactions).where(and(eq(leagueReactions.leagueId, league.id), eq(leagueReactions.playerId, playerId)));
     if (league.ownerId !== playerId) return;
     const [next] = await tx
       .select()
@@ -112,7 +129,10 @@ export async function removeMember(league: League, playerId: string, memberId: n
     .where(and(eq(leagueMembers.id, memberId), eq(leagueMembers.leagueId, league.id)));
   if (!m) throw new LeagueError("Taj igrač nije u ligi.");
   if (m.playerId === playerId) throw new LeagueError("Osnivač ne može izbaciti sebe; izađi iz lige.");
-  await db.delete(leagueMembers).where(eq(leagueMembers.id, memberId));
+  await db.transaction(async (tx) => {
+    await tx.delete(leagueMembers).where(eq(leagueMembers.id, memberId));
+    await tx.delete(leagueReactions).where(and(eq(leagueReactions.leagueId, league.id), eq(leagueReactions.playerId, m.playerId)));
+  });
 }
 
 export async function deleteLeague(league: League, playerId: string) {
@@ -188,8 +208,28 @@ export async function myLeagues(skin: Skin, playerId: string): Promise<LeagueSum
   return out;
 }
 
-export type TodayStatus = { memberId: number; nickname: string; status: "done" | "playing" | "none"; km: number };
-export type TodayAnswers = { title: string; answers: { memberId: number; nickname: string; answer: string | null; km: number; emoji: string }[] }[];
+export type TodayStatus = {
+  memberId: number;
+  nickname: string;
+  tag: string; // oznaka i boja kao u utrci na karti
+  color: string;
+  status: "done" | "playing" | "none";
+  km: number; // dok igra: km do zadnje bodovane kategorije
+  played: number; // bodovane kategorije
+};
+export type TodayAnswer = {
+  memberId: number;
+  nickname: string;
+  answer: string | null;
+  km: number;
+  emoji: string;
+  reactions: Partial<Record<Reaction, number>>;
+  mine: Reaction | null; // moja reakcija na ovaj odgovor
+  tag: "rare" | "same" | null; // rijetka zvjerka / ista misao
+};
+export type TodayAnswers = { position: number; title: string; group: string; answers: TodayAnswer[] }[];
+export type StandingView = StandingRow & { move: number | null; crowns: number };
+export type Legend = { group: string; memberId: number; nickname: string; avg: number };
 
 export type LeagueView = {
   code: string;
@@ -202,10 +242,15 @@ export type LeagueView = {
   members: number;
   period?: Period;
   from?: string;
-  standings?: StandingRow[];
+  weekFrom?: string; // ponedjeljak tekućeg tjedna: pitanja i odgovori vide se samo za dane od tad
+  standings?: StandingView[];
   today?: TodayStatus[];
+  perDay?: number; // kategorija u partiji
   answers?: TodayAnswers | null; // null dok igrač nije završio današnju partiju
-  week?: { today: string; days: DayAvg[] }; // prosjek km članova po danu, samo tekući tjedan pon–ned
+  awards?: DayAwards | null; // null dok igrač nije završio, ili dok nisu završila barem dvojica
+  week?: { today: string; days: DayAvg[]; km: number; reach: string | null }; // tekući tjedan pon–ned
+  hall?: HallWeek[];
+  legends?: Legend[];
 };
 
 /** Stranica lige. Tko nije član vidi samo ime, osnivača i broj članova. */
@@ -227,12 +272,20 @@ export async function leagueView(skin: Skin, league: League, playerId: string | 
   const today = localDate(skin.timezone);
   const leagueStart = localDate(skin.timezone, league.createdAt);
   const from = periodStart(period, today, leagueStart);
+  const weekFrom = periodStart("week", today, today);
   const ids = members.map((m) => m.playerId);
   // streak treba i dane prije razdoblja
   const all = await finishedGames(skin, ids);
-  const standings = computeStandings(members, all, from, today);
-  // graf prosjeka uvijek za tekući tjedan, neovisno o odabranom razdoblju tablice
-  const week = { today, days: dailyAverages(all, weekDays(periodStart("week", today, today))) };
+  const hall = hallOfFame(members, all, leagueStart, today);
+  const crowned = crowns(hall);
+  // pomak od jučer: tablica istog razdoblja do jučer (prvog dana razdoblja nema s čim usporediti)
+  const yesterday = addDays(today, -1);
+  const rows = computeStandings(members, all, from, today);
+  const moves = rankMoves(rows, period !== "day" && yesterday >= from ? computeStandings(members, all, from, yesterday) : null);
+  const standings = rows.map((r) => ({ ...r, move: moves.get(r.memberId) ?? null, crowns: crowned.get(r.memberId) ?? 0 }));
+  // graf prosjeka i zajednički km uvijek za tekući tjedan, neovisno o odabranom razdoblju tablice
+  const weekKm = all.filter((g) => g.date >= weekFrom && g.date <= today).reduce((a, g) => a + g.km, 0);
+  const week = { today, days: dailyAverages(all, weekDays(weekFrom)), km: weekKm, reach: teamReach(weekKm) };
 
   const [puzzle] = await db
     .select()
@@ -244,55 +297,186 @@ export async function leagueView(skin: Skin, league: League, playerId: string | 
         .from(games)
         .where(and(eq(games.puzzleId, puzzle.id), eq(games.ranked, true), inArray(games.playerId, ids)))
     : [];
+  // tko još igra: km do zadnje bodovane kategorije, kao u utrci na karti (bez odgovora)
+  const progress = todays.length
+    ? await db
+        .select({ gameId: rounds.gameId, n: sql<number>`count(*)::int`, km: sql<number>`coalesce(sum(${rounds.km}), 0)::int` })
+        .from(rounds)
+        .where(and(inArray(rounds.gameId, todays.map((g) => g.id)), isNotNull(rounds.km)))
+        .groupBy(rounds.gameId)
+    : [];
+  const progressOf = new Map(progress.map((p) => [p.gameId, p]));
   const byPlayer = new Map(todays.map((g) => [g.playerId, g]));
+  const tags = raceTags(members.map((m) => m.nickname));
   const todayStatus: TodayStatus[] = members
-    .map((m) => {
+    .map((m, j) => {
       const g = byPlayer.get(m.playerId);
+      const p = g ? progressOf.get(g.id) : undefined;
       const status: TodayStatus["status"] = !g ? "none" : g.finishedAt ? "done" : "playing";
-      return { memberId: m.memberId, nickname: m.nickname, status, km: g?.finishedAt ? g.km : 0 };
+      return {
+        memberId: m.memberId,
+        nickname: m.nickname,
+        tag: tags[j],
+        color: RACE_COLORS[j % RACE_COLORS.length],
+        status,
+        km: g?.finishedAt ? g.km : (p?.km ?? 0),
+        played: p?.n ?? 0,
+      };
     })
     .sort((a, b) => b.km - a.km || a.nickname.localeCompare(b.nickname, "hr"));
 
   const mineToday = byPlayer.get(me.playerId);
-  const answersView = puzzle && mineToday?.finishedAt ? await dayAnswers(skin, puzzle.id, members, todays) : null;
-  return { ...base, period, from, standings, today: todayStatus, answers: answersView, week };
+  const day = puzzle && mineToday?.finishedAt ? await dayAnswers(skin, league.id, me.playerId, puzzle.id, members, todays) : null;
+  const legends = await leagueLegends(skin, members, today);
+  return {
+    ...base,
+    period,
+    from,
+    weekFrom,
+    standings,
+    today: todayStatus,
+    perDay: puzzle ? (await puzzleCats(puzzle.id)).length : 0,
+    answers: day?.answers ?? null,
+    awards: day?.awards ?? null,
+    week,
+    hall,
+    legends,
+  };
 }
 
-/** Odgovori zadanih partija jednog dana, po kategorijama. */
-async function dayAnswers(
-  skin: Skin,
-  puzzleId: number,
-  members: Member[],
-  todays: { id: number; playerId: string; finishedAt: Date | null }[],
-): Promise<TodayAnswers> {
-  const cats = await db
-    .select({ position: puzzleCategories.position, title: categories.title })
+async function puzzleCats(puzzleId: number) {
+  return db
+    .select({ position: puzzleCategories.position, title: categories.title, group: categories.group })
     .from(puzzleCategories)
     .innerJoin(categories, eq(categories.id, puzzleCategories.categoryId))
     .where(eq(puzzleCategories.puzzleId, puzzleId))
     .orderBy(asc(puzzleCategories.position));
+}
+
+/** Odgovori završenih partija jednog dana po kategorijama, s reakcijama lige i nagradama dana. */
+async function dayAnswers(
+  skin: Skin,
+  leagueId: number,
+  viewerId: string,
+  puzzleId: number,
+  members: Member[],
+  todays: { id: number; playerId: string; finishedAt: Date | null }[],
+): Promise<{ answers: TodayAnswers; awards: DayAwards | null }> {
+  const cats = await puzzleCats(puzzleId);
   const done = todays.filter((g) => g.finishedAt);
+  const gameIds = done.map((g) => g.id);
   const rows = done.length
     ? await db
-        .select({ gameId: rounds.gameId, position: rounds.position, canonical: answers.canonical, km: rounds.km, tier: rounds.tier })
+        .select({
+          gameId: rounds.gameId,
+          position: rounds.position,
+          answerId: rounds.answerId,
+          canonical: answers.canonical,
+          km: rounds.km,
+          tier: rounds.tier,
+          share: rounds.share,
+        })
         .from(rounds)
         .leftJoin(answers, eq(answers.id, rounds.answerId))
-        .where(inArray(rounds.gameId, done.map((g) => g.id)))
+        .where(inArray(rounds.gameId, gameIds))
+    : [];
+  // vrijeme točnog odgovora (naknadno prihvaćeni odgovori ga nemaju, pa ne ulaze u najbrži prst)
+  const times = done.length
+    ? await db
+        .select({ gameId: attempts.gameId, position: attempts.position, ms: sql<number>`min(${attempts.elapsedMs})::int` })
+        .from(attempts)
+        .where(and(inArray(attempts.gameId, gameIds), eq(attempts.accepted, true)))
+        .groupBy(attempts.gameId, attempts.position)
+    : [];
+  const msOf = new Map(times.map((t) => [`${t.gameId}|${t.position}`, t.ms]));
+  const reacts = done.length
+    ? await db
+        .select({ gameId: leagueReactions.gameId, position: leagueReactions.position, playerId: leagueReactions.playerId, emoji: leagueReactions.emoji })
+        .from(leagueReactions)
+        .where(and(eq(leagueReactions.leagueId, leagueId), inArray(leagueReactions.gameId, gameIds), inArray(leagueReactions.playerId, members.map((m) => m.playerId))))
     : [];
   const memberOf = new Map(done.map((g) => [g.id, members.find((m) => m.playerId === g.playerId)!]));
   const cfg = skin.config;
+  const rareTier = cfg.tiers.find((t) => t.rare)?.name;
   const emoji = (tier: string | null, canonical: string | null) =>
     canonical === null ? cfg.miss.emoji : (cfg.tiers.find((t) => t.name === tier)?.emoji ?? "");
-  return cats.map((c) => ({
+  const titleOf = new Map(cats.map((c) => [c.position, c.title]));
+  const reactionsOf = (gameId: number, position: number) => reacts.filter((x) => x.gameId === gameId && x.position === position);
+
+  const awardRounds: AwardRound[] = rows.map((r) => {
+    const m = memberOf.get(r.gameId)!;
+    return {
+      memberId: m.memberId,
+      nickname: m.nickname,
+      position: r.position,
+      title: titleOf.get(r.position) ?? "",
+      answerId: r.canonical === null ? null : r.answerId,
+      answer: r.canonical,
+      share: r.share,
+      rare: !!rareTier && r.tier === rareTier,
+      ms: msOf.get(`${r.gameId}|${r.position}`) ?? null,
+      reactions: reactionsOf(r.gameId, r.position).length,
+    };
+  });
+  // nagrade imaju smisla tek kad su završila barem dvojica
+  const awards = done.length >= 2 ? dayAwards(awardRounds) : null;
+  const sameKeys = new Set(awards?.same.flatMap((s) => s.members.map((m) => `${m.memberId}|${s.position}`)));
+  const rareKey = awards?.rare ? `${awards.rare.memberId}|${awards.rare.position}` : null;
+
+  const out = cats.map((c) => ({
+    position: c.position,
     title: c.title,
+    group: c.group,
     answers: rows
       .filter((r) => r.position === c.position)
-      .map((r) => {
+      .map((r): TodayAnswer => {
         const m = memberOf.get(r.gameId)!;
-        return { memberId: m.memberId, nickname: m.nickname, answer: r.canonical, km: r.km ?? 0, emoji: emoji(r.tier, r.canonical) };
+        const rs = reactionsOf(r.gameId, r.position);
+        const counts: Partial<Record<Reaction, number>> = {};
+        for (const x of rs) counts[x.emoji as Reaction] = (counts[x.emoji as Reaction] ?? 0) + 1;
+        const key = `${m.memberId}|${r.position}`;
+        return {
+          memberId: m.memberId,
+          nickname: m.nickname,
+          answer: r.canonical,
+          km: r.km ?? 0,
+          emoji: emoji(r.tier, r.canonical),
+          reactions: counts,
+          mine: (rs.find((x) => x.playerId === viewerId)?.emoji as Reaction | undefined) ?? null,
+          tag: key === rareKey ? "rare" : sameKeys.has(key) ? "same" : null,
+        };
       })
       .sort((a, b) => b.km - a.km || a.nickname.localeCompare(b.nickname, "hr")),
   }));
+  return { answers: out, awards };
+}
+
+/** Km po pitanju s grupom pitanja, za dvoboj i legende. */
+async function groupRounds(skin: Skin, playerIds: string[], from?: string): Promise<GroupRound[]> {
+  if (!playerIds.length) return [];
+  return db
+    .select({ playerId: games.playerId, date: dailyPuzzles.date, group: categories.group, km: sql<number>`coalesce(${rounds.km}, 0)::int` })
+    .from(rounds)
+    .innerJoin(games, eq(games.id, rounds.gameId))
+    .innerJoin(dailyPuzzles, eq(dailyPuzzles.id, games.puzzleId))
+    .innerJoin(categories, eq(categories.id, rounds.categoryId))
+    .where(
+      and(
+        inArray(games.playerId, playerIds),
+        eq(dailyPuzzles.skinId, skin.id),
+        eq(games.ranked, true),
+        isNotNull(games.finishedAt),
+        from ? gte(dailyPuzzles.date, from) : undefined,
+      ),
+    );
+}
+
+const groupKeys = (skin: Skin) => Object.keys(skin.config.groups);
+
+/** Legende lige po grupama pitanja u zadnjih 30 dana. */
+async function leagueLegends(skin: Skin, members: Member[], today: string): Promise<Legend[]> {
+  const rows = await groupRounds(skin, members.map((m) => m.playerId), addDays(today, -(LEGEND_DAYS - 1)));
+  return groupLegends(members, rows, groupKeys(skin));
 }
 
 export type MemberDay = {
@@ -305,14 +489,16 @@ export type MemberDay = {
 };
 
 /**
- * Jedan dan jednog člana lige (npr. najbolji rezultat iz tablice): pitanja i odgovori.
- * Današnje odgovore vidi samo tko je i sam završio današnju partiju.
+ * Jedan dan jednog člana lige (npr. najbolji rezultat iz tablice): pitanja i odgovori. Samo za dane tekućeg tjedna;
+ * današnje odgovore vidi samo tko je i sam završio današnju partiju.
  */
 export async function memberDay(skin: Skin, league: League, viewerId: string, memberId: number, date: string): Promise<MemberDay> {
   const members = await membersOf(league.id);
   if (!members.some((m) => m.playerId === viewerId)) throw new LeagueError("Nisi u ovoj ligi.");
   const member = members.find((m) => m.memberId === memberId);
   if (!member) throw new LeagueError("Taj igrač nije u ligi.");
+  const today = localDate(skin.timezone);
+  if (date < periodStart("week", today, today) || date > today) throw new LeagueError("Pitanja i odgovori vide se samo za ovaj tjedan.");
   const [puzzle] = await db
     .select()
     .from(dailyPuzzles)
@@ -321,11 +507,11 @@ export async function memberDay(skin: Skin, league: League, viewerId: string, me
     ? (await db.select().from(games).where(and(eq(games.puzzleId, puzzle.id), eq(games.playerId, member.playerId))))[0]
     : undefined;
   if (!puzzle || !game?.finishedAt) throw new LeagueError("Taj dan nema završene partije.");
-  if (date === localDate(skin.timezone) && viewerId !== member.playerId) {
+  if (date === today && viewerId !== member.playerId) {
     const [mine] = await db.select().from(games).where(and(eq(games.puzzleId, puzzle.id), eq(games.playerId, viewerId)));
     if (!mine?.finishedAt) throw new LeagueError("Odigraj današnju partiju pa ćeš vidjeti tuđe današnje odgovore.");
   }
-  const cats = await dayAnswers(skin, puzzle.id, members, [game]);
+  const { answers: cats } = await dayAnswers(skin, league.id, viewerId, puzzle.id, members, [game]);
   return {
     nickname: member.nickname,
     date,
@@ -337,6 +523,79 @@ export async function memberDay(skin: Skin, league: League, viewerId: string, me
       return { title: c.title, answer: a?.answer ?? null, km: a?.km ?? 0, emoji: a?.emoji ?? skin.config.miss.emoji };
     }),
   };
+}
+
+export type PastWeek = { from: string; standings: (Omit<StandingRow, "bestDate" | "streak">)[]; days: DayAvg[] };
+
+/** Tablica i graf prosjeka jednog završenog tjedna (dvorana slavnih); bez pitanja i odgovora. */
+export async function pastWeek(skin: Skin, league: League, viewerId: string, from: string): Promise<PastWeek> {
+  const members = await membersOf(league.id);
+  if (!members.some((m) => m.playerId === viewerId)) throw new LeagueError("Nisi u ovoj ligi.");
+  const today = localDate(skin.timezone);
+  const leagueStart = localDate(skin.timezone, league.createdAt);
+  if (periodStart("week", from, from) !== from || from >= periodStart("week", today, today) || from < periodStart("week", leagueStart, leagueStart))
+    throw new LeagueError("Taj tjedan nije u povijesti lige.");
+  const games = await finishedGames(skin, members.map((m) => m.playerId), from);
+  const to = addDays(from, 6);
+  const week = games.filter((g) => g.date <= to);
+  return {
+    from,
+    standings: computeStandings(members, week, from, to).map(({ bestDate: _d, streak: _s, ...r }) => r),
+    days: dailyAverages(week, weekDays(from)),
+  };
+}
+
+export type MemberDuel = Duel & { me: string; them: string; legends: Legend[] };
+
+/** Dvoboj gledatelja s članom lige: dani koje su oboje odigrali, bez pitanja i odgovora. */
+export async function memberDuel(skin: Skin, league: League, viewerId: string, memberId: number): Promise<MemberDuel> {
+  const members = await membersOf(league.id);
+  const me = members.find((m) => m.playerId === viewerId);
+  if (!me) throw new LeagueError("Nisi u ovoj ligi.");
+  const them = members.find((m) => m.memberId === memberId);
+  if (!them) throw new LeagueError("Taj igrač nije u ligi.");
+  if (them.playerId === viewerId) throw new LeagueError("Dvoboj sa samim sobom uvijek završi neriješeno.");
+  const pair = [me.playerId, them.playerId];
+  const games: MemberGame[] = await finishedGames(skin, pair);
+  const today = localDate(skin.timezone);
+  const legends = (await leagueLegends(skin, members, today)).filter((l) => l.memberId === me.memberId || l.memberId === them.memberId);
+  return { ...duel(me.playerId, them.playerId, games, await groupRounds(skin, pair), groupKeys(skin)), me: me.nickname, them: them.nickname, legends };
+}
+
+/** Reakcija na današnji odgovor člana; null je briše. Samo tko je završio današnju partiju, i ne na svoje odgovore. */
+export async function reactToAnswer(skin: Skin, league: League, viewerId: string, memberId: number, position: number, emoji: Reaction | null) {
+  const members = await membersOf(league.id);
+  if (!members.some((m) => m.playerId === viewerId)) throw new LeagueError("Nisi u ovoj ligi.");
+  const target = members.find((m) => m.memberId === memberId);
+  if (!target) throw new LeagueError("Taj igrač nije u ligi.");
+  if (target.playerId === viewerId) throw new LeagueError("Na svoje odgovore ne možeš reagirati.");
+  const [puzzle] = await db
+    .select()
+    .from(dailyPuzzles)
+    .where(and(eq(dailyPuzzles.skinId, skin.id), eq(dailyPuzzles.date, localDate(skin.timezone))));
+  const day = puzzle
+    ? await db.select().from(games).where(and(eq(games.puzzleId, puzzle.id), inArray(games.playerId, [viewerId, target.playerId])))
+    : [];
+  const mine = day.find((g) => g.playerId === viewerId);
+  const theirs = day.find((g) => g.playerId === target.playerId);
+  if (!mine?.finishedAt) throw new LeagueError("Odigraj današnju partiju pa možeš reagirati.");
+  if (!theirs?.finishedAt || !theirs.ranked) throw new LeagueError("Taj igrač danas još nije završio.");
+  const [round] = await db.select().from(rounds).where(and(eq(rounds.gameId, theirs.id), eq(rounds.position, position)));
+  if (!round) throw new LeagueError("Nema tog pitanja.");
+  const where = and(
+    eq(leagueReactions.leagueId, league.id),
+    eq(leagueReactions.gameId, theirs.id),
+    eq(leagueReactions.position, position),
+    eq(leagueReactions.playerId, viewerId),
+  );
+  if (!emoji) return void (await db.delete(leagueReactions).where(where));
+  await db
+    .insert(leagueReactions)
+    .values({ leagueId: league.id, gameId: theirs.id, position, playerId: viewerId, emoji })
+    .onConflictDoUpdate({
+      target: [leagueReactions.leagueId, leagueReactions.gameId, leagueReactions.position, leagueReactions.playerId],
+      set: { emoji, createdAt: new Date() },
+    });
 }
 
 // ---------- Utrka na karti ----------

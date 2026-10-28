@@ -12,7 +12,10 @@ import {
   leaveAllLeagues,
   leaveLeague,
   memberDay,
+  memberDuel,
   myLeagues,
+  pastWeek,
+  reactToAnswer,
   removeMember,
 } from "./leagues";
 
@@ -84,7 +87,7 @@ describe.skipIf(!process.env.DATABASE_URL)("lige", () => {
     expect(day.rounds.length).toBe(8);
     await expect(memberDay(skin, league, bruno, anaId, today)).rejects.toThrow(/Odigraj/);
     await expect(memberDay(skin, league, cvita, anaId, today)).rejects.toThrow(/Nisi u ovoj ligi/);
-    await expect(memberDay(skin, league, ana, anaId, "2000-01-01")).rejects.toThrow(/nema završene/);
+    await expect(memberDay(skin, league, ana, anaId, "2000-01-01")).rejects.toThrow(/samo za ovaj tjedan/);
     await playToday(bruno, "nešto");
     expect((await memberDay(skin, league, bruno, anaId, today)).nickname).toBe("Ana");
 
@@ -96,6 +99,60 @@ describe.skipIf(!process.env.DATABASE_URL)("lige", () => {
 
     const mine = await myLeagues(skin, bruno);
     expect(mine).toEqual([expect.objectContaining({ code: league.code, members: 2, isOwner: false })]);
+  });
+
+  it("reakcije, nagrade dana, dvoboj i prošli tjedni", async () => {
+    const skin = await getSkin("hr");
+    const { localDate } = await import("@/lib/day");
+    const { addDays, periodStart } = await import("@/lib/league");
+    const today = localDate(skin.timezone);
+    const ana = await newPlayer("Ana R");
+    const bruno = await newPlayer("Bruno R");
+    const cvita = await newPlayer("Cvita R");
+    const league = await createLeague(skin, ana, "Reakcije");
+    await joinLeague(league, bruno);
+    await joinLeague(league, cvita);
+    const ids = (await leagueView(skin, league, ana, "week")).today!;
+    const id = (n: string) => ids.find((t) => t.nickname === n)!.memberId;
+
+    await playToday(ana, "nešto");
+    // samo jedan je završio: odgovori da, nagrade još ne
+    const solo = await leagueView(skin, league, ana, "week");
+    expect(solo.answers).not.toBeNull();
+    expect(solo.awards).toBeNull();
+    await expect(reactToAnswer(skin, league, ana, id("Bruno R"), 0, "😂")).rejects.toThrow(/nije završio/);
+
+    await playToday(bruno, "nešto");
+    const v = await leagueView(skin, league, ana, "week");
+    expect(v.awards!.roadworks!.misses).toBe(8);
+    expect(v.awards!.rare).toBeNull();
+
+    await expect(reactToAnswer(skin, league, ana, id("Ana R"), 0, "😂")).rejects.toThrow(/svoje/);
+    await expect(reactToAnswer(skin, league, cvita, id("Ana R"), 0, "😂")).rejects.toThrow(/Odigraj/);
+    await reactToAnswer(skin, league, ana, id("Bruno R"), 0, "😂");
+    await reactToAnswer(skin, league, ana, id("Bruno R"), 0, "🔥"); // zamjena, ne druga reakcija
+    const seen = (await leagueView(skin, league, bruno, "week")).answers![0].answers.find((a) => a.nickname === "Bruno R")!;
+    expect(seen.reactions).toEqual({ "🔥": 1 });
+    expect(seen.mine).toBeNull();
+    expect((await leagueView(skin, league, ana, "week")).answers![0].answers.find((a) => a.nickname === "Bruno R")!.mine).toBe("🔥");
+    await reactToAnswer(skin, league, ana, id("Bruno R"), 0, null);
+    expect((await leagueView(skin, league, ana, "week")).answers![0].answers.find((a) => a.nickname === "Bruno R")!.reactions).toEqual({});
+    await reactToAnswer(skin, league, ana, id("Bruno R"), 1, "👏");
+    await leaveLeague(league, bruno); // izlazak briše reakcije koje je dao, a i njegovi odgovori nestaju iz lige
+    await joinLeague(league, bruno);
+    expect((await leagueView(skin, league, bruno, "week")).answers![1].answers.find((a) => a.nickname === "Bruno R")!.reactions).toEqual({ "👏": 1 });
+
+    // dvoboj: danas su oboje imali 0 km
+    const d = await memberDuel(skin, league, ana, (await leagueView(skin, league, ana, "week")).today!.find((t) => t.nickname === "Bruno R")!.memberId);
+    expect(d).toMatchObject({ days: 1, wins: 0, losses: 0, ties: 1, them: "Bruno R" });
+    await expect(memberDuel(skin, league, ana, id("Ana R"))).rejects.toThrow(/samim sobom/);
+
+    // prošli tjedni: samo završeni tjedni od osnivanja lige
+    const monday = periodStart("week", today, today);
+    await expect(pastWeek(skin, league, ana, monday)).rejects.toThrow(/povijesti/);
+    await expect(pastWeek(skin, league, ana, addDays(monday, -6))).rejects.toThrow(/povijesti/);
+    await expect(pastWeek(skin, league, cvita, monday)).rejects.toThrow(/povijesti/);
+    expect((await leagueView(skin, league, ana, "week")).hall).toEqual([]);
   });
 
   it("izbacivanje, izlazak osnivača i brisanje", async () => {
