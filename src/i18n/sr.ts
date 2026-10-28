@@ -18,7 +18,7 @@ export const sr: Record<string, string> = {
   "što brže odgovoriš, to više km; ako se predugo misliš, dobiješ malo manje": "što brže odgovoriš, to više km; ako predugo razmišljaš, dobiješ malo manje",
   "bez odgovora: {x}, 0 km": "bez odgovora: {x}, 0 km",
   "kategorije su svaki dan iste za sve, nova ruta u ponoć": "kategorije su svaki dan iste za sve, nova ruta u ponoć",
-  "Rjeđi odgovor = brže prijevozno sredstvo": "Ređi odgovor = brže prevozno sredstvo",
+  "Rjeđi odgovor = brži prijevoz": "Ređi odgovor = brži prevoz",
   "Tvoj odgovor": "Tvoj odgovor",
   "Pošalji": "Pošalji",
   "„{x}” smo već provjerili i nije prihvaćen. Probaj nešto drugo.": "„{x}” smo već proverili i nije prihvaćen. Probaj nešto drugo.",

@@ -144,7 +144,7 @@ function Shell({ state, me = null, fit = false, children }: { state?: GameState;
   return (
     <div className={"wrap" + (fit ? " fit" : "")} ref={wrapRef}>
       <header className="top">
-        <a href={href("/")} className="plate" style={{ textDecoration: "none" }}>{cfg?.title ?? "Dokle?"}</a>
+        <a href={href("/")} className={"plate" + ((cfg?.title.length ?? 0) > 8 ? " long" : "")} style={{ textDecoration: "none" }}>{cfg?.title ?? "Dokle?"}</a>
         {state && cfg && (
           <div className="meta">
             <b>#{state.number}</b> · {+d}. {+m}. {y}.<br />
@@ -186,6 +186,9 @@ function Landing({ state, cfg, me, onStart }: { state: GameState; cfg: SkinConfi
   const first = cfg.stations[0], last = cfg.stations[cfg.stations.length - 1];
   const t = useT();
   const [y, m, d] = state.date.split("-");
+  const startRef = useRef<HTMLButtonElement>(null);
+  // Enter odmah kreće, ali bez autoFocusa: on bi na mobitelu odskrolao stranicu do gumba, ispod naslova
+  useEffect(() => startRef.current?.focus({ preventScroll: true }), []);
   return (
     <div className="landing">
       <div className="landing-bg" aria-hidden="true" style={{ "--landing-map": `url(${maps[state.skin.id]?.image.href ?? maps.hr.image.href})` } as React.CSSProperties} />
@@ -198,7 +201,7 @@ function Landing({ state, cfg, me, onStart }: { state: GameState; cfg: SkinConfi
       </header>
       <main className="landing-main">
         <h1 className={"plate big" + (cfg.title.length > 8 ? " long" : "")}>{cfg.title}</h1>
-        <p className="route-line">{first.name} → {last.name} · {cfg.maxKm} km</p>
+        <p className="route-line">{first.name} → {last.name} · {cfg.maxKm}&nbsp;km</p>
         <p className="lead">
           {t("{n} kategorija, za svaku jedan odgovor. Što je tvoj odgovor rjeđi među igračima, to brže putuješ prema {cilj}.", {
             n: state.perDay,
@@ -216,7 +219,7 @@ function Landing({ state, cfg, me, onStart }: { state: GameState; cfg: SkinConfi
         </ul>
         <p className="rarity-hint"><span>{t("češći odgovor")}</span><span>{t("rjeđi odgovor")}</span></p>
         {!state.ranked && <p className="unranked">{t("Danas si već odigrao drugu državu, pa je ova partija za gušt: ne ulazi u lige, streak ni postotke odgovora.")}</p>}
-        <button className="start" autoFocus onClick={onStart}>{t("Kreni iz {mjesta}", { mjesta: first.genitive ?? first.name })}</button>
+        <button className="start" ref={startRef} onClick={onStart}>{t("Kreni iz {mjesta}", { mjesta: first.genitive ?? first.name })}</button>
         <details className="howto">
           <summary>{t("Pravila")}</summary>
           <ul className="rules">
@@ -372,9 +375,9 @@ function Play({ state, onScored, onLost }: { state: GameState; onScored: (s: Gam
         <i ref={barRef} style={{ transform: `scaleX(${cur.remainingMs / 1000 / seconds})` }} />
       </div>
       {waiting ? (
-        <div className="trow wait"><span>{t("Vrijeme kreće za")} <b className="waitnum" key={wait}>{wait}</b></span><span>{t("Rjeđi odgovor = brže prijevozno sredstvo")}</span></div>
+        <div className="trow wait"><span>{t("Vrijeme kreće za")} <b className="waitnum" key={wait}>{wait}</b></span><span>{t("Rjeđi odgovor = brži prijevoz")}</span></div>
       ) : (
-        <div className="trow"><span>{left} s</span><span>{t("Rjeđi odgovor = brže prijevozno sredstvo")}</span></div>
+        <div className="trow"><span>{left} s</span><span>{t("Rjeđi odgovor = brži prijevoz")}</span></div>
       )}
       <form
         className="answer"
