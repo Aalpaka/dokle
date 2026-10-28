@@ -331,4 +331,9 @@ export const helikopter: Record<string, string[]> = {
   "prosti-broj": ["167"],
   "glavni-isto-slovo": ["Maršalovi Otoci"],
   "oscar-redatelj": ["Norman Taurog/Taurog", "Delbert Mann"],
+  "olimpijske-godina": ["1904"],
+  "sp-godina": ["1938"],
+  kvadrat: ["841"],
+  "otok-veliki": ["Banksov otok/Banks"],
+  "pozivni-3": ["Armenija/Jermenija/Armenia"],
 };

@@ -1,6 +1,7 @@
 // Peti val novih pitanja (2026-10-28): samo zatvoreni popisi koji se mogu provjeriti do kraja, s novim vrstama pitanja:
 // prag (veće od, manje od), dvostruki uvjet (glavni grad na isto slovo) i brojevi. Popisi su provjereni na hr.wikipediji
-// (članci o državama, Eurovizija po godinama, Oscar za režiju, likovi Alana Forda). Poredak je od najčešćih prema rjeđima.
+// (članci o državama i otocima, Eurovizija i Olimpijske igre po godinama, Svjetsko prvenstvo, Oscar za režiju, pozivni brojevi,
+// likovi Alana Forda). Poredak je od najčešćih prema rjeđima.
 import type { SeedCategory } from "../categories";
 import { rang, type Nova } from "./nove-4";
 
@@ -52,10 +53,11 @@ const zaigrano: Nova[] = [
   },
 ];
 
-const opce: Nova[] = [
+// Brojčana pitanja (prag, godine, brojevi) su u Kvizu, bez posebne grupe
+const kviz: Nova[] = [
   {
     slug: "drzava-velika",
-    group: "opce",
+    group: "kviz",
     title: "Država veća od milijun km²",
     hint: "Ukupna površina države; Grenland se ne računa Danskoj",
     answers: `Rusija/Ruska Federacija; Kanada; Kina/NR Kina; SAD/Sjedinjene Američke Države/Sjedinjene Države/Amerika/USA; Brazil; Australija;
@@ -66,7 +68,7 @@ const opce: Nova[] = [
   },
   {
     slug: "drzava-mala",
-    group: "opce",
+    group: "kviz",
     title: "Država manja od 1.000 km²",
     hint: "Članica UN-a ili Vatikan",
     answers: `Vatikan/Sveta Stolica/Vatican; Monako/Monaco; San Marino; Lihtenštajn/Liechtenstein; Malta; Andora/Andorra; Singapur/Singapore;
@@ -76,9 +78,6 @@ const opce: Nova[] = [
       Sveti Vincent i Grenadini/Sv. Vincent i Grenadini/Saint Vincent i Grenadini/Saint Vincent; Mikronezija/Micronesia; Kiribati;
       Sveti Toma i Princip/Sv. Toma i Princip/São Tomé i Príncipe/Sao Tome`,
   },
-];
-
-const kviz: Nova[] = [
   {
     slug: "prosti-broj",
     group: "kviz",
@@ -121,6 +120,55 @@ const kviz: Nova[] = [
       Tony Richardson/Richardson; George Stevens/Stevens; Leo McCarey/McCarey; Lewis Milestone/Milestone; Frank Borzage/Borzage;
       Frank Lloyd; Norman Taurog/Taurog; Delbert Mann`,
   },
+  {
+    slug: "olimpijske-godina",
+    group: "kviz",
+    title: "Godina Olimpijskih igara",
+    hint: "Ljetnih ili zimskih, od 1896. do 2026.; Tokio 2020. vrijedi i kao 2021.",
+    answers: `2024; 2020/2021; 2016; 2012; 2008; 1984; 2000; 2004; 1896; 1992; 2026; 2022; 1996; 2018; 2014; 1980; 1936; 1988; 1972;
+      2010; 2006; 2002; 1998; 1994; 1976; 1968; 1964; 1960; 1948; 1952; 1956; 1932; 1924; 1920; 1928; 1908; 1900; 1912; 1904`,
+  },
+  {
+    slug: "sp-godina",
+    group: "kviz",
+    title: "Godina Svjetskog prvenstva u nogometu",
+    hint: "Muškog, od 1930. do 2026.; vrijede i već dodijeljena 2030. i 2034.",
+    answers: `2018; 1998; 2022; 2026; 2014; 1990; 2010; 2006; 2002; 1986; 1930; 1994; 1982; 1970; 1966; 1974; 1978; 2030; 1950; 1962;
+      1958; 1954; 2034; 1934; 1938`,
+  },
+  {
+    slug: "kvadrat",
+    group: "kviz",
+    title: "Kvadrat prirodnog broja manji od 1.000",
+    hint: "Upiši kvadrat, ne korijen (49, a ne 7); 0 se ne računa",
+    answers: `100/Sto; 4/Četiri; 9/Devet; 16/Šesnaest; 25/Dvadeset pet; 144; 64; 81; 36; 49; 121; 1/Jedan; 400; 900; 225; 625; 169;
+      196; 256; 289; 361; 324; 441; 484; 529; 576; 676; 729; 784; 961; 841`,
+  },
+  {
+    slug: "otok-veliki",
+    group: "kviz",
+    title: "Otok veći od 50.000 km²",
+    hint: "Pojedinačni otok, ne otočje; Australija je kontinent",
+    strip: ["otok"],
+    answers: `Grenland/Greenland; Madagaskar; Velika Britanija/Britanija/Great Britain; Island/Iceland; Irska/Ireland; Kuba/Cuba;
+      Borneo/Kalimantan; Nova Gvineja/New Guinea; Sumatra; Java; Šri Lanka/Sri Lanka/Cejlon; Tasmanija/Tasmania;
+      Honšu/Honshu/Honshū; Hokkaido/Hokaido; Sahalin/Sakhalin; Newfoundland/Njufaundlend; Sulawesi/Celebes; Luzon;
+      Baffinov otok/Baffin/Baffinova zemlja; Južni otok/Južni otok Novog Zelanda/South Island;
+      Sjeverni otok/Sjeverni otok Novog Zelanda/North Island; Hispaniola/Española/La Española; Mindanao;
+      Viktorijin otok/Viktorija/Victoria Island; Ellesmere/Ellesmereov otok; Devon/Devonov otok; Banksov otok/Banks`,
+  },
+  {
+    slug: "pozivni-3",
+    group: "kviz",
+    title: "Država s pozivnim brojem koji počinje s 3",
+    hint: "Međunarodni pozivni broj (+3…); članica UN-a ili Vatikan",
+    answers: `Hrvatska/Croatia; Srbija/Serbia; Slovenija/Slovenia; Bosna i Hercegovina/BiH/Bosna; Italija/Italy; Crna Gora/Montenegro;
+      Sjeverna Makedonija/Makedonija/North Macedonia; Mađarska/Hungary; Francuska/France; Španjolska/Španija/Spain;
+      Grčka/Greece/Elada; Nizozemska/Holandija/Holland/Netherlands; Belgija/Belgium; Portugal; Irska/Ireland; Ukrajina/Ukraine;
+      Albanija/Albania; Bugarska/Bulgaria; Finska/Finland; Cipar/Kipar/Cyprus; Malta; Luksemburg/Luxembourg/Luxemburg;
+      Island/Iceland; Monako/Monaco; San Marino; Vatikan/Sveta Stolica/Vatican; Andora/Andorra; Bjelorusija/Belorusija/Belarus;
+      Litva/Litvanija/Lithuania; Latvija/Letonija/Latvia; Estonija/Estonia; Moldavija/Moldova; Armenija/Jermenija/Armenia`,
+  },
 ];
 
-export const nove5: SeedCategory[] = [...zaigrano, ...opce, ...kviz].map(rang);
+export const nove5: SeedCategory[] = [...zaigrano, ...kviz].map(rang);
