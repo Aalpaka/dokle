@@ -543,9 +543,18 @@ export const zanimljivosti: Record<string, Record<string, string>> = {
     "Nick Nack": "Mali pomoćnik zlikovca Scaramange iz 'Čovjeka sa zlatnim pištoljem'.",
     "Gert Fröbe": "Glumio je Goldfingera; slabo je govorio engleski, pa je u filmu sinkroniziran.",
   },
-  "muppet-sezam": { "Mr. Hooper": "Glumac Will Lee umro je 1982., a Ulica Sezam je kroz njegov lik djeci objasnila smrt." },
-  "star-trek": { "Shran": "Andorijanac plave kože s antenama iz serije 'Enterprise'." },
-  "friends": { "Leonard Green": "Rachelin otac, glumio ga je Ron Leibman." },
+  "muppet-sezam": {
+    "Mr. Hooper": "Glumac Will Lee umro je 1982., a Ulica Sezam je kroz njegov lik djeci objasnila smrt.",
+    "Ji-Young": "Prva azijsko-američka lutka Ulice Sezam, uvedena 2021. Sedmogodišnja Korejsko-Amerikanka svira električnu gitaru.",
+  },
+  "star-trek": {
+    "Shran": "Andorijanac plave kože s antenama iz serije 'Enterprise'.",
+    "Morn": "Stalni gost Quarkova bara u 'Deep Space Nine'. U cijeloj seriji ne izgovori ni riječ, a ostali ga opisuju kao velikog brbljavca.",
+  },
+  "friends": {
+    "Leonard Green": "Rachelin otac, glumio ga je Ron Leibman.",
+    "Earl": "Phoebe ga je kao telefonska prodavačica tonera odgovorila od samoubojstva. Glumio ga je Jason Alexander, George iz 'Seinfelda'.",
+  },
   "pokemon": { "Spinda": "Svaka Spinda ima drukčiji raspored pjega, a mogućih kombinacija ima više od četiri milijarde." },
 
   // Sport
