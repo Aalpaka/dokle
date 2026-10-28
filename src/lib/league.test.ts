@@ -161,7 +161,7 @@ describe("nagrade dana", () => {
     ...extra,
   });
 
-  it("rijetka zvjerka je helikopter i kad netko ima manji udio", () => {
+  it("Zokijeva desna ruka je helikopter i kad netko ima manji udio", () => {
     const a = dayAwards([r(1, 0, 5, { share: 0.2 }), r(2, 1, 7, { share: 1.5, rare: true }), r(3, 2, 9, { share: 3 })]);
     expect(a.rare).toMatchObject({ nickname: "Bruno", heli: true, answer: "Odgovor 7" });
     expect(dayAwards([r(1, 0, 5, { share: 0.2 }), r(2, 1, 7, { share: 1.5 })]).rare).toMatchObject({ nickname: "Ana", heli: false });

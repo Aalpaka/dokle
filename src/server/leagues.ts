@@ -225,7 +225,7 @@ export type TodayAnswer = {
   emoji: string;
   reactions: Partial<Record<Reaction, number>>;
   mine: Reaction | null; // moja reakcija na ovaj odgovor
-  tag: "rare" | "same" | null; // rijetka zvjerka / ista misao
+  tag: "rare" | "same" | null; // Zokijeva desna ruka / ista misao
 };
 export type TodayAnswers = { position: number; title: string; group: string; answers: TodayAnswer[] }[];
 export type StandingView = StandingRow & { move: number | null; crowns: number };
