@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { CODE_RE, PERIODS, cleanLeagueName, type Period } from "@/lib/league";
+import { CODE_RE, PERIODS, cleanLeagueName, isReaction, type Period } from "@/lib/league";
 import {
   LeagueError,
   deleteLeague,
@@ -7,6 +7,7 @@ import {
   leagueByCode,
   leagueView,
   leaveLeague,
+  reactToAnswer,
   removeMember,
   renameLeague,
 } from "@/server/leagues";
@@ -35,7 +36,7 @@ export async function GET(req: Request, ctx: Ctx) {
   return NextResponse.json({ ...view, skinId: league.skinId });
 }
 
-type Action = { action?: string; name?: unknown; memberId?: unknown };
+type Action = { action?: string; name?: unknown; memberId?: unknown; position?: unknown; emoji?: unknown };
 
 export async function POST(req: Request, ctx: Ctx) {
   const league = await find(ctx);
@@ -63,6 +64,12 @@ export async function POST(req: Request, ctx: Ctx) {
       case "delete":
         await deleteLeague(league, playerId);
         break;
+      case "react": {
+        const position = Number(body.position);
+        if (!Number.isInteger(position) || (body.emoji !== null && !isReaction(body.emoji))) throw new LeagueError("Neispravna reakcija.");
+        await reactToAnswer(await getSkin(league.skinId), league, playerId, Number(body.memberId), position, body.emoji);
+        break;
+      }
       default:
         throw new LeagueError("Nepoznata radnja.");
     }

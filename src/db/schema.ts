@@ -222,3 +222,21 @@ export const leagueMembers = pgTable(
   },
   (t) => [uniqueIndex("league_members_league_player").on(t.leagueId, t.playerId), index("league_members_player").on(t.playerId)],
 );
+
+// Reakcije članova lige na današnje odgovore drugih članova; jedna po osobi po odgovoru, svaka liga svoje.
+export const leagueReactions = pgTable(
+  "league_reactions",
+  {
+    id: serial("id").primaryKey(),
+    leagueId: integer("league_id").notNull().references(() => leagues.id, { onDelete: "cascade" }),
+    gameId: integer("game_id").notNull().references(() => games.id, { onDelete: "cascade" }),
+    position: integer("position").notNull(),
+    playerId: uuid("player_id").notNull().references(() => players.id, { onDelete: "cascade" }), // tko reagira
+    emoji: text("emoji").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("league_reactions_one").on(t.leagueId, t.gameId, t.position, t.playerId),
+    index("league_reactions_game").on(t.gameId),
+  ],
+);
