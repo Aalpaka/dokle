@@ -13,6 +13,8 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   serverExternalPackages: ["postgres"],
+  // next/image se ne koristi, pa ni /_next/image (optimizator slika, u 2026. izvor više ozbiljnih ranjivosti Next.js-a)
+  images: { unoptimized: true },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },

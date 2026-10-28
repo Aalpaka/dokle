@@ -1,6 +1,11 @@
+// Upis igrača koji počinje s = + - @ Excel i Google Sheets pri otvaranju izvrše kao formulu (npr. =HYPERLINK ili
+// =IMPORTXML koji podatke iz tablice šalje na tuđu adresu); apostrof ispred ga ostavlja običnim tekstom.
+const FORMULA = /^[=+\-@\t\r]/;
+
 const csvCell = (v: unknown) => {
-  const s = v instanceof Date ? v.toISOString() : String(v ?? "");
-  return /[",\n;]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+  let s = v instanceof Date ? v.toISOString() : String(v ?? "");
+  if (typeof v === "string" && FORMULA.test(s)) s = "'" + s;
+  return /[",\r\n;]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 };
 
 /** CSV za preuzimanje (s BOM-om, da ga Excel otvori u UTF-8). */

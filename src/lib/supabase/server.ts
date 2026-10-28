@@ -2,12 +2,13 @@ import "server-only";
 import { createServerClient } from "@supabase/ssr";
 import { createClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
-import { authEnabled, supabaseAnonKey, supabaseUrl } from "./config";
+import { authEnabled, cookieOptions, supabaseAnonKey, supabaseUrl } from "./config";
 
 /** Supabase klijent za route handlere; čita i osvježava sesiju u kolačićima. */
 export async function supabaseServer() {
   const store = await cookies();
   return createServerClient(supabaseUrl, supabaseAnonKey, {
+    cookieOptions,
     cookies: {
       getAll: () => store.getAll(),
       setAll: (list) => {
@@ -38,10 +39,15 @@ export async function currentAuthUser(strict = false): Promise<AuthUser | null> 
   return c?.sub ? { id: c.sub, email: typeof c.email === "string" && c.email ? c.email : null } : null;
 }
 
-/** Briše korisnika iz Supabase Autha (email ostaje samo ako service_role ključ nije postavljen). */
+/**
+ * Briše korisnika iz Supabase Autha. Bez service_role ključa (ili s krivim) email ostaje u Supabaseu, a stranica o
+ * privatnosti obećaje brisanje, pa se to bar vidi u Vercelovim logovima.
+ */
 export async function deleteAuthUser(id: string) {
+  if (!authEnabled) return;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!authEnabled || !key) return;
+  if (!key) return console.error("Brisanje računa: nema SUPABASE_SERVICE_ROLE_KEY, korisnik ostaje u Supabase Authu");
   const admin = createClient(supabaseUrl, key, { auth: { persistSession: false } });
-  await admin.auth.admin.deleteUser(id);
+  const { error } = await admin.auth.admin.deleteUser(id);
+  if (error) console.error("Brisanje računa iz Supabase Autha nije uspjelo:", error.message);
 }
