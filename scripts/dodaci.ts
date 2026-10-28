@@ -33,8 +33,8 @@ for (const slug of process.argv.slice(2)) {
       add.push(`${names.join("/")}=${share}`);
     }
   }
-  // zbroj udjela pitanja mora ostati ispod 160 (test), pa se novi po potrebi razmjerno smanje
-  const room = 155 - parseSeedAnswers(c.answers).reduce((t, a) => t + a.share, 0);
+  // zbroj udjela pitanja mora ostati ispod 160 (test), pa se novi po potrebi razmjerno smanje (DODACI_CAP mijenja granicu od 155)
+  const room = Number(process.env.DODACI_CAP ?? 155) - parseSeedAnswers(c.answers).reduce((t, a) => t + a.share, 0);
   const total = add.reduce((t, e) => t + parseFloat(e.split("=")[1]), 0);
   if (total > room) {
     const k = room / total;
