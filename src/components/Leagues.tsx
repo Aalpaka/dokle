@@ -314,11 +314,11 @@ export function LeaguePage({ code }: { code: string }) {
               onRival={setRival}
             />
           </section>
-          <Answers view={view} act={act} />
         </div>
 
         <div className="side">
           <Awards view={view} />
+          <Answers view={view} act={act} />
           <Legends view={view} />
           <Hall view={view} onWeek={setPastWeek} />
           <Settings view={view} act={act} />
@@ -566,7 +566,7 @@ function Awards({ view }: { view: LeagueView }) {
         {a.rare && (
           <li>
             <span className="ic">{a.rare.heli ? "🚁" : "🦄"}</span>
-            <span><span className="aw-t">{t("Rijetka zvjerka")}</span><b>{a.rare.nickname}</b>: „{a.rare.answer}”<small> · {a.rare.title}{a.rare.heli ? ` · ${t("helikopter")}` : a.rare.share !== null ? ` · ${pct(a.rare.share)} % ${t("igrača")}` : ""}</small></span>
+            <span><span className="aw-t">{t("Zokijeva desna ruka")}</span><b>{a.rare.nickname}</b>: „{a.rare.answer}”<small> · {a.rare.title}{a.rare.heli ? ` · ${t("helikopter")}` : a.rare.share !== null ? ` · ${pct(a.rare.share)} % ${t("igrača")}` : ""}</small></span>
           </li>
         )}
         {a.same.map((s) => (
@@ -811,6 +811,7 @@ function Answers({ view, act }: { view: LeagueView; act: (b: Record<string, unkn
     act({ action: "react", memberId, position: c.position, emoji });
   };
   const reacted = (k: number) => cats[k].answers.some((a) => Object.keys(a.reactions).length > 0);
+  const color = new Map((view.today ?? []).map((m) => [m.memberId, m.color]));
   return (
     <section
       className="card stack team-answers"
@@ -842,14 +843,16 @@ function Answers({ view, act }: { view: LeagueView; act: (b: Record<string, unkn
           const counts = REACTIONS.filter((e) => a.reactions[e]);
           return (
             <li key={a.memberId} className={own ? "me" : ""}>
-              <span className="em">{a.emoji}</span>
+              <span className="who" title={a.nickname}>
+                <i style={{ background: own ? "var(--signal)" : color.get(a.memberId) }} />
+                {own ? t("Ti") : a.nickname}
+              </span>
               <span className="ans">
                 {a.answer ?? "—"}
-                {a.tag === "rare" && <span className="tag rare">{t("rijetka zvjerka")}</span>}
+                {a.tag === "rare" && <span className="tag rare">{t("Zokijeva desna ruka")}</span>}
                 {a.tag === "same" && <span className="tag same">{t("ista misao")}</span>}
               </span>
-              <span className="km">{a.km}</span>
-              <span className="who">{own ? t("Ti") : a.nickname}</span>
+              <span className="km" title={`${a.km} km`}>{a.emoji} {a.km}</span>
               <span className="reacts">
                 {counts.map((e) => (
                   <button

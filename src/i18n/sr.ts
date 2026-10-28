@@ -241,8 +241,6 @@ export const sr: Record<string, string> = {
   "Pitanja i odgovori vide se samo za ovaj tjedan.": "Pitanja i odgovori vide se samo za ovu nedelju.",
   "Taj tjedan nije u povijesti lige.": "Ta nedelja nije u istoriji lige.",
   "Nagrade dana stižu kad danas odigra još netko iz lige.": "Nagrade dana stižu kada danas odigra još neko iz lige.",
-  "Rijetka zvjerka": "Retka zverka",
-  "rijetka zvjerka": "retka zverka",
   "općeg znanja": "opšteg znanja",
   "Najviše km po pitanju u toj grupi u zadnjih 30 dana.": "Najviše km po pitanju u toj grupi u poslednjih 30 dana.",
   "Još niste igrali isti dan. Kad oboje odigrate, ovdje vidite tko je stigao dalje.": "Još niste igrali isti dan. Kada oboje odigrate, ovde vidite ko je stigao dalje.",

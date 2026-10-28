@@ -178,7 +178,7 @@ export type AwardRound = {
 
 type Who = { memberId: number; nickname: string };
 export type DayAwards = {
-  /** Rijetka zvjerka: helikopter ako ga je itko dobio, inače najmanji % igrača. */
+  /** Zokijeva desna ruka: helikopter ako ga je itko dobio, inače najmanji % igrača. */
   rare: (Who & { position: number; title: string; answer: string; share: number | null; heli: boolean }) | null;
   /** Ista misao: isti odgovor na istom pitanju, najviše tri, najveće i najrjeđe grupe prve. */
   same: { position: number; title: string; answer: string; members: Who[] }[];
