@@ -894,14 +894,14 @@ const zaigrano: Nova[] = [
     slug: "zivotinja-k",
     group: "zaigrano",
     title: "Životinja na slovo K",
-    answers: `Krava; Konj; Koza; Kokoš/Kokoška; Krokodil; Kit; Kengur/Klokan; Koala; Kobra; Kornjača/Kornjaca; Kamila/Deva; Komarac; Kos;
+    answers: `Krava; Konj; Koza; Kokoš/Kokoška; Krokodil; Kit; Kengur/Klokan; Koala; Kobra; Kornjača/Kornjaca; Kamila; Komarac; Kos;
       Kukavica; Kozorog; Kuna; Kojot; Kondor; Kolibrić/Kolibri; Kameleon; Kapibara; Kakadu; Kunić; Krtica; Kanarinac; Kivi;
-      Kit ubojica/Orka; Kobila; Krmača; Kopun; Kokot/Pijetao Kokot; Kozlić; Kuja/Kujica; Kobac; Kraljić; Kreja; Kormoran; Kosac; Kulik;
+      Kit ubojica; Kobila; Krmača; Kopun; Kokot; Kozlić; Kuja/Kujica; Kobac; Kraljić; Kreja; Kormoran; Kosac; Kulik;
       Kukuvija; Kokošar; Kazuar; Kapucin; Kolobus; Kudu; Karibu; Kuna zlatica; Kuna bjelica; Kakapo; Kea; Kukabura/Kookaburra;
-      Kraljevski pingvin; Kajman; Komodski varan/Komodo zmaj; Krastača; Kalamar/Lignja kalamar; Kozica; Kamenica; Kapica; Koralj; Kril;
+      Kraljevski pingvin; Kajman; Komodski varan/Komodo zmaj; Krastača; Kalamar; Kozica; Kamenica; Kapica; Koralj; Kril;
       Karet; Kantar; Kirnja; Kečiga; Klen; Karas; Komarča; Kovač; Kornjaš; Krijesnica; Krpelj; Kukuruzna zlatica; Kućna muha;
       Konjska muha; Karakal; Kinkaju; Koati; Kraljevska kobra; Kitoglavac; Kunjka; Kvaga; Kljunaš; Kljunorožac; Kraljevski orao;
-      Kit grbavac/Grbavi kit; Krmak; Karakurt; Kamenjarka; Kulan; Kalifornijski kondor=0.05; Kraljevski piton=0.1;
+      Kit grbavac; Krmak; Karakurt; Kamenjarka; Kulan; Kalifornijski kondor=0.05; Kraljevski piton=0.1;
       Kajmanska kornjača=0.05; Koraljna zmija=0.1; Kongoni=0.05; Kuskus=0.05; Kardinal; Krivokljun; Kurjak; Koljuška; Kanjac; Kostelj;
       Kraljevski lešinar; Kanadska guska`,
   },

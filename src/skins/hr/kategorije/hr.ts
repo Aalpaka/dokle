@@ -739,7 +739,7 @@ export const hrKategorije: SeedCategory[] = [
     strip: ["grad", "selo", "mjesto"],
     answers: `Karlovac=20; Koprivnica=12; Knin=8; Krapina=7; Kutina=6; Krk=6; Korčula=5; Kaštela=5; Križevci=3;
       Komiža=2; Klis=2; Kastav=2; Kraljevica=1.5; Karlobag=1.5; Kumrovec=1.5; Kutjevo=1.5; Kostrena=1; Klanjec=1;
-      Kostajnica/Hrvatska Kostajnica=1; Korenica=0.8; Kistanje=0.8; Krapinske Toplice=0.8; Kijevo=0.5; Kali=0.5;
+      Kostajnica=1; Korenica=0.8; Kistanje=0.8; Krapinske Toplice=0.8; Kijevo=0.5; Kali=0.5;
       Kukljica=0.5; Kanfanar=0.5; Kaštel Stari=0.5; Kaštel Sućurac=0.5; Kaštel Lukšić=0.5; Kaštel Novi=0.5;
       Kloštar Ivanić=0.5; Kupari=0.5; Klek=0.5; Kaštel Gomilica=0.3; Kaštel Kambelovac=0.3; Kaštel Štafilić=0.3;
       Kneževi Vinogradi=0.3; Kotoriba=0.3; Križ=0.3; Kalnik=0.3; Konjščina=0.3; Krašić=0.3; Kuterevo=0.3; Krapanj=0.3;
@@ -760,7 +760,7 @@ export const hrKategorije: SeedCategory[] = [
     hint: "Grad, mjesto ili selo kojem ime počinje na S (ne na Š)",
     strip: ["grad", "selo", "mjesto"],
     answers: `Split=25; Sisak=12; Slavonski Brod=8; Sinj=6; Samobor=6; Senj=4; Solin=3; Supetar=3; Skradin=2; Ston=2;
-      Slatina=2; Stari Grad/Starigrad/Starigrad-Paklenica=2; Slunj=1.5; Sesvete=1; Sveta Nedelja=1; Sveti Ivan Zelina/Zelina=1; Selce=1;
+      Slatina=2; Stari Grad/Starigrad/Starigrad-Paklenica=2; Slunj=1.5; Sesvete=1; Sveta Nedelja=1; Sveti Ivan Zelina=1; Selce=1;
       Sveti Filip i Jakov=0.8; Sukošan=0.8; Stobreč=0.5; Seget=0.5; Slano=0.5;
       Sali=0.5; Sutivan=0.5; Sveti Martin na Muri=0.5; Sveti Križ Začretje=0.5; Stubičke Toplice=0.5; Sunja=0.5;
       Savudrija=0.5; Svetvinčenat=0.5; Smiljan=0.5; Stomorska=0.3; Silba=0.3; Susak=0.3; Sućuraj=0.3; Sumartin=0.3;
