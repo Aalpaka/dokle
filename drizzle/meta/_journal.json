@@ -127,6 +127,13 @@
       "when": 1792880000000,
       "tag": "0017_upute_kviz",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1792890000000,
+      "tag": "0018_krivi_odgovori",
+      "breakpoints": true
     }
   ]
 }
