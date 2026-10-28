@@ -19,8 +19,18 @@ export function SkinPicker() {
     document.addEventListener("click", close);
     return () => document.removeEventListener("click", close);
   }, []);
+  // popis je poravnat s desnim rubom izbornika; kad iza njega ima još gumba (prijava), na mobitelu bi izašao lijevo van ekrana
+  const fit = (e: React.SyntheticEvent<HTMLDetailsElement>) => {
+    const ul = e.currentTarget.querySelector("ul");
+    if (!ul) return;
+    ul.style.translate = "";
+    if (!e.currentTarget.open) return;
+    const r = ul.getBoundingClientRect(), vw = document.documentElement.clientWidth;
+    const dx = Math.max(0, 8 - r.left) - Math.max(0, r.right - (vw - 8));
+    if (dx) ul.style.translate = `${dx}px 0`;
+  };
   return (
-    <details className="skinpick" ref={ref}>
+    <details className="skinpick" ref={ref} onToggle={fit}>
       <summary aria-label={t("Zemlja")} title={t("Zemlja")}>
         <span className="flag">{flag}</span><span className="wide">{short}</span>
       </summary>

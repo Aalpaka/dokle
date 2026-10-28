@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { supabaseBrowser } from "@/lib/supabase/client";
 import { googleClientId, googleIdentity } from "@/lib/google";
+import { raceTags } from "@/lib/league";
 import type { PlayerStats } from "@/lib/stats";
 import { codeConfigs } from "@/skins/maps";
 import { SkinPicker } from "./SkinPicker";
@@ -91,30 +92,36 @@ function RedirectButton({ label, className }: { label?: string; className?: stri
   );
 }
 
-/** Desni kut zaglavlja: za prijavljene (admin), lige i nadimak (link na profil), inače gumb za prijavu. */
+/**
+ * Desni kut zaglavlja: za prijavljene (admin), lige i nadimak (link na profil), inače gumb za prijavu.
+ * Na mobitelu su to samo ikone, a profil je kružić s prvim slovom nadimka.
+ */
 export function AccountLink({ me }: { me: Me | null }) {
   const path = usePathname();
   const { href, base } = useSkin();
   const t = useT();
   if (!me?.authEnabled) return null;
   const at = (p: string) => path === href(p) || path.startsWith(base + p + "/");
-  if (me.user)
+  if (me.user) {
+    const nick = me.user.nickname ?? t("Profil");
     return (
       <nav className="acct-nav" aria-label="Račun">
         {me.user.isAdmin && (
-          <a className="acct" href="/admin" aria-current={path.startsWith("/admin") ? "page" : undefined} title="Admin">
+          <a className="acct adm" href="/admin" aria-current={path.startsWith("/admin") ? "page" : undefined} title="Admin">
             <span>⚙️</span><span className="wide">Admin</span>
           </a>
         )}
         <a className="acct" href={href("/lige")} aria-current={at("/lige") || path.startsWith(base + "/liga/") ? "page" : undefined} title={t("Lige")}>
           <span>🏆</span><span className="wide">{t("Lige")}</span>
         </a>
-        <a className="acct" href={href("/profil")} aria-current={at("/profil") ? "page" : undefined}>
-          <span className="nm">{me.user.nickname ?? t("Profil")}</span>
+        <a className="acct me" href={href("/profil")} aria-current={at("/profil") ? "page" : undefined}>
+          <span className="av" aria-hidden="true">{raceTags([nick])[0]}</span>
+          <span className="nm">{nick}</span>
           {me.stats && me.stats.currentStreak > 0 && <span className="wide">· 🔥 {me.stats.currentStreak}</span>}
         </a>
       </nav>
     );
+  }
   return <GoogleButton label={t("Prijava")} className="ghost small-btn" compact />;
 }
 

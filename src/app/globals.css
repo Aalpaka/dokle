@@ -1,4 +1,10 @@
 /* Layout: cestovna karta + zelena autocestovna ploča; igra lijevo, karta desno (na mobitelu igra pa karta) */
+/* Overpass crta "·" (i par sličnih znakova) bez širine, pa se "Privatnost · Uvjeti" slijepi; samo te znakove
+   uzimamo iz malog izvatka Overpassa bez GDEF tablice (scripts/fonts/tocka.py) */
+@font-face {
+  font-family: "Dokle Tocka"; src: url(/fonts/tocka.woff2) format("woff2"); font-weight: 100 900; font-display: swap;
+  unicode-range: U+60, U+A8, U+AF, U+B4, U+B7, U+B8, U+2C6-2C7, U+2C9, U+2DA, U+2DC-2DD;
+}
 :root {
   /* tamna "asfalt" podloga oko svijetle reljefne karte; zelena ploča autoceste ostaje znak igre */
   --bg: #161d1f;          /* pozadina stranice */
@@ -13,13 +19,15 @@
   --stop: #e2572b;        /* radovi na cesti */
   --sea: #6aa8cc;
   --map-ink: #1d2628;     /* tekst na karti */
-  --font-sign: var(--nf-sign), "Overpass", "Helvetica Neue", Arial, sans-serif;
+  --font-sign: "Dokle Tocka", var(--nf-sign), "Overpass", "Helvetica Neue", Arial, sans-serif;
   /* Barlow nema ćirilicu; ćirilična slova (Докле, бре?) uzima Roboto Condensed */
   --font-town: var(--nf-town), var(--nf-town-cyr), "Barlow Semi Condensed", "Roboto Condensed", "DIN Alternate", "Arial Narrow", sans-serif;
   --font-mono: var(--nf-mono), "Overpass Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   color-scheme: dark;
 }
 html, body { min-height: 100%; }
+/* iPhone u položeno ne smije sam povećavati tekst */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 body {
   background: var(--bg); color: var(--ink); font-family: var(--font-sign); font-size: 16px; line-height: 1.45;
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
@@ -35,9 +43,9 @@ header.top { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .plate {
   display: inline-block; background: var(--town-sign); color: #111; border-radius: 4px; padding: calc(6px + 0.1em) 26px calc(6px + 0.17em);
   box-shadow: inset 0 0 0 4px var(--town-sign), inset 0 0 0 6px #111, 0 4px 12px -4px #0009;
-  font-family: var(--font-town); font-weight: 600; font-size: 32px; letter-spacing: 0.03em; line-height: 1;
+  font-family: var(--font-town); font-weight: 600; font-size: 32px; letter-spacing: 0.03em; line-height: 1; white-space: nowrap;
 }
-@media (max-width: 520px) { .meta { display: none; } .plate { font-size: 26px; padding-inline: 16px; } }
+@media (max-width: 520px) { .meta { display: none; } }
 .meta { font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
 .meta b { color: var(--ink); }
 .grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: start; }
@@ -74,7 +82,11 @@ button:disabled { opacity: .5; cursor: default; }
 .timer { height: 8px; border-radius: 4px; background: var(--line); overflow: hidden; }
 .timer i { display: block; height: 100%; width: 100%; background: var(--signal); transform-origin: left; }
 .timer.low i { background: var(--stop); }
-.trow { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
+.trow { display: flex; justify-content: space-between; gap: 12px; font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
+.trow > span:first-child { white-space: nowrap; }
+.trow > span:last-child { text-align: right; }
+/* na mobitelu uz odbrojavanje nema mjesta za objašnjenje; vrati se čim vrijeme krene */
+@media (max-width: 520px) { .trow.wait > span:last-child { display: none; } }
 /* pitanje se čita prije nego krene vrijeme */
 .timer.wait i { animation: wait-pulse 1s ease-in-out infinite; }
 @keyframes wait-pulse { 50% { opacity: 0.45; } }
@@ -89,7 +101,7 @@ button:disabled { opacity: .5; cursor: default; }
 .answer input::placeholder { color: #6d7d7a; font-weight: 600; }
 .answer button { border-radius: 12px; font-size: 18px; font-weight: 900; padding: 0 22px; }
 .answer input:focus { border-color: var(--sign); outline: none; }
-.sending { font-size: 14px; color: var(--muted); min-height: 1.45em; }
+.sending { font-size: 14px; color: var(--muted); min-height: 1.45em; overflow-wrap: anywhere; }
 .sending b { color: var(--ink); }
 .sending.nope { color: var(--stop); font-weight: 700; }
 .sending.changed b { background: var(--signal); color: #1b1b1b; padding: 0 5px; border-radius: 4px; }
@@ -116,6 +128,7 @@ button.small-btn.ghost { font-weight: 700; }
 .result { border-radius: 12px; padding: 14px 16px; background: var(--card); display: flex; flex-direction: column; gap: 6px; }
 .result .big { display: flex; align-items: center; gap: 12px; }
 .result .emo { font-size: 34px; line-height: 1; }
+.result .big > div { min-width: 0; overflow-wrap: anywhere; }
 .result .km { font-family: var(--font-mono); font-weight: 700; font-size: 22px; margin-left: auto; }
 .result.miss .km { color: var(--stop); }
 .small { font-size: 13px; color: var(--muted); }
@@ -171,7 +184,8 @@ button.small-btn.ghost { font-weight: 700; }
 /* postaja produžetka (easter egg) vidi se tek kad netko do nje stigne */
 .stn.egg:not(.reached) { display: none; }
 @keyframes pop { 0% { transform: scale(1); } 35% { transform: scale(2.2); } 100% { transform: scale(1); } }
-.veh { width: 0; height: 0; }
+/* vlastito vozilo iznad kružića utrke (na mobitelu su točkice baš na cesti) */
+.veh { width: 0; height: 0; z-index: 200; }
 .veh .badge {
   position: absolute; left: -23px; top: -23px; width: 46px; height: 46px; border-radius: 50%;
   display: grid; place-items: center; color: #fff; background: var(--vc, #13804a);
@@ -209,7 +223,7 @@ button.small-btn.ghost { font-weight: 700; }
 .maptoast .tbadge svg { width: 24px; height: 24px; }
 .maptoast .txt { min-width: 0; }
 .maptoast b { font-size: 17px; overflow-wrap: anywhere; }
-.maptoast .sub { font-size: 13px; color: var(--muted); }
+.maptoast .sub { font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
 .maptoast .km { font-family: var(--font-mono); font-weight: 700; font-size: 22px; color: var(--signal); margin-left: 6px; white-space: nowrap; }
 .stationmsg {
   position: absolute; left: 50%; top: 14%; transform: translateX(-50%); background: #fff; color: var(--map-ink); border-radius: 12px;
@@ -254,7 +268,7 @@ button.small-btn.ghost { font-weight: 700; }
 .misses { display: grid; gap: 6px; padding: 0 4px 10px 2.6em; }
 .misses ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
 .misses li { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; }
-.misses .a { font-weight: 600; }
+.misses .a { font-weight: 600; overflow-wrap: anywhere; }
 .misses .small-btn { padding: 4px 10px; font-size: 13px; }
 .misses .st { color: var(--muted); }
 .misses .st.accepted { color: var(--ink); }
@@ -262,7 +276,7 @@ button.small-btn.ghost { font-weight: 700; }
 .history > li { display: grid; grid-template-columns: 3em minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 10px 4px; }
 .hist-head { justify-content: space-between; }
 /* dva-tri gumba kao jedan prekidač (npr. poredak povijesti) */
-.seg { display: inline-flex; border-radius: 9px; box-shadow: inset 0 0 0 1.5px var(--line); padding: 2px; gap: 2px; }
+.seg { display: inline-flex; flex-wrap: wrap; max-width: 100%; border-radius: 9px; box-shadow: inset 0 0 0 1.5px var(--line); padding: 2px; gap: 2px; }
 .seg button { padding: 5px 11px; font-size: 13px; border-radius: 7px; }
 .seg button.ghost { box-shadow: none; color: var(--muted); }
 .history .n { font-family: var(--font-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
@@ -325,11 +339,33 @@ a { color: #5fd39a; font-weight: 700; }
 .acct { font-size: 14px; text-decoration: none; padding: 8px 12px; border-radius: 10px; box-shadow: inset 0 0 0 1.5px var(--line); color: var(--ink); white-space: nowrap; display: inline-flex; gap: .35em; min-width: 0; }
 .acct[aria-current="page"] { box-shadow: inset 0 0 0 1.5px var(--signal); }
 .acct .nm { overflow: hidden; text-overflow: ellipsis; }
+.acct .av { display: none; }
+/* račun do 700 px (mobitel, položeni mobitel, mali tablet): ikone kao ostali gumbi, profil je kružić s prvim slovom
+   nadimka (cijeli nadimak ostaje za čitač ekrana); s natpisima se poveznice na tim širinama preklapaju */
+@media (max-width: 700px) {
+  .acct-nav { gap: 6px; flex-shrink: 0; }
+  .acct-nav .wide { display: none; }
+  .acct-nav .acct { position: relative; width: 42px; height: 42px; padding: 0; justify-content: center; align-items: center; font-size: 16px; background: var(--card); }
+  .wrap.fit .acct-nav .acct { width: 36px; height: 36px; }
+  .acct-nav .acct.me { border-radius: 50%; }
+  .acct .av { display: block; font-weight: 800; color: var(--signal); }
+  .acct.me .nm { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+}
 @media (max-width: 520px) {
   .wide { display: none; }
-  .acct .nm { max-width: 7.5em; }
-  header.top, .landing-top { gap: 8px; }
+  header.top { gap: 8px; }
+  /* zaglavlja kao u igri (manja ploča, gumbi od 36 px), da i s prijavom sve stane u jedan red */
+  header.top .plate { font-size: 20px; padding: calc(4.5px + 0.08em) 12px calc(4.5px + 0.15em); box-shadow: inset 0 0 0 3px var(--town-sign), inset 0 0 0 4.5px #111, 0 3px 8px -3px #0009; }
+  header.top .iconbtn, .landing-top .iconbtn, .acct-nav .acct { width: 36px; height: 36px; }
+  /* razmak umjesto praznog elementa, da ne troši dva gapa */
+  header.top > .spacer, .landing-top > .spacer { display: none; }
+  header.top > .spacer + *, .landing-top > .spacer + * { margin-left: auto; }
+  /* u igri s dugim naslovom (BiH, Srbija) admin ne stane u red; ima ga na početnom ekranu i na kraju */
+  .wrap.fit header.top:has(.plate.long) .acct.adm { display: none; }
 }
+@media (max-width: 400px) { header.top { gap: 6px; } }
+/* najuži mobiteli: u igri samo ploča, zvuk i zemlja */
+@media (max-width: 340px) { .wrap.fit .acct-nav { display: none; } }
 button.small-btn { padding: 8px 14px; font-size: 14px; }
 /* izbornik zemlje: zastava (i kratica na širem ekranu), padajući popis ispod */
 .skinpick { position: relative; flex-shrink: 0; }
@@ -343,6 +379,7 @@ button.small-btn { padding: 8px 14px; font-size: 14px; }
 .skinpick li a:hover { background: var(--line); }
 .skinpick li a[aria-current] { box-shadow: inset 0 0 0 1.5px var(--signal); }
 .wrap.fit .skinpick summary { height: 36px; padding: 0 9px; }
+@media (max-width: 520px) { .skinpick summary { height: 36px; padding: 0 9px; } }
 .savebox { border-radius: 12px; padding: 14px 16px; box-shadow: inset 0 0 0 2px var(--sign); display: grid; gap: 8px; }
 .stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
 .stat { background: var(--card); border-radius: 12px; padding: 12px 14px; display: grid; gap: 2px; }
@@ -408,6 +445,9 @@ textarea.field { width: 100%; font-family: var(--font-mono); }
   position: relative; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
   text-align: center; gap: 18px; padding: 16px 16px 40px;
 }
+/* na mobitelu body već ima rub od 16 px: zaglavlje i sadržaj bez još jednog, pa su vozila u dva reda i na 360 px */
+@media (max-width: 520px) { .landing-top { padding-inline: 0; flex-wrap: wrap; gap: 8px; } .landing-main { padding-inline: 0; } }
+@media (max-width: 400px) { .landing-top { gap: 6px; } }
 .plate.big {
   margin: 0; font-size: clamp(60px, 12vw, 128px); line-height: 1; border-radius: 8px;
   /* unutar crnog ruba (14px): malo više mjesta dolje, za descendere (Д, р, zarez), tako da su velika slova po sredini */
@@ -472,6 +512,8 @@ textarea.field { width: 100%; font-family: var(--font-mono); }
   .wrap.fit header.top > * { pointer-events: auto; }
   .wrap.fit .plate { font-size: 20px; padding: calc(4.5px + 0.08em) 12px calc(4.5px + 0.15em); box-shadow: inset 0 0 0 3px var(--town-sign), inset 0 0 0 4.5px #111, 0 3px 8px -3px #0009; }
   .wrap.fit .iconbtn { width: 36px; height: 36px; }
+  /* broj, datum i ruta tu se lome u četiri retka preko karte (do 520 px ih ionako nema) */
+  .wrap.fit .meta { display: none; }
   .wrap.fit .stage { position: absolute; inset: 0; border-radius: 0; box-shadow: none; min-height: 0; }
   .wrap.fit .hud.tl, .wrap.fit .hud.tr { top: calc(max(10px, env(safe-area-inset-top)) + 46px); }
   .wrap.fit .panel {
@@ -547,6 +589,8 @@ table.league tr.me td { color: var(--signal); background: #f2b2000f; }
 table.league td b { font-size: 17px; }
 .legend { margin-top: 8px; }
 @media (max-width: 520px) { table.league .opt { display: none; } table.league th, table.league td { padding-inline: 5px; } }
+/* 360 px: tablica stane bez skrolanja u stranu */
+@media (max-width: 400px) { table.league .name { min-width: 6em; } table.league th, table.league td { padding-inline: 4px; } }
 
 .today-bars { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
 .today-bars li { display: grid; grid-template-columns: minmax(5em, 8em) 1fr auto; gap: 10px; align-items: center; }
@@ -693,7 +737,7 @@ details.answers[open] > summary { margin-bottom: 14px; }
 /* admin: statistika */
 .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 12px; align-items: start; }
 .bar.wide { grid-template-columns: 150px minmax(0, 1fr) 44px 40px; }
-.bar em { font-style: normal; font-size: 12px; color: var(--muted); text-align: right; font-family: var(--font-mono); }
+.bar em { font-style: normal; font-size: 12px; color: var(--muted); text-align: right; font-family: var(--font-mono); white-space: nowrap; }
 .histo { height: 120px; display: flex; align-items: flex-end; gap: 2px; border-bottom: 1.5px solid var(--muted); }
 .histo-slot { flex: 1; height: 100%; display: flex; align-items: flex-end; }
 .histo-slot span { width: 100%; background: var(--sign); border-radius: 2px 2px 0 0; }
@@ -802,8 +846,9 @@ button.att-player:hover { background: var(--bg); }
 .race-pick { display: block; margin: 2px 10px 8px; width: calc(100% - 20px); font: inherit; font-size: 12px; padding: 3px 6px; border-radius: 7px; border: 1px solid #c9d0ce; background: #fff; color: inherit; }
 .rstrip.card .race-pick { background: var(--bg); border-color: var(--line); }
 .mapbtn.race-on { pointer-events: auto; padding: 6px 10px; font-size: 12px; }
-/* mobitel: na karti samo točkice u boji, a utrka je traka od starta do cilja s popisom na dodir */
-.rstrip { pointer-events: auto; background: #ffffffeb; color: var(--map-ink); border-radius: 10px; box-shadow: 0 4px 14px -6px #0006; width: calc(100vw - 24px); }
+/* mobitel: na karti samo točkice u boji, a utrka je traka od starta do cilja s popisom na dodir
+   (isolation drži z-index kružića unutar trake, pa poruka o stanici prekrije cijelu traku) */
+.rstrip { pointer-events: auto; background: #ffffffeb; color: var(--map-ink); border-radius: 10px; box-shadow: 0 4px 14px -6px #0006; width: calc(100vw - 24px); isolation: isolate; }
 .rstrip .race-head { padding: 5px 10px 0; font-size: 12px; }
 .rtrack { position: relative; margin: 0 10px; cursor: pointer; }
 .rline { position: absolute; left: 0; right: 0; bottom: 6px; height: 3px; border-radius: 2px; background: repeating-linear-gradient(90deg, #8a9592 0 6px, transparent 6px 10px); }
@@ -833,3 +878,6 @@ button.att-player:hover { background: var(--bg); }
   .race-ghost i { display: none; }
   .race-ghost .ghost-chip { width: 12px; height: 12px; left: -6px; top: -6px; font-size: 0; translate: none; box-shadow: 0 0 0 2px #fff, 0 1px 4px #0008; }
 }
+
+/* iPhone zumira stranicu kad se dodirne polje sa slovima manjim od 16 px */
+@media (pointer: coarse) { .field, .race-pick { font-size: 16px; } }
