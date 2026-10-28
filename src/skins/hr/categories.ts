@@ -7,6 +7,7 @@ import { aliasi } from "./kategorije/aliasi";
 import { dodaci } from "./kategorije/dodaci";
 import { helikopter } from "./kategorije/helikopter";
 import { hrKategorije } from "./kategorije/hr";
+import { krivi } from "./kategorije/krivi";
 import { kvizKategorije } from "./kategorije/kviz";
 import { nove3, nove3Hr } from "./kategorije/nove-3";
 import { nove4 } from "./kategorije/nove-4";
@@ -56,7 +57,7 @@ export const hrCategories: SeedCategory[] = [
   ...zastaveKategorije,
   ...nove3Hr,
   ...nove4Hr,
-].map(withDodaci).map(withWiki).map(withRare).map(withAliasi);
+].map(withDodaci).map(withWiki).map(withRare).map(withAliasi).map(withoutKrivi);
 
 function format(list: ReturnType<typeof parseSeedAnswers>) {
   return list.map((a) => `${[a.canonical, ...a.variants].join("/")}=${a.share}${a.rare ? "!" : ""}`).join(";");
@@ -73,6 +74,13 @@ function withAliasi(c: SeedCategory): SeedCategory {
   if (!m) return c;
   const list = parseSeedAnswers(c.answers).map((a) => (m[a.canonical] ? { ...a, variants: [...a.variants, ...m[a.canonical].split("/")] } : a));
   return { ...c, answers: format(list) };
+}
+
+/** Bez odgovora iz krivi.ts (zadnji korak, da ih ni dodaci ni helikopter.ts ne vrate). */
+function withoutKrivi(c: SeedCategory): SeedCategory {
+  const names = krivi[c.slug];
+  if (!names) return c;
+  return { ...c, answers: format(parseSeedAnswers(c.answers).filter((a) => !names.includes(a.canonical))) };
 }
 
 /** Udjeli dorađeni Wikipedia pregledima (wikipedija.ts, wikipedija-dodaci.ts) zamjenjuju ručne procjene. */
