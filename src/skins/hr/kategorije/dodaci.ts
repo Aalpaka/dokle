@@ -223,4 +223,5 @@ export const dodaci: Record<string, string> = {
   "zastava-zivotinja": "Poljska/Poland=0.2; Finska/Finland/Suomi=0.2",
   "zastava-pruge": "Sjeverna Koreja/DNRK/North Korea=0.3; Esvatini/Svazi/Eswatini/Swaziland=0.1; Belize=0.05",
   "papa": "Telesfor=0.05; Silverije=0.05; Adeodat/Adeodat I/Adeodat II/Deusdedit=0.05; Donus/Don=0.05; Marin/Marin I/Marin II=0.05; Roman=0.05",
+  "eurovizija-pobjednik": "Dara/Bangaranga=1",
 };

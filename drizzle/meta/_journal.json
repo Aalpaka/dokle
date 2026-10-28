@@ -120,6 +120,13 @@
       "when": 1792870000000,
       "tag": "0016_slova_aliasi",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1792880000000,
+      "tag": "0017_upute_kviz",
+      "breakpoints": true
     }
   ]
 }

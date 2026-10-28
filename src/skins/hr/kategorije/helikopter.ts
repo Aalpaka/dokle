@@ -323,4 +323,12 @@ export const helikopter: Record<string, string[]> = {
   "mjesto-c-h-i": ["Hrgovec", "Ivanić Košnički"],
   "grad-hr": ["Klanjec", "Donja Stubica"],
   "opcina-hr": ["Jesenje", "Gornji Mihaljevec"],
+  "eurovizija-grad": ["Millstreet"],
+  "eurovizija-drzava": ["Maroko/Morocco"],
+  "alan-ford": ["Alonisius Alonisiis", "Divna Mačkolović"],
+  "drzava-velika": ["Mauritanija"],
+  "drzava-mala": ["Sveti Toma i Princip"],
+  "prosti-broj": ["167"],
+  "glavni-isto-slovo": ["Maršalovi Otoci"],
+  "oscar-redatelj": ["Norman Taurog/Taurog", "Delbert Mann"],
 };

@@ -462,6 +462,7 @@ export const kvizKategorije: SeedCategory[] = [
     slug: "f1-prvak",
     group: "kviz",
     title: "Svjetski prvak Formule 1",
+    hint: "Vozač, ne momčad; od 1950. do 2025.",
     strip: [],
     answers: `Michael Schumacher/Schumacher=20; Lewis Hamilton/Hamilton=18; Max Verstappen/Verstappen=12;
       Ayrton Senna/Senna=8; Sebastian Vettel/Vettel=6; Fernando Alonso/Alonso=5; Niki Lauda/Lauda=4;
@@ -1127,7 +1128,7 @@ export const kvizKategorije: SeedCategory[] = [
     slug: "eurovizija-pobjednik",
     group: "kviz",
     title: "Pobjednik Eurovizije: izvođač ili pjesma",
-    hint: "Bilo koja godina od 1956. do 2025.",
+    hint: "Bilo koja godina od 1956. do 2026.",
     strip: [],
     answers: `ABBA/Waterloo=15; Riva/Rock Me=12; Måneskin/Zitti e buoni=8;
       Conchita Wurst/Conchita/Rise Like a Phoenix=6; Loreen/Euphoria/Tattoo=6; Marija Šerifović/Molitva=5;

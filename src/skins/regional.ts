@@ -42,6 +42,7 @@ const HINTS: Record<string, (lang: string) => string> = {
   germanizam: () => "Germanizam u našem jeziku, i u svakodnevnom govoru",
   kost: () => "Naš ili latinski naziv; vrijede i skupine kostiju (npr. kosti zapešća)",
   zvijezda: () => "Naš ili latinski naziv; planeti ne vrijede",
+  "glavni-isto-slovo": (l) => `Po ${l}m nazivima, i kad se grad zove isto kao država; Š i S nisu isto slovo`,
   "oscar-film": () => "Bilo koja godina, od Krila (1929.) do Anore (2025.); naš ili izvorni naslov",
 };
 
