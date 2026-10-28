@@ -56,12 +56,19 @@ export const svijetSport = `Janica Kostelić=1.5; Blanka Vlašić=1; Ivica Koste
 
 /**
  * Verzija hrvatske "izvan Hrvatske" kategorije za drugu državu: isti slug, iz popisa se miču domaći odgovori
- * (remove, po kanonskom imenu), a dodaju hrvatski iz domaće hrvatske kategorije (addFrom) s upola manjim udjelom.
+ * (remove, po kanonskom imenu iz te ili iz addFrom kategorije, ili samo varijanta), a dodaju hrvatski iz domaće
+ * hrvatske kategorije (addFrom) s upola manjim udjelom.
  */
 export type Abroad = { title: string; hint?: string; remove?: string[]; addFrom?: string; add?: string };
 
 /** Sadržaj države: domaće kategorije (isti slugovi kao hrvatska grupa), "izvan" verzije i zamjene ostalih hrvatskih. */
 export type Country = { lang: string; domestic: SeedCategory[]; abroad: Record<string, Abroad>; replace: SeedCategory[] };
+
+/** Dodaje domaće odgovore iz addFrom kategorija (npr. političari iz BiH među hrvatskim političarima) u remove "izvan" verzija. */
+export function withRemoved(abroad: Record<string, Abroad>, extra: Record<string, string[]>): Record<string, Abroad> {
+  for (const slug of Object.keys(extra)) if (!abroad[slug]) throw new Error(`Nema "izvan" verzije ${slug}`);
+  return Object.fromEntries(Object.entries(abroad).map(([slug, a]) => [slug, extra[slug] ? { ...a, remove: [...(a.remove ?? []), ...extra[slug]] } : a]));
+}
 
 /** Dodatni odgovori (dodaci.ts) na kraj popisa kategorija. */
 export function withDodaci(cats: SeedCategory[], dodaci: Record<string, string>): SeedCategory[] {
@@ -81,21 +88,34 @@ export function abroadVersion(all: SeedCategory[], slug: string, a: Abroad): See
   const base = all.find((c) => c.slug === slug);
   if (!base) throw new Error(`Nema kategorije ${slug}`);
   const list = parseSeedAnswers(base.answers);
+  const from = a.addFrom ? parseSeedAnswers(all.find((c) => c.slug === a.addFrom)!.answers) : [];
+  // remove vrijedi i za addFrom: domaći odgovor (npr. ćevapi u hrvatskim jelima) inače bi se vratio iz hrvatske kategorije
+  const removed = new Set<string>();
   for (const r of a.remove ?? []) {
     const i = list.findIndex((x) => x.canonical === r);
-    if (i < 0) throw new Error(`${slug}: nema odgovora ${r}`);
-    list.splice(i, 1);
+    const f = from.find((x) => x.canonical === r);
+    // samo varijanta ("Gibanica" uz Međimursku gibanicu): odgovor ostaje pod punim imenom
+    if (i < 0 && !f && [...list, ...from].some((x) => x.variants.includes(r))) {
+      removed.add(fold(r));
+      continue;
+    }
+    if (i < 0 && !f) throw new Error(`${slug}: nema odgovora ${r}`);
+    for (const x of [...(i >= 0 ? list.splice(i, 1) : []), ...(f ? [f] : [])]) [x.canonical, ...x.variants].forEach((n) => removed.add(fold(n)));
   }
+  // ni varijanta stranog odgovora ne vrijedi za maknuti domaći ("Ćufte" uz Köfte)
+  for (const x of list) x.variants = x.variants.filter((v) => !removed.has(fold(v)));
   const seen = new Set(list.flatMap((x) => [x.canonical, ...x.variants].map(fold)));
   const extra = [
-    ...(a.addFrom ? parseSeedAnswers(all.find((c) => c.slug === a.addFrom)!.answers).map((x) => ({ ...x, share: x.share / 2, rare: false })) : []),
+    ...from.map((x) => ({ ...x, share: x.share / 2, rare: false })),
     ...(a.add ? parseSeedAnswers(a.add) : []),
   ];
   for (const x of extra) {
-    const names = [x.canonical, ...x.variants].map(fold);
-    if (names.some((n) => seen.has(n))) continue;
-    names.forEach((n) => seen.add(n));
-    list.push(x);
+    if (seen.has(fold(x.canonical)) || removed.has(fold(x.canonical))) continue;
+    // kratko ime koje već ima drugi odgovor ("Bogdanović" za Bogdana) ili maknuti domaći ("Ivanović" za Branislava) ne prenosi se,
+    // a hrvatski odgovor (Bojan Bogdanović, Franjo Ivanović) ostaje pod punim imenom
+    const variants = x.variants.filter((v) => !seen.has(fold(v)) && !removed.has(fold(v)));
+    [x.canonical, ...variants].forEach((n) => seen.add(fold(n)));
+    list.push({ ...x, variants });
   }
   const answers = list.map((x) => `${[x.canonical, ...x.variants].join("/")}=${x.share}${x.rare ? "!" : ""}`).join(";");
   return { ...base, title: a.title, hint: a.hint ?? base.hint, answers };

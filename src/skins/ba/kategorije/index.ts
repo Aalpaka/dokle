@@ -10,23 +10,26 @@ import { baDomace6 } from "./domace6";
 import { baDomace7 } from "./domace7";
 import { baZamjene } from "./zamjene";
 import { dodaci } from "./dodaci";
-import { withDodaci } from "../../regional";
+import { withDodaci, withRemoved } from "../../regional";
+import { izBiH } from "./iz-bih";
 
 export const baContent: Country = {
   lang: "bosanski",
   domestic: withDodaci([...baDomace1, ...baDomace2, ...baDomace3, ...baDomace4, ...baDomace5, ...baDomace6, ...baDomace7], dodaci),
   replace: withDodaci(baZamjene, dodaci),
-  abroad: {
+  abroad: withRemoved({
     "svjetska-planina": {
       title: "Planina ili vrh izvan BiH",
       addFrom: "planina",
       remove: ["Jahorina", "Bjelašnica", "Igman", "Vlašić", "Maglić", "Romanija", "Velež", "Čvrsnica", "Trebević", "Kozara",
-        "Treskavica", "Prenj", "Grmeč", "Vranica", "Zelengora", "Ozren", "Majevica", "Cincar"],
+        "Treskavica", "Prenj", "Grmeč", "Vranica", "Zelengora", "Ozren", "Majevica", "Cincar", "Volujak", "Lelija", "Visočica",
+        "Bitovnja", "Ivan planina", "Konjuh", "Crvanj", "Vitorog", "Šator", "Klekovača", "Osječenica", "Motajica", "Trebava"],
     },
     "strani-klub": {
       title: "Nogometni klub izvan BiH",
       addFrom: "klub",
-      remove: ["Zrinjski", "Željezničar", "Sarajevo", "Velež", "Borac Banja Luka", "Široki Brijeg", "Sloboda", "Čelik", "Posušje"],
+      remove: ["Zrinjski", "Željezničar", "Sarajevo", "Velež", "Borac Banja Luka", "Široki Brijeg", "Sloboda", "Čelik", "Posušje",
+        "GOŠK Gabela", "Rudar Prijedor", "Igman Konjic", "Tuzla City", "Leotar", "Slavija"],
     },
     "otok-svijet": { title: "Otok", hint: "Bilo koji otok na svijetu, i hrvatski", addFrom: "otok" },
     nogometas: {
@@ -46,19 +49,19 @@ export const baContent: Country = {
       title: "Znamenitost ili građevina izvan BiH",
       hint: "Izvan BiH: građevina, spomenik ili poznata prirodna atrakcija",
       addFrom: "znamenitost",
-      remove: ["Stari most"],
+      remove: ["Stari most", "Baščaršija"],
     },
     "jezero-svijet": {
       title: "Jezero izvan BiH",
       hint: "Prirodno ili umjetno jezero bilo gdje osim u BiH",
       addFrom: "jezero",
-      remove: ["Buško jezero", "Jablaničko jezero", "Boračko jezero", "Ramsko jezero", "Plivsko jezero"],
+      remove: ["Buško jezero", "Jablaničko jezero", "Boračko jezero", "Ramsko jezero", "Plivsko jezero", "Perućačko jezero"],
     },
     "kosarkas-svijet": {
       title: "Košarkaš izvan BiH",
       hint: "Košarkaš ili košarkašica koji nije iz BiH, bilo koja generacija",
       addFrom: "kosarkas",
-      remove: ["Mirza Delibašić", "Jusuf Nurkić", "Mirza Teletović", "Razija Mujanović"],
+      remove: ["Mirza Delibašić", "Jusuf Nurkić", "Mirza Teletović", "Razija Mujanović", "Dražen Dalipagić"],
     },
     "sportas-svijet": {
       title: "Sportaš ili sportašica izvan BiH, bez nogometa i tenisa",
@@ -69,7 +72,9 @@ export const baContent: Country = {
       title: "Političar ili državnik izvan BiH",
       hint: "Političar, vladar ili državnik koji nije iz BiH, danas ili kroz povijest",
       addFrom: "politicar",
-      remove: ["Milorad Dodik", "Alija Izetbegović", "Bakir Izetbegović", "Dragan Čović", "Željko Komšić", "Radovan Karadžić"],
+      remove: ["Milorad Dodik", "Alija Izetbegović", "Bakir Izetbegović", "Dragan Čović", "Željko Komšić", "Radovan Karadžić",
+        "Biljana Plavšić", "Momčilo Krajišnik", "Haris Silajdžić", "Fikret Abdić", "Mladen Ivanić", "Nebojša Radmanović",
+        "Željka Cvijanović", "Denis Bećirović", "Zlatko Lagumdžija", "Sulejman Tihić", "Ratko Mladić"],
     },
     "strani-pisac": {
       title: "Pisac ili pjesnik izvan BiH",
@@ -93,7 +98,8 @@ export const baContent: Country = {
         "Davorin Popović", "Elvis J. Kurtović", "Nele Karajlić", "Alen Islamović", "Mladen Vojičić Tifa", "Kemal Malovčić",
         "Hari Varešanović", "Nedžad Salković", "Asim Brkan", "Beba Selimović", "Meho Puzić", "Zehra Deović", "Saša Lošić",
         "Amila Glamočak", "Deen", "Elvir Laković Laka", "Letu štuke", "Frenkie", "Regina", "Vatreni poljubac", "Pro arte",
-        "Teška industrija", "Ambasadori", "Bombaj štampa", "Jadranka Stojaković", "Divlje jagode", "Maya Sar"],
+        "Teška industrija", "Ambasadori", "Bombaj štampa", "Jadranka Stojaković", "Divlje jagode", "Maya Sar", "Zdravko Čolić",
+        "No Smoking Orchestra", "Nada Topčagić"],
     },
     "strani-film": {
       title: "Strani film",
@@ -106,5 +112,5 @@ export const baContent: Country = {
       addFrom: "obala",
       remove: ["Neum"],
     },
-  },
+  }, izBiH),
 };
