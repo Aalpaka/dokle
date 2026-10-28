@@ -7,4 +7,6 @@ export const krivi: Record<string, string[]> = {
   hajduk: ["Martin Baturina", "Nediljko Labrović", "Bernardo Matić", "Gregor Gulišija"],
   // Špehar nikad nije igrao za Dinamo (bio je u NK Zagrebu), ostali samo u Dinamovoj omladinskoj školi
   dinamo: ["Robert Špehar", "Roko Šimić", "David Čolina", "Tomislav Štrkalj", "Branimir Kalaica", "Ivan Pavlica"],
+  // nisu bili u olimpijskim momčadima (rukomet 2004. i 2012.), a Huklek je u Tokiju bio peti
+  "hr-olimpijac": ["Renato Sulić", "Željko Musa", "Tonči Valčić", "Ivan Huklek"],
 };
