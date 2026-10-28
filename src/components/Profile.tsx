@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { AVATAR_PX, MAX_AVATAR_BYTES } from "@/lib/avatar";
+import { raceTags } from "@/lib/league";
 import { GoogleButton, PageShell, signOut, useMe } from "./account";
 import { MyLeagues } from "./Leagues";
 import { skinFetch, useSkin, useT } from "./skin";
@@ -97,6 +99,8 @@ function LoggedIn({ me, onChange }: { me: NonNullable<ReturnType<typeof useMe>>;
           <MyLeagues />
         </section>
 
+        <AvatarCard me={me} onChange={onChange} />
+
         <section className="card stack">
           <span className="eyebrow">{t("Nadimak")}</span>
           <p className="small">{t("Ovo ime vide drugi igrači; tvoje pravo ime i email ne prikazujemo.")}</p>
@@ -123,4 +127,90 @@ function LoggedIn({ me, onChange }: { me: NonNullable<ReturnType<typeof useMe>>;
 
 function Stat({ value, label }: { value: number; label: string }) {
   return <div className="stat"><b>{value}</b><span>{label}</span></div>;
+}
+
+/**
+ * Slika se u pregledniku izreže na kvadrat iz sredine i smanji na AVATAR_PX (webp, a gdje preglednik ne zna webp
+ * jpeg), pa na server ide desetak KB umjesto fotografije od nekoliko MB.
+ */
+async function shrink(file: File): Promise<Blob> {
+  const url = URL.createObjectURL(file);
+  try {
+    const img = new Image();
+    img.src = url;
+    await img.decode();
+    const side = Math.min(img.naturalWidth, img.naturalHeight);
+    const canvas = document.createElement("canvas");
+    canvas.width = canvas.height = AVATAR_PX;
+    const ctx = canvas.getContext("2d")!;
+    ctx.imageSmoothingQuality = "high";
+    ctx.drawImage(img, (img.naturalWidth - side) / 2, (img.naturalHeight - side) / 2, side, side, 0, 0, AVATAR_PX, AVATAR_PX);
+    const encode = (type: string, q: number) => new Promise<Blob | null>((ok) => canvas.toBlob(ok, type, q));
+    for (const q of [0.85, 0.7, 0.5]) {
+      let blob = await encode("image/webp", q);
+      if (blob?.type !== "image/webp") blob = await encode("image/jpeg", q);
+      if (blob && blob.size <= MAX_AVATAR_BYTES) return blob;
+    }
+    throw new Error("Slika je prevelika.");
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
+
+function AvatarCard({ me, onChange }: { me: NonNullable<ReturnType<typeof useMe>>; onChange: () => void }) {
+  const t = useT();
+  const input = useRef<HTMLInputElement>(null);
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState("");
+  const avatar = me.user!.avatar;
+
+  const upload = async (file: File | undefined) => {
+    if (!file) return;
+    setBusy(true);
+    setMsg("");
+    try {
+      const blob = await shrink(file).catch(() => {
+        throw new Error("Ovu sliku ne mogu otvoriti, probaj s drugom (JPG ili PNG).");
+      });
+      const r = await skinFetch("/api/me/slika", { method: "POST", headers: { "content-type": blob.type }, body: blob });
+      const body = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(body.error ?? "Greška");
+      setMsg(t("Spremljeno."));
+      onChange();
+    } catch (e) {
+      setMsg(t((e as Error).message));
+    } finally {
+      setBusy(false);
+      if (input.current) input.current.value = "";
+    }
+  };
+  const remove = async () => {
+    setBusy(true);
+    await skinFetch("/api/me/slika", { method: "DELETE" });
+    setBusy(false);
+    setMsg("");
+    onChange();
+  };
+
+  return (
+    <section className="card stack">
+      <span className="eyebrow">{t("Profilna slika")}</span>
+      <div className="avatar-edit">
+        <span className={"avatar-big" + (avatar ? " pic" : "")}>
+          {avatar ? <img src={avatar} alt={t("Tvoja profilna slika")} /> : raceTags([me.user!.nickname ?? "?"])[0]}
+        </span>
+        <div className="stack">
+          <p className="small">{t("Vide je članovi tvojih liga: u tablici, na traci i u utrci na karti. Ti na karti i dalje voziš svoje prijevozno sredstvo.")}</p>
+          <div className="row">
+            <button className="small-btn" disabled={busy} onClick={() => input.current?.click()}>
+              {busy ? t("Šaljem…") : avatar ? t("Promijeni sliku") : t("Dodaj sliku")}
+            </button>
+            {avatar && <button className="ghost small-btn" disabled={busy} onClick={remove}>{t("Ukloni")}</button>}
+          </div>
+        </div>
+      </div>
+      <input ref={input} type="file" accept="image/*" hidden onChange={(e) => upload(e.target.files?.[0])} />
+      {msg && <p className="small">{msg}</p>}
+    </section>
+  );
 }

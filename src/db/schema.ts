@@ -1,5 +1,6 @@
 import {
   boolean,
+  customType,
   date,
   index,
   integer,
@@ -239,4 +240,19 @@ export const leagueReactions = pgTable(
     uniqueIndex("league_reactions_one").on(t.leagueId, t.gameId, t.position, t.playerId),
     index("league_reactions_game").on(t.gameId),
   ],
+);
+
+const bytea = customType<{ data: Buffer; driverData: Buffer }>({ dataType: () => "bytea" });
+
+// Profilna slika prijavljenog igrača; drugi je dohvaćaju preko nasumičnog ključa, ne preko id-a igrača.
+export const playerAvatars = pgTable(
+  "player_avatars",
+  {
+    playerId: uuid("player_id").primaryKey().references(() => players.id, { onDelete: "cascade" }),
+    key: text("key").notNull(),
+    mime: text("mime").notNull(),
+    data: bytea("data").notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("player_avatars_key").on(t.key)],
 );

@@ -34,6 +34,7 @@ import {
   type Reaction,
   type StandingRow,
 } from "@/lib/league";
+import { avatarUrls } from "./avatars";
 import type { Skin } from "./game";
 
 export class LeagueError extends Error {}
@@ -251,6 +252,7 @@ export type LeagueView = {
   week?: { today: string; days: DayAvg[]; km: number; reach: string | null }; // tekući tjedan pon–ned
   hall?: HallWeek[];
   legends?: Legend[];
+  faces?: Record<number, string>; // profilne slike članova po javnom id-u člana (tko je nema, ima inicijale)
 };
 
 /** Stranica lige. Tko nije član vidi samo ime, osnivača i broj članova. */
@@ -328,6 +330,8 @@ export async function leagueView(skin: Skin, league: League, playerId: string | 
   const mineToday = byPlayer.get(me.playerId);
   const day = puzzle && mineToday?.finishedAt ? await dayAnswers(skin, league.id, me.playerId, puzzle.id, members, todays) : null;
   const legends = await leagueLegends(skin, members, today);
+  const urls = await avatarUrls(ids);
+  const faces = Object.fromEntries(members.filter((m) => urls.has(m.playerId)).map((m) => [m.memberId, urls.get(m.playerId)!]));
   return {
     ...base,
     period,
@@ -341,6 +345,7 @@ export async function leagueView(skin: Skin, league: League, playerId: string | 
     week,
     hall,
     legends,
+    faces,
   };
 }
 
@@ -600,7 +605,7 @@ export async function reactToAnswer(skin: Skin, league: League, viewerId: string
 
 // ---------- Utrka na karti ----------
 
-export type RaceRunner = { memberId: number; nickname: string; tag: string; color: string; kms: number[]; done: boolean };
+export type RaceRunner = { memberId: number; nickname: string; tag: string; color: string; avatar: string | null; kms: number[]; done: boolean };
 export type RaceLeague = { code: string; name: string; members: number; me: { tag: string; color: string }; runners: RaceRunner[] };
 
 /**
@@ -636,6 +641,7 @@ export async function leagueRace(skin: Skin, playerId: string): Promise<RaceLeag
         .orderBy(asc(rounds.position))
     : [];
   const kmsOf = new Map(todays.map((g) => [g.playerId, { kms: rows.filter((r) => r.gameId === g.id).map((r) => r.km ?? 0), done: !!g.finishedAt }]));
+  const faces = await avatarUrls(todays.map((g) => g.playerId));
 
   return mine.map(({ l }, i) => {
     const members = rosters[i];
@@ -650,7 +656,7 @@ export async function leagueRace(skin: Skin, playerId: string): Promise<RaceLeag
       me: { tag: me.tag, color: me.color },
       runners: look
         .filter((x) => x.m.playerId !== playerId && kmsOf.get(x.m.playerId)?.kms.length)
-        .map((x) => ({ memberId: x.m.memberId, nickname: x.m.nickname, tag: x.tag, color: x.color, ...kmsOf.get(x.m.playerId)! })),
+        .map((x) => ({ memberId: x.m.memberId, nickname: x.m.nickname, tag: x.tag, color: x.color, avatar: faces.get(x.m.playerId) ?? null, ...kmsOf.get(x.m.playerId)! })),
     };
   });
 }

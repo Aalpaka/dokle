@@ -1,11 +1,12 @@
 "use client";
 
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { Fragment, createContext, useCallback, useContext, useEffect, useState } from "react";
 import { GoogleButton, PageShell, useMe } from "./account";
 import { PERIODS, PERIOD_LABEL, REACTIONS, addDays, type Period, type Reaction, type StandingRow } from "@/lib/league";
 import type { LeagueSummary, LeagueView, MemberDay, MemberDuel, PastWeek, StandingView } from "@/server/leagues";
 import { SKIN_META, isSkinId } from "@/skins/meta";
 import { codeConfigs } from "@/skins/maps";
+import { Chip } from "./Chip";
 import Modal from "./Modal";
 import WeekChart from "./WeekChart";
 import { useNarrow } from "./Race";
@@ -190,6 +191,24 @@ export function LeaguesBox() {
 
 // ---------- /liga/KOD ----------
 
+/** Izgled članova lige (slika, boja, inicijali) po javnom id-u člana, za kružiće u svim popisima stranice. */
+type Look = { faces: Record<number, string>; color: Map<number, string>; tag: Map<number, string> };
+const LookCtx = createContext<Look>({ faces: {}, color: new Map(), tag: new Map() });
+const lookOf = (view: LeagueView): Look => ({
+  faces: view.faces ?? {},
+  color: new Map((view.today ?? []).map((m) => [m.memberId, m.color])),
+  tag: new Map((view.today ?? []).map((m) => [m.memberId, m.tag])),
+});
+
+/** Mali kružić člana uz ime: slika ili inicijali u boji člana. */
+function Face({ id }: { id: number }) {
+  const l = useContext(LookCtx);
+  return <Chip className="face" src={l.faces[id]} color={l.color.get(id)}>{l.tag.get(id)}</Chip>;
+}
+const Faces = ({ list }: { list: { memberId: number }[] }) => (
+  <span className="faces">{list.map((m) => <Face key={m.memberId} id={m.memberId} />)}</span>
+);
+
 export function LeaguePage({ code }: { code: string }) {
   const me = useMe();
   const [period, setPeriod] = useState<Period>("week");
@@ -266,6 +285,7 @@ export function LeaguePage({ code }: { code: string }) {
 
   const mine = view.standings!.find((r) => r.memberId === view.meMemberId);
   return (
+    <LookCtx.Provider value={lookOf(view)}>
     <PageShell me={me}>
       <section className="card league-hero">
         <div className="lh-top">
@@ -325,9 +345,10 @@ export function LeaguePage({ code }: { code: string }) {
         </div>
       </div>
       {day && <DayModal code={view.code} {...day} onClose={() => setDay(null)} />}
-      {rival !== null && <DuelModal code={view.code} memberId={rival} onClose={() => setRival(null)} />}
+      {rival !== null && <DuelModal code={view.code} memberId={rival} me={view.meMemberId} onClose={() => setRival(null)} />}
       {pastWeek && <WeekModal code={view.code} from={pastWeek} me={view.meMemberId} onClose={() => setPastWeek(null)} />}
     </PageShell>
+    </LookCtx.Provider>
   );
 }
 
@@ -392,21 +413,23 @@ function TodayTrack({ view }: { view: LeagueView }) {
         {placed.map(({ m, x }) => {
           const isMe = m.memberId === view.meMemberId;
           return (
-            <span
+            <Chip
               key={m.memberId}
-              className={"ghost-chip tchip" + (isMe ? " me" : "") + (m.status === "playing" ? " playing" : "")}
+              className={"tchip" + (isMe ? " me" : "") + (m.status === "playing" ? " playing" : "")}
               title={`${m.nickname} · ${m.km} km`}
-              style={{ background: isMe ? undefined : m.color, transform: `translateX(${x.toFixed(1)}px)`, zIndex: isMe ? 9 : 1 }}
+              color={isMe ? undefined : m.color}
+              src={isMe ? null : view.faces?.[m.memberId]}
+              style={{ transform: `translateX(${x.toFixed(1)}px)`, zIndex: isMe ? 9 : 1 }}
             >
               {isMe ? t("TI") : m.tag}
-            </span>
+            </Chip>
           );
         })}
       </div>
       <ul className="tstatus">
         {on.map((m) => (
           <li key={m.memberId} className={(m.memberId === view.meMemberId ? "me " : "") + m.status}>
-            <i style={{ background: m.memberId === view.meMemberId ? "var(--signal)" : m.color }} />
+            {m.memberId === view.meMemberId ? <i /> : <Face id={m.memberId} />}
             <b>{m.nickname}</b> {m.km} km
             {m.status === "playing" && <small> · {t("igra, {n}/{m}", { n: m.played, m: view.perDay ?? 0 })}</small>}
           </li>
@@ -469,14 +492,15 @@ function Standings({
       r.bestKm
     );
   const name = (r: StandingView) => (
-    <>
+    <span className="pname">
+      <Face id={r.memberId} />
       {r.memberId === me || narrow ? (
         r.nickname
       ) : (
         <button className="name-btn" onClick={() => onRival(r.memberId)} title={t("Dvoboj: {x}", { x: r.nickname })}>{r.nickname}</button>
       )}
       {r.crowns > 0 && <span className="crowns" title={t("osvojenih tjedana")}>👑{r.crowns > 1 ? r.crowns : ""}</span>}
-    </>
+    </span>
   );
   const cols = narrow ? 4 : full ? 9 : 5;
   return (
@@ -566,31 +590,31 @@ function Awards({ view }: { view: LeagueView }) {
         {a.rare && (
           <li>
             <span className="ic">{a.rare.heli ? "🚁" : "🦄"}</span>
-            <span><span className="aw-t">{t("Zokijeva desna ruka")}</span><b>{a.rare.nickname}</b>: „{a.rare.answer}”<small> · {a.rare.title}{a.rare.heli ? ` · ${t("helikopter")}` : a.rare.share !== null ? ` · ${pct(a.rare.share)} % ${t("igrača")}` : ""}</small></span>
+            <span><span className="aw-t">{t("Zokijeva desna ruka")}</span><Face id={a.rare.memberId} /><b>{a.rare.nickname}</b>: „{a.rare.answer}”<small> · {a.rare.title}{a.rare.heli ? ` · ${t("helikopter")}` : a.rare.share !== null ? ` · ${pct(a.rare.share)} % ${t("igrača")}` : ""}</small></span>
           </li>
         )}
         {a.same.map((s) => (
           <li key={s.position}>
             <span className="ic">🤝</span>
-            <span><span className="aw-t">{t("Ista misao")}</span><b>{names(s.members, t)}</b>: „{s.answer}”<small> · {s.title}</small></span>
+            <span><span className="aw-t">{t("Ista misao")}</span><Faces list={s.members} /><b>{names(s.members, t)}</b>: „{s.answer}”<small> · {s.title}</small></span>
           </li>
         ))}
         {a.fastest && (
           <li>
             <span className="ic">⚡</span>
-            <span><span className="aw-t">{t("Najbrži prst")}</span><b>{a.fastest.nickname}</b>: „{a.fastest.answer}” {t("za")} {(a.fastest.ms / 1000).toLocaleString("hr-HR", { maximumFractionDigits: 1 })} s<small> · {a.fastest.title}</small></span>
+            <span><span className="aw-t">{t("Najbrži prst")}</span><Face id={a.fastest.memberId} /><b>{a.fastest.nickname}</b>: „{a.fastest.answer}” {t("za")} {(a.fastest.ms / 1000).toLocaleString("hr-HR", { maximumFractionDigits: 1 })} s<small> · {a.fastest.title}</small></span>
           </li>
         )}
         {a.liked && (
           <li>
             <span className="ic">😂</span>
-            <span><span className="aw-t">{t("Odgovor dana")}</span><b>{a.liked.nickname}</b>: „{a.liked.answer}”<small> · {a.liked.reactions} {t(plural(a.liked.reactions, "reakcija", "reakcije", "reakcija"))}</small></span>
+            <span><span className="aw-t">{t("Odgovor dana")}</span><Face id={a.liked.memberId} /><b>{a.liked.nickname}</b>: „{a.liked.answer}”<small> · {a.liked.reactions} {t(plural(a.liked.reactions, "reakcija", "reakcije", "reakcija"))}</small></span>
           </li>
         )}
         {a.roadworks && (
           <li>
             <span className="ic">🚧</span>
-            <span><span className="aw-t">{codeConfigs[id].miss.name}</span><b>{names(a.roadworks.members, t)}</b><small> · {a.roadworks.misses} {t(plural(a.roadworks.misses, "promašaj", "promašaja", "promašaja"))}</small></span>
+            <span><span className="aw-t">{codeConfigs[id].miss.name}</span><Faces list={a.roadworks.members} /><b>{names(a.roadworks.members, t)}</b><small> · {a.roadworks.misses} {t(plural(a.roadworks.misses, "promašaj", "promašaja", "promašaja"))}</small></span>
           </li>
         )}
       </ul>
@@ -613,7 +637,7 @@ function Legends({ view }: { view: LeagueView }) {
         {view.legends.map((l) => (
           <li key={l.group} className={l.memberId === view.meMemberId ? "me" : ""}>
             <span>🎓 {legendTitle(l.group, t)}</span>
-            <b>{l.nickname}</b>
+            <span className="pname"><Face id={l.memberId} /><b>{l.nickname}</b></span>
             <span className="km">{l.avg} km</span>
           </li>
         ))}
@@ -637,7 +661,7 @@ function Hall({ view, onWeek }: { view: LeagueView; onWeek: (from: string) => vo
         <>
           <div className="crown-list">
             {crownsOf.map((r) => (
-              <span key={r.memberId} className={r.memberId === view.meMemberId ? "me" : ""}>👑 {r.nickname} ×{r.crowns}</span>
+              <span key={r.memberId} className={r.memberId === view.meMemberId ? "me" : ""}><Face id={r.memberId} /> {r.nickname} 👑×{r.crowns}</span>
             ))}
           </div>
           <ul className="hall">
@@ -645,7 +669,7 @@ function Hall({ view, onWeek }: { view: LeagueView; onWeek: (from: string) => vo
               <li key={w.from}>
                 <button onClick={() => onWeek(w.from)}>
                   <span className="hw-date">{t("tjedan")} {weekRange(w.from)}</span>
-                  <span className="hw-win">👑 {names(w.winners, t)}</span>
+                  <span className="hw-win">👑 <Faces list={w.winners} /> {names(w.winners, t)}</span>
                   <span className="hw-km">{w.winners[0].km} km</span>
                 </button>
               </li>
@@ -697,7 +721,7 @@ function WeekModal({ code, from, me, onClose }: { code: string; from: string; me
                 {data.standings.map((r) => (
                   <tr key={r.memberId} className={(r.memberId === me ? "me " : "") + (r.rank <= 3 && r.km > 0 ? "top" : "")}>
                     <td className="rk">{r.km > 0 ? medal(r.rank) : `${r.rank}.`}</td>
-                    <td className="name">{r.nickname}</td>
+                    <td className="name"><span className="pname"><Face id={r.memberId} />{r.nickname}</span></td>
                     <td><b>{r.km}</b></td>
                     <td className="opt">{r.played}</td>
                     <td className="opt">{r.avgKm}</td>
@@ -715,7 +739,7 @@ function WeekModal({ code, from, me, onClose }: { code: string; from: string; me
   );
 }
 
-function DuelModal({ code, memberId, onClose }: { code: string; memberId: number; onClose: () => void }) {
+function DuelModal({ code, memberId, me, onClose }: { code: string; memberId: number; me: number | null; onClose: () => void }) {
   const [data, setData] = useState<MemberDuel | null>(null);
   const [error, setError] = useState("");
   const t = useT();
@@ -742,9 +766,9 @@ function DuelModal({ code, memberId, onClose }: { code: string; memberId: number
       ) : (
         <div className="duel">
           <div className="duel-top">
-            <span className="who me">{t("Ti")}</span>
+            <span className="who me">{me !== null && <Face id={me} />}{t("Ti")}</span>
             <span className="score">{data.wins} : {data.losses}</span>
-            <span className="who">{data.them}</span>
+            <span className="who"><Face id={memberId} />{data.them}</span>
           </div>
           <p className="small duel-sub">
             {data.days} {t(plural(data.days, "zajednički dan", "zajednička dana", "zajedničkih dana"))}
@@ -811,7 +835,6 @@ function Answers({ view, act }: { view: LeagueView; act: (b: Record<string, unkn
     act({ action: "react", memberId, position: c.position, emoji });
   };
   const reacted = (k: number) => cats[k].answers.some((a) => Object.keys(a.reactions).length > 0);
-  const color = new Map((view.today ?? []).map((m) => [m.memberId, m.color]));
   return (
     <section
       className="card stack team-answers"
@@ -844,7 +867,7 @@ function Answers({ view, act }: { view: LeagueView; act: (b: Record<string, unkn
           return (
             <li key={a.memberId} className={own ? "me" : ""}>
               <span className="who" title={a.nickname}>
-                <i style={{ background: own ? "var(--signal)" : color.get(a.memberId) }} />
+                {own ? <i /> : <Face id={a.memberId} />}
                 {own ? t("Ti") : a.nickname}
               </span>
               <span className="ans">
@@ -976,7 +999,7 @@ function Settings({ view, act }: { view: LeagueView; act: (b: Record<string, unk
                     {others.map((m) => (
                       <li key={m.memberId}>
                         <div>
-                          <span className="a">{m.nickname}</span>
+                          <span className="a pname"><Face id={m.memberId} />{m.nickname}</span>
                           <button className="danger small-btn" onClick={() => confirm(t("Izbaciti {x}?", { x: m.nickname })) && act({ action: "kick", memberId: m.memberId })}>
                             {t("Izbaci")}
                           </button>

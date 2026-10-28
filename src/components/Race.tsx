@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { kmAfter } from "@/lib/league";
 import type { RaceLeague } from "@/server/leagues";
 import { skinFetch, useT } from "./skin";
+import { Chip } from "./Chip";
 
 const KEY = "dokle_utrka";
 
@@ -52,15 +53,16 @@ type RaceProps = {
   perDay: number;
 };
 
-type Row = { id: number; tag: string; color: string; name: string; km: number; playing: boolean; me: boolean };
+type Row = { id: number; tag: string; color: string; avatar: string | null; name: string; km: number; playing: boolean; me: boolean };
 
 function raceRows(league: RaceLeague, myKms: number[], step: number, perDay: number, me: string): Row[] {
   return [
-    { id: 0, tag: league.me.tag, color: league.me.color, name: me, km: kmAfter(myKms, step), playing: false, me: true },
+    { id: 0, tag: league.me.tag, color: league.me.color, avatar: null, name: me, km: kmAfter(myKms, step), playing: false, me: true },
     ...league.runners.map((r) => ({
       id: r.memberId,
       tag: r.tag,
       color: r.color,
+      avatar: r.avatar,
       name: r.nickname,
       km: kmAfter(r.kms, step),
       // još igra i nije stigao do ove kategorije
@@ -117,7 +119,7 @@ function RaceBody({ race, league, pick, rows, step, perDay }: Omit<RaceProps, "m
         {shown.map((r) => (
           <li key={r.id} className={r.me ? "me" : undefined}>
             <span className="race-pos">{rows.indexOf(r) + 1}.</span>
-            <span className={"ghost-chip" + (r.me ? " me" : "")} style={{ background: r.me ? undefined : r.color }}>{r.me ? "TI" : r.tag}</span>
+            <Chip className={r.me ? "me" : ""} color={r.me ? undefined : r.color} src={r.avatar}>{r.me ? "TI" : r.tag}</Chip>
             <span className="race-who">{r.name}{r.playing && <small> · {t("igra")}</small>}</span>
             <span className="race-km">{r.km} km</span>
           </li>
@@ -187,14 +189,16 @@ export function RaceStrip({ race, league, pick, myKms, step, perDay, maxKm, card
         <i className={"rline" + (end < maxKm ? " part" : "")} />
         {end < maxKm && <span className="rend">{end} km</span>}
         {placed.map(({ r, x }) => (
-          <span
+          <Chip
             key={r.id}
-            className={"ghost-chip" + (r.me ? " me" : "")}
+            className={r.me ? "me" : ""}
             title={r.name}
-            style={{ background: r.me ? undefined : r.color, transform: `translateX(${x.toFixed(1)}px)`, zIndex: r.me ? 9 : 1 }}
+            color={r.me ? undefined : r.color}
+            src={r.avatar}
+            style={{ transform: `translateX(${x.toFixed(1)}px)`, zIndex: r.me ? 9 : 1 }}
           >
             {r.me ? "TI" : r.tag}
-          </span>
+          </Chip>
         ))}
       </div>
       {open && <RaceBody race={race} league={league} pick={pick} rows={rows} step={step} perDay={perDay} />}

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { authEnabled } from "@/lib/supabase/config";
 import { deleteAuthUser, supabaseServer } from "@/lib/supabase/server";
+import { avatarUrls, deleteAvatar } from "@/server/avatars";
 import { anonymize, getPlayer, isAdminEmail, profileFor, setNickname } from "@/server/accounts";
 import { leaveAllLeagues } from "@/server/leagues";
 import { clearPlayerCookie, resolveIdentity } from "@/server/player";
@@ -13,9 +14,10 @@ export async function GET() {
   const { playerId, user } = await resolveIdentity();
   const player = playerId ? await getPlayer(playerId) : null;
   const profile = playerId ? await profileFor(skin, playerId) : { stats: null, history: [] };
+  const avatar = user && playerId ? ((await avatarUrls([playerId])).get(playerId) ?? null) : null;
   return NextResponse.json({
     authEnabled,
-    user: user && player ? { nickname: player.nickname, email: user.email, isAdmin: isAdminEmail(user.email) } : null,
+    user: user && player ? { nickname: player.nickname, email: user.email, avatar, isAdmin: isAdminEmail(user.email) } : null,
     ...profile,
   });
 }
@@ -36,6 +38,7 @@ export async function DELETE() {
   const { playerId, user } = await resolveIdentity();
   if (!user || !playerId) return NextResponse.json({ error: "Nisi prijavljen." }, { status: 401 });
   await leaveAllLeagues(playerId);
+  await deleteAvatar(playerId);
   await anonymize(playerId);
   await (await supabaseServer()).auth.signOut();
   await deleteAuthUser(user.id);

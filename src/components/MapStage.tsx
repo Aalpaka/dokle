@@ -12,6 +12,7 @@ import { useT } from "./skin";
 import { kmAfter } from "@/lib/league";
 import type { RaceLeague, RaceRunner } from "@/server/leagues";
 import { RacePanel, RaceStrip, useNarrow, useRaceChoice } from "./Race";
+import { Chip } from "./Chip";
 
 // trajanje vožnje po vozilu (s); pješak je najsporiji, a prijeđe i najmanje km
 // koliko kružić lige klizi do novog km (ms)
@@ -598,7 +599,7 @@ export default function MapStage({ skinId, cfg, map, rounds, perDay, ended = fal
               }}
             >
               <i />
-              <span className="ghost-chip" style={{ background: r.color }}>{r.tag}</span>
+              <Chip color={r.color} src={r.avatar}>{r.tag}</Chip>
             </div>
           ))}
           <div className="veh" ref={vehRef}>
