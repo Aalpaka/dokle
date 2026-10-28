@@ -12,7 +12,7 @@ import { skinFetch, useSkin, useT } from "./skin";
 
 export type Me = {
   authEnabled: boolean;
-  user: { nickname: string | null; email: string | null; isAdmin: boolean } | null;
+  user: { nickname: string | null; email: string | null; avatar: string | null; isAdmin: boolean } | null;
   stats: PlayerStats | null;
   history: { date: string; number: number; km: number; station: string }[];
 };
@@ -115,7 +115,11 @@ export function AccountLink({ me }: { me: Me | null }) {
           <span>🏆</span><span className="wide">{t("Lige")}</span>
         </a>
         <a className="acct me" href={href("/profil")} aria-current={at("/profil") ? "page" : undefined}>
-          <span className="av" aria-hidden="true">{raceTags([nick])[0]}</span>
+          {me.user.avatar ? (
+            <img className="av-img" src={me.user.avatar} alt="" />
+          ) : (
+            <span className="av" aria-hidden="true">{raceTags([nick])[0]}</span>
+          )}
           <span className="nm">{nick}</span>
           {me.stats && me.stats.currentStreak > 0 && <span className="wide">· 🔥 {me.stats.currentStreak}</span>}
         </a>

@@ -169,6 +169,13 @@
       "when": 1792940000000,
       "tag": "0023_reakcije_lige",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1792950000000,
+      "tag": "0024_profilne_slike",
+      "breakpoints": true
     }
   ]
 }

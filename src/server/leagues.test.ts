@@ -2,6 +2,7 @@ import { afterAll, describe, expect, it } from "vitest";
 import { inArray } from "drizzle-orm";
 import { db, sql } from "@/db";
 import { games, leagues, players } from "@/db/schema";
+import { avatarByKey, deleteAvatar, setAvatar } from "./avatars";
 import { ensurePlayer, getSkin, startNext, submitAnswer } from "./game";
 import {
   createLeague,
@@ -12,6 +13,7 @@ import {
   leaveAllLeagues,
   leaveLeague,
   memberDay,
+  leagueRace,
   memberDuel,
   myLeagues,
   pastWeek,
@@ -183,5 +185,38 @@ describe.skipIf(!process.env.DATABASE_URL)("lige", () => {
     const p = await newPlayer("Skupljač");
     for (let i = 0; i < 10; i++) await createLeague(skin, p, `Liga ${i}`);
     await expect(createLeague(skin, p, "Jedanaesta")).rejects.toThrow(/najviše 10/);
+  });
+
+  it("profilne slike: samo male slike poznatog formata, vide ih članovi lige i utrka", async () => {
+    const skin = await getSkin("hr");
+    const ana = await newPlayer("Slika Ana");
+    const bruno = await newPlayer("Slika Bruno");
+    const league = await createLeague(skin, ana, "Liga sa slikama");
+    await joinLeague(league, bruno);
+
+    const webp = Buffer.concat([Buffer.from("RIFF\0\0\0\0WEBPVP8 "), Buffer.alloc(100)]);
+    expect(await setAvatar(bruno, Buffer.from("<svg onload=alert(1)>"))).toBeNull();
+    expect(await setAvatar(bruno, Buffer.concat([webp, Buffer.alloc(70 * 1024)]))).toBeNull();
+    const first = (await setAvatar(bruno, webp))!;
+    const url = (await setAvatar(bruno, webp))!;
+    expect(url).not.toBe(first); // nova slika, novi ključ (stari URL više ne vrijedi)
+    expect(url).toMatch(/^\/api\/slika\/[A-Za-z0-9_-]{22}$/);
+    expect(await avatarByKey(first.split("/").pop()!)).toBeNull();
+    expect((await avatarByKey(url.split("/").pop()!))!.mime).toBe("image/webp");
+    expect(url).not.toContain(bruno);
+
+    const v = await leagueView(skin, league, ana, "week");
+    const brunoId = v.standings!.find((r) => r.nickname === "Slika Bruno")!.memberId;
+    expect(v.faces).toEqual({ [brunoId]: url });
+    // tko nije član ne vidi slike
+    const outsider = await newPlayer("Slika Netko");
+    expect((await leagueView(skin, league, outsider, "week")).faces).toBeUndefined();
+
+    await playToday(bruno, "nešto");
+    const race = (await leagueRace(skin, ana)).find((l) => l.code === league.code)!;
+    expect(race.runners.map((r) => r.avatar)).toEqual([url]);
+
+    await deleteAvatar(bruno);
+    expect((await leagueView(skin, league, ana, "week")).faces).toEqual({});
   });
 });

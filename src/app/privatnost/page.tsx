@@ -27,7 +27,7 @@ export default function Privatnost() {
             Grubu lokaciju (državu i grad) koju poslužitelj procijeni iz tvoje IP adrese, vrstu uređaja (mobitel, tablet ili
             računalo) i domenu stranice s koje si došao (npr. google), za statistiku o tome odakle se igra. Samu IP adresu ne spremamo.
           </li>
-          <li>Ako se prijaviš s Googleom: Googleov identifikator računa, email adresu i nadimak koji sam odabereš, da tvoja povijest, streak i lige rade na svakom uređaju.</li>
+          <li>Ako se prijaviš s Googleom: Googleov identifikator računa, email adresu i nadimak koji sam odabereš, da tvoja povijest, streak i lige rade na svakom uređaju. Ako sam dodaš profilnu sliku, spremamo njenu smanjenu kopiju (192 × 192 piksela).</li>
         </ul>
         <p>
           Pravna osnova je izvršenje usluge koju tražiš, tj. igranje i korisnički račun (čl. 6. st. 1. b GDPR-a). Anonimnu statistiku
@@ -40,7 +40,7 @@ export default function Privatnost() {
         </p>
         <h2>Tko još vidi podatke</h2>
         <ul>
-          <li>Drugi igrači vide samo tvoj nadimak, kilometre i odgovore (u ligama kojima se pridružiš). Ne vide tvoje ime ni email.</li>
+          <li>Drugi igrači vide samo tvoj nadimak, profilnu sliku ako si je dodao, kilometre i odgovore (u ligama kojima se pridružiš). Ne vide tvoje ime ni email, a Googleovu sliku računa ne koristimo.</li>
           <li>Supabase (baza i prijava, poslužitelji u Irskoj, EU).</li>
           <li>Vercel (poslužuje stranicu, poslužitelji u Dublinu, Irska; tvrtka je iz SAD-a i prenosi podatke prema EU-US Data Privacy Frameworku).</li>
           <li>Google, kad se prikaže ili koristi Googleov gumb za prijavu (učitava se s Googleovih poslužitelja).</li>
@@ -53,8 +53,8 @@ export default function Privatnost() {
         </p>
         <h2>Tvoja prava</h2>
         <p>
-          Na stranici <a href="/profil">Profil</a> možeš promijeniti nadimak i obrisati račun. Tada brišemo vezu s Google računom,
-          email i nadimak. Možeš i zatražiti uvid u svoje podatke, ispravak, ograničenje obrade, prijenos ili prigovor; piši na
+          Na stranici <a href="/profil">Profil</a> možeš promijeniti nadimak i profilnu sliku i obrisati račun. Tada brišemo vezu s Google računom,
+          email, nadimak i sliku. Možeš i zatražiti uvid u svoje podatke, ispravak, ograničenje obrade, prijenos ili prigovor; piši na
           adresu gore i odgovorit ćemo u roku od mjesec dana. Ako misliš da kršimo pravila, možeš podnijeti pritužbu Agenciji za
           zaštitu osobnih podataka (<a href="https://azop.hr">azop.hr</a>).
         </p>

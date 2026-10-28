@@ -16,7 +16,11 @@ const nextConfig: NextConfig = {
   // next/image se ne koristi, pa ni /_next/image (optimizator slika, u 2026. izvor više ozbiljnih ranjivosti Next.js-a)
   images: { unoptimized: true },
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      // profilne slike: i kad bi se netko uspio podmetnuti kao slika, ne smije se izvršiti kao stranica
+      { source: "/api/slika/:key", headers: [{ key: "Content-Security-Policy", value: "default-src 'none'; sandbox; frame-ancestors 'none'" }] },
+    ];
   },
 };
 

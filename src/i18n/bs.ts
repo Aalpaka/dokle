@@ -37,4 +37,5 @@ export const bs: Record<string, string> = {
   "Reagiraj": "Reaguj",
   "Odigraj današnju partiju pa možeš reagirati.": "Odigraj današnju partiju pa možeš reagovati.",
   "Na svoje odgovore ne možeš reagirati.": "Na svoje odgovore ne možeš reagovati.",
+  "Vide je članovi tvojih liga: u tablici, na traci i u utrci na karti. Ti na karti i dalje voziš svoje prijevozno sredstvo.": "Vide je članovi tvojih liga: u tabeli, na traci i u utrci na karti. Ti na karti i dalje voziš svoje prijevozno sredstvo.",
 };
