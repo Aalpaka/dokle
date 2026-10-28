@@ -688,7 +688,7 @@ export const kvizKategorije: SeedCategory[] = [
     slug: "oscar-film",
     group: "kviz",
     title: "Film koji je osvojio Oscara za najbolji film",
-    hint: "Bilo koja godina, od Krila (1929.) do Anore (2025.); hrvatski ili izvorni naslov",
+    hint: "Bilo koja godina od 1929. do 2026.; hrvatski ili izvorni naslov",
     strip: ["film"],
     answers: `Titanic=10.5; Kum/The Godfather=9; Forrest Gump=7; Gladijator/Gladiator=6;
       Gospodar prstenova: Povratak kralja/Povratak kralja/Gospodar prstenova/The Return of the King/Lord of the Rings=5.5;
@@ -729,7 +729,7 @@ export const kvizKategorije: SeedCategory[] = [
     slug: "oscar-gluma",
     group: "kviz",
     title: "Dobitnik ili dobitnica Oscara za glumu",
-    hint: "Glavna ili sporedna uloga, do 2025.",
+    hint: "Glavna ili sporedna uloga, do 2026.",
     strip: [],
     answers: `Leonardo DiCaprio/DiCaprio=7; Tom Hanks/Hanks=4; Meryl Streep/Streep=4; Jack Nicholson/Nicholson=3;
       Anthony Hopkins/Hopkins=3; Marlon Brando/Brando=3; Al Pacino/Pacino=2.5; Robert De Niro/De Niro=2.5;
@@ -1339,7 +1339,7 @@ export const kvizKategorije: SeedCategory[] = [
     slug: "liga-prvaka-klub",
     group: "kviz",
     title: "Klub koji je osvojio Ligu prvaka ili Kup prvaka",
-    hint: "Nogomet, muški ili ženski, do 2025.",
+    hint: "Nogomet, muški ili ženski, do 2026.",
     strip: ["fc","fk","ac","sc"],
     answers: `Real Madrid/Real=14; Barcelona/Barca/Barça=12; Bayern/Bayern München/Bayern Munchen=10;
       Milan/AC Milan=9; Liverpool=9; Manchester United/Man Utd/United=8; Juventus/Juve=7; Inter/Internazionale=7;
