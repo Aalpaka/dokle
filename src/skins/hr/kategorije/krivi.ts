@@ -9,4 +9,6 @@ export const krivi: Record<string, string[]> = {
   dinamo: ["Robert Špehar", "Roko Šimić", "David Čolina", "Tomislav Štrkalj", "Branimir Kalaica", "Ivan Pavlica"],
   // nisu bili u olimpijskim momčadima (rukomet 2004. i 2012.), a Huklek je u Tokiju bio peti
   "hr-olimpijac": ["Renato Sulić", "Željko Musa", "Tonči Valčić", "Ivan Huklek"],
+  // talijanska modna kuća iz Rima, samo je ime dobila po Brijunima
+  brend: ["Brioni"],
 };
