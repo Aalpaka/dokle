@@ -445,7 +445,8 @@ const sve: SeedCategory[] = ([
     group: "opce",
     title: "Model automobila",
     hint: "Model, ne marka: npr. Golf, Clio ili Punto",
-    strip: ["vw", "volkswagen", "opel", "renault", "fiat", "peugeot", "ford", "bmw", "mercedes", "audi", "toyota", "škoda", "skoda", "citroen", "citroën", "seat", "honda", "mazda", "nissan", "hyundai", "kia", "dacia", "tesla", "volvo", "suzuki", "zastava", "lada", "jeep", "porsche", "ferrari", "lamborghini", "mitsubishi", "chevrolet", "dodge", "mini", "lancia", "subaru", "rimac", "jaguar", "cupra", "toyotin", "model"],
+    strip: ["vw", "volkswagen", "opel", "renault", "fiat", "peugeot", "ford", "bmw", "mercedes", "audi", "toyota", "škoda", "skoda", "citroen", "citroën", "seat", "honda", "mazda", "nissan", "hyundai", "kia", "dacia", "tesla", "volvo", "suzuki", "zastava", "lada", "jeep", "porsche", "ferrari", "lamborghini", "mitsubishi", "chevrolet", "dodge", "mini", "lancia", "subaru", "rimac", "jaguar", "cupra", "toyotin", "model",
+      "buick", "cadillac", "chrysler", "pontiac", "oldsmobile", "lincoln", "plymouth", "saab", "rover", "lexus", "infiniti", "acura", "maserati", "bentley", "bugatti", "mclaren", "lotus", "daihatsu", "isuzu", "daewoo", "vauxhall", "austin", "morris", "abarth", "polestar", "byd", "ssangyong", "simca", "trabant", "wartburg", "datsun", "holden", "proton", "mahindra", "geely", "chery", "studebaker", "packard", "hummer", "gmc", "koenigsegg", "pagani", "talbot", "hillman", "sunbeam", "wolseley", "delorean", "moskvič"],
     answers: `Golf/VW Golf=14; Punto/Fiat Punto=6; Clio/Renault Clio=5; Polo/VW Polo=5; Passat=5; Corsa/Opel Corsa=4; Astra/Opel Astra=4;
       Octavia/Škoda Octavia=4; Fićo/Fiat 600/Fića=4; Stojadin/Yugo 45/Zastava 101=4; Megane/Mégane=3; Mustang/Ford Mustang=3;
       Buba/VW Buba/Beetle/Käfer=3; Fiesta/Ford Fiesta=3; Focus/Ford Focus=3; Kadett/Opel Kadett=2.5; Yaris=2.5; Corolla=2.5;

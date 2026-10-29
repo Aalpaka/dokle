@@ -38,9 +38,11 @@ for (const slug of process.argv.slice(2)) {
   const total = add.reduce((t, e) => t + parseFloat(e.split("=")[1]), 0);
   if (total > room) {
     const k = room / total;
+    // donja granica 0.002, a manja kad je mjesta malo za puno novih (npr. +900 lijekova), da zbroj ostane ispod granice
+    const floor = room > 0 ? Math.min(0.002, +(room / add.length).toPrecision(2)) : 0.002;
     for (let i = 0; i < add.length; i++) {
       const [n, v] = add[i].split("=");
-      add[i] = `${n}=${Math.max(0.002, +(parseFloat(v) * k).toPrecision(2))}`;
+      add[i] = `${n}=${Math.max(floor, +(parseFloat(v) * k).toPrecision(2))}`;
     }
   }
   console.error(slug, "+", add.length, "preskočeno:", skipped.join(", "));
