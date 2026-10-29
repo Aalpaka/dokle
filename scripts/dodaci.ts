@@ -23,7 +23,7 @@ for (const slug of process.argv.slice(2)) {
       if (!existing.some((a) => a.canonical === canonical)) throw new Error(`${slug}: nema odgovora ${canonical}`);
       const names = list.split("/").map((s) => s.trim()).filter((n) => !seen.has(key(n)));
       names.forEach((n) => seen.add(key(n)));
-      if (names.length) (aliasOut[slug] ??= {})[canonical] = names.join("/");
+      if (names.length) { const m = (aliasOut[slug] ??= {}); m[canonical] = m[canonical] ? `${m[canonical]}/${names.join("/")}` : names.join("/"); }
       continue;
     }
     for (const e of line.split(";").map((s) => s.trim()).filter(Boolean)) {
