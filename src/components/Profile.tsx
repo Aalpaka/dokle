@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { AVATAR_PX, MAX_AVATAR_BYTES } from "@/lib/avatar";
 import { raceTags } from "@/lib/league";
 import { GoogleButton, PageShell, signOut, useMe } from "./account";
+import AvatarCrop, { type Crop } from "./AvatarCrop";
 import { MyLeagues } from "./Leagues";
 import { skinFetch, useSkin, useT } from "./skin";
 
@@ -130,31 +131,22 @@ function Stat({ value, label }: { value: number; label: string }) {
 }
 
 /**
- * Slika se u pregledniku izreže na kvadrat iz sredine i smanji na AVATAR_PX (webp, a gdje preglednik ne zna webp
- * jpeg), pa na server ide desetak KB umjesto fotografije od nekoliko MB.
+ * Izrez koji je igrač namjestio smanji se u pregledniku na AVATAR_PX (webp, a gdje preglednik ne zna webp jpeg),
+ * pa na server ide desetak KB umjesto fotografije od nekoliko MB.
  */
-async function shrink(file: File): Promise<Blob> {
-  const url = URL.createObjectURL(file);
-  try {
-    const img = new Image();
-    img.src = url;
-    await img.decode();
-    const side = Math.min(img.naturalWidth, img.naturalHeight);
-    const canvas = document.createElement("canvas");
-    canvas.width = canvas.height = AVATAR_PX;
-    const ctx = canvas.getContext("2d")!;
-    ctx.imageSmoothingQuality = "high";
-    ctx.drawImage(img, (img.naturalWidth - side) / 2, (img.naturalHeight - side) / 2, side, side, 0, 0, AVATAR_PX, AVATAR_PX);
-    const encode = (type: string, q: number) => new Promise<Blob | null>((ok) => canvas.toBlob(ok, type, q));
-    for (const q of [0.85, 0.7, 0.5]) {
-      let blob = await encode("image/webp", q);
-      if (blob?.type !== "image/webp") blob = await encode("image/jpeg", q);
-      if (blob && blob.size <= MAX_AVATAR_BYTES) return blob;
-    }
-    throw new Error("Slika je prevelika.");
-  } finally {
-    URL.revokeObjectURL(url);
+async function shrink(img: HTMLImageElement, { sx, sy, side }: Crop): Promise<Blob> {
+  const canvas = document.createElement("canvas");
+  canvas.width = canvas.height = AVATAR_PX;
+  const ctx = canvas.getContext("2d")!;
+  ctx.imageSmoothingQuality = "high";
+  ctx.drawImage(img, sx, sy, side, side, 0, 0, AVATAR_PX, AVATAR_PX);
+  const encode = (type: string, q: number) => new Promise<Blob | null>((ok) => canvas.toBlob(ok, type, q));
+  for (const q of [0.85, 0.7, 0.5]) {
+    let blob = await encode("image/webp", q);
+    if (blob?.type !== "image/webp") blob = await encode("image/jpeg", q);
+    if (blob && blob.size <= MAX_AVATAR_BYTES) return blob;
   }
+  throw new Error("Slika je prevelika.");
 }
 
 function AvatarCard({ me, onChange }: { me: NonNullable<ReturnType<typeof useMe>>; onChange: () => void }) {
@@ -164,24 +156,45 @@ function AvatarCard({ me, onChange }: { me: NonNullable<ReturnType<typeof useMe>
   const [msg, setMsg] = useState("");
   const avatar = me.user!.avatar;
 
-  const upload = async (file: File | undefined) => {
+  const [picked, setPicked] = useState<HTMLImageElement | null>(null);
+
+  const close = () => {
+    if (picked) URL.revokeObjectURL(picked.src);
+    setPicked(null);
+  };
+  const pick = async (file: File | undefined) => {
+    if (input.current) input.current.value = "";
     if (!file) return;
+    setMsg("");
+    const img = new Image();
+    img.src = URL.createObjectURL(file);
+    try {
+      await img.decode();
+      if (!img.naturalWidth || !img.naturalHeight) throw new Error();
+      setPicked(img);
+    } catch {
+      URL.revokeObjectURL(img.src);
+      setMsg(t("Ovu sliku ne mogu otvoriti, probaj s drugom (JPG ili PNG)."));
+    }
+  };
+  const upload = async (crop: Crop) => {
+    if (!picked) return;
     setBusy(true);
     setMsg("");
     try {
-      const blob = await shrink(file).catch(() => {
+      const blob = await shrink(picked, crop).catch(() => {
         throw new Error("Ovu sliku ne mogu otvoriti, probaj s drugom (JPG ili PNG).");
       });
       const r = await skinFetch("/api/me/slika", { method: "POST", headers: { "content-type": blob.type }, body: blob });
       const body = await r.json().catch(() => ({}));
       if (!r.ok) throw new Error(body.error ?? "Greška");
       setMsg(t("Spremljeno."));
+      close();
       onChange();
     } catch (e) {
       setMsg(t((e as Error).message));
     } finally {
       setBusy(false);
-      if (input.current) input.current.value = "";
     }
   };
   const remove = async () => {
@@ -209,7 +222,8 @@ function AvatarCard({ me, onChange }: { me: NonNullable<ReturnType<typeof useMe>
           </div>
         </div>
       </div>
-      <input ref={input} type="file" accept="image/*" hidden onChange={(e) => upload(e.target.files?.[0])} />
+      <input ref={input} type="file" accept="image/*" hidden onChange={(e) => pick(e.target.files?.[0])} />
+      {picked && <AvatarCrop img={picked} busy={busy} onSave={upload} onClose={() => !busy && close()} />}
       {msg && <p className="small">{msg}</p>}
     </section>
   );
