@@ -158,7 +158,7 @@ export function rankMoves(now: StandingRow[], before: StandingRow[] | null): Map
 
 // ---------- Nagrade dana ----------
 
-export const REACTIONS = ["😂", "🔥", "😮", "🤦", "👏", "✍️"] as const;
+export const REACTIONS = ["😂", "🔥", "😮", "😢", "👏", "✍️"] as const;
 export type Reaction = (typeof REACTIONS)[number];
 export const isReaction = (x: unknown): x is Reaction => REACTIONS.includes(x as Reaction);
 
