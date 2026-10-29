@@ -226,7 +226,7 @@ export type TodayAnswer = {
   emoji: string;
   reactions: Partial<Record<Reaction, number>>;
   mine: Reaction | null; // moja reakcija na ovaj odgovor
-  tag: "rare" | "same" | null; // Zokijeva desna ruka / ista misao
+  tag: "heli" | "rare" | "same" | null; // Zokijeva desna ruka (helikopter) / Plameni jazavac / ista misao
 };
 export type TodayAnswers = { position: number; title: string; group: string; answers: TodayAnswer[] }[];
 export type StandingView = StandingRow & { move: number | null; crowns: number };
@@ -448,7 +448,7 @@ async function dayAnswers(
           emoji: emoji(r.tier, r.canonical),
           reactions: counts,
           mine: (rs.find((x) => x.playerId === viewerId)?.emoji as Reaction | undefined) ?? null,
-          tag: key === rareKey ? "rare" : sameKeys.has(key) ? "same" : null,
+          tag: key === rareKey ? (awards!.rare!.heli ? "heli" : "rare") : sameKeys.has(key) ? "same" : null,
         };
       })
       .sort((a, b) => b.km - a.km || a.nickname.localeCompare(b.nickname, "hr")),
