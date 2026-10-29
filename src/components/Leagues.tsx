@@ -589,8 +589,8 @@ function Awards({ view }: { view: LeagueView }) {
       <ul className="awards">
         {a.rare && (
           <li>
-            <span className="ic">{a.rare.heli ? "🚁" : "🦄"}</span>
-            <span><span className="aw-t">{t("Zokijeva desna ruka")}</span><Face id={a.rare.memberId} /><b>{a.rare.nickname}</b>: „{a.rare.answer}”<small> · {a.rare.title}{a.rare.heli ? ` · ${t("helikopter")}` : a.rare.share !== null ? ` · ${pct(a.rare.share)} % ${t("igrača")}` : ""}</small></span>
+            <span className="ic">{a.rare.heli ? "🚁" : "🦡"}</span>
+            <span><span className="aw-t">{t(a.rare.heli ? "Zokijeva desna ruka" : "Plameni jazavac")}</span><Face id={a.rare.memberId} /><b>{a.rare.nickname}</b>: „{a.rare.answer}”<small> · {a.rare.title}{a.rare.heli ? ` · ${t("helikopter")}` : a.rare.share !== null ? ` · ${pct(a.rare.share)} % ${t("igrača")}` : ""}</small></span>
           </li>
         )}
         {a.same.map((s) => (
@@ -816,6 +816,18 @@ function Answers({ view, act }: { view: LeagueView; act: (b: Record<string, unkn
   const [idx, setIdx] = useState(0);
   const [picking, setPicking] = useState<number | null>(null);
   const [touch, setTouch] = useState<number | null>(null);
+  useEffect(() => {
+    if (picking === null) return;
+    const close = (e: Event) => {
+      if (e instanceof KeyboardEvent ? e.key === "Escape" : !(e.target as Element).closest?.(".rwrap")) setPicking(null);
+    };
+    document.addEventListener("pointerdown", close);
+    document.addEventListener("keydown", close);
+    return () => {
+      document.removeEventListener("pointerdown", close);
+      document.removeEventListener("keydown", close);
+    };
+  }, [picking]);
   if (!view.answers)
     return (
       <section className="card stack">
@@ -872,11 +884,12 @@ function Answers({ view, act }: { view: LeagueView; act: (b: Record<string, unkn
               </span>
               <span className="ans">
                 {a.answer ?? "—"}
-                {a.tag === "rare" && <span className="tag rare">{t("Zokijeva desna ruka")}</span>}
+                {a.tag === "heli" && <span className="tag rare">{t("Zokijeva desna ruka")}</span>}
+                {a.tag === "rare" && <span className="tag rare">{t("Plameni jazavac")}</span>}
                 {a.tag === "same" && <span className="tag same">{t("ista misao")}</span>}
               </span>
               <span className="km" title={`${a.km} km`}>{a.emoji} {a.km}</span>
-              <span className={"reacts" + (picking === a.memberId ? " picking" : "")}>
+              <span className="reacts">
                 {counts.map((e) => (
                   <button
                     key={e}
@@ -888,16 +901,18 @@ function Answers({ view, act }: { view: LeagueView; act: (b: Record<string, unkn
                     {e} {a.reactions[e]}
                   </button>
                 ))}
-                {!own &&
-                  (picking === a.memberId ? (
-                    <span className="rpick">
-                      {REACTIONS.map((e) => (
-                        <button key={e} className={a.mine === e ? "mine" : ""} onClick={() => react(a.memberId, a.mine === e ? null : e)} aria-label={e}>{e}</button>
-                      ))}
-                    </span>
-                  ) : (
-                    <button className="rpill add" onClick={() => setPicking(a.memberId)} aria-label={t("Reagiraj")}>＋</button>
-                  ))}
+                {!own && (
+                  <span className="rwrap">
+                    <button className={"rpill add" + (picking === a.memberId ? " on" : "")} onClick={() => setPicking(picking === a.memberId ? null : a.memberId)} aria-label={t("Reagiraj")} aria-expanded={picking === a.memberId}>＋</button>
+                    {picking === a.memberId && (
+                      <span className="rpick" role="menu">
+                        {REACTIONS.map((e) => (
+                          <button key={e} className={a.mine === e ? "mine" : ""} onClick={() => react(a.memberId, a.mine === e ? null : e)} aria-label={e}>{e}</button>
+                        ))}
+                      </span>
+                    )}
+                  </span>
+                )}
               </span>
             </li>
           );
