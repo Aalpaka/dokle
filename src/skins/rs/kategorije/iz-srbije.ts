@@ -110,6 +110,7 @@ export const izSrbije: Record<string, string[]> = {
     "Sarma", "Punjene paprike", "Grah", "Čorbast grah", "Grah s kobasicom", "Ražnjići", "Đuveč", "Ajvar", "Proja", "Uštipci",
     "Lepinja", "Sataraš", "Kulen", "Kulenova seka", "Hladetina", "Tripice", "Gibanica", "Pita od sira",
     "Pita od zelja", "Krumpiruša", "Pinđur", "Ćufte",
+    "Halva", "Kataifi", "Tres leches", "Tulumba",
   ],
   nogometas: [
     // iz Srbije, dodani u pitanju "izvan Hrvatske" (2026-10-29)
@@ -118,5 +119,29 @@ export const izSrbije: Record<string, string[]> = {
     "Milan Dudić", "Milan Jovanović", "Mladen Krstajić", "Nemanja Rnić", "Nenad Mirosavljević", "Nenad Đorđević",
     "Nikola Žigić", "Radomir Antić", "Saša Ilić", "Slaviša Jokanović", "Slavoljub Muslin", "Zvonimir Vukić", "Zoran Mirković",
     "Ilija Petković", "Dejan Kekezović", "Darko Brašanac", "Mario Maslać",
+  ],
+  // nova "izvan" mjesta i objekti iz Srbije (dodaci 19)
+  "jezero-svijet": [
+    "Akumulacijsko jezero Fierza", "Lićenat", "Sjeničko jezero", "Akumulacijsko jezero Gazivode", "Robovac", "Prilepnica", "Mali Lićenat", "Žuti kamen",
+    "Konjuško jezero", "Štrbačko jezero", "Donje defsko jezero", "Gornje defsko jezero", "Donji Vir", "Malo jažinačko jezero", "Zvorničko jezero", "Ludaško jezero",
+    "Kelebijsko jezero", "Krvavo jezero", "Tresetište", "Skenderevo", "Čonopljansko jezero", "Zaovinsko jezero", "Mitrovačko jezero", "Batlavsko jezero",
+    "Gračaničko jezero", "Livočko jezero", "Đeravičko jezero", "Šutmansko jezero", "Veliko jažinačko jezero", "Gornje blateštičko jezero", "Donje blateštičko jezero",
+  ],
+  // nova "izvan" mjesta i objekti iz Srbije (dodaci 19)
+  "svjetska-planina": [
+    "Vršačke planine", "Jagodnja", "Sokolska planina", "Jablanik", "Valjevske planine", "Juhor", "Suvobor", "Rajac",
+    "Gradina", "Kamena Gora", "Hum", "Lićenat", "Skopska Crna gora", "Koritnik", "Paštrik", "Marijaš",
+    "Maja e Ropës", "Žuti kamen", "Juničke planine", "Bogićaj",
+  ],
+  // nova "izvan" mjesta i objekti iz Srbije (dodaci 19)
+  "svjetska-znamenitost": [
+    "Kalemegdan", "Đavolja varoš", "Sopoćani", "Gamzigrad", "Đurđevi stupovi", "Lepenski vir", "Sinagoga u Subotici", "Katedrala sv. Terezije Avilske u Subotici",
+    "Manastir Lipovac", "Manastir Ravanica", "Manastir Gračanica", "Manastir Pećka patrijarhija", "Crkva Gospe Ljeviške", "Vrdnička kula", "Tvrđava Vrdnik", "Trajanov most",
+    "Ćele-kula", "Bačka tvrđava", "Spomenik zahvalnosti Francuskoj", "Spomenik Neznanom junaku", "Spomenik Risaru", "Zoološki vrt Palić", "Hagenov most", "Pavlinski samostan u Đurđinu",
+    "Franjevački samostan u Baču", "Crkva sv. Klementa u Hrtkovcima", "Crkva sv. Petra u Inđiji", "Crkva Uznesenja Blažene Djevice Marije u Bikovu", "Crkva sv. Josipa Radnika u Đurđinu", "Crkva sv. Marka Evanđelista u Žedniku", "Manastir Bođani", "Muzej vojvođanskih Slovaka",
+    "Muzej grada Novog Sada", "Muzej Srijema", "Narodni muzej Zrenjanin", "Narodni muzej Kraljevo", "Narodni muzej Šumadije u Kragujevcu", "Smederevska utvrda", "Petrovaradinska tvrđava", "Zvornička tvrđava",
+    "Kuća cvijeća", "Televizijski toranj Avala", "Katedrala sv. Dimitrija u Srijemskoj Mitrovici", "Sinagoga u Srijemskoj Mitrovici", "Crkva sv. Grgura Prosvjetitelja u Novom Sadu", "Crkva Imena Marijina u Novom Sadu", "Hasan-begova džamija", "Islam-agina džamija u Nišu",
+    "Bali-begova džamija u Nišu", "Hasan-agina džamija u Priboju", "Altun-alem džamija", "Manastir Mileševa", "Manastir Žiča", "Karađorđev park", "Brankov most", "Most Obrenovac – Surčin",
+    "Cestovni Ostružnički most u Beogradu", "Stari most u Zvorniku", "Hram Svetog Save", "Manastir Studenica",
   ],
 };
