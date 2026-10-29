@@ -367,7 +367,7 @@ const weekRange = (from: string) => {
   return m1 === m2 ? `${d1}.–${d2}. ${m2}.` : `${d1}. ${m1}. – ${d2}. ${m2}.`;
 };
 
-const CHIP = 26; // širina kružića u traci (px)
+const CHIP = 34; // širina kružića u traci (px)
 
 /** Danas: traka od starta do cilja s kružićima članova (boje kao u utrci na karti) i tko je igrao, tko igra, tko nije. */
 function TodayTrack({ view }: { view: LeagueView }) {

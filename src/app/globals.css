@@ -570,18 +570,18 @@ textarea.field { width: 100%; font-family: var(--font-mono); }
 /* vrh lige: ime i moje mjesto, pa današnja traka i km ekipe */
 .lh-top { flex: 1 1 100%; display: flex; gap: 20px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
 .lh-today { flex: 1 1 100%; display: grid; gap: 8px; min-width: 0; }
-.ttrack { position: relative; height: 54px; margin: 0 2px; }
-.ttrack-road { position: absolute; left: 0; right: 0; top: 33px; height: 6px; border-radius: 3px; background: #3a4447; }
+.ttrack { position: relative; height: 62px; margin: 0 2px; }
+.ttrack-road { position: absolute; left: 0; right: 0; top: 41px; height: 6px; border-radius: 3px; background: #3a4447; }
 .ttrack-road::after { content: ""; position: absolute; left: 4px; right: 4px; top: 2px; height: 2px; background: repeating-linear-gradient(90deg, #8a9592 0 6px, transparent 6px 12px); opacity: .6; }
-.ttrack-town { position: absolute; top: 42px; transform: translateX(-50%); font-size: 11px; font-weight: 700; color: var(--muted); white-space: nowrap; line-height: 1; }
+.ttrack-town { position: absolute; top: 50px; transform: translateX(-50%); font-size: 11px; font-weight: 700; color: var(--muted); white-space: nowrap; line-height: 1; }
 .ttrack-town.first { transform: none; }
 .ttrack-town.last { transform: translateX(-100%); }
-.ttrack .tchip { position: absolute; left: 0; top: 0; box-shadow: 0 0 0 2px var(--card); }
+.ttrack .tchip { position: absolute; left: 0; top: 0; width: 34px; height: 34px; font-size: 13.5px; box-shadow: 0 0 0 2px var(--card); }
 .ttrack .tchip.me { box-shadow: 0 0 0 2px var(--map-ink); }
 .ttrack .tchip.playing { opacity: .6; }
 /* kružić sa slikom inače reže sve izvan sebe, pa i crticu prema cesti (sliku i tako zaobli img) */
 .ttrack .tchip.pic { overflow: visible; }
-.ttrack .tchip::after { content: ""; position: absolute; left: 12px; top: 28px; width: 2px; height: 5px; background: var(--muted); }
+.ttrack .tchip::after { content: ""; position: absolute; left: 16px; top: 36px; width: 2px; height: 5px; background: var(--muted); }
 .tstatus { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
 .tstatus li { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-family: var(--font-mono); padding: 4px 10px; border-radius: 999px; background: var(--bg); }
 .tstatus li b { font-family: var(--font-sign); }
@@ -1006,7 +1006,7 @@ table .ghost-chip.face.pic { padding: 2px; }
 .faces .ghost-chip + .ghost-chip { margin-left: -6px; box-shadow: 0 0 0 1.5px var(--card); }
 .awards b { vertical-align: middle; }
 .awards .aw-t + .ghost-chip.face { margin-right: 6px; }
-.tstatus li .ghost-chip.face { width: 18px; height: 18px; font-size: 8px; margin-left: -4px; }
+.tstatus li .ghost-chip.face { width: 24px; height: 24px; font-size: 10px; margin-left: -6px; }
 .tstatus li.me i, .ta-list li.me .who i { background: var(--signal); }
 .ta-list .who .ghost-chip.face { width: 20px; height: 20px; font-size: 8.5px; }
 .crown-list span { display: inline-flex; align-items: center; gap: 6px; }
