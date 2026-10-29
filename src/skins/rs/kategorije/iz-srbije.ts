@@ -6,6 +6,10 @@ export const izSrbije: Record<string, string[]> = {
     "Beloš Vukanović", "Blaško Rajić", "Tomislav Žigmanov", "Lazar Mamužić", "Živko Bertić", "Aleksa Ivić", "Grgo Vuković",
     "Ivan Evetović", "Vranje Sudarević", "Slavko Aranicki", "Stipan Vojnić Tunić", "Martin Matić", "Miško Prćić", "Josip Sarić",
     "Beno Sudarević", "Baltazar Josić",
+    // iz Srbije, dodani u pitanju "izvan Hrvatske" (2026-10-29)
+    "Aleksandar Vulin", "Aleksandar Šapić", "Bojan Pajtić", "Dimitrije Ljotić", "Dragan Todorović", "Dragan Šutanovac",
+    "Ivan Stambolić", "Nataša Mićić", "Nenad Bogdanović", "Nikola Šainović", "Oliver Ivanović", "Slavica Đukić-Dejanović",
+    "Velimir Ilić", "Vuk Jeremić",
   ],
   // pisci iz Vojvodine i Srbije (bački i srijemski Hrvati, Velikić); rođeni u Srbiji koji su djelovali u Hrvatskoj
   // (Šoljan, Vrkljan, Radaković) ostaju
@@ -28,6 +32,10 @@ export const izSrbije: Record<string, string[]> = {
     "Ivan Jesse Kujundžić", "Stjepan Beato Bukinac", "Lazar Stipić", "Geza Kikić", "Stjepan Bartoš", "Ružica Miković Žigmanov",
     "Staniša Neorčić", "Ivan Tikvicki Pudar", "Zvjezdana Asić Šarić", "Matija Išpanović", "Josip Klarski", "Mirko Pavić",
     "Ivan Vujić", "Josip Jukić Manić", "Bariša Matković", "Antun Pejić", "Katarina Firanj",
+    // iz Srbije, dodani u pitanju "izvan Hrvatske" (2026-10-29)
+    "Draginja Adamović", "Dušan Radović", "Filip David", "Ljiljana Habjanović Đurović", "Ljubivoje Ršumović", "Marko Ristić",
+    "Milorad Mitrović", "Novica Tadić", "Svetislav Basara", "Uglješa Šajtinac", "Vladislav Pandurović", "Zoran Spasojević",
+    "Biljana Srbljanović", "Goran Skrobonja", "Jovan Radulović",
   ],
   // rođeni u Srbiji (uputa "Nije rođen u Srbiji")
   "strani-znanstvenik": [
@@ -38,10 +46,18 @@ export const izSrbije: Record<string, string[]> = {
     "Branko Čelustka", "Teodor Wikerhauser", "Vjekoslav Dulić", "Vladimir Anić", "Jasna Melvinger", "Petar Šimunić",
     "Jadranka Damjanov", "Jozsef Mikuska", "Josip Buljovčić", "Stjepan Musulin", "Adalbert Adam Barić", "Zvonimir Doroghy",
     "Ana Gabrijela Šabić", "Oton Frangeš", "Jure Prpić", "Stjepan Bartolović", "Miroslav Sić",
+    // iz Srbije, dodani u pitanju "izvan Hrvatske" (2026-10-29)
+    "Milutin Milanković", "Mileva Marić",
   ],
   // igrali za Srbiju ili su srpski košarkaši
   "kosarkas-svijet": [
     "Dunja Prćić", "Zoran Maroević",
+    // iz Srbije, dodani u pitanju "izvan Hrvatske" (2026-10-29)
+    "Aleksandar Rašić", "Dejan Borovnjak", "Dejan Tomašević", "Dragan Labović", "Dragan Tarlać", "Dušan Kecman",
+    "Duško Savanović", "Haris Brkić", "Ivan Paunić", "Marko Kešelj", "Milan Mačvan", "Milan Mlađan", "Milenko Tepić",
+    "Milovan Raković", "Novica Veličković", "Sonja Vasić", "Stefan Živanović", "Svetislav Pešić", "Tadija Dragićević",
+    "Uroš Tripković", "Vule Avdalović", "Zoran Savić", "Zoran Sretenović", "Zufer Avdija", "Čedomir Vitkovac",
+    "Želimir Obradović", "Saša Čađo", "Slađana Golić", "Božidar Maljković",
   ],
   // srbijanski pjevači i pjevači iz Vojvodine
   "exyu-izvodjac": [
@@ -52,5 +68,13 @@ export const izSrbije: Record<string, string[]> = {
     "Sarma", "Punjene paprike", "Grah", "Čorbast grah", "Grah s kobasicom", "Ražnjići", "Đuveč", "Ajvar", "Proja", "Uštipci",
     "Lepinja", "Sataraš", "Kulen", "Kulenova seka", "Hladetina", "Tripice", "Gibanica", "Pita od sira",
     "Pita od zelja", "Krumpiruša", "Pinđur", "Ćufte",
+  ],
+  nogometas: [
+    // iz Srbije, dodani u pitanju "izvan Hrvatske" (2026-10-29)
+    "Aleksandar Trišović", "Andrija Pavlović", "Dragan Ćirić", "Dragoslav Jevrić", "Dragoslav Šekularac", "Dušan Basta",
+    "Dušan Kerkez", "Ivan Ergić", "Ivan Tomić", "Ivica Dragutinović", "Marko Pantelić", "Marjan Marković", "Marko Lomić",
+    "Milan Dudić", "Milan Jovanović", "Mladen Krstajić", "Nemanja Rnić", "Nenad Mirosavljević", "Nenad Đorđević",
+    "Nikola Žigić", "Radomir Antić", "Saša Ilić", "Slaviša Jokanović", "Slavoljub Muslin", "Zvonimir Vukić", "Zoran Mirković",
+    "Ilija Petković", "Dejan Kekezović", "Darko Brašanac", "Mario Maslać",
   ],
 };

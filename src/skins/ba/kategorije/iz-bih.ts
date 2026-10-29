@@ -11,6 +11,12 @@ export const izBiH: Record<string, string[]> = {
     "Željana Zovko", "Slobodan Praljak", "Ante Raspudić", "Ivica Lučić", "Viktor Gutić", "Božidar Bralo", "Nikola Mandić",
     "Džafer Kulenović", "Osman Kulenović", "Hilmija Bešlagić", "Marko Dragić", "Vuk Vukčić Hrvatinić", "Petar Rogulja",
     "Nino Raspudić", "Zdravko Sančević", "Alija Šiljak", "Ragib Čapljić",
+    // iz BiH, dodani u pitanju "izvan Hrvatske" (2026-10-29)
+    "Adil Zulfikarpašić", "Adnan Terzić", "Ahmet Hadžipašić", "Aleksandar Džombić", "Benjamina Karić", "Bogić Bogićević",
+    "Borislav Paravac", "Dario Kordić", "Denis Zvizdić", "Dragan Đokanović", "Ejup Ganić", "Fahrudin Radončić", "Igor Crnadak",
+    "Igor Radojičić", "Ivo Miro Jović", "Mate Boban", "Mehmed-beg Kapetanović Ljubušak", "Mirko Šarović", "Nijaz Duraković",
+    "Nikola Koljević", "Nikola Poplašen", "Nikola Špirić", "Raif Dizdarević", "Sven Alkalaj", "Vjekoslav Bevanda",
+    "Džemal Bijedić", "Rodoljub Čolaković",
   ],
   // bosanskohercegovački i bošnjački pisci, franjevci Bosne Srebrene i Hercegovine, i oni rođeni u BiH koji su ondje
   // živjeli ili umrli; hrvatski pisci koji su samo rođeni u BiH (A. B. Šimić, Kušan, Šop) ostaju
@@ -50,6 +56,11 @@ export const izBiH: Record<string, string[]> = {
     "Slavo Antin Bago", "Pavao Papić", "Tomislava Kata Ćavar", "Ljuboje Dlustuš", "Mila Bernardina Crnogorac", "Mira Beljan",
     "Bono Perišić", "Đuro Bujher", "Ivo Vlahović", "Marko Roko Vincetić", "Vesna Berezovska", "Ivan Stražemanac Kopijarević",
     "Edhem Mulabdić",
+    // iz BiH, dodani u pitanju "izvan Hrvatske" (2026-10-29)
+    "Ahmet Hromadžić", "Alija Isaković", "Bisera Alikadić", "Duško Trifunović", "Dževad Karahasan", "Faruk Šehić",
+    "Hamza Humo", "Irfan Horozović", "Izet Sarajlić", "Nasiha Kapidžić-Hadžić", "Nedžad Ibrišimović", "Svetozar Ćorović",
+    "Velibor Čolić", "Zija Dizdarević", "Zlata Filipović", "Đorđo Sladoje", "Umihana Čuvidina", "Hadžem Hajdarević",
+    "Midhat Ajanović", "Selim Arnaut", "Nihad Hasanović", "Sadudin Musabegović", "Nura Bazdulj-Hubijar", "Aleksandar Hemon",
   ],
   // rođeni u BiH (uputa "Nije rođen u BiH"): Prelog, Rimac, Primorac…
   "strani-znanstvenik": [
@@ -75,10 +86,21 @@ export const izBiH: Record<string, string[]> = {
   // bosanskohercegovački ili "iz BiH" po članku; hrvatski reprezentativci rođeni u BiH (Bogdanović, Zubac) ostaju
   "kosarkas-svijet": [
     "Andrija Stipanović", "Vedran Princ", "Darko Bajo", "Mato Perajica", "Mladen Drijenčić", "Zvonimir Buntić", "Kornelija Kvesić",
+    // iz BiH, dodani u pitanju "izvan Hrvatske" (2026-10-29)
+    "Edin Bavčić", "Elmedin Kikanović", "Mujo Tuljković", "Nihad Đedović", "Sabahudin Bilalović", "Seid Hajrić",
+    "Ratko Radovanović", "Džanan Musa",
   ],
   // igrali i za BiH ili su po članku bosanskohercegovački; Lovren, Ćorluka i Budimir ostaju (igrali za Hrvatsku)
   nogometas: [
     "Ivan Šunjić", "Mato Jajalo", "Sejad Halilović", "Nikola Katić", "Josip Bulat",
+    // iz BiH, dodani u pitanju "izvan Hrvatske" (2026-10-29)
+    "Adi Adilović", "Admir Adžem", "Admir Vladavić", "Adnan Gušo", "Almir Aganspahić", "Amar Dedić", "Anel Ahmedhodžić",
+    "Bakir Beširević", "Damir Vrabac", "Dinko Vrabac", "Damir Vrančić", "Dženan Hošić", "Elvir Rahimić", "Ermin Zec",
+    "Esmir Bajraktarević", "Haris Alihodžić", "Haris Hajradinović", "Ibrahim Zukanović", "Ivica Grlić", "Ivica Osim",
+    "Kemal Alispahić", "Kerim Alajbegović", "Mersudin Ahmetović", "Muhamed Konjić", "Nail Omerović", "Nedim Halilović",
+    "Sejad Salihović", "Sulejman Smajić", "Ševko Okić", "Tomislav Piplica", "Toni Šunjić", "Zajko Zeba", "Zijad Švrakić",
+    "Zlatan Bajramović", "Zvjezdan Misimović", "Želimir Terkeš", "Franjo Vladić", "Darko Maletić", "Mladen Žižović",
+    "Nemanja Bilbija", "Nemanja Supić", "Saša Papac",
   ],
   // bosanskohercegovački pjevači i oni "iz BiH" (Bebek, Mate Bulić, Feminnem, Neda Ukraden)
   "exyu-izvodjac": [
