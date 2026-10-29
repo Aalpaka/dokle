@@ -267,4 +267,8 @@ export const sr: Record<string, string> = {
   "Ovu sliku ne mogu otvoriti, probaj s drugom (JPG ili PNG).": "Ovu sliku ne mogu da otvorim, probaj sa drugom (JPG ili PNG).",
   "Slika je prevelika.": "Slika je prevelika.",
   "Slika nije prihvaćena.": "Slika nije prihvaćena.",
+  "Namjesti sliku": "Namesti sliku",
+  "Povuci sliku i zumiraj da lice bude u krugu.": "Povuci sliku i zumiraj da lice bude u krugu.",
+  "Zum": "Zum",
+  "Odustani": "Odustani",
 };
