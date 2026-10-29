@@ -99,12 +99,16 @@ export const baContent: Country = {
         "Hari Varešanović", "Nedžad Salković", "Asim Brkan", "Beba Selimović", "Meho Puzić", "Zehra Deović", "Saša Lošić",
         "Amila Glamočak", "Deen", "Elvir Laković Laka", "Letu štuke", "Frenkie", "Regina", "Vatreni poljubac", "Pro arte",
         "Teška industrija", "Ambasadori", "Bombaj štampa", "Jadranka Stojaković", "Divlje jagode", "Maya Sar", "Zdravko Čolić",
-        "No Smoking Orchestra", "Nada Topčagić"],
+        "No Smoking Orchestra", "Nada Topčagić",
+        "Skroz", "SCH", "Sikter", "Zoster", "Dino Šaran", "Emina Zečaj", "Nada Mamula", "Božo Vrećo",
+        "Damir Imamović", "Mirza Selimović", "Hasan Dudić", "Sejo Pitić", "Sanja Maletić", "Merima Njegomir", "Ljuba Alićić"],
     },
     "strani-film": {
       title: "Strani film",
       hint: "Bilo koji igrani ili animirani film koji nije iz BiH",
-      remove: ["Ničija zemlja", "Grbavica", "Sjećaš li se Dolly Bell", "Otac na službenom putu"],
+      remove: ["Ničija zemlja", "Grbavica", "Sjećaš li se Dolly Bell", "Otac na službenom putu",
+        "Valter brani Sarajevo", "Bitka na Neretvi", "Sutjeska", "Kod amidže Idriza", "Savršeni krug", "Gori vatra", "Snijeg", "Quo vadis, Aida?",
+        "Sarajevski atentat"],
     },
     "jadran-grad": {
       title: "Grad ili mjesto na Jadranu izvan BiH",
