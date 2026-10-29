@@ -680,6 +680,8 @@ table.league tr.details.me td { color: inherit; }
   .ta-list li { grid-template-columns: minmax(0, 6.5em) minmax(0, 1fr) auto; grid-template-columns: subgrid; }
   .reacts { grid-column: 2 / -1; justify-content: flex-start; }
 }
+/* Otvoren izbor reakcija ide u svoj red da ne stisne odgovor. */
+.ta-list .reacts.picking { grid-column: 1 / -1; justify-content: flex-end; }
 .rpill { padding: 2px 8px; border-radius: 999px; background: var(--bg); color: var(--ink); font-weight: 700; font-size: 12px; }
 .rpill.mine { box-shadow: inset 0 0 0 1.5px var(--signal); }
 .rpill.add { color: var(--muted); }

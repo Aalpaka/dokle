@@ -876,7 +876,7 @@ function Answers({ view, act }: { view: LeagueView; act: (b: Record<string, unkn
                 {a.tag === "same" && <span className="tag same">{t("ista misao")}</span>}
               </span>
               <span className="km" title={`${a.km} km`}>{a.emoji} {a.km}</span>
-              <span className="reacts">
+              <span className={"reacts" + (picking === a.memberId ? " picking" : "")}>
                 {counts.map((e) => (
                   <button
                     key={e}
