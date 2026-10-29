@@ -89,6 +89,8 @@ export const izBiH: Record<string, string[]> = {
     // iz BiH, dodani u pitanju "izvan Hrvatske" (2026-10-29)
     "Edin Bavčić", "Elmedin Kikanović", "Mujo Tuljković", "Nihad Đedović", "Sabahudin Bilalović", "Seid Hajrić",
     "Ratko Radovanović", "Džanan Musa",
+    // iz BiH, dodani u pitanju "Hrvatski košarkaš" (2026-10-29)
+    "Boris Barać", "Pero Dujmović", "Arnel Dedić", "Marko Baković", "Zvonimir Ivišić",
   ],
   // igrali i za BiH ili su po članku bosanskohercegovački; Lovren, Ćorluka i Budimir ostaju (igrali za Hrvatsku)
   nogometas: [
@@ -106,6 +108,17 @@ export const izBiH: Record<string, string[]> = {
   "exyu-izvodjac": [
     "Željko Bebek", "Mate Bulić", "Zrinko Tutić", "Zele Lipovača", "Senna M", "Pamela Ramljak", "Jozo Kristić", "Mario Zovko",
     "Ljiljana Molnar-Talajić", "Zoran Begić", "Vinko Ćemeraš", "Marko Bošnjak", "Ivana Marić", "Neda Ukraden",
+    // iz BiH, dodani u pitanju "iz susjedstva" (2026-10-29)
+    "Admir Kulović", "Zlatan Fazlić-Fazla", "Marija Šestić", "Donna Ares", "DJ Krmak", "Sanela Sijerčić",
+    "Ismet Alajbegović Šerbo", "Rešad Bešlagić", "Sabahudin Kurt", "Jasmin Bašić", "Dražen Ričl", "Zdravko Čurić", "Al' Dino",
+    "Seid Memić Vajta", "Arif Ahmetašević", "Muhamed Mujkanović", "Bahrija Nuri Hadžić", "Esad Plavi", "Jasmin Muharemović",
+    "Amir Kazić Leo", "Muhamed Fazlagić-Fazla", "Alma Čardžić", "Dada Mešaljić", "Fadil Toskić", "Vinko Brnada", "Ado Gegaj",
+    "Madita", "Adnan Nezirov", "Nermin Puškar", "Cunami Flo", "Adi Lukovac", "Zora Dubljević", "Faris Pinjo", "Adi Šoše",
+    "Davor Sučić", "Siledžije", "Macao Band", "Nervozni poštar", "Maja Milinković", "Ćana", "Marin Gradac",
+    "Ljubiša Racić", "Zlatko Arslanagić", "Fazlija", "Nihad Kantić – Šike", "Eldin Huseinbegović", "Dzeny", "Zuzi Zu", "Rialda",
+    "Dalal Midhat-Talakić", "Osman Hadžić", "Nino Rešić", "Šeki Bihorac", "Adnan Babajić", "Slađa Guduraš", "Elvira Rahić",
+    "Selma Muhedinović", "Enes Begović", "Nihad Alibegović", "Refik Kolić", "Amar Jašarspahić", "Semir Cerić Koke",
+    "Disciplinska komisija", "DZihan & Kamien", "Bezbeli Apstraklije", "Zona Isključenja", "Nemoguće Vruće",
   ],
   // jela koja su i bosanska (sarma, grah, japrak, pite, sudžuk, lepinja)
   "svjetsko-jelo": [
