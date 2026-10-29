@@ -176,6 +176,13 @@
       "when": 1792950000000,
       "tag": "0024_profilne_slike",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1792960000000,
+      "tag": "0025_spojeni_duplikati",
+      "breakpoints": true
     }
   ]
 }

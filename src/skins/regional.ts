@@ -2,6 +2,7 @@
 // iste km kao u Hrvatskoj, i kategorije bez onih koje su vezane uz Hrvatsku.
 import { fold, parseSeedAnswers } from "../lib/matcher";
 import type { SeedCategory } from "./hr/categories";
+import { withSpojeni } from "./spojeni";
 import { hrConfig } from "./hr/config";
 import type { SkinConfig, Tier } from "./types";
 
@@ -81,7 +82,8 @@ export function regionalCategories(all: SeedCategory[], country: Country): SeedC
     .filter((c) => c.group !== "hr" && !HR_SPECIFIC.has(c.slug))
     .map((c) => (HINTS[c.slug] ? { ...c, hint: HINTS[c.slug](country.lang) } : c));
   const abroad = Object.entries(country.abroad).map(([slug, a]) => abroadVersion(all, slug, a));
-  return [...shared, ...abroad, ...country.replace, ...country.domestic];
+  // domaće zamjene mogu imati svoje duplikate (Isa-beg Ishaković / Isaković)
+  return [...shared, ...abroad, ...country.replace, ...country.domestic].map(withSpojeni);
 }
 
 export function abroadVersion(all: SeedCategory[], slug: string, a: Abroad): SeedCategory {
