@@ -67,6 +67,19 @@ describe("match", () => {
     expect(m("SDSS")).toBeNull();
   });
 
+  it("ime uz prezime: dvostruko slovo i ij kao u izgovoru (Ana Kurnikova, Marija Šarapova)", () => {
+    const tenis = indexFor("tenis");
+    const t = (s: string) => match(tenis, s)?.canonical ?? null;
+    expect(t("Ana Kurnikova")).toBe("Anna Kurnikova");
+    expect(t("Marija Sharapova")).toBe("Maria Šarapova");
+    expect(t("Anna Ivanović")).toBe("Ana Ivanović");
+    // samostalno ime i dalje mora biti točno: Dario i Darijo, Ana i Anna su različita imena
+    const idx = buildIndex(["Dario", "Anna", "SDS"].map((canonical, id) => ({ id, canonical, variants: [] })));
+    expect(match(idx, "Darijo")).toBeNull();
+    expect(match(idx, "Ana")).toBeNull();
+    expect(match(idx, "SDSS")).toBeNull();
+  });
+
   it("odgovor bez opće riječi: Dubravsko = Dubravsko jezero", () => {
     const jezero = indexFor("jezero");
     expect(match(jezero, "Dubravsko")?.canonical).toBe("Dubravsko jezero");

@@ -19,6 +19,7 @@ import { prosirenja } from "./kategorije/prosirenja";
 import { wikipedija } from "./kategorije/wikipedija";
 import { wikipedijaDodaci } from "./kategorije/wikipedija-dodaci";
 import { zaigranoKategorije } from "./kategorije/zaigrano";
+import { withSpojeni } from "../spojeni";
 
 export type SeedCategory = { slug: string; group: string; title: string; hint?: string; strip: string[]; answers: string };
 
@@ -57,7 +58,7 @@ export const hrCategories: SeedCategory[] = [
   ...zastaveKategorije,
   ...nove3Hr,
   ...nove4Hr,
-].map(withDodaci).map(withWiki).map(withRare).map(withAliasi).map(withoutKrivi);
+].map(withDodaci).map(withWiki).map(withRare).map(withAliasi).map(withoutKrivi).map(withSpojeni);
 
 function format(list: ReturnType<typeof parseSeedAnswers>) {
   return list.map((a) => `${[a.canonical, ...a.variants].join("/")}=${a.share}${a.rare ? "!" : ""}`).join(";");
