@@ -34,11 +34,13 @@ function stem(k: string): string {
   return k;
 }
 
-// strani pravopis na hrvatski izgovor: "Mississippi" = "Misisipi", "Washington" = "Vašington", "Philadelphia" = "Filadelfia"
+// strani pravopis na hrvatski izgovor: "Mississippi" = "Misisipi", "Washington" = "Vašington", "Philadelphia" = "Filadelfia",
+// a uz druge riječi i "Maria Šarapova" = "Marija Šarapova" (samostalno "Dario" ≠ "Darijo", to su dva imena)
 const ROMAN = /^[ivxlcdm]+$/;
-const phonWord = (w: string) => {
+const phonWord = (w: string, multi: boolean) => {
   if (w.length < 4 || /\d/.test(w) || ROMAN.test(w)) return w; // kratice, brojevi i rimski brojevi ostaju kako jesu
   const p = w
+    .replace(/ij(?=[aeou])/g, multi ? "i" : "ij")
     .replace(/sch|sh/g, "s")
     .replace(/ch/g, "c")
     .replace(/zh/g, "z")
@@ -50,9 +52,13 @@ const phonWord = (w: string) => {
     .replace(/x/g, "ks")
     .replace(/y/g, "i")
     .replace(/([a-z])\1+/g, "$1");
-  return p.length < 4 ? w : p; // "SDSS" ≠ "SDS", "Eevee" ≠ "EVE"
+  // samostalna kratka riječ ostaje ("SDSS" ≠ "SDS", "Eevee" ≠ "EVE"), a uz druge riječi smije se skratiti ("Anna Kurnikova" = "Ana Kurnikova")
+  return p.length < 4 && !multi ? w : p;
 };
-const phon = (f: string) => f.split(" ").map(phonWord).join("");
+const phon = (f: string) => {
+  const w = f.split(" ");
+  return w.map((x) => phonWord(x, w.length > 1)).join("");
+};
 
 // riječi abecedno: "Lisinski Vatroslav" = "Vatroslav Lisinski"
 const sorted = (f: string) => f.split(" ").sort().join("");
