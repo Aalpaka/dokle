@@ -579,6 +579,8 @@ textarea.field { width: 100%; font-family: var(--font-mono); }
 .ttrack .tchip { position: absolute; left: 0; top: 0; box-shadow: 0 0 0 2px var(--card); }
 .ttrack .tchip.me { box-shadow: 0 0 0 2px var(--map-ink); }
 .ttrack .tchip.playing { opacity: .6; }
+/* kružić sa slikom inače reže sve izvan sebe, pa i crticu prema cesti (sliku i tako zaobli img) */
+.ttrack .tchip.pic { overflow: visible; }
 .ttrack .tchip::after { content: ""; position: absolute; left: 12px; top: 28px; width: 2px; height: 5px; background: var(--muted); }
 .tstatus { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
 .tstatus li { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-family: var(--font-mono); padding: 4px 10px; border-radius: 999px; background: var(--bg); }

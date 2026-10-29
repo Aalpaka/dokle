@@ -418,7 +418,7 @@ function TodayTrack({ view }: { view: LeagueView }) {
               className={"tchip" + (isMe ? " me" : "") + (m.status === "playing" ? " playing" : "")}
               title={`${m.nickname} · ${m.km} km`}
               color={isMe ? undefined : m.color}
-              src={isMe ? null : view.faces?.[m.memberId]}
+              src={view.faces?.[m.memberId]}
               style={{ transform: `translateX(${x.toFixed(1)}px)`, zIndex: isMe ? 9 : 1 }}
             >
               {isMe ? t("TI") : m.tag}
