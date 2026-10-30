@@ -562,6 +562,8 @@ export default function MapStage({ skinId, cfg, map, rounds, perDay, ended = fal
           {/* rub prema okolici je upečen u alfa kanal slike (scripts/map/feather.py); SVG maska sa zamućenjem
               se računala u svakom okviru i na mobitelu rušila igru */}
           <image href={map.image.href} x={map.image.x} y={map.image.y} width={map.image.width} height={map.image.height} preserveAspectRatio="none" />
+          {/* sumrak za Noć vještica; skriven dok tema nije uključena (globals.css) */}
+          <rect className="dusk" x={-6000} y={-6000} width={14000} height={14000} />
           {map.rivers.map((r) => <path key={r.name} className="river" d={r.d} />)}
           <path className="border" d={map.border} />
           {map.dashedBorder && <path className="border dashed" d={map.dashedBorder} />}

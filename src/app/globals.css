@@ -1038,3 +1038,57 @@ table .ghost-chip.face.pic { padding: 2px; }
 .crop-hint { color: var(--muted); margin: 0; }
 .crop-zoom { display: flex; align-items: center; gap: 10px; width: min(100%, 360px); margin: 0 auto; font-weight: 800; color: var(--muted); }
 .crop-zoom input { flex: 1; accent-color: var(--signal); }
+
+/* Noć vještica (31. 10. po zagrebačkom vremenu, ili ?halloween=1): html[data-theme="halloween"] postavlja
+   skripta u <head> (src/lib/halloween.ts); ploča postaje bundeva, asfalt ljubičast, karta u sumraku */
+.map .dusk { display: none; }
+html[data-theme="halloween"] {
+  --bg: #130e1a;
+  --card: #1e1628;
+  --line: #352947;
+  --ink: #f3eef6;
+  --muted: #ae9fbf;
+  --sign: #c2410c;        /* gumbi: tamna bundeva, bijela slova */
+  --signal: #ff9a1f;
+  --town-sign: #ff7a12;   /* ploča "Dokle?" postaje narančasta */
+  --stop: #e0315b;
+  --sea: #2f4d6b;
+}
+html[data-theme="halloween"] .map .dusk { display: block; fill: #2a0f47; opacity: .38; pointer-events: none; }
+html[data-theme="halloween"] .map .road-casing { stroke: #ffd9a8; }
+html[data-theme="halloween"] .landing-bg {
+  background: linear-gradient(180deg, #130e1ad9 0%, #2a0f47a6 45%, #130e1ff5 100%), var(--landing-map, url(/map/hr-reljef.webp)) center 35% / cover;
+}
+html[data-theme="halloween"] .start { box-shadow: 0 12px 34px -10px #ff7a12; }
+/* bundeva na kutu ploče */
+html[data-theme="halloween"] .plate { position: relative; }
+html[data-theme="halloween"] .plate::after {
+  content: "🎃"; position: absolute; right: -0.45em; top: -0.5em; font-size: 0.62em; line-height: 1; transform: rotate(14deg);
+  filter: drop-shadow(0 3px 4px #0009); pointer-events: none;
+}
+html[data-theme="halloween"] .plate.big::after { font-size: 0.42em; right: -0.32em; top: -0.36em; }
+/* paučina u gornjim kutovima početnog ekrana */
+html[data-theme="halloween"] .landing::before {
+  content: ""; position: absolute; inset: 0 0 auto; height: 220px; pointer-events: none; opacity: .32;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%23e9e2f2' stroke-width='.8'%3E%3Cpath d='M0 0L100 30M0 0L80 80M0 0L30 100M0 0L100 6M0 0L6 100'/%3E%3Cpath d='M25 0Q22 6 24 7.5Q20 16 21 21Q14 22 7.5 24Q6 22 0 25M50 0Q44 12 48 15Q40 32 42 42Q28 44 15 48Q12 44 0 50M75 0Q66 18 72 22Q60 48 63 63Q42 66 22 72Q18 66 0 75'/%3E%3C/svg%3E") left top / 180px no-repeat,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%23e9e2f2' stroke-width='.8'%3E%3Cg transform='matrix(-1 0 0 1 100 0)'%3E%3Cpath d='M0 0L100 30M0 0L80 80M0 0L30 100M0 0L100 6M0 0L6 100'/%3E%3Cpath d='M25 0Q22 6 24 7.5Q20 16 21 21Q14 22 7.5 24Q6 22 0 25M50 0Q44 12 48 15Q40 32 42 42Q28 44 15 48Q12 44 0 50M75 0Q66 18 72 22Q60 48 63 63Q42 66 22 72Q18 66 0 75'/%3E%3C/g%3E%3C/svg%3E") right top / 180px no-repeat;
+}
+@media (max-width: 520px) { html[data-theme="halloween"] .landing::before { background-size: 90px; opacity: .25; } }
+.hw-tag { font-family: var(--font-mono); font-weight: 700; font-size: 14px; letter-spacing: .14em; text-transform: uppercase; color: var(--signal); margin-bottom: -6px; }
+.hw-tag::before, .hw-tag::after { content: "🦇"; margin-inline: .6em; letter-spacing: 0; }
+html[data-theme="halloween"] .stationmsg small::before { content: "👻 "; }
+/* šišmiši: samo transform, pa ih slaže grafička kartica i ne opterećuju igru */
+.hw-bats { position: fixed; inset: 0; z-index: 40; pointer-events: none; overflow: hidden; }
+.hw-bats span { position: absolute; left: 0; display: block; transform: translateX(-60px); animation: hw-fly linear infinite; }
+.hw-bats svg { display: block; width: 100%; fill: #0b0710; filter: drop-shadow(0 0 3px #ff9a1f66); animation: hw-flap .22s ease-in-out infinite alternate; transform-origin: 50% 40%; }
+@keyframes hw-fly {
+  0% { transform: translate(-60px, 0); }
+  25% { transform: translate(25vw, -30px); }
+  50% { transform: translate(50vw, 20px); }
+  75% { transform: translate(75vw, -20px); }
+  /* ostatak ciklusa šišmiš čeka izvan ekrana, da ne lete cijelo vrijeme */
+  80%, 100% { transform: translate(calc(100vw + 60px), 0); }
+}
+@keyframes hw-flap { to { transform: scaleY(.45); } }
+@media (prefers-reduced-motion: reduce) { .hw-bats { display: none; } }

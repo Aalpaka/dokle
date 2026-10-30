@@ -272,4 +272,5 @@ export const sr: Record<string, string> = {
   "Povuci sliku i zumiraj da lice bude u krugu.": "Povuci sliku i zumiraj da lice bude u krugu.",
   "Zum": "Zum",
   "Odustani": "Odustani",
+  "Noć vještica · samo danas": "Noć veštica · samo danas",
 };

@@ -9,6 +9,7 @@ import { formatShare, landingAt } from "@/lib/scoring";
 import { maps, withVisuals } from "@/skins/maps";
 import { nearestStation, placeAt } from "@/skins/mjesta";
 import { setMuted, sfx, useMuted } from "@/lib/sound";
+import { useHalloween } from "./Halloween";
 import { fold } from "@/lib/matcher";
 import MapStage from "./MapStage";
 import { vehicleIcons } from "./vehicleIcons";
@@ -186,6 +187,7 @@ function Landing({ state, cfg, me, onStart }: { state: GameState; cfg: SkinConfi
   const first = cfg.stations[0], last = cfg.stations[cfg.stations.length - 1];
   const t = useT();
   const [y, m, d] = state.date.split("-");
+  const halloween = useHalloween();
   const startRef = useRef<HTMLButtonElement>(null);
   // Enter odmah kreće, ali bez autoFocusa: on bi na mobitelu odskrolao stranicu do gumba, ispod naslova
   useEffect(() => startRef.current?.focus({ preventScroll: true }), []);
@@ -200,6 +202,7 @@ function Landing({ state, cfg, me, onStart }: { state: GameState; cfg: SkinConfi
         <AccountLink me={me} />
       </header>
       <main className="landing-main">
+        {halloween && <p className="hw-tag">{t("Noć vještica · samo danas")}</p>}
         <h1 className={"plate big" + (cfg.title.length > 8 ? " long" : "")}>{cfg.title}</h1>
         <p className="route-line">{first.name} → {last.name} · {cfg.maxKm}&nbsp;km</p>
         <p className="lead">
