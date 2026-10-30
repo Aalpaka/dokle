@@ -9,9 +9,10 @@ describe("jako otvorena pitanja", () => {
     expect([...OTVORENA].filter((s) => !slugs.has(s))).toEqual([]);
   });
 
-  it("migracija 0012 označi iste", () => {
+  it("migracija 0012 označi iste, a kasnije nove kategorije označi seed kad ih doda", () => {
     const sql = readFileSync(new URL("../../drizzle/0012_otvorena_pitanja.sql", import.meta.url), "utf8");
-    const listed = [...sql.matchAll(/'([a-z0-9-]+)'/g)].map((m) => m[1]);
-    expect(new Set(listed)).toEqual(OTVORENA);
+    const listed = new Set([...sql.matchAll(/'([a-z0-9-]+)'/g)].map((m) => m[1]));
+    expect([...listed].filter((s) => !OTVORENA.has(s))).toEqual([]);
+    expect([...OTVORENA].filter((s) => !listed.has(s))).toEqual(["noc-vjestica"]);
   });
 });

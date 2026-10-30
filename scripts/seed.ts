@@ -1,10 +1,12 @@
 // Puni bazu skinom i početnim kategorijama. Može se pokretati više puta: config skina osvježava, kategorije i odgovore samo dodaje
 // (jedina izmjena postojećih je oznaka najrjeđeg odgovora za helikopter). Izmjene iz admina (naziv, rijetkost) ostaju.
-import { and, eq } from "drizzle-orm";
+import { and, eq, inArray, sql as dsql } from "drizzle-orm";
 import { db, sql } from "../src/db";
-import { answerAliases, answers, categories, removedAliases, skins } from "../src/db/schema";
+import { answerAliases, answers, categories, dailyPuzzles, puzzleCategories, removedAliases, skins } from "../src/db/schema";
 import { parseSeedAnswers } from "../src/lib/matcher";
-import { localDate } from "../src/lib/day";
+import { dayNumber, localDate } from "../src/lib/day";
+import { pickCategories, plannedSlugs } from "../src/lib/pick";
+import { RASPORED } from "../src/skins/hr/raspored";
 import { hrSkin } from "../src/skins/hr/config";
 import { hrCategories } from "../src/skins/hr/categories";
 import { baSkin } from "../src/skins/ba/config";
@@ -92,6 +94,58 @@ for (const { skin, categories: cats } of SKINS) {
     }
   }
   console.log(`${skin.id}: ${cats.length} kategorija, ${added} novih odgovora, ${marked} označeno za helikopter`);
+}
+
+// unaprijed složeni dani (raspored.ts): upisuju se samo ako taj dan još ne postoji (ni iz admina ni od igrača), pa ponovni deploy
+// i ručna izmjena u adminu ostaju kako jesu. BiH i Srbija dan slože same po Hrvatskoj kad ga prvi put otvore.
+const today = localDate(hrSkin.timezone);
+const followers = SKINS.map((x) => x.skin.id).filter((id) => id !== hrSkin.id);
+for (const [date, plan] of Object.entries(RASPORED)) {
+  if (date < today) continue;
+  const exists = await db.select({ id: dailyPuzzles.id }).from(dailyPuzzles).where(and(eq(dailyPuzzles.skinId, hrSkin.id), eq(dailyPuzzles.date, date)));
+  if (exists.length) {
+    console.log(`raspored ${date}: dan već postoji, ne dira se`);
+    continue;
+  }
+  const lastUsed = new Map(
+    (
+      await db
+        .select({ categoryId: puzzleCategories.categoryId, last: dsql<string>`max(${dailyPuzzles.date})::text` })
+        .from(puzzleCategories)
+        .innerJoin(dailyPuzzles, eq(dailyPuzzles.id, puzzleCategories.puzzleId))
+        .groupBy(puzzleCategories.categoryId)
+    ).map((r) => [r.categoryId, r.last]),
+  );
+  // samo kategorije aktivne u sve tri države (kao i automatski izbor)
+  const paired = new Set(
+    (
+      await db
+        .select({ slug: categories.slug, n: dsql<number>`count(distinct ${categories.skinId})::int` })
+        .from(categories)
+        .where(and(inArray(categories.skinId, [hrSkin.id, ...followers]), eq(categories.active, true)))
+        .groupBy(categories.slug)
+    )
+      .filter((r) => r.n === followers.length + 1)
+      .map((r) => r.slug),
+  );
+  const rows = await db
+    .select({ id: categories.id, group: categories.group, slug: categories.slug, open: categories.open })
+    .from(categories)
+    .where(and(eq(categories.skinId, hrSkin.id), eq(categories.active, true)));
+  const pool = rows
+    .filter((r) => paired.has(r.slug))
+    .map((r) => ({ ...r, last: lastUsed.get(r.id) ?? "", rnd: Math.random() }))
+    .sort((a, b) => a.last.localeCompare(b.last) || a.rnd - b.rnd);
+  const used = new Set(pool.filter((p) => p.last).map((p) => p.slug));
+  const pattern = hrSkin.config.dailyPattern;
+  const wanted = plannedSlugs(pattern, plan, pool, used);
+  const ids = pickCategories(pattern, pool, wanted);
+  const [{ launchDate }] = await db.select({ launchDate: skins.launchDate }).from(skins).where(eq(skins.id, hrSkin.id));
+  await db.transaction(async (tx) => {
+    const [np] = await tx.insert(dailyPuzzles).values({ skinId: hrSkin.id, date, number: dayNumber(launchDate, date) }).returning();
+    await tx.insert(puzzleCategories).values(ids.map((categoryId, position) => ({ puzzleId: np.id, position, categoryId })));
+  });
+  console.log(`raspored ${date}: ${ids.map((id) => pool.find((p) => p.id === id)!.slug).join(", ")} (zadano: ${wanted.filter(Boolean).length}/${pattern.length})`);
 }
 
 await sql.end();

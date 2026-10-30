@@ -13,6 +13,7 @@ import { nove3, nove3Hr } from "./kategorije/nove-3";
 import { nove4 } from "./kategorije/nove-4";
 import { nove4Hr } from "./kategorije/nove-4-hr";
 import { nove5 } from "./kategorije/nove-5";
+import { halloween } from "./kategorije/halloween";
 import { opceKategorije } from "./kategorije/opce";
 import { zastaveKategorije } from "./kategorije/zastave";
 import { prosirenja } from "./kategorije/prosirenja";
@@ -55,6 +56,7 @@ export const hrCategories: SeedCategory[] = [
   ...nove3,
   ...nove4,
   ...nove5,
+  ...halloween,
   ...zastaveKategorije,
   ...nove3Hr,
   ...nove4Hr,
