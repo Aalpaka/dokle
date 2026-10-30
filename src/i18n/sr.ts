@@ -96,6 +96,7 @@ export const sr: Record<string, string> = {
   "Udio igrača danas i km koje odgovor donosi, bez bonusa za brzinu.": "Udeo igrača danas i km koje odgovor donosi, bez bonusa za brzinu.",
   "tvoj": "tvoj",
   "Nema takvog odgovora.": "Nema takvog odgovora.",
+  "Filtriraj po prijevozu": "Filtriraj po prevozu",
   "Nova ruta za {h} h {m} min": "Nova ruta za {h} h {m} min",
   // karta
   "Vrijeme je isteklo": "Vreme je isteklo",
