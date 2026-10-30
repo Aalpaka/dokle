@@ -9,6 +9,7 @@ import type { PlayerStats } from "@/lib/stats";
 import { codeConfigs } from "@/skins/maps";
 import { SkinPicker } from "./SkinPicker";
 import { skinFetch, useSkin, useT } from "./skin";
+import { useReturnKey } from "./fresh";
 
 export type Me = {
   authEnabled: boolean;
@@ -19,11 +20,12 @@ export type Me = {
 
 export function useMe(reloadKey: unknown = 0) {
   const [me, setMe] = useState<Me | null>(null);
+  const back = useReturnKey();
   useEffect(() => {
     skinFetch("/api/me", { cache: "no-store" })
       .then((r) => r.json())
       .then(setMe, () => {});
-  }, [reloadKey]);
+  }, [reloadKey, back]);
   return me;
 }
 
