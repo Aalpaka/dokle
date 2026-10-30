@@ -226,6 +226,7 @@ export type TodayAnswer = {
   km: number;
   emoji: string;
   reactions: Partial<Record<Reaction, number>>;
+  who: Partial<Record<Reaction, { memberId: number; nickname: string }[]>>; // tko je reagirao, po emojiju
   mine: Reaction | null; // moja reakcija na ovaj odgovor
   tag: "heli" | "rare" | "same" | null; // Zokijeva desna ruka (helikopter) / Plameni jazavac / ista misao
 };
@@ -439,7 +440,13 @@ async function dayAnswers(
         const m = memberOf.get(r.gameId)!;
         const rs = reactionsOf(r.gameId, r.position);
         const counts: Partial<Record<Reaction, number>> = {};
-        for (const x of rs) counts[x.emoji as Reaction] = (counts[x.emoji as Reaction] ?? 0) + 1;
+        const who: TodayAnswer["who"] = {};
+        for (const x of rs) {
+          counts[x.emoji as Reaction] = (counts[x.emoji as Reaction] ?? 0) + 1;
+          const r = members.find((mm) => mm.playerId === x.playerId)!;
+          (who[x.emoji as Reaction] ??= []).push({ memberId: r.memberId, nickname: r.nickname });
+        }
+        for (const list of Object.values(who)) list.sort((a, b) => a.nickname.localeCompare(b.nickname, "hr"));
         const key = `${m.memberId}|${r.position}`;
         return {
           memberId: m.memberId,
@@ -448,6 +455,7 @@ async function dayAnswers(
           km: r.km ?? 0,
           emoji: emoji(r.tier, r.canonical),
           reactions: counts,
+          who,
           mine: (rs.find((x) => x.playerId === viewerId)?.emoji as Reaction | undefined) ?? null,
           tag: key === rareKey ? (awards!.rare!.heli ? "heli" : "rare") : sameKeys.has(key) ? "same" : null,
         };
