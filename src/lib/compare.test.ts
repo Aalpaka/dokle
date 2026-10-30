@@ -17,13 +17,13 @@ describe("compareDay", () => {
     expect(compareDay("hr", hr, [300, 300, 300], 300).ahead).toBe(0);
   });
   it("stupci po 100 km s igračem, najdalji grad", () => {
-    const c = compareDay("hr", hr, [100, 150, 700, 700, 750, 1423], 700);
-    expect(c.hist.length).toBe(15); // 0–1499
+    const c = compareDay("hr", hr, [100, 150, 700, 700, 750, 1723], 700);
+    expect(c.hist.length).toBe(18); // 0–1799
     expect(c.hist[1]).toBe(2);
     expect(c.hist[7]).toBe(3); // igrač, izjednačeni i 750
     expect(c.mineBin).toBe(7);
-    expect(c.hist[14]).toBe(1);
-    expect(c).toMatchObject({ behind: 2, bestKm: 1423, bestTown: "Budva" });
+    expect(c.hist[17]).toBe(1);
+    expect(c).toMatchObject({ behind: 2, bestKm: 1723, bestTown: "Budva" });
     expect(compareDay("hr", hr, [700], 700).hist.length).toBe(13); // do maxKm 1200 (zadnji stupac 1200–1299)
   });
 });

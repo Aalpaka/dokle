@@ -59,6 +59,8 @@ export type SkinConfig = {
   stations: Station[];
   // easter egg: tko skupi više od overKm, ne stane na cilju nego produži do ove postaje (izvan rute i usporedbe)
   overshoot?: { overKm: number; station: Station };
+  // km prijevoza (po redu tiers) i prag produžetka za partije prije datuma `until`; tiers i overshoot vrijede od tog dana
+  before?: { until: string; tierKm: number[]; overKm?: number };
   tiers: Tier[]; // sortirano od najčešćeg prema najrjeđem
   speed: SpeedStep[]; // sortirano po maxSeconds, zadnji bez granice
   miss: { km: number; emoji: string; name: string };

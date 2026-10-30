@@ -19,6 +19,7 @@ export function regionalBase(home: string) {
     mirror: "hr",
     maxKm: hrConfig.maxKm,
     priorWeight: hrConfig.priorWeight,
+    before: hrConfig.before,
   } satisfies Partial<SkinConfig>;
 }
 
