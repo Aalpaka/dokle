@@ -706,6 +706,14 @@ table.league tr.details.me td { color: inherit; }
 .rpill.mine { box-shadow: inset 0 0 0 1.5px var(--signal); }
 .rpill.add { color: var(--muted); padding-inline: 6px; }
 .rpill:disabled { opacity: 1; }
+.rpill { position: relative; -webkit-touch-callout: none; user-select: none; }
+.rpill.own { cursor: default; }
+/* tko je reagirao: hover na desktopu, dugi pritisak (ili dodir na svoj odgovor) na mobitelu */
+.rwho { display: none; position: absolute; z-index: 20; right: -4px; bottom: calc(100% + 8px); width: max-content; max-width: 200px; padding: 5px 9px; border-radius: 10px; background: var(--card); border: 1px solid var(--line); box-shadow: 0 6px 18px #0005; font-size: 12px; font-weight: 600; line-height: 1.4; text-align: left; white-space: normal; pointer-events: none; animation: rpick-in .12s ease-out; }
+.rwho::after { content: ""; position: absolute; right: 12px; top: 100%; border: 6px solid transparent; border-top-color: var(--line); }
+.rwho span { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rpill.peek .rwho, .rpill:focus-visible .rwho { display: block; }
+@media (hover: hover) { .rpill:hover .rwho { display: block; } }
 /* Izbor reakcija je balončić iznad ＋ pa se red ne pomiče. */
 .rwrap { position: relative; display: inline-flex; }
 .rpick { position: absolute; z-index: 20; right: -4px; bottom: calc(100% + 8px); display: flex; gap: 2px; padding: 4px 6px; border-radius: 999px; background: var(--card); border: 1px solid var(--line); box-shadow: 0 6px 18px #0005; white-space: nowrap; animation: rpick-in .12s ease-out; }

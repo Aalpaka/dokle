@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, createContext, useCallback, useContext, useEffect, useState } from "react";
+import { Fragment, createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { GoogleButton, PageShell, useMe } from "./account";
 import { PERIODS, PERIOD_LABEL, REACTIONS, addDays, type Period, type Reaction, type StandingRow } from "@/lib/league";
 import type { LeagueSummary, LeagueView, MemberDay, MemberDuel, PastWeek, StandingView } from "@/server/leagues";
@@ -833,6 +833,20 @@ function Answers({ view, act }: { view: LeagueView; act: (b: Record<string, unkn
   const [idx, setIdx] = useState(0);
   const [picking, setPicking] = useState<number | null>(null);
   const [touch, setTouch] = useState<number | null>(null);
+  const [peek, setPeek] = useState<string | null>(null); // "memberId|emoji" čija se imena vide (mobitel)
+  const press = useRef<{ timer?: ReturnType<typeof setTimeout>; fired: boolean }>({ fired: false });
+  useEffect(() => {
+    if (peek === null) return;
+    const close = (e: Event) => {
+      if (e instanceof KeyboardEvent ? e.key === "Escape" : !(e.target as Element).closest?.(".rpill.peek")) setPeek(null);
+    };
+    document.addEventListener("pointerdown", close);
+    document.addEventListener("keydown", close);
+    return () => {
+      document.removeEventListener("pointerdown", close);
+      document.removeEventListener("keydown", close);
+    };
+  }, [peek]);
   useEffect(() => {
     if (picking === null) return;
     const close = (e: Event) => {
@@ -857,6 +871,7 @@ function Answers({ view, act }: { view: LeagueView; act: (b: Record<string, unkn
   const c = cats[i];
   const go = (d: number) => {
     setPicking(null);
+    setPeek(null);
     setIdx((i + d + cats.length) % cats.length);
   };
   const react = (memberId: number, emoji: Reaction | null) => {
@@ -907,17 +922,44 @@ function Answers({ view, act }: { view: LeagueView; act: (b: Record<string, unkn
               </span>
               <span className="km" title={`${a.km} km`}>{a.emoji} {a.km}</span>
               <span className="reacts">
-                {counts.map((e) => (
-                  <button
-                    key={e}
-                    className={"rpill" + (a.mine === e ? " mine" : "")}
-                    disabled={own}
-                    onClick={() => react(a.memberId, a.mine === e ? null : e)}
-                    aria-label={`${e} ${a.reactions[e]}`}
-                  >
-                    {e} {a.reactions[e]}
-                  </button>
-                ))}
+                {counts.map((e) => {
+                  const key = `${a.memberId}|${e}`;
+                  const names = (a.who[e] ?? []).map((w) => (w.memberId === view.meMemberId ? t("Ti") : w.nickname));
+                  return (
+                    <button
+                      key={e}
+                      className={"rpill" + (a.mine === e ? " mine" : "") + (own ? " own" : "") + (peek === key ? " peek" : "")}
+                      onPointerDown={(ev) => {
+                        if (ev.pointerType === "mouse" || own) return;
+                        // dugi pritisak na mobitelu: pokaži tko je reagirao umjesto da mijenja reakciju
+                        clearTimeout(press.current.timer);
+                        press.current.fired = false;
+                        press.current.timer = setTimeout(() => {
+                          press.current.fired = true;
+                          setPicking(null);
+                          setPeek(key);
+                        }, 450);
+                      }}
+                      onPointerUp={() => clearTimeout(press.current.timer)}
+                      onPointerLeave={() => clearTimeout(press.current.timer)}
+                      onPointerCancel={() => clearTimeout(press.current.timer)}
+                      onContextMenu={(ev) => ev.preventDefault()}
+                      onClick={() => {
+                        if (press.current.fired) return void (press.current.fired = false);
+                        // na svoj odgovor ne možeš reagirati, pa dodir samo pokaže imena
+                        if (own) return setPeek(peek === key ? null : key);
+                        setPeek(null);
+                        react(a.memberId, a.mine === e ? null : e);
+                      }}
+                      aria-label={`${e} ${a.reactions[e]}: ${names.join(", ")}`}
+                    >
+                      {e} {a.reactions[e]}
+                      <span className="rwho" role="tooltip" aria-hidden>
+                        {names.map((n, k) => <span key={k}>{n}</span>)}
+                      </span>
+                    </button>
+                  );
+                })}
                 {!own && (
                   <span className="rwrap">
                     <button className={"rpill add" + (picking === a.memberId ? " on" : "")} onClick={() => setPicking(picking === a.memberId ? null : a.memberId)} aria-label={t("Reagiraj")} aria-expanded={picking === a.memberId}>＋</button>
