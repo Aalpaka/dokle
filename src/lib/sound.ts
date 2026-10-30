@@ -192,6 +192,16 @@ export const sfx = {
       s.start(start);
     });
   },
+  /** Jumpscare za Noć vještica: nagli vrisak (disonantni akord koji pada), šum i udarac. */
+  scream() {
+    const c = ready();
+    if (!c) return;
+    const t = c.currentTime;
+    tone(c, "square", 70, t, 0.005, 0.6, 0.5, 35);
+    noise(c, t, 1.1, "bandpass", 1800, 0.6, 0.9, 0.01);
+    noise(c, t, 0.35, "highpass", 4000, 0.7, 0.4, 0.005);
+    [440, 466, 622, 932].forEach((f) => tone(c, "sawtooth", f, t, 0.01, 0.16, 1.2, f * 0.55));
+  },
   station() {
     const c = ready();
     if (!c) return;

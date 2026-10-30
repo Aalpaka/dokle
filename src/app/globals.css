@@ -1097,3 +1097,19 @@ html[data-theme="halloween"] .stationmsg small::before { content: "👻 "; }
 }
 @keyframes hw-flap { to { transform: scaleY(.45); } }
 @media (prefers-reduced-motion: reduce) { .hw-bats { display: none; } }
+/* jumpscare nakon prvog prihvaćenog odgovora na Noć vještica (Halloween.tsx) */
+.hw-scare {
+  position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; cursor: pointer;
+  background: radial-gradient(circle at 50% 45%, #5a0000e6 0%, #000000f2 70%);
+  animation: hw-scare-out 1.7s ease-in both;
+}
+.hw-scare svg { width: min(92vw, 92vh); height: auto; filter: drop-shadow(0 0 40px #ff1f1f88); animation: hw-scare-in .14s cubic-bezier(.2, 1.6, .4, 1) both, hw-shake .09s linear .14s 9; }
+@keyframes hw-scare-in { from { transform: scale(.25); } to { transform: scale(1.12); } }
+@keyframes hw-shake {
+  0%, 100% { transform: scale(1.12) translate(0, 0) rotate(0); }
+  25% { transform: scale(1.14) translate(-8px, 5px) rotate(-2deg); }
+  50% { transform: scale(1.1) translate(7px, -6px) rotate(1.5deg); }
+  75% { transform: scale(1.13) translate(-5px, -4px) rotate(-1deg); }
+}
+@keyframes hw-scare-out { 0%, 75% { opacity: 1; } to { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .hw-scare svg { animation: none; transform: scale(1.05); } }

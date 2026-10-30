@@ -9,7 +9,7 @@ import { formatShare, landingAt } from "@/lib/scoring";
 import { maps, withVisuals } from "@/skins/maps";
 import { nearestStation, placeAt } from "@/skins/mjesta";
 import { setMuted, sfx, useMuted } from "@/lib/sound";
-import { useHalloween } from "./Halloween";
+import { jumpscare, useHalloween } from "./Halloween";
 import { fold } from "@/lib/matcher";
 import MapStage from "./MapStage";
 import { vehicleIcons } from "./vehicleIcons";
@@ -263,7 +263,11 @@ function Play({ state, onScored, onLost }: { state: GameState; onScored: (s: Gam
       busy.current = true;
       try {
         const r = await api<AnswerResponse>("/api/game/answer", { raw, final });
-        if (r.status === "scored") onScored(r.state);
+        if (r.status === "scored") {
+          // Noć vještica: monstrum iskoči nakon prvog prihvaćenog odgovora (jumpscare sam provjerava je li tema uključena)
+          if (cur.position === 0 && r.state.rounds.find((x) => x.position === 0)?.canonical) jumpscare(`${state.skin.id}:${state.date}`);
+          onScored(r.state);
+        }
         else if (r.status === "rejected") {
           sfx.wrong();
           setSending({ kind: "nope", raw: raw.trim(), checked: r.checked });
@@ -273,7 +277,7 @@ function Play({ state, onScored, onLost }: { state: GameState; onScored: (s: Gam
         busy.current = false;
       }
     },
-    [onScored, onLost],
+    [onScored, onLost, cur.position, state.skin.id, state.date],
   );
 
   // tajmer; server je mjerodavan, ovo je samo prikaz
