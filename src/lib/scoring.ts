@@ -75,6 +75,20 @@ export function priorForRank(tiers: Pick<Tier, "minShare" | "rare">[], index: nu
   return Math.max(0.01, Math.round(share * 100) / 100);
 }
 
+/**
+ * Konfiguracija s km prijevoza i pragom produžetka koji vrijede za partije dana `date` (YYYY-MM-DD): prije
+ * `before.until` stare km, da promjena bodovanja ne dira već odigrane ni naknadno bodovane partije.
+ */
+export function configOn(cfg: SkinConfig, date: string): SkinConfig {
+  const b = cfg.before;
+  if (!b || date >= b.until) return cfg;
+  return {
+    ...cfg,
+    tiers: cfg.tiers.map((t, i) => ({ ...t, km: b.tierKm[i] ?? t.km })),
+    ...(cfg.overshoot && b.overKm !== undefined && { overshoot: { ...cfg.overshoot, overKm: b.overKm, station: { ...cfg.overshoot.station, km: b.overKm + 1 } } }),
+  };
+}
+
 export function speedFor(cfg: SkinConfig, elapsedMs: number): SpeedStep {
   const steps = cfg.speed ?? [];
   return steps.find((s) => s.maxSeconds === undefined || elapsedMs <= s.maxSeconds * 1000) ?? { multiplier: 1, emoji: "", name: "" };
@@ -117,10 +131,11 @@ export function assignTiers<T extends TierLike>(cfg: { tiers: T[] }, answers: { 
   });
 }
 
-/** Km za tier: km tiera puta množitelj brzine, zaokruženo. */
+/** Km za tier: km tiera iz `cfg` (po imenu, vidi configOn) puta množitelj brzine, zaokruženo. */
 export function kmFor(cfg: SkinConfig, tier: Tier, elapsedMs: number): { tier: Tier; speed: SpeedStep; km: number } {
   const speed = speedFor(cfg, elapsedMs);
-  return { tier, speed, km: Math.round(tier.km * speed.multiplier) };
+  const t = cfg.tiers.find((x) => x.name === tier.name) ?? tier;
+  return { tier: t, speed, km: Math.round(t.km * speed.multiplier) };
 }
 
 /** Km za pogođeni odgovor: km tiera puta množitelj brzine, zaokruženo. */

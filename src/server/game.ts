@@ -16,7 +16,7 @@ import {
 } from "@/db/schema";
 import { buildIndex, fold, match, type MatchIndex } from "@/lib/matcher";
 import { pickCategories } from "@/lib/pick";
-import { assignTiers, blendedShare, kmFor, speedFor, tierFor } from "@/lib/scoring";
+import { assignTiers, blendedShare, configOn, kmFor, speedFor, tierFor } from "@/lib/scoring";
 import { dayNumber, localDate } from "@/lib/day";
 import { compareDay, type DayCompare } from "@/lib/compare";
 import type { Origin } from "./origin";
@@ -322,8 +322,9 @@ function baseTier(cfg: SkinConfig, tier: string, share: number | null) {
 export async function getState(skin: Skin, playerId: string | null): Promise<GameState> {
   const date = localDate(skin.timezone);
   const puzzle = await getOrCreatePuzzle(skin, date);
+  const cfg = configOn(skin.config, date);
   const head = {
-    skin: { id: skin.id, timezone: skin.timezone, config: skin.config },
+    skin: { id: skin.id, timezone: skin.timezone, config: cfg },
     date,
     number: puzzle.number,
     perDay: puzzle.categoryIds.length,
@@ -346,10 +347,10 @@ export async function getState(skin: Skin, playerId: string | null): Promise<Gam
     const cat = await getCategory(r.categoryId);
     const category = { title: cat.title, hint: cat.hint, group: cat.group };
     if (r.answeredAt) {
-      const base = r.answerId !== null ? baseTier(skin.config, r.tier ?? "", r.share) : null;
+      const base = r.answerId !== null ? baseTier(cfg, r.tier ?? "", r.share) : null;
       // naknadno bodovan raniji pokušaj ima množitelj po vremenu tog pokušaja, ne po kraju runde: prepozna se po km
-      const step = (r.rescoredAt && base && skin.config.speed?.find((x) => Math.round(base.km * x.multiplier) === r.km)) ||
-        speedFor(skin.config, r.answeredAt.getTime() - r.startedAt.getTime());
+      const step = (r.rescoredAt && base && cfg.speed?.find((x) => Math.round(base.km * x.multiplier) === r.km)) ||
+        speedFor(cfg, r.answeredAt.getTime() - r.startedAt.getTime());
       const report = reportState(r);
       views.push({
         position: r.position,
@@ -618,7 +619,7 @@ async function scoreRound(
   answerId: number | null,
   elapsedMs: number,
 ) {
-  const cfg = skin.config;
+  const cfg = configOn(skin.config, puzzle.date);
   let share: number | null = null;
   let km = cfg.miss.km;
   let tier = raw ? cfg.miss.name : "Isteklo vrijeme";
@@ -730,14 +731,15 @@ export async function answerList(skin: Skin, playerId: string, position: number)
   const ordered = [...all.filter((a) => !a.tier.rare), ...all.filter((a) => a.tier.rare)];
   // svoj odgovor igrač uvijek vidi s prijevozom, km i udjelom koje je stvarno dobio, i to među odgovorima
   // tog prijevoza, makar se od tada pomaknuo među druge
-  const got = mine?.tier ? baseTier(skin.config, mine.tier, mine.share) : null;
+  const cfg = configOn(skin.config, puzzle.date);
+  const got = mine?.tier ? baseTier(cfg, mine.tier, mine.share) : null;
   const now = mine && ordered.find((a) => a.id === mine.answerId);
   const rows = got && now ? placeMine(skin.config, ordered.filter((a) => a !== now), { ...now, tier: got, share: mine.share ?? now.share }) : ordered;
   return {
     position,
     title: cat.title,
     mine: mine?.canonical ?? null,
-    answers: rows.map((a) => ({ canonical: a.canonical, share: a.share, tier: a.tier.name, km: a.tier.km, ...(a.fact && { fact: a.fact }) })),
+    answers: rows.map((a) => ({ canonical: a.canonical, share: a.share, tier: a.tier.name, km: (cfg.tiers.find((t) => t.name === a.tier.name) ?? a.tier).km, ...(a.fact && { fact: a.fact }) })),
   };
 }
 
@@ -753,7 +755,7 @@ export async function dayCompare(skin: Skin, playerId: string): Promise<(DayComp
     .where(and(eq(games.puzzleId, puzzle.id), eq(games.ranked, true), isNotNull(games.finishedAt)))
     .groupBy(games.totalKm);
   const kms = rows.flatMap((r) => Array<number>(r.n).fill(r.km));
-  return { ...compareDay(skin.id, skin.config, kms, game.totalKm), mine: game.totalKm };
+  return { ...compareDay(skin.id, configOn(skin.config, puzzle.date), kms, game.totalKm), mine: game.totalKm };
 }
 
 export function clearCategoryCache(id?: number) {
@@ -779,9 +781,11 @@ export async function rescoreMisses(skin: Skin, categoryId: number, normalized: 
       startedAt: rounds.startedAt,
       answeredAt: rounds.answeredAt,
       puzzleId: games.puzzleId,
+      date: dailyPuzzles.date,
     })
     .from(rounds)
     .innerJoin(games, eq(games.id, rounds.gameId))
+    .innerJoin(dailyPuzzles, eq(dailyPuzzles.id, games.puzzleId))
     .where(and(eq(rounds.categoryId, categoryId), isNull(rounds.answerId), isNotNull(rounds.raw), isNotNull(rounds.answeredAt)));
   const hits = misses.filter((m) => fold(m.raw!) === normalized && (!m.reportedRaw || fold(m.reportedRaw) === normalized));
   if (!hits.length) return 0;
@@ -797,8 +801,8 @@ export async function rescoreMisses(skin: Skin, categoryId: number, normalized: 
     const share = standing.share;
     await db.transaction(async (tx) => {
       for (const h of list) {
-        // množitelj brzine kao da je odgovor bio prihvaćen kad ga je igrač poslao
-        const scored = kmFor(skin.config, tier ?? standing.tier, h.answeredAt!.getTime() - h.startedAt.getTime());
+        // množitelj brzine kao da je odgovor bio prihvaćen kad ga je igrač poslao; km prijevoza kakve su bile taj dan
+        const scored = kmFor(configOn(skin.config, h.date), tier ?? standing.tier, h.answeredAt!.getTime() - h.startedAt.getTime());
         await tx
           .update(rounds)
           .set({ share, km: scored.km, tier: scored.tier.name, rescoredAt: new Date(), rescoreSeenAt: null })
@@ -821,9 +825,10 @@ export async function rescoreMisses(skin: Skin, categoryId: number, normalized: 
  */
 export async function rescoreReported(skin: Skin, categoryId: number, normalized: string, answerId: number, tier?: Tier): Promise<number> {
   const reported = await db
-    .select({ gameId: rounds.gameId, position: rounds.position, reportedRaw: rounds.reportedRaw, km: rounds.km, puzzleId: games.puzzleId })
+    .select({ gameId: rounds.gameId, position: rounds.position, reportedRaw: rounds.reportedRaw, km: rounds.km, puzzleId: games.puzzleId, date: dailyPuzzles.date })
     .from(rounds)
     .innerJoin(games, eq(games.id, rounds.gameId))
+    .innerJoin(dailyPuzzles, eq(dailyPuzzles.id, games.puzzleId))
     .where(
       and(
         eq(rounds.categoryId, categoryId),
@@ -851,7 +856,7 @@ export async function rescoreReported(skin: Skin, categoryId: number, normalized
         const now = new Date();
         const where = and(eq(rounds.gameId, h.gameId), eq(rounds.position, h.position));
         // bez zapisa pokušaja (ne bi se trebalo dogoditi) računa se najsporiji množitelj
-        const scored = kmFor(skin.config, tier ?? standing.tier, elapsed.get(`${h.gameId}|${h.position}`) ?? Number.MAX_SAFE_INTEGER);
+        const scored = kmFor(configOn(skin.config, h.date), tier ?? standing.tier, elapsed.get(`${h.gameId}|${h.position}`) ?? Number.MAX_SAFE_INTEGER);
         if (scored.km <= (h.km ?? 0)) {
           // prihvaćeno, ali stari odgovor vrijedi više: ništa se ne mijenja, igrač to vidi u popisu pokušaja
           // (isto vrijeme u rescoredAt i rescoreSeenAt je oznaka za to, vidi roundMisses)

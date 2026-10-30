@@ -17,7 +17,7 @@ import {
   rounds,
 } from "@/db/schema";
 import { capitalize, fold, parseSeedAnswers } from "@/lib/matcher";
-import { stationAt } from "@/lib/scoring";
+import { configOn, stationAt } from "@/lib/scoring";
 import { computeStats } from "@/lib/stats";
 import { dayNumber, localDate } from "@/lib/day";
 import { addDays, dailyAverages, weekDays } from "@/lib/league";
@@ -509,7 +509,7 @@ export async function playerDetail(skin: Skin, id: string) {
   return {
     ...p,
     stats: computeStats(done, today),
-    games: rows.slice(0, 60).map((r) => ({ ...r, station: r.finished ? placeAt(skin.id, skin.config, r.km) : null })),
+    games: rows.slice(0, 60).map((r) => ({ ...r, station: r.finished ? placeAt(skin.id, configOn(skin.config, r.date), r.km) : null })),
     leagues: myLeagues,
   };
 }

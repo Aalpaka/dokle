@@ -20,7 +20,7 @@ describe("placeAt", () => {
   });
   it("iza cilja cilj, preko overKm Budva", () => {
     expect(placeAt("hr", hrConfig, 1300)).toBe("Dubrovnik");
-    expect(placeAt("hr", hrConfig, 1401)).toBe("Budva");
+    expect(placeAt("hr", hrConfig, 1701)).toBe("Budva");
   });
   it("nepoznat skin pada na postaje", () => {
     expect(placeAt("xx", hrConfig, 705)).toBe("Gospić");
@@ -31,6 +31,6 @@ describe("nearestStation", () => {
   it("bliža postaja po km, ispred ili iza", () => {
     expect(nearestStation(hrConfig, 705).name).toBe("Zadar");
     expect(nearestStation(hrConfig, 630).name).toBe("Gospić");
-    expect(nearestStation(hrConfig, 1450).name).toBe("Budva");
+    expect(nearestStation(hrConfig, 1750).name).toBe("Budva");
   });
 });

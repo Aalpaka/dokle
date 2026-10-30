@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { assignTiers, blendedShare, priorForRank, priorForTier, scoreKm, speedFor, stationAt, tierFor, tierSizes, landingAt, routeKm } from "./scoring";
+import { assignTiers, blendedShare, configOn, kmFor, priorForRank, priorForTier, scoreKm, speedFor, stationAt, tierFor, tierSizes, landingAt, routeKm } from "./scoring";
 import { dayNumber, localDate } from "./day";
 import { hrConfig } from "@/skins/hr/config";
 import { baConfig } from "@/skins/ba/config";
@@ -13,9 +13,9 @@ describe("scoring", () => {
     expect(blendedShare(22, 1, 1000, 50)).toBeCloseTo((50 * 22 + 100) / 1050);
   });
   it("tierovi", () => {
-    expect(tierFor(hrConfig, 22).km).toBe(10);
-    expect(tierFor(hrConfig, 0.4).km).toBe(125);
-    expect(tierFor(hrConfig, 2).km).toBe(70);
+    expect(tierFor(hrConfig, 22).km).toBe(12);
+    expect(tierFor(hrConfig, 0.4).km).toBe(150);
+    expect(tierFor(hrConfig, 2).km).toBe(84);
   });
   it("prijevoz ide po rangu u pitanju", () => {
     expect(tierSizes(60)).toEqual([3, 7, 7, 7, 11]);
@@ -60,7 +60,7 @@ describe("scoring", () => {
   it("helikopter samo za označene najrjeđe odgovore", () => {
     expect(tierFor(hrConfig, 0.05).name).toBe("Croatia Airlines");
     expect(tierFor(hrConfig, 0.05, true).name).toBe("Milanovićev helikopter");
-    expect(tierFor(hrConfig, 0.05, true).km).toBe(185);
+    expect(tierFor(hrConfig, 0.05, true).km).toBe(220);
     // kad ga puno igrača da, gubi helikopter
     expect(tierFor(hrConfig, 3, true).name).toBe("Čazmatrans");
   });
@@ -83,11 +83,11 @@ describe("scoring", () => {
     expect(landingAt(hrConfig, allPlanes).name).toBe("Dubrovnik");
     expect(landingAt(hrConfig, 7 * scoreKm(hrConfig, 0, 0).km + scoreKm(hrConfig, 0, 0, true).km).name).toBe("Dubrovnik");
     expect(landingAt(hrConfig, 6 * scoreKm(hrConfig, 0, 0).km + 2 * scoreKm(hrConfig, 0, 0, true).km).name).toBe("Budva");
-    expect(landingAt(hrConfig, 1400).name).toBe("Dubrovnik");
-    expect(landingAt(hrConfig, 1401).name).toBe("Budva");
-    expect(stationAt(hrConfig, 1450).name).toBe("Dubrovnik");
+    expect(landingAt(hrConfig, 1700).name).toBe("Dubrovnik");
+    expect(landingAt(hrConfig, 1701).name).toBe("Budva");
+    expect(stationAt(hrConfig, 1750).name).toBe("Dubrovnik");
     expect(routeKm(hrConfig, 1250)).toBe(hrConfig.maxKm);
-    expect(routeKm(hrConfig, 1450)).toBe(hrConfig.overshoot!.station.km);
+    expect(routeKm(hrConfig, 1750)).toBe(hrConfig.overshoot!.station.km);
     expect(routeKm(hrConfig, 600)).toBe(600);
   });
   it("brzina", () => {
@@ -105,10 +105,27 @@ describe("scoring", () => {
     }
   });
   it("km s brzinom", () => {
-    expect(scoreKm(hrConfig, 0.1, 4000).km).toBe(163); // 125 × 1,3
-    expect(scoreKm(hrConfig, 3, 9000).km).toBe(81); // 70 × 1,15
-    expect(scoreKm(hrConfig, 30, 24000).km).toBe(9); // 10 × 0,9
-    expect(8 * scoreKm(hrConfig, 0, 0).km).toBeGreaterThan(hrConfig.maxKm);
+    expect(scoreKm(hrConfig, 0.1, 4000).km).toBe(195); // 150 × 1,3
+    expect(scoreKm(hrConfig, 3, 9000).km).toBe(97); // 84 × 1,15
+    expect(scoreKm(hrConfig, 30, 24000).km).toBe(11); // 12 × 0,9
+    // 8 aviona normalnom brzinom stigne točno u Dubrovnik
+    expect(8 * scoreKm(hrConfig, 0, 15000).km).toBe(hrConfig.maxKm);
+  });
+  it("stare km prijevoza za partije prije promjene", () => {
+    for (const cfg of [hrConfig, baConfig, rsConfig]) {
+      const old = configOn(cfg, "2026-11-01");
+      expect(old.tiers.map((t) => t.km)).toEqual([10, 25, 45, 70, 100, 125, 185]);
+      expect(old.tiers.map((t) => t.name)).toEqual(cfg.tiers.map((t) => t.name));
+      expect(configOn(cfg, "2026-11-02")).toBe(cfg);
+      // tier iz današnje konfiguracije dobije km dana partije
+      const plane = cfg.tiers.find((t) => t.vehicle === "plane")!;
+      expect(kmFor(old, plane, 4000).km).toBe(163);
+      expect(kmFor(cfg, plane, 4000).km).toBe(195);
+    }
+    const old = configOn(hrConfig, "2026-10-30");
+    expect(landingAt(old, 1401).name).toBe("Budva");
+    expect(landingAt(old, 1400).name).toBe("Dubrovnik");
+    expect(8 * scoreKm(old, 0, 15000).km).toBe(1000);
   });
 });
 

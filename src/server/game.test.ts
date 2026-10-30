@@ -2,6 +2,7 @@ import { afterAll, describe, expect, it } from "vitest";
 import { and, desc, eq, inArray } from "drizzle-orm";
 import { db, sql } from "@/db";
 import { localDate } from "@/lib/day";
+import { configOn } from "@/lib/scoring";
 import { answers, categories, dailyPuzzles, games, players, rounds } from "@/db/schema";
 import { answerList, categoryShares, dayCompare, ensurePlayer, getOrCreatePuzzle, getSkin, getState, startNext, submitAnswer } from "./game";
 
@@ -39,7 +40,9 @@ describe.skipIf(!process.env.DATABASE_URL)("svi odgovori nakon igre", () => {
       const shares = part.map((a) => a.share);
       expect(shares).toEqual([...shares].sort((a, b) => b - a));
     }
-    expect(list!.answers.every((a) => skin.config.tiers.some((t) => t.name === a.tier && t.km === a.km))).toBe(true);
+    // km prijevoza kakve vrijede za partije tog dana
+    const cfg = configOn(skin.config, localDate(skin.timezone));
+    expect(list!.answers.every((a) => cfg.tiers.some((t) => t.name === a.tier && t.km === a.km))).toBe(true);
     expect(await answerList(skin, id, state.perDay)).toBeNull();
   });
 
@@ -110,7 +113,7 @@ describe.skipIf(!process.env.DATABASE_URL)("svi odgovori nakon igre", () => {
     expect(list.mine).toBe(top.canonical);
     expect(list.answers.filter((a) => a.canonical === top.canonical)).toHaveLength(1);
     const at = list.answers.findIndex((a) => a.canonical === top.canonical);
-    expect(list.answers[at]).toMatchObject({ tier: got.name, km: got.km, share: 0.001 });
+    expect(list.answers[at]).toMatchObject({ tier: got.name, km: configOn(skin.config, localDate(skin.timezone)).tiers.find((t) => t.name === got.name)!.km, share: 0.001 });
     // stoji među odgovorima prijevoza koji je dobio: prije njega nijedan rjeđi prijevoz, poslije nijedan češći
     const rank = (name: string) => skin.config.tiers.findIndex((t) => t.name === name);
     expect(list.answers.slice(0, at).every((a) => rank(a.tier) <= rank(got.name))).toBe(true);

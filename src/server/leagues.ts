@@ -4,6 +4,7 @@ import { db } from "@/db";
 import { answers, attempts, categories, dailyPuzzles, games, leagueMembers, leagueReactions, leagues, players, puzzleCategories, rounds } from "@/db/schema";
 import { localDate } from "@/lib/day";
 import { placeAt } from "@/skins/mjesta";
+import { configOn } from "@/lib/scoring";
 import {
   LEAGUE_LIMITS,
   LEGEND_DAYS,
@@ -522,7 +523,7 @@ export async function memberDay(skin: Skin, league: League, viewerId: string, me
     date,
     number: puzzle.number,
     km: game.totalKm,
-    station: placeAt(skin.id, skin.config, game.totalKm),
+    station: placeAt(skin.id, configOn(skin.config, date), game.totalKm),
     rounds: cats.map((c) => {
       const a = c.answers[0];
       return { title: c.title, answer: a?.answer ?? null, km: a?.km ?? 0, emoji: a?.emoji ?? skin.config.miss.emoji };
