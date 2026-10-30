@@ -391,10 +391,24 @@ function TodayTrack({ view }: { view: LeagueView }) {
   const waiting = today.filter((m) => m.status === "none");
   const span = Math.max(1, width - CHIP);
   const x = (km: number) => (Math.min(km, cfg.maxKm) / cfg.maxKm) * span;
-  // kao u utrci na karti: kružić preblizu prethodnom odmakne se udesno (uz kraj ulijevo), poredak ostaje
-  const placed = [...on].reverse().map((m) => ({ m, x: x(m.km) }));
-  for (let i = 1; i < placed.length; i++) placed[i].x = Math.max(placed[i].x, placed[i - 1].x + CHIP + 1);
-  for (let i = placed.length - 1; i >= 0; i--) placed[i].x = Math.min(placed[i].x, i === placed.length - 1 ? span : placed[i + 1].x - CHIP - 1);
+  // dvije trake: kružić ide iznad ceste, a ako bi ga tamo trebalo odmaknuti (gužva), ispod; poredak po km ostaje
+  const sorted = [...on].reverse().map((m) => ({ m, x: x(m.km), lane: 0 }));
+  const lastX = [-Infinity, -Infinity];
+  for (const p of sorted) {
+    const need = [0, 1].map((l) => Math.max(0, lastX[l] + CHIP + 1 - p.x));
+    p.lane = need[0] <= 0 || need[0] <= need[1] ? 0 : 1;
+    lastX[p.lane] = Math.max(p.x, lastX[p.lane] + CHIP + 1);
+  }
+  // unutar trake kružići se razmaknu, a nikad ne izlaze iz kartice: ako ih je previše, malo se preklapaju
+  for (const lane of [0, 1]) {
+    const row = sorted.filter((p) => p.lane === lane);
+    const gap = row.length > 1 ? Math.min(CHIP + 1, span / (row.length - 1)) : 0;
+    for (let i = 1; i < row.length; i++) row[i].x = Math.max(row[i].x, row[i - 1].x + gap);
+    for (let i = row.length - 1; i >= 0; i--) row[i].x = Math.min(row[i].x, i === row.length - 1 ? span : row[i + 1].x - gap);
+    for (const p of row) p.x = Math.max(0, p.x);
+  }
+  const twoLanes = sorted.some((p) => p.lane === 1);
+  const placed = sorted;
   const towns = cfg.stations.filter((s) => s.alwaysLabel);
   return (
     <div className="lh-today">
@@ -402,7 +416,7 @@ function TodayTrack({ view }: { view: LeagueView }) {
         <span className="eyebrow">{t("Danas")}</span>
         <span className="small">{t("završilo {n} od {m}", { n: done.length, m: today.length })}</span>
       </div>
-      <div className="ttrack" ref={setTrack}>
+      <div className={"ttrack" + (twoLanes ? " two" : "")} ref={setTrack}>
         <i className="ttrack-road" />
         {towns.map((s, i) => (
           <span
@@ -413,12 +427,12 @@ function TodayTrack({ view }: { view: LeagueView }) {
             {s.name}
           </span>
         ))}
-        {placed.map(({ m, x }) => {
+        {placed.map(({ m, x, lane }) => {
           const isMe = m.memberId === view.meMemberId;
           return (
             <Chip
               key={m.memberId}
-              className={"tchip" + (isMe ? " me" : "") + (m.status === "playing" ? " playing" : "")}
+              className={"tchip" + (lane ? " below" : "") + (isMe ? " me" : "") + (m.status === "playing" ? " playing" : "")}
               title={`${m.nickname} · ${m.km} km`}
               color={isMe ? undefined : m.color}
               src={view.faces?.[m.memberId]}
