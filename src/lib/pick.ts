@@ -22,3 +22,17 @@ export function pickCategories(pattern: string[], pool: PoolCategory[], wanted: 
   }
   return picked.map((p) => p.id);
 }
+
+/**
+ * Unaprijed zadani dan (raspored.ts): za svako mjesto prvi kandidat iz te grupe koji postoji u poolu, još nije bio ni u
+ * jednom danu (`used`) i nije već uzet za drugo mjesto; inače null, pa to mjesto popuni pickCategories kao i obično.
+ */
+export function plannedSlugs(pattern: string[], plan: string[][], pool: PoolCategory[], used: Set<string>): (string | null)[] {
+  const taken = new Set<string>();
+  return pattern.map((group, i) => {
+    const slug = (plan[i] ?? []).find((s) => !used.has(s) && !taken.has(s) && pool.some((p) => p.slug === s && p.group === group));
+    if (!slug) return null;
+    taken.add(slug);
+    return slug;
+  });
+}
