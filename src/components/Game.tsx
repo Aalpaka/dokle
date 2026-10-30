@@ -744,8 +744,8 @@ function MissList({ r, misses, onState }: { r: RoundView; misses: Miss[]; onStat
 function AllAnswers({ position, cfg }: { position: number; cfg: SkinConfig }) {
   const [list, setList] = useState<AnswerList | null | "error">(null);
   const [q, setQ] = useState("");
-  // prijevozi koje je igrač maknuo s popisa; prazno = svi se vide
-  const [off, setOff] = useState<Set<string>>(new Set());
+  // prikazani prijevoz; null = svi
+  const [only, setOnly] = useState<string | null>(null);
   const t = useT();
   useEffect(() => {
     api<AnswerList | null>(`/api/game/answers?position=${position}`).then((l) => setList(l ?? "error"), () => setList("error"));
@@ -754,30 +754,25 @@ function AllAnswers({ position, cfg }: { position: number; cfg: SkinConfig }) {
   if (list === "error") return <div className="allans small">{t("Odgovori se ne mogu učitati.")}</div>;
   const fold = (s: string) => s.toLowerCase().replace(/đ/g, "d").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   const f = fold(q.trim());
-  const shown = list.answers.filter((a) => !off.has(a.tier) && (!f || fold(a.canonical).includes(f)));
+  const shown = list.answers.filter((a) => (only === null || a.tier === only) && (!f || fold(a.canonical).includes(f)));
   const counts = new Map<string, number>();
   for (const a of list.answers) counts.set(a.tier, (counts.get(a.tier) ?? 0) + 1);
   const present = cfg.tiers.filter((x) => counts.has(x.name));
-  const toggle = (name: string) =>
-    setOff((prev) => {
-      const next = new Set(prev);
-      if (!next.delete(name)) next.add(name);
-      return next;
-    });
   return (
     <div className="allans">
       {present.length > 1 && (
-        <div className="tierfilter" role="group" aria-label={t("Filtriraj po prijevozu")}>
+        <div className="tierfilter" role="radiogroup" aria-label={t("Filtriraj po prijevozu")}>
+          <label className={only === null ? "on" : ""}>
+            <input type="radio" name={`tf${position}`} checked={only === null} onChange={() => setOnly(null)} />
+            <span className="c">{t("Svi")} {list.answers.length}</span>
+          </label>
           {present.map((x) => (
-            <label key={x.name} className={off.has(x.name) ? "off" : ""} style={{ "--tc": x.color } as React.CSSProperties} title={x.name}>
-              <input type="checkbox" checked={!off.has(x.name)} onChange={() => toggle(x.name)} aria-label={x.name} />
+            <label key={x.name} className={only === x.name ? "on" : ""} style={{ "--tc": x.color } as React.CSSProperties} title={x.name}>
+              <input type="radio" name={`tf${position}`} checked={only === x.name} onChange={() => setOnly(x.name)} aria-label={x.name} />
               <span className="i"><TierIcon emoji={x.emoji} icon={x.badge ?? x.icon} /></span>
               <span className="c">{counts.get(x.name)}</span>
             </label>
           ))}
-          {off.size > 0 && (
-            <button type="button" className="ghost small-btn" onClick={() => setOff(new Set())}>{t("Svi")}</button>
-          )}
         </div>
       )}
       <input
