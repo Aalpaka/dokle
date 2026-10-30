@@ -11,6 +11,7 @@ import Modal from "./Modal";
 import WeekChart from "./WeekChart";
 import { useNarrow } from "./Race";
 import { skinFetch, useSkin, useT, type T } from "./skin";
+import { useReturnKey } from "./fresh";
 
 async function post<T>(url: string, body: unknown): Promise<T> {
   const r = await skinFetch(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
@@ -21,11 +22,12 @@ async function post<T>(url: string, body: unknown): Promise<T> {
 
 function useMyLeagues() {
   const [list, setList] = useState<LeagueSummary[] | null>(null);
+  const back = useReturnKey();
   useEffect(() => {
     skinFetch("/api/lige", { cache: "no-store" })
       .then((r) => r.json())
       .then((b) => setList(b.leagues), () => setList([]));
-  }, []);
+  }, [back]);
   return list;
 }
 
@@ -220,6 +222,7 @@ export function LeaguePage({ code }: { code: string }) {
   const [pastWeek, setPastWeek] = useState<string | null>(null);
   const t = useT();
   const { id: skinId, href } = useSkin();
+  const back = useReturnKey();
 
   useEffect(() => {
     skinFetch(`/api/lige/${code}?period=${period}`, { cache: "no-store" })
@@ -235,7 +238,7 @@ export function LeaguePage({ code }: { code: string }) {
       })
       .catch((e) => setError(t(e.message)));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [code, period, reload]);
+  }, [code, period, reload, back]);
 
   const act = useCallback(
     async (body: Record<string, unknown>, after?: () => void) => {

@@ -5,6 +5,7 @@ import { kmAfter } from "@/lib/league";
 import type { RaceLeague } from "@/server/leagues";
 import { skinFetch, useT } from "./skin";
 import { Chip } from "./Chip";
+import { useReturnKey } from "./fresh";
 
 const KEY = "dokle_utrka";
 
@@ -12,12 +13,13 @@ const KEY = "dokle_utrka";
 export function useLeagueRace(enabled: boolean, reloadKey: unknown, poll: boolean) {
   const [race, setRace] = useState<RaceLeague[] | null>(null);
   const [tick, setTick] = useState(0);
+  const back = useReturnKey();
   useEffect(() => {
     if (!enabled) return;
     skinFetch("/api/lige/utrka", { cache: "no-store" })
       .then((r) => r.json())
       .then((b) => setRace(b.leagues), () => {});
-  }, [enabled, reloadKey, tick]);
+  }, [enabled, reloadKey, tick, back]);
   useEffect(() => {
     if (!enabled || !poll) return;
     const i = setInterval(() => document.visibilityState === "visible" && setTick((x) => x + 1), 60_000);

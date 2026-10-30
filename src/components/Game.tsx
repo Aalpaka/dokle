@@ -19,6 +19,7 @@ import { SKIN_META, type SkinId } from "@/skins/meta";
 import { skinFetch, useSkin, useT, type T } from "./skin";
 import { LeaguesBox } from "./Leagues";
 import { useLeagueRace } from "./Race";
+import { useReturnKey } from "./fresh";
 
 async function api<T>(path: string, body?: unknown): Promise<T> {
   const res = await skinFetch(path, {
@@ -61,9 +62,29 @@ export default function Game() {
   useEffect(load, [load]);
   // naknadno prihvaćeni odgovori iz prijašnjih partija
   const [notices, setNotices] = useState<Notice[]>([]);
-  useEffect(() => {
+  const loadNotices = useCallback(() => {
     api<Notice[]>("/api/game/notices").then((n) => setNotices(Array.isArray(n) ? n : []), () => {});
   }, []);
+  useEffect(loadNotices, [loadNotices]);
+  // povratak na staru karticu: km su se možda promijenili (naknadno bodovanje) ili je već novi dan.
+  // Usred kategorije se ne dira (Play drži odbrojavanje i upis), tad server ionako vraća svježe stanje uz odgovor.
+  const back = useReturnKey();
+  const busy = useRef(false);
+  const shownDate = useRef<string | undefined>(undefined);
+  useEffect(() => {
+    busy.current = starting || state?.phase === "play";
+    shownDate.current = state?.date;
+  }, [starting, state?.phase, state?.date]);
+  useEffect(() => {
+    if (!back || busy.current) return;
+    api<GameState>("/api/game").then((s) => {
+      if (busy.current) return;
+      // novi dan: kraj jučerašnje partije ne smije ostati otvoren preko prve kategorije današnje
+      if (s.date !== shownDate.current) setShowEnd(false);
+      setState(s);
+    }, () => {});
+    loadNotices();
+  }, [back, loadNotices]);
   const dismiss = () => {
     setNotices([]);
     api("/api/game/notices", {}).catch(() => {});
@@ -538,7 +559,8 @@ function End({ state, me, onState }: { state: GameState; me: Me | null; onState:
   // partija izvan konkurencije (druga država istog dana) nema usporedbu s ostalim igračima
   useEffect(() => {
     if (state.ranked) api<Compare | null>("/api/game/compare").then(setCmp, () => setCmp(null));
-  }, [state.ranked]);
+    // i kad se km promijene (naknadno bodovanje, obavijest, prijava), inače usporedba ostaje na starim km
+  }, [state.ranked, state.totalKm]);
   const share = shareText(state, place, egg, cmp?.ahead ?? null, t);
   const onShare = () => {
     const copy = () =>
