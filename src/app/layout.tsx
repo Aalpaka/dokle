@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Barlow_Semi_Condensed, Overpass, Overpass_Mono, Roboto_Condensed } from "next/font/google";
 import "./globals.css";
 import { SITE_URL } from "@/lib/site";
+import { HALLOWEEN_SCRIPT } from "@/lib/halloween";
+import Halloween from "@/components/Halloween";
 
 const description = "Dnevna igra: koliko daleko stigneš od Vukovara do Dubrovnika?";
 
@@ -24,8 +26,15 @@ export const viewport: Viewport = { width: "device-width", initialScale: 1, view
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="hr" className={[sign.variable, mono.variable, town.variable, townCyr.variable].join(" ")}>
-      <body>{children}</body>
+    // data-theme postavlja skripta prije hidracije (Noć vještica), pa React ne smije prigovarati razlici
+    <html lang="hr" className={[sign.variable, mono.variable, town.variable, townCyr.variable].join(" ")} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: HALLOWEEN_SCRIPT }} />
+      </head>
+      <body>
+        {children}
+        <Halloween />
+      </body>
     </html>
   );
 }
