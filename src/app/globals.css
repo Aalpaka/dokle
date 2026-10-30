@@ -252,6 +252,14 @@ button.small-btn.ghost { font-weight: 700; }
 .recap .chev { color: var(--muted); }
 .allans { display: grid; gap: 8px; padding: 4px 0 12px 2.2em; }
 .allans .field { width: 100%; }
+/* kučići za prijevoz: jedan po prijevozu koji se pojavljuje na popisu */
+.tierfilter { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.tierfilter label { display: inline-flex; align-items: center; gap: 5px; min-height: 34px; padding: 3px 9px 3px 6px; border-radius: 999px; border: 1.5px solid var(--tc, var(--line)); background: color-mix(in srgb, var(--tc, #fff) 16%, transparent); font-family: var(--font-mono); font-size: 13px; font-variant-numeric: tabular-nums; cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; }
+.tierfilter label.off { border-color: var(--line); background: transparent; color: var(--muted); }
+.tierfilter label.off .i, .tierfilter label.off .c { opacity: .45; }
+.tierfilter input { width: 15px; height: 15px; margin: 0; accent-color: var(--tc, var(--signal)); }
+.tierfilter label:has(input:focus-visible) { outline: 2px solid var(--signal); outline-offset: 2px; }
+.tierfilter .tier-icon { height: 18px; width: auto; }
 .allans ol { list-style: none; margin: 0; padding: 0; max-height: 340px; overflow-y: auto; display: grid; align-content: start; }
 .allans li { display: grid; grid-template-columns: 1.5em minmax(0, 1fr) auto 3.2em; gap: 10px; align-items: baseline; padding: 4px 6px; border-radius: 6px; font-size: 14px; }
 .allans li:nth-child(even) { background: #ffffff06; }
