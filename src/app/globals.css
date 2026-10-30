@@ -590,6 +590,11 @@ textarea.field { width: 100%; font-family: var(--font-mono); }
 /* kružić sa slikom inače reže sve izvan sebe, pa i crticu prema cesti (sliku i tako zaobli img) */
 .ttrack .tchip.pic { overflow: visible; }
 .ttrack .tchip::after { content: ""; position: absolute; left: 16px; top: 36px; width: 2px; height: 5px; background: var(--muted); }
+/* gužva: dio kružića ide ispod ceste (crtica gore), imena gradova se spuste ispod njih */
+.ttrack.two { height: 104px; }
+.ttrack.two .ttrack-town { top: 93px; }
+.ttrack .tchip.below { top: 54px; }
+.ttrack .tchip.below::after { top: -7px; }
 .tstatus { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
 .tstatus li { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-family: var(--font-mono); padding: 4px 10px; border-radius: 999px; background: var(--bg); }
 .tstatus li b { font-family: var(--font-sign); }
