@@ -4,12 +4,12 @@
 export const RASPORED: Record<string, string[][]> = {
   // Noć vještica
   "2026-10-31": [
-    ["utvrda", "spilja-slap"],
-    ["kukac", "gmaz", "gljiva"],
+    [],
+    ["gljiva", "gmaz"],
     ["horor-lik"],
     ["horor-film"],
-    ["spilja-slap", "utvrda"],
-    ["gljiva", "gmaz", "kukac"],
+    [],
+    ["gmaz", "gljiva"],
     ["grcki-junak", "bog-ostali", "zastava-crna"],
     ["noc-vjestica", "mitolosko-bice"],
   ],
