@@ -58,7 +58,11 @@ export const izSrbije: Record<string, string[]> = {
     "Milovan Raković", "Novica Veličković", "Sonja Vasić", "Stefan Živanović", "Svetislav Pešić", "Tadija Dragićević",
     "Uroš Tripković", "Vule Avdalović", "Zoran Savić", "Zoran Sretenović", "Zufer Avdija", "Čedomir Vitkovac",
     "Želimir Obradović", "Saša Čađo", "Slađana Golić", "Božidar Maljković",
+    // iz Srbije, dodani u pitanju "izvan Hrvatske" (2026-10-31)
+    "Andrej Stojaković", "Nikola Topić", "Boban Janković", "Nikola Jović",
   ],
+  // srpski sportaši dodani u pitanju "izvan Hrvatske" (2026-10-31)
+  "sportas-svijet": ["Darko Miličić"],
   // srbijanski pjevači i pjevači iz Vojvodine
   "exyu-izvodjac": [
     "Neda Ukraden", "Biserka Cvejić", "Slobodan Cvetičanin", "Kraljice Bodroga", "Jelka Asić",
