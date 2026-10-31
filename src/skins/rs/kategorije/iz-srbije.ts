@@ -108,6 +108,19 @@ export const izSrbije: Record<string, string[]> = {
     "Dogovor iz 1804.", "Funky G", "Apsolutno Romantično", "Beauty Queens", "Tap 011", "Elitni Odredi", "Balkanika",
     "Harem Girls", "Dʼ Boys", "Betty Boop", "Dobrovoljno Pevačko Društvo", "Vlada i Bajka", "Ruž", "Divlji Anđeli",
     "The Dibidus", "Super s Karamelom", "Đogani", "Miligram", "Mud Factory", "Wikluh Sky", "Baka Prase", "Pljugica",
+    // iz Srbije, dodani u dopuni odgovora (2026-10-31)
+    "Saša Popović", "Laza Ristovski", "Familija", "Škabo", "Tijana Bogićević", "Ljiljana Buttler", "Željko Vasić",
+    "Ministarke", "Amadeus Band", "Ognjen Amidžić", "Zafir Hadžimanov", "Marko Kon", "Beti Đorđević", "Suzana Mančić",
+    "Izolda Barudžija", "Ivan Kukolj Kuki", "Zvonko Demirović", "Boris Aranđelović", "Radomir Mihajlović Točak",
+    "Zvonimir Đukić", "Milan Đurđević", "Zemlja gruva", "Artan Lili", "Ivana Jordan", "Zli Tony", "Vuk Mob",
+    "Gazda Paja", "Cvija", "Sanja Ilić", "Đuza Stojiljković", "Senka Veletanlić", "Danica Obrenić", "Mara Đorđević",
+    "Ljubiša Stojanović Luis", "Ajs Nigrutin", "Buč Kesidi", "Six Pack", "Babe", "Dah", "Tako", "Gordi",
+    "Nada Knežević", "Janika Balaž", "Milan Topalović Topalko", "MC Stojan", "Snežana Savić", "Sanja Đorđević",
+    "Bane Bojanić", "Aleksandra Mladenović", "Edita Aradinović", "Vasil Hadžimanov", "Biljana Sečivanović",
+    "Biljana Jevtić", "Marina Živković", "Uroš Živković", "Adil Maksutović", "Duško Gojković", "Nikola Vranjković",
+    "Vidoja Božinović", "Rajko Kojić", "Miša Aleksić", "Branislav Babić Kebra", "Nebojša Antonijević Anton",
+    "Bojan Pečar", "Ivica Vdović", "Vesna Rivas", "Goran Čavajda", "Predrag Milosavljević", "Žika Milenković",
+    "Leontina", "Milaan", "Bakija Bakić", "Dragan Laković",
   ],
   // jela koja su i srpska (sarma, ajvar, proja, kulen, sataraš, ćufte); "Gibanica" je srpska, a Međimurska gibanica ostaje
   "svjetsko-jelo": [

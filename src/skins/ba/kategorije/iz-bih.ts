@@ -121,6 +121,10 @@ export const izBiH: Record<string, string[]> = {
     "Dalal Midhat-Talakić", "Osman Hadžić", "Nino Rešić", "Šeki Bihorac", "Adnan Babajić", "Slađa Guduraš", "Elvira Rahić",
     "Selma Muhedinović", "Enes Begović", "Nihad Alibegović", "Refik Kolić", "Amar Jašarspahić", "Semir Cerić Koke",
     "Disciplinska komisija", "DZihan & Kamien", "Bezbeli Apstraklije", "Zona Isključenja", "Nemoguće Vruće",
+    // iz BiH, dodani u dopuni odgovora (2026-10-31)
+    "Ipe Ivandić", "Dražen Žerić Žera", "Ismeta Krvavac", "Ljiljana Buttler", "Hašim Kučuk Hoki", "Vlado Pravdić",
+    "Zoran Redžić", "Bodo Kovačević", "Divanhana", "Zekerijah Đezić", "Omer Pobrić", "Fadil Redžić", "Đorđe Kisić",
+    "Ranko Rihtman",
   ],
   // jela koja su i bosanska (sarma, grah, japrak, pite, sudžuk, lepinja)
   "svjetsko-jelo": [
