@@ -3,8 +3,8 @@ import { and, desc, eq, inArray } from "drizzle-orm";
 import { db, sql } from "@/db";
 import { localDate } from "@/lib/day";
 import { configOn } from "@/lib/scoring";
-import { answers, categories, dailyPuzzles, games, players, rounds } from "@/db/schema";
-import { answerList, categoryShares, dayCompare, ensurePlayer, getOrCreatePuzzle, getSkin, getState, startNext, submitAnswer } from "./game";
+import { answers, categories, dailyPuzzles, games, players, puzzleCategories, rounds } from "@/db/schema";
+import { answerList, categoryShares, clearPuzzleCache, dayCompare, ensurePlayer, getOrCreatePuzzle, getSkin, getState, pairedSlugs, startNext, submitAnswer } from "./game";
 
 // Integracijski test nad lokalnom bazom (npm run db:migrate && npm run db:seed).
 const ids: string[] = [];
@@ -118,6 +118,48 @@ describe.skipIf(!process.env.DATABASE_URL)("svi odgovori nakon igre", () => {
     const rank = (name: string) => skin.config.tiers.findIndex((t) => t.name === name);
     expect(list.answers.slice(0, at).every((a) => rank(a.tier) <= rank(got.name))).toBe(true);
     expect(list.answers.slice(at + 1).every((a) => rank(a.tier) >= rank(got.name))).toBe(true);
+  });
+
+  it("od live faze pitanja iz testa se vraćaju ravnopravno s novima, a već korištena live ne", async () => {
+    const hr = await getSkin("hr");
+    const ready = (await pairedSlugs("hr"))!;
+    // kategorije iz dana koji već postoje u bazi ne ulaze u podjelu (njihov datum bi pomiješao redoslijed)
+    const usedElsewhere = new Set((await db.select({ id: puzzleCategories.categoryId }).from(puzzleCategories)).map((r) => r.id));
+    const all = (await db.select({ id: categories.id, group: categories.group, slug: categories.slug, open: categories.open }).from(categories).where(and(eq(categories.skinId, "hr"), eq(categories.active, true))))
+      .filter((c) => ready.has(c.slug) && !usedElsewhere.has(c.id))
+      .sort((a, b) => a.id - b.id);
+    // po grupi: 2 nikad korištene (ne jako otvorene, da ih ne preskoči pravilo o jednom otvorenom), 2 već korištene live,
+    // ostale samo u testu
+    const fresh = new Set<number>(), live: number[] = [], test: number[] = [];
+    for (const g of new Set(all.map((c) => c.group))) {
+      const cs = all.filter((c) => c.group === g).sort((a, b) => Number(a.open) - Number(b.open));
+      cs.slice(0, 2).forEach((c) => fresh.add(c.id));
+      live.push(...cs.slice(2, 4).map((c) => c.id));
+      test.push(...cs.slice(4).map((c) => c.id));
+    }
+    const dates = ["2026-10-02", "2099-03-01", "2099-03-02", "2026-10-03"];
+    await db.delete(dailyPuzzles).where(inArray(dailyPuzzles.date, dates));
+    const insertDay = async (date: string, catIds: number[]) => {
+      const [p] = await db.insert(dailyPuzzles).values({ skinId: "hr", date, number: 1 }).returning();
+      await db.insert(puzzleCategories).values(catIds.map((categoryId, position) => ({ puzzleId: p.id, position, categoryId })));
+    };
+    try {
+      await insertDay("2026-10-02", test);
+      await insertDay("2099-03-01", live);
+      clearPuzzleCache();
+      // u testnoj fazi se testni dani i dalje broje: uzima samo nikad korištene
+      const before = (await getOrCreatePuzzle(hr, "2026-10-03")).categoryIds;
+      expect(before.every((id) => fresh.has(id))).toBe(true);
+      await db.delete(dailyPuzzles).where(eq(dailyPuzzles.date, "2026-10-03"));
+      clearPuzzleCache();
+      const picked = (await getOrCreatePuzzle(hr, "2099-03-02")).categoryIds;
+      expect(picked.some((id) => live.includes(id))).toBe(false);
+      // stari izbor bi opet uzeo samo nikad korištene; sad su i testne u igri
+      expect(picked.some((id) => test.includes(id))).toBe(true);
+    } finally {
+      await db.delete(dailyPuzzles).where(inArray(dailyPuzzles.date, dates));
+      clearPuzzleCache();
+    }
   });
 
   it("BiH i Srbija dobiju iste kategorije kao Hrvatska, a broji se samo prva država dana", async () => {

@@ -1,5 +1,5 @@
 import "server-only";
-import { and, asc, desc, eq, gte, ilike, inArray, isNotNull, isNull, or, sql } from "drizzle-orm";
+import { and, asc, desc, eq, gte, ilike, inArray, isNotNull, isNull, lte, or, sql } from "drizzle-orm";
 import { db } from "@/db";
 import {
   answerAliases,
@@ -21,6 +21,7 @@ import { configOn, stationAt } from "@/lib/scoring";
 import { computeStats } from "@/lib/stats";
 import { dayNumber, localDate } from "@/lib/day";
 import { addDays, dailyAverages, weekDays } from "@/lib/league";
+import { LIVE_FROM, phaseOf, phaseRange, type Phase } from "@/lib/phase";
 import { placeAt } from "@/skins/mjesta";
 import { routeHistogram, routeLabels } from "@/lib/compare";
 import { isAdminEmail } from "./accounts";
@@ -170,11 +171,17 @@ export async function weekAverages(skin: Skin, monday: string) {
 
 // ---------- Opća statistika ----------
 
-/** Brojke kroz sve dane skina (ukupno) i zadnjih 30 dana (raspodjele); samo partije koje se broje. */
-export async function generalStats(skin: Skin) {
+/**
+ * Brojke jedne faze (testiranje do LIVE_FROM, live od tada): ukupno kroz cijelu fazu, raspodjele kroz zadnjih 30 dana
+ * te faze; samo partije koje se broje. Live koja još nije počela vraća started: false.
+ */
+export async function generalStats(skin: Skin, phase: Phase = phaseOf(localDate(skin.timezone))) {
   const today = localDate(skin.timezone);
-  const since = addDays(today, -29);
-  const base = and(eq(dailyPuzzles.skinId, skin.id), eq(games.ranked, true));
+  const range = phaseRange(phase, today);
+  const from = range.from ?? skin.launchDate;
+  const until = range.to ?? from;
+  const since = phase === "live" && addDays(until, -29) > from ? addDays(until, -29) : from;
+  const base = and(eq(dailyPuzzles.skinId, skin.id), eq(games.ranked, true), gte(dailyPuzzles.date, from), lte(dailyPuzzles.date, until));
   const recent = and(base, gte(dailyPuzzles.date, since));
   const [totals] = await db
     .select({
@@ -251,6 +258,11 @@ export async function generalStats(skin: Skin) {
   const byMiss = cats.map((c) => ({ ...c, missPct: Math.round((100 * c.missed) / c.answered) })).sort((a, b) => b.missPct - a.missPct);
   return {
     today,
+    phase,
+    liveFrom: LIVE_FROM,
+    started: range.to !== null,
+    from,
+    until,
     since,
     totals: { ...totals, ...answersRow },
     best: best ?? null,

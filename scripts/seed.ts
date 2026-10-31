@@ -6,6 +6,7 @@ import { answerAliases, answers, categories, dailyPuzzles, puzzleCategories, rem
 import { parseSeedAnswers } from "../src/lib/matcher";
 import { dayNumber, localDate } from "../src/lib/day";
 import { pickCategories, plannedSlugs } from "../src/lib/pick";
+import { usedSince } from "../src/lib/phase";
 import { RASPORED } from "../src/skins/hr/raspored";
 import { hrSkin } from "../src/skins/hr/config";
 import { hrCategories } from "../src/skins/hr/categories";
@@ -107,15 +108,17 @@ for (const [date, plan] of Object.entries(RASPORED)) {
     console.log(`raspored ${date}: dan već postoji, ne dira se`);
     continue;
   }
-  const lastUsed = new Map(
-    (
-      await db
-        .select({ categoryId: puzzleCategories.categoryId, last: dsql<string>`max(${dailyPuzzles.date})::text` })
-        .from(puzzleCategories)
-        .innerJoin(dailyPuzzles, eq(dailyPuzzles.id, puzzleCategories.puzzleId))
-        .groupBy(puzzleCategories.categoryId)
-    ).map((r) => [r.categoryId, r.last]),
-  );
+  // isto kao automatski izbor: u live fazi testni dani se ne broje kao korišteni
+  const since = usedSince(date);
+  const usage = await db
+    .select({
+      categoryId: puzzleCategories.categoryId,
+      last: since ? dsql<string>`(max(${dailyPuzzles.date}) filter (where ${dailyPuzzles.date} >= ${since}))::text` : dsql<string>`max(${dailyPuzzles.date})::text`,
+    })
+    .from(puzzleCategories)
+    .innerJoin(dailyPuzzles, eq(dailyPuzzles.id, puzzleCategories.puzzleId))
+    .groupBy(puzzleCategories.categoryId);
+  const lastUsed = new Map(usage.filter((r) => r.last).map((r) => [r.categoryId, r.last]));
   // samo kategorije aktivne u sve tri države (kao i automatski izbor)
   const paired = new Set(
     (

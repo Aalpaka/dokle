@@ -18,6 +18,7 @@ import { buildIndex, fold, match, type MatchIndex } from "@/lib/matcher";
 import { pickCategories } from "@/lib/pick";
 import { assignTiers, blendedShare, configOn, kmFor, speedFor, tierFor } from "@/lib/scoring";
 import { dayNumber, localDate } from "@/lib/day";
+import { usedSince } from "@/lib/phase";
 import { compareDay, type DayCompare } from "@/lib/compare";
 import type { Origin } from "./origin";
 import type { SkinConfig, Tier } from "@/skins/types";
@@ -96,8 +97,14 @@ export async function getOrCreatePuzzle(skin: Skin, date: string) {
     const rows = await db.select({ id: categories.id, slug: categories.slug }).from(categories).where(inArray(categories.id, source.categoryIds));
     source.categoryIds.forEach((id, i) => (wanted[i] = rows.find((r) => r.id === id)?.slug ?? null));
   }
+  // u live fazi testni dani se ne broje: kategorije iz testa su opet ravnopravne s nikad korištenima (nasumično među
+  // njima), a tek onda dolaze one koje su već bile live
+  const since = usedSince(date);
   const lastUsed = db
-    .select({ categoryId: puzzleCategories.categoryId, last: sql<string>`max(${dailyPuzzles.date})`.as("last") })
+    .select({
+      categoryId: puzzleCategories.categoryId,
+      last: (since ? sql<string>`max(${dailyPuzzles.date}) filter (where ${dailyPuzzles.date} >= ${since})` : sql<string>`max(${dailyPuzzles.date})`).as("last"),
+    })
     .from(puzzleCategories)
     .innerJoin(dailyPuzzles, eq(dailyPuzzles.id, puzzleCategories.puzzleId))
     .groupBy(puzzleCategories.categoryId)
