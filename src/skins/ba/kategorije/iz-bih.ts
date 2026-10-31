@@ -91,6 +91,8 @@ export const izBiH: Record<string, string[]> = {
     "Ratko Radovanović", "Džanan Musa",
     // iz BiH, dodani u pitanju "Hrvatski košarkaš" (2026-10-29)
     "Boris Barać", "Pero Dujmović", "Arnel Dedić", "Marko Baković", "Zvonimir Ivišić",
+    // igra za BiH, dodan u pitanju "izvan Hrvatske" (2026-10-31)
+    "Luka Garza",
   ],
   // igrali i za BiH ili su po članku bosanskohercegovački; Lovren, Ćorluka i Budimir ostaju (igrali za Hrvatsku)
   nogometas: [
