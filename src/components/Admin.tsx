@@ -4,6 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useRef, useState } f
 import { assignTiers, priorForRank, priorForTier } from "@/lib/scoring";
 import { fold } from "@/lib/matcher";
 import { addDays, type DayAvg } from "@/lib/league";
+import { LIVE_FROM, type Phase } from "@/lib/phase";
 import Modal from "./Modal";
 import WeekChart from "./WeekChart";
 import RouteHist from "./RouteHist";
@@ -263,6 +264,11 @@ function WeekAverages({ today }: { today: string }) {
 
 type StatsData = {
   today: string;
+  phase: Phase;
+  liveFrom: string;
+  started: boolean;
+  from: string;
+  until: string;
   since: string;
   totals: { days: number; games: number; finished: number; players: number; avgKm: number; answered: number; hit: number; avgMs: number };
   best: { km: number; date: string; player: string } | null;
@@ -291,19 +297,39 @@ function Bars({ rows }: { rows: { label: string; n: number }[] }) {
   );
 }
 
-/** Opće brojke igre (ne vežu se za jedan dan): ukupno, tjedni prosjek km, raspodjele zadnjih 30 dana. */
+/**
+ * Opće brojke igre (ne vežu se za jedan dan), odvojeno za testnu fazu (do 1.11.) i live (od 2.11.): ukupno, tjedni
+ * prosjek km, raspodjele zadnjih 30 dana faze.
+ */
 function GeneralStats({ today }: { today: string }) {
-  const { data, error } = useLoad<StatsData>("/api/admin/stats");
+  const [phase, setPhase] = useState<Phase>(today >= LIVE_FROM ? "live" : "test");
+  const { data: loaded, error } = useLoad<StatsData>(`/api/admin/stats?phase=${phase}`);
+  const data = loaded?.phase === phase ? loaded : null;
   const t = data?.totals;
   const { id } = useSkin();
+  const lastTest = addDays(LIVE_FROM, -1);
   return (
     <div className="stack">
       <div className="row" style={{ justifyContent: "space-between" }}>
         <h2>Statistika</h2>
         <a href={`/api/admin/export?skin=${id}`} className="small">Izvoz svih rundi (CSV)</a>
       </div>
+      <div className="seg" role="tablist">
+        <button role="tab" aria-selected={phase === "live"} className={phase === "live" ? "" : "ghost"} onClick={() => setPhase("live")}>
+          Live <span className="seg-n">od {fmtDate(LIVE_FROM).slice(0, -5)}</span>
+        </button>
+        <button role="tab" aria-selected={phase === "test"} className={phase === "test" ? "" : "ghost"} onClick={() => setPhase("test")}>
+          Testiranje <span className="seg-n">do {fmtDate(lastTest).slice(0, -5)}</span>
+        </button>
+      </div>
       <Err msg={error} />
-      {data && t && (
+      {data && !data.started && <p className="small">Live igra počinje {fmtDate(data.liveFrom)} Ovdje će biti samo partije od tog dana.</p>}
+      {data && data.started && (
+        <p className="small">
+          {phase === "test" ? "Testna faza" : "Live"}: {fmtDate(data.from)} – {fmtDate(data.until)} Partije iz druge faze se ovdje ne broje.
+        </p>
+      )}
+      {data && t && data.started && (
         <div className="kpis">
           <Kpi v={t.days} l="dana igre" />
           <Kpi v={t.games} l="partija ukupno" />
@@ -313,10 +339,14 @@ function GeneralStats({ today }: { today: string }) {
           {data.best && <Kpi v={data.best.km} l="rekord km" sub={`${data.best.player}, ${fmtDate(data.best.date)}`} />}
         </div>
       )}
-      <section className="stack panel-sub"><WeekAverages today={today} /></section>
-      {data && t && (
+      {data?.started && (
+        <section className="stack panel-sub"><WeekAverages key={phase} today={phase === "test" && today > lastTest ? lastTest : today} /></section>
+      )}
+      {data && t && data.started && (
         <>
-          <p className="small">Ispod je zadnjih 30 dana ({fmtDate(data.since)} – {fmtDate(data.today)}).</p>
+          <p className="small">
+            Ispod je {data.since === data.from ? "cijela faza" : "zadnjih 30 dana"} ({fmtDate(data.since)} – {fmtDate(data.until)})
+          </p>
           <div className="kpis">
             <Kpi v={t.answered ? Math.round((100 * t.hit) / t.answered) : 0} l="% pitanja s točnim odgovorom" />
             <Kpi v={(t.avgMs / 1000).toFixed(1).replace(".", ",")} l="s prosječno do točnog odgovora" />
@@ -328,7 +358,7 @@ function GeneralStats({ today }: { today: string }) {
               <Bars rows={data.tiers.map((x) => ({ label: `${x.emoji} ${x.name}`, n: x.n }))} />
             </section>
             <section className="stack panel-sub">
-              <span className="eyebrow">Koliko dana su igrači odigrali (od početka)</span>
+              <span className="eyebrow">Koliko dana su igrači odigrali (u ovoj fazi)</span>
               <Bars rows={data.loyalty} />
             </section>
             <section className="stack panel-sub">

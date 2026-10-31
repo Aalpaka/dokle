@@ -3,6 +3,7 @@ import { and, desc, eq, inArray } from "drizzle-orm";
 import { db, sql } from "@/db";
 import { answerAliases, answers, categories, dailyPuzzles, games, players, removedAliases, reviewDecisions, rounds } from "@/db/schema";
 import { dismissNotices, ensurePlayer, flagAttempt, getOrCreatePuzzle, getSkin, getState, reportRound, rescoreNotices, startNext, submitAnswer } from "./game";
+import { LIVE_FROM, phaseOf } from "@/lib/phase";
 import { decide, generalStats, listCategories, playerDetail, playersOverview, reviewQueue, searchAttempts, setSchedule, updateAnswer, weekAverages } from "./admin";
 import { localDate } from "@/lib/day";
 import { periodStart } from "@/lib/league";
@@ -114,6 +115,22 @@ describe.skipIf(!process.env.DATABASE_URL)("admin", () => {
     expect(st.route.labels[0].km).toBe(0);
     expect(st.tiers.map((t) => t.name)).toEqual(skin.config.tiers.map((t) => t.name));
     expect(st.loyalty.reduce((a, b) => a + b.n, 0)).toBeGreaterThanOrEqual(1);
+  });
+
+  it("statistika je odvojena za testnu fazu i live", async () => {
+    const skin = await getSkin("hr");
+    const today = localDate(skin.timezone);
+    await playAllWith("zzqx faza");
+    const test = await generalStats(skin, "test");
+    const live = await generalStats(skin, "live");
+    expect(test.until < LIVE_FROM && live.from).toBe(LIVE_FROM);
+    // današnja partija ulazi samo u fazu kojoj današnji dan pripada
+    const mine = today >= LIVE_FROM ? live : test;
+    const other = today >= LIVE_FROM ? test : live;
+    expect(mine.started).toBe(true);
+    expect(mine.totals.games).toBeGreaterThanOrEqual(1);
+    if (today < LIVE_FROM) expect(other).toMatchObject({ started: false, totals: { games: 0 } });
+    expect((await generalStats(skin)).phase).toBe(phaseOf(today));
   });
 
   it("odbijeni upis je u redu za pregled, a prihvaćanje naknadno boduje", async () => {
