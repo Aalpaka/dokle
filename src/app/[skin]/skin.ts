@@ -22,7 +22,7 @@ export async function skinMetadata(params: SkinParams["params"], page?: string):
   const first = cfg.stations[0].genitive ?? cfg.stations[0].name;
   const last = cfg.stations[cfg.stations.length - 1];
   const title = page ? `${page} · ${cfg.title}` : cfg.title;
-  const description = `Dnevna igra: koliko daleko stigneš od ${first} do ${last.genitive ?? last.name}? ${SKIN_META[id].flag}`;
+  const description = `8 pitanja svaki dan. Smisli odgovor kojeg se drugi ne sjete i stigni što dalje na putu od ${first} do ${last.genitive ?? last.name}. ${SKIN_META[id].flag}`;
   return {
     title,
     description,

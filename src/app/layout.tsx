@@ -5,7 +5,7 @@ import { SITE_URL } from "@/lib/site";
 import { HALLOWEEN_SCRIPT } from "@/lib/halloween";
 import Halloween from "@/components/Halloween";
 
-const description = "Dnevna igra: koliko daleko stigneš od Vukovara do Dubrovnika?";
+const description = "8 pitanja svaki dan. Smisli odgovor kojeg se drugi ne sjete i stigni što dalje na putu od Vukovara do Dubrovnika.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
