@@ -58,6 +58,8 @@ export const answers = pgTable(
     fact: text("fact"),
     // admin je ručno mijenjao procjenu ili helikopter; seed to više ne dira
     editedAt: timestamp("edited_at", { withTimezone: true }),
+    // povučen odgovor više ne prolazi (npr. izvan nove definicije pitanja), ali ostaje zbog starih rundi koje ga koriste
+    retired: boolean("retired").notNull().default(false),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [uniqueIndex("answers_category_canonical").on(t.categoryId, t.canonical)],

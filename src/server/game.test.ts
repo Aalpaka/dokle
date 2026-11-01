@@ -4,7 +4,7 @@ import { db, sql } from "@/db";
 import { localDate } from "@/lib/day";
 import { configOn } from "@/lib/scoring";
 import { answers, categories, dailyPuzzles, games, players, puzzleCategories, rounds } from "@/db/schema";
-import { answerList, categoryShares, clearPuzzleCache, dayCompare, ensurePlayer, getOrCreatePuzzle, getSkin, getState, pairedSlugs, startNext, submitAnswer } from "./game";
+import { answerList, categoryShares, clearCategoryCache, clearPuzzleCache, dayCompare, ensurePlayer, getOrCreatePuzzle, getSkin, getState, pairedSlugs, startNext, submitAnswer } from "./game";
 
 // Integracijski test nad lokalnom bazom (npm run db:migrate && npm run db:seed).
 const ids: string[] = [];
@@ -44,6 +44,25 @@ describe.skipIf(!process.env.DATABASE_URL)("svi odgovori nakon igre", () => {
     const cfg = configOn(skin.config, localDate(skin.timezone));
     expect(list!.answers.every((a) => cfg.tiers.some((t) => t.name === a.tier && t.km === a.km))).toBe(true);
     expect(await answerList(skin, id, state.perDay)).toBeNull();
+  });
+
+  it("povučen odgovor nije među odgovorima kategorije", async () => {
+    const skin = await getSkin("hr");
+    const [ans] = await db
+      .select({ id: answers.id, categoryId: answers.categoryId })
+      .from(answers)
+      .innerJoin(categories, eq(categories.id, answers.categoryId))
+      .where(and(eq(categories.skinId, "hr"), eq(answers.retired, false)))
+      .limit(1);
+    try {
+      await db.update(answers).set({ retired: true }).where(eq(answers.id, ans.id));
+      clearCategoryCache(ans.categoryId);
+      expect((await categoryShares(skin, 0, ans.categoryId, true)).some((a) => a.id === ans.id)).toBe(false);
+    } finally {
+      await db.update(answers).set({ retired: false }).where(eq(answers.id, ans.id));
+      clearCategoryCache(ans.categoryId);
+    }
+    expect((await categoryShares(skin, 0, ans.categoryId, true)).some((a) => a.id === ans.id)).toBe(true);
   });
 
   it("najčešći odgovor ide pješice", async () => {

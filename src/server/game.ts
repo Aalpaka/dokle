@@ -65,7 +65,7 @@ async function getCategory(id: number): Promise<CategoryData> {
     .select({ id: answers.id, canonical: answers.canonical, prior: answers.priorShare, rare: answers.rare, fact: answers.fact, alias: answerAliases.alias })
     .from(answers)
     .leftJoin(answerAliases, eq(answerAliases.answerId, answers.id))
-    .where(eq(answers.categoryId, id))
+    .where(and(eq(answers.categoryId, id), eq(answers.retired, false)))
     .orderBy(asc(answers.id));
   const byId = new Map<number, { id: number; canonical: string; variants: string[] }>();
   const prior = new Map<number, number>();

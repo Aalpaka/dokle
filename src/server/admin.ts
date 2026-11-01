@@ -329,7 +329,7 @@ export async function decide(skin: Skin, adminId: string | null, a: ReviewAction
     const [row] = await db
       .insert(answers)
       .values({ categoryId: a.categoryId, canonical: capitalize(a.canonical), priorShare: a.priorShare, rare: !!a.rare, source: "review" })
-      .onConflictDoUpdate({ target: [answers.categoryId, answers.canonical], set: { source: "review" } })
+      .onConflictDoUpdate({ target: [answers.categoryId, answers.canonical], set: { source: "review", retired: false } })
       .returning();
     answerId = row.id;
     // izvorni zapis igrača kao varijanta, da se prepoznaje i ubuduće
@@ -546,7 +546,7 @@ export async function listCategories(skin: Skin) {
       group: categories.group,
       active: categories.active,
       open: categories.open,
-      answers: sql<number>`(select count(*)::int from ${answers} where ${answers.categoryId} = ${categories.id})`,
+      answers: sql<number>`(select count(*)::int from ${answers} where ${answers.categoryId} = ${categories.id} and not ${answers.retired})`,
       // upisi s tekstom i oni koje nismo prepoznali: koliko je pitanje otvoreno (naknadno odobreni se broje kao pogodak)
       typed: sql<number>`(select count(*)::int from ${rounds} where ${rounds.categoryId} = ${categories.id} and ${rounds.raw} is not null)`,
       missed: sql<number>`(select count(*)::int from ${rounds} where ${rounds.categoryId} = ${categories.id} and ${rounds.raw} is not null and ${rounds.answerId} is null)`,
@@ -590,7 +590,7 @@ export async function categoryDetail(id: number) {
     })
     .from(answers)
     .leftJoin(answerAliases, eq(answerAliases.answerId, answers.id))
-    .where(eq(answers.categoryId, id))
+    .where(and(eq(answers.categoryId, id), eq(answers.retired, false)))
     .orderBy(desc(answers.priorShare), asc(answers.canonical));
   type Row = Omit<(typeof rows)[number], "alias"> & { aliases: string[] };
   const byId = new Map<number, Row>();
@@ -655,7 +655,7 @@ export async function addAnswer(categoryId: number, input: { canonical: string; 
   const [ans] = await db
     .insert(answers)
     .values({ categoryId, canonical: capitalize(input.canonical), priorShare: input.priorShare, rare, source: "review" })
-    .onConflictDoUpdate({ target: [answers.categoryId, answers.canonical], set: { priorShare: input.priorShare, rare, editedAt: new Date() } })
+    .onConflictDoUpdate({ target: [answers.categoryId, answers.canonical], set: { priorShare: input.priorShare, rare, editedAt: new Date(), retired: false } })
     .returning();
   const variants = input.variants.map((v) => v.trim()).filter(Boolean);
   if (variants.length) await db.insert(answerAliases).values(variants.map((alias) => ({ answerId: ans.id, alias }))).onConflictDoNothing();
