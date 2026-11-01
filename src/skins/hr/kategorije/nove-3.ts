@@ -292,8 +292,8 @@ const sve: SeedCategory[] = ([
   {
     slug: "unesco-hr",
     group: "hr",
-    title: "Hrvatsko dobro na UNESCO-ovom popisu",
-    hint: "Svjetska baština ili nematerijalna kulturna baština",
+    title: "Hrvatska svjetska ili nematerijalna baština UNESCO-a",
+    hint: "Lokaliteti svjetske baštine i nematerijalna baština; geoparkovi, rezervati biosfere i privremeni popis ne vrijede",
     strip: [],
     answers: `Dubrovnik/Stari grad Dubrovnik/Dubrovačke zidine=15; Plitvička jezera/Plitvice=14; Dioklecijanova palača/Split=12;
       Eufrazijeva bazilika/Poreč=6; Trogir=6; Šibenska katedrala/Katedrala svetog Jakova=6; Sinjska alka/Alka=6;
