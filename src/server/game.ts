@@ -16,7 +16,7 @@ import {
 } from "@/db/schema";
 import { buildIndex, fold, match, type MatchIndex } from "@/lib/matcher";
 import { pickCategories } from "@/lib/pick";
-import { assignTiers, blendedShare, configOn, kmFor, speedFor, tierFor } from "@/lib/scoring";
+import { assignTiers, blendedShare, configOn, kmFor, rareBelowAll, speedFor, tierFor } from "@/lib/scoring";
 import { dayNumber, localDate } from "@/lib/day";
 import { usedSince } from "@/lib/phase";
 import { compareDay, type DayCompare } from "@/lib/compare";
@@ -78,7 +78,7 @@ async function getCategory(id: number): Promise<CategoryData> {
     if (r.alias) byId.get(r.id)!.variants.push(r.alias);
     prior.set(r.id, r.prior);
   }
-  const data = { id, title: cat.title, hint: cat.hint, group: cat.group, index: buildIndex([...byId.values()], cat.strip), prior, rare, facts };
+  const data = { id, title: cat.title, hint: cat.hint, group: cat.group, index: buildIndex([...byId.values()], cat.strip), prior: rareBelowAll(prior, rare), rare, facts };
   categoryCache.set(id, { at: Date.now(), data });
   return data;
 }

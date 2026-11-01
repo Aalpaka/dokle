@@ -45,6 +45,23 @@ export function tierFor<T extends TierLike>(cfg: { tiers: T[] }, share: number, 
 /** Procjena za odgovore označene kao najrjeđi (helikopter). */
 export const RARE_PRIOR = 0.05;
 
+/**
+ * Procjene za prikaz i rang u igri: označeni helikopter uvijek ispod najrjeđeg običnog odgovora (90 % od njega).
+ * Helikopteri su birani ručno dok su pitanja bila kraća; kasnije dodani odgovori imaju nižu procjenu, pa bi na popisu
+ * avion pokazivao manji postotak od helikoptera. Tierovi se ne mijenjaju: helikopter je oznaka, a obični idu po rangu.
+ */
+export function rareBelowAll(prior: Map<number, number>, rare: Set<number>): Map<number, number> {
+  let min = Infinity;
+  for (const [id, p] of prior) if (!rare.has(id) && p < min) min = p;
+  if (!rare.size || min === Infinity) return prior;
+  const out = new Map(prior);
+  for (const id of rare) {
+    const p = out.get(id);
+    if (p !== undefined) out.set(id, Math.min(p, min * 0.9));
+  }
+  return out;
+}
+
 /** Početna procjena (%) iz sredine raspona tiera, za admin kad bira prijevoz umjesto postotka. */
 export function priorForTier(tiers: Pick<Tier, "minShare" | "rare">[], index: number): number {
   if (tiers[index].rare) return RARE_PRIOR;
