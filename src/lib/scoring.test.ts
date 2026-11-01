@@ -1,11 +1,25 @@
 import { describe, expect, it } from "vitest";
-import { assignTiers, blendedShare, configOn, kmFor, priorForRank, priorForTier, scoreKm, speedFor, stationAt, tierFor, tierSizes, landingAt, routeKm } from "./scoring";
+import { assignTiers, blendedShare, configOn, kmFor, priorForRank, priorForTier, rareBelowAll, scoreKm, speedFor, stationAt, tierFor, tierSizes, landingAt, routeKm } from "./scoring";
 import { dayNumber, localDate } from "./day";
 import { hrConfig } from "@/skins/hr/config";
 import { baConfig } from "@/skins/ba/config";
 import { rsConfig } from "@/skins/rs/config";
 
 describe("scoring", () => {
+  it("helikopter ima procjenu ispod najrjeđeg običnog, tierovi ostaju isti", () => {
+    const prior = new Map([[1, 30], [2, 5], [3, 0.21], [4, 0.0005], [5, 0.21]]);
+    const out = rareBelowAll(prior, new Set([3, 5]));
+    expect(out.get(3)).toBeCloseTo(0.00045);
+    expect(out.get(5)).toBeCloseTo(0.00045);
+    expect(out.get(4)).toBe(0.0005);
+    expect(rareBelowAll(prior, new Set())).toBe(prior);
+    const tiersOf = (p: Map<number, number>) => {
+      const list = [...p].map(([id, share]) => ({ id, share, rare: id === 3 || id === 5 })).sort((a, b) => b.share - a.share);
+      const t = assignTiers(hrConfig, list);
+      return Object.fromEntries(list.map((a, i) => [a.id, t[i].name]));
+    };
+    expect(tiersOf(out)).toEqual(tiersOf(prior));
+  });
   it("bez igrača vraća procjenu", () => {
     expect(blendedShare(22, 0, 0, 50)).toBe(22);
   });
